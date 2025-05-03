@@ -3,8 +3,9 @@ package com.ecosolicitud.demo.service;
 import com.ecosolicitud.demo.model.Usuario;
 import com.ecosolicitud.demo.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,35 +17,12 @@ import java.util.Optional;
 public class UsuarioService {
     
     private final UsuarioRepository usuarioRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-        
-        // Verificar si ya existen usuarios, si no, crear algunos por defecto
-        if (usuarioRepository.count() == 0) {
-            // Agregar un usuario administrador
-            Usuario admin = new Usuario();
-            admin.setNombre("Admin");
-            admin.setApellido("Admin");
-            admin.setEmail("admin@example.com");
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("password"));
-            admin.setRol("ADMIN");
-            usuarioRepository.save(admin);
-            
-            // Agregar un usuario normal
-            Usuario usuario = new Usuario();
-            usuario.setNombre("Usuario");
-            usuario.setApellido("Normal");
-            usuario.setEmail("usuario@example.com");
-            usuario.setUsername("usuario");
-            usuario.setPassword(passwordEncoder.encode("password"));
-            usuario.setRol("USUARIO");
-            usuarioRepository.save(usuario);
-        }
+        this.passwordEncoder = passwordEncoder;
     }
     
     // Método para obtener todos los usuarios
@@ -58,9 +36,10 @@ public class UsuarioService {
     }
     
     // Método para guardar un usuario (crear o actualizar)
+    @Transactional
     public Usuario save(Usuario usuario) {
         // Si es un nuevo usuario o se está actualizando la contraseña
-        if (usuario.getId() == null || 
+        if (usuario .getId() == null ||
             (usuario.getId() != null && usuario.getPassword() != null && !usuario.getPassword().startsWith("$2a$"))) {
             usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         } else if (usuario.getId() != null && (usuario.getPassword() == null || usuario.getPassword().isEmpty())) {
@@ -72,13 +51,8 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
     
-    // Método para eliminar un usuario
+    @Transactional
     public void deleteById(Long id) {
         usuarioRepository.deleteById(id);
-    }
-    
-    // Método para buscar un usuario por nombre de usuario
-    public Optional<Usuario> findByUsername(String username) {
-        return usuarioRepository.findByUsername(username);
     }
 }
