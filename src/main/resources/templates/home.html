@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Inicio - Sistema de Solicitudes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            margin-right: 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistema de Solicitudes</h1>
+        </div>
+        
+        <div class="nav">
+            <a th:href="@{/}">Inicio</a>
+            <a th:href="@{/login}">Iniciar Sesión</a>
+            <a th:href="@{/solicitudes}">Solicitudes</a>
+        </div>
+        
+        <div>
+            <h2>Bienvenido al Sistema de Solicitudes</h2>
+            <p>Esta es una aplicación MVP para la gestión de solicitudes.</p>
+        </div>
+    </div>
+</body>
+</html>
