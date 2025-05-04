@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Inicio - Sistema de Solicitudes</title>
+    <title>Inicio - Sistema MVP</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -56,24 +56,17 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Sistema de Solicitudes</h1>
+            <h1>Sistema MVP</h1>
         </div>
         
         <div class="nav">
             <a th:href="@{/}">Inicio</a>
-            <a th:href="@{/solicitudes}">Solicitudes</a>
             <a th:href="@{/login}">Iniciar Sesión</a>
         </div>
         
         <div class="main-content">
-            <h2>Bienvenido al Sistema de Solicitudes</h2>
-            <p>Esta es una aplicación MVP para la gestión de solicitudes.</p>
-            
-            <div class="card">
-                <h3>Solicitudes</h3>
-                <p>Accede a la lista de solicitudes y gestiona su estado.</p>
-                <a th:href="@{/solicitudes}">Ver solicitudes</a>
-            </div>
+            <h2>Bienvenido al Sistema</h2>
+            <p>Esta es una aplicación MVP minimalista.</p>
             
             <div class="card">
                 <h3>Iniciar Sesión</h3>
