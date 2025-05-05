@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Fragmento de campo de texto -->
+    <div th:fragment="textField(id, label, placeholder, icon, required)" class="mb-3">
+        <label th:for="${id}" class="form-label" th:text="${label}">Campo</label>
+        <div class="input-group">
+            <span class="input-group-text" th:if="${icon != null}"><i th:class="${icon}"></i></span>
+            <input type="text" class="form-control" th:id="${id}" th:name="${id}" th:placeholder="${placeholder}" th:required="${required}">
+        </div>
+    </div>
+    
+    <!-- Fragmento de campo de contraseña -->
+    <div th:fragment="passwordField(id, label, placeholder, icon, required)" class="mb-3">
+        <label th:for="${id}" class="form-label" th:text="${label}">Contraseña</label>
+        <div class="input-group">
+            <span class="input-group-text" th:if="${icon != null}"><i th:class="${icon}"></i></span>
+            <input type="password" class="form-control" th:id="${id}" th:name="${id}" th:placeholder="${placeholder}" th:required="${required}">
+        </div>
+    </div>
+    
+    <!-- Fragmento de checkbox -->
+    <div th:fragment="checkbox(id, label)" class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" th:id="${id}" th:name="${id}">
+        <label class="form-check-label" th:for="${id}" th:text="${label}">Checkbox</label>
+    </div>
+    
+    <!-- Fragmento de botón de envío -->
+    <div th:fragment="submitButton(text, icon)" class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-primary">
+            <i th:if="${icon != null}" th:class="${icon + ' me-2'}"></i>
+            <span th:text="${text}">Enviar</span>
+        </button>
+    </div>
+    
+    <!-- Fragmento de alerta de error -->
+    <div th:fragment="errorAlert(message)" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <span th:text="${message}">Mensaje de error</span>
+    </div>
+    
+    <!-- Fragmento de alerta de éxito -->
+    <div th:fragment="successAlert(message)" class="alert alert-success" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span th:text="${message}">Mensaje de éxito</span>
+    </div>
+</body>
+</html>

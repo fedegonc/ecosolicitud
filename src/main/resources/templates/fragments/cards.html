@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Fragmento de tarjeta básica -->
+    <div th:fragment="basicCard(title, content)" class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0" th:text="${title}">Título de la tarjeta</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text" th:text="${content}">Contenido de la tarjeta</p>
+        </div>
+    </div>
+    
+    <!-- Fragmento de tarjeta con icono -->
+    <div th:fragment="iconCard(icon, title, content)" class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex align-items-center">
+                <i th:if="${icon != null}" th:class="${icon + ' me-2'}"></i>
+                <h5 class="mb-0" th:text="${title}">Título de la tarjeta</h5>
+            </div>
+        </div>
+        <div class="card-body">
+            <p class="card-text" th:text="${content}">Contenido de la tarjeta</p>
+        </div>
+    </div>
+    
+    <!-- Fragmento de tarjeta de estadística -->
+    <div th:fragment="statCard(icon, value, label, color)" class="stat-card" th:classappend="${'bg-' + color + ' text-white'}">
+        <i th:class="${icon + ' stat-icon'}"></i>
+        <h3 th:text="${value}">0</h3>
+        <p class="mb-0" th:text="${label}">Etiqueta</p>
+    </div>
+    
+    <!-- Fragmento de tarjeta de acción -->
+    <div th:fragment="actionCard(icon, title, url)" class="list-group-item list-group-item-action action-item p-3">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <div>
+                <i th:class="${icon + ' me-2 text-primary'}"></i>
+                <strong th:text="${title}">Título de la acción</strong>
+            </div>
+            <i class="bi bi-chevron-right"></i>
+        </div>
+    </div>
+    
+    <!-- Fragmento de alerta de bienvenida -->
+    <div th:fragment="welcomeAlert(username)" class="alert alert-success welcome-alert">
+        <h4 class="alert-heading">
+            <i class="bi bi-person-check me-2"></i>¡Bienvenido <span th:text="${username}">Usuario</span>!
+        </h4>
+        <p>Has iniciado sesión correctamente en el sistema de EcoSolicitud.</p>
+    </div>
+</body>
+</html>

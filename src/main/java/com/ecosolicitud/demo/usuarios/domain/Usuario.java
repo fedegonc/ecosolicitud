@@ -1,10 +1,14 @@
-package com.ecosolicitud.demo.model;
+package com.ecosolicitud.demo.usuarios.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+import com.ecosolicitud.demo.roles.domain.Rol;
 
 /**
  * Entidad Usuario - Representa a un usuario del sistema
@@ -21,7 +25,10 @@ public class Usuario {
     private String email;
     private String username;
     private String password;
-    private String rol; // Puede ser "ADMIN", "USUARIO", etc.
+    
+    @ManyToOne
+    @JoinColumn(name = "rol_id")
+    private Rol rol;
     
     public Usuario() {
     }
@@ -74,11 +81,11 @@ public class Usuario {
         this.password = password;
     }
     
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
     
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 }

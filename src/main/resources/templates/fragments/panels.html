@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Fragmento de bienvenida -->
+    <div th:fragment="welcome-alert" class="bg-success text-white p-4 rounded-lg shadow-md mb-6">
+        <h4 class="text-xl font-bold mb-2">
+            <i class="bi bi-person-check mr-2"></i>¡Bienvenido <span sec:authentication="name">Usuario</span>!
+        </h4>
+        <p class="mb-0">Gracias por usar EcoSolicitud. Aquí podrás gestionar todas tus solicitudes ambientales.</p>
+    </div>
+    
+    <!-- Fragmento de panel de administrador -->
+    <div th:fragment="admin-panel" class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="bg-danger text-white p-3">
+            <h5 class="font-bold mb-0"><i class="bi bi-shield-lock mr-2"></i>Panel de Administración</h5>
+        </div>
+        <div class="p-4">
+            <p class="mb-4">Este contenido es exclusivo para administradores del sistema.</p>
+            <div class="space-y-2">
+                <div class="bg-light p-3 rounded border">
+                    <h6 class="font-bold"><i class="bi bi-gear-fill mr-2"></i>Herramientas de Administración</h6>
+                    <ul class="list-disc pl-5 mt-2">
+                        <li>Gestión completa de usuarios</li>
+                        <li>Configuración de roles y permisos</li>
+                        <li>Administración de solicitudes</li>
+                        <li>Reportes y estadísticas avanzadas</li>
+                    </ul>
+                </div>
+                <div class="bg-info text-white p-3 rounded mt-3">
+                    <h6 class="font-bold"><i class="bi bi-graph-up mr-2"></i>Estadísticas del Sistema</h6>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <div class="bg-white text-dark p-2 rounded text-center">
+                            <span class="block text-xl font-bold">25</span>
+                            <span class="text-sm">Usuarios</span>
+                        </div>
+                        <div class="bg-white text-dark p-2 rounded text-center">
+                            <span class="block text-xl font-bold">150</span>
+                            <span class="text-sm">Solicitudes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Fragmento de panel de usuario -->
+    <div th:fragment="user-panel" class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+        <div class="bg-primary text-white p-3">
+            <h5 class="font-bold mb-0"><i class="bi bi-person-badge mr-2"></i>Panel de Usuario</h5>
+        </div>
+        <div class="p-4">
+            <p class="mb-4">Bienvenido a tu panel personal. Aquí podrás gestionar tus solicitudes.</p>
+            <div class="space-y-2">
+                <div class="bg-light p-3 rounded border">
+                    <h6 class="font-bold"><i class="bi bi-file-earmark-text mr-2"></i>Mis Solicitudes</h6>
+                    <p class="text-muted mt-2">No tienes solicitudes activas en este momento.</p>
+                    <button class="btn btn-primary mt-2">
+                        <i class="bi bi-plus-circle mr-1"></i>Nueva Solicitud
+                    </button>
+                </div>
+                <div class="bg-success text-white p-3 rounded mt-3">
+                    <h6 class="font-bold"><i class="bi bi-info-circle mr-2"></i>Información Útil</h6>
+                    <p class="mt-2">Recuerda que puedes crear nuevas solicitudes ambientales desde tu panel de usuario.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

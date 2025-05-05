@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Fragmento de características simplificado -->
+    <div th:fragment="features-simple" class="py-8 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8">
+                <div class="text-center">
+                    <i class="bi bi-shield-check text-2xl text-primary"></i>
+                    <span class="ml-2">Seguro</span>
+                </div>
+                <div class="text-center">
+                    <i class="bi bi-speedometer2 text-2xl text-primary"></i>
+                    <span class="ml-2">Eficiente</span>
+                </div>
+                <div class="text-center">
+                    <i class="bi bi-graph-up-arrow text-2xl text-primary"></i>
+                    <span class="ml-2">Analítico</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Fragmento de hero section -->
+    <section th:fragment="hero-section(title, description, buttonText, buttonUrl)" class="hero-section flex items-center justify-center">
+        <div class="container mx-auto px-4 py-16 text-center text-white">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6" th:text="${title}">Título</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto" th:text="${description}">
+                Descripción
+            </p>
+            <div class="flex flex-row justify-center gap-4">
+                <a th:href="${buttonUrl}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-blue-700 transition-colors">
+                    <i class="bi bi-box-arrow-in-right mr-2"></i>
+                    <span th:text="${buttonText}">Botón</span>
+                </a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

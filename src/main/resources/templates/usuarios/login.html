@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Iniciar Sesión</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+            <div class="max-w-md w-full space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Iniciar Sesión</h2>
+                </div>
+                
+                <!-- Mensajes de error o éxito usando fragmentos -->
+                <div th:replace="~{fragments/auth :: error-message}"></div>
+                <div th:replace="~{fragments/auth :: success-message}"></div>
+                
+                <!-- Formulario de login usando fragmento -->
+                <div th:replace="~{fragments/auth :: login-form}"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

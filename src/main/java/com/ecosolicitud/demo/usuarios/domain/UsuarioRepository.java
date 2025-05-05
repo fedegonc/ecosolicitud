@@ -1,6 +1,5 @@
-package com.ecosolicitud.demo.repository;
+package com.ecosolicitud.demo.usuarios.domain;
 
-import com.ecosolicitud.demo.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

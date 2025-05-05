@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}">
+<head>
+    <title>Panel Principal</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="py-8">
+            <!-- Alerta de bienvenida usando fragmento -->
+            <div th:replace="~{fragments/panels :: welcome-alert}"></div>
+            
+            <!-- Panel de administrador usando fragmento (solo visible para administradores) -->
+            <div sec:authorize="hasRole('ADMIN')">
+                <div th:replace="~{fragments/panels :: admin-panel}"></div>
+            </div>
+            
+            <!-- Panel de usuario usando fragmento (solo visible para usuarios regulares) -->
+            <div sec:authorize="hasRole('USER') and !hasRole('ADMIN')">
+                <div th:replace="~{fragments/panels :: user-panel}"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

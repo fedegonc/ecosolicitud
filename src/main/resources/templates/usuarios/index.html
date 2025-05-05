@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Bienvenido</title>
+    <th:block layout:fragment="styles">
+        <style>
+            .hero-section {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1274&q=80');
+                background-size: cover;
+                background-position: center;
+                min-height: 80vh;
+            }
+        </style>
+    </th:block>
+</head>
+<body>
+    <div layout:fragment="content">
+        <!-- Hero Section usando fragmento -->
+        <div th:replace="~{fragments/features :: hero-section(
+            title='EcoSolicitud',
+            description='Sistema de gestión de solicitudes ambientales',
+            buttonText='Iniciar Sesión',
+            buttonUrl=@{/login}
+        )}"></div>
+        
+        <!-- Features Section usando fragmento -->
+        <section th:replace="~{fragments/features :: features-simple}"></section>
+    </div>
+</body>
+</html>

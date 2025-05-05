@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Fragmento de navegación principal -->
+    <nav th:fragment="navbar" class="bg-primary text-white shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a class="text-xl font-bold" href="/">EcoSolicitud</a>
+                
+                <!-- Botón de menú móvil -->
+                <button class="md:hidden focus:outline-none" id="mobileMenuButton" aria-label="Menú">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+                
+                <!-- Menú desktop -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a class="hover:text-gray-200 transition-colors" href="/">Inicio</a>
+                    <a class="hover:text-gray-200 transition-colors" href="/demo">Demo</a>
+                    <a sec:authorize="isAuthenticated()" class="hover:text-gray-200 transition-colors" href="/home">Panel Principal</a>
+                    <a sec:authorize="!isAuthenticated()" class="ml-4 px-4 py-2 bg-white text-primary rounded-md hover:bg-gray-100 transition-colors" href="/login">Iniciar Sesión</a>
+                    <a sec:authorize="isAuthenticated()" class="ml-4 px-4 py-2 border border-white rounded-md hover:bg-white hover:text-primary transition-colors" href="/logout">Cerrar Sesión</a>
+                </div>
+            </div>
+            
+            <!-- Menú móvil (oculto por defecto) -->
+            <div class="md:hidden hidden transition-all duration-300 ease-in-out max-h-0 overflow-hidden" id="mobileMenu">
+                <div class="pt-4 pb-3 space-y-3">
+                    <a class="block hover:bg-blue-700 px-3 py-2 rounded-md" href="/">Inicio</a>
+                    <a class="block hover:bg-blue-700 px-3 py-2 rounded-md" href="/demo">Demo</a>
+                    <a sec:authorize="isAuthenticated()" class="block hover:bg-blue-700 px-3 py-2 rounded-md" href="/home">Panel Principal</a>
+                    <a sec:authorize="!isAuthenticated()" class="block bg-white text-primary px-3 py-2 rounded-md mt-4" href="/login">Iniciar Sesión</a>
+                    <a sec:authorize="isAuthenticated()" class="block border border-white px-3 py-2 rounded-md mt-4" href="/logout">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <script th:fragment="navbarScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    // Toggle the hidden class
+                    mobileMenu.classList.toggle('hidden');
+                    
+                    // Animación de altura
+                    if (mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.style.maxHeight = '0';
+                    } else {
+                        mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                    }
+                });
+                
+                // Cerrar menú al hacer clic en un enlace
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.style.maxHeight = '0';
+                    });
+                });
+                
+                // Cerrar menú al redimensionar a desktop
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth >= 768) { // md breakpoint
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.style.maxHeight = '0';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

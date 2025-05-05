@@ -1,0 +1,21 @@
+/* 
+ * EcoSolicitud - Estilos personalizados
+ * Complemento a Tailwind CSS
+ */
+
+/* Estilos base que no están cubiertos por Tailwind */
+@layer base {
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+}
+
+/* Estilos personalizados para componentes específicos */
+.stat-card {
+  @apply flex flex-col items-center p-4 rounded-lg bg-primary text-white;
+}
+
+/* Animaciones y transiciones */
+.transition-all {
+  transition: all 0.3s ease;
+}
