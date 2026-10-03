@@ -1,4 +1,10 @@
+/* ============================================================
+   EcoSolicitud — hoja única, mobile-first
+   Tokens arriba → base (móvil) → componentes → breakpoints
+   ============================================================ */
+
 :root {
+    /* color */
     --verde-sidebar: #1b4332;
     --verde-sidebar-activo: #2d6a4f;
     --verde-sidebar-texto: #d8f3dc;
@@ -7,14 +13,27 @@
     --acento-texto: #1f2933;
     --texto: #1f2933;
     --borde: #d9e2d9;
+    --blanco: #ffffff;
+
+    /* materiales (E3+) */
     --mat-papel: #2d6a4f;
     --mat-carton: #8a5a2b;
     --mat-plastico: #277da1;
     --mat-vidrio: #43aa8b;
     --mat-metal: #6c757d;
     --mat-organico: #7d4f22;
+
+    /* forma y ritmo */
     --radio: 8px;
+    --pad: 1rem;
+    --pad-grande: 2rem;
+    --sidebar-w: 15rem;
+    --icono-tam: 1.25rem;
+    --foco: 3px solid var(--acento);
+    --bp-menu: 45rem;
 }
+
+/* ---------- base ---------- */
 
 * {
     box-sizing: border-box;
@@ -29,7 +48,13 @@ body {
 
 .app {
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
+}
+
+:focus-visible {
+    outline: var(--foco);
+    outline-offset: 2px;
 }
 
 .salto {
@@ -38,7 +63,7 @@ body {
     top: 0;
     background: var(--acento);
     color: var(--acento-texto);
-    padding: 0.5rem 1rem;
+    padding: calc(var(--pad) / 2) var(--pad);
     z-index: 20;
 }
 
@@ -46,41 +71,18 @@ body {
     left: 0;
 }
 
-/* ---------- Sidebar ---------- */
-
-.sidebar {
-    position: sticky;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    width: 15rem;
-    height: 100vh;
-    background: var(--verde-sidebar);
-    color: var(--verde-sidebar-texto);
-    padding: 1rem;
+.icono {
+    width: var(--icono-tam);
+    height: var(--icono-tam);
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-.marca {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.5rem;
-}
-
-.marca-logo {
-    width: 2.25rem;
-    height: 2.25rem;
-}
-
-.marca-nombre {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #fff;
-}
-
-.rol-switch {
-    min-height: 1rem;
-}
+/* ---------- lista de secciones (sidebar y menú móvil) ---------- */
 
 .secciones ul {
     list-style: none;
@@ -108,27 +110,62 @@ body {
     font-weight: 600;
 }
 
-.secciones a:focus-visible,
-summary:focus-visible {
-    outline: 3px solid var(--acento);
-    outline-offset: 2px;
+/* ---------- menú móvil (base) ---------- */
+
+.menu-movil {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--verde-sidebar);
+    color: var(--verde-sidebar-texto);
 }
 
-.icono {
-    width: 1.25rem;
-    height: 1.25rem;
-    flex-shrink: 0;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+.menu-movil summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem var(--pad);
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
 }
 
-.sidebar-pie {
-    margin-top: auto;
-    padding: 0.5rem;
+.menu-movil summary::-webkit-details-marker {
+    display: none;
 }
+
+.menu-movil .secciones {
+    padding: 0 var(--pad) var(--pad);
+}
+
+.menu-marca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.menu-marca .marca-logo {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+.menu-marca .marca-nombre {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--blanco);
+}
+
+.menu-pie {
+    padding: 0 var(--pad) var(--pad);
+}
+
+/* ---------- sidebar (oculta en móvil) ---------- */
+
+.sidebar {
+    display: none;
+}
+
+/* ---------- insignia demo ---------- */
 
 .demo {
     display: inline-block;
@@ -140,56 +177,68 @@ summary:focus-visible {
     border-radius: 999px;
 }
 
-/* ---------- Menú móvil ---------- */
-
-.menu-movil {
-    display: none;
-    background: var(--verde-sidebar);
-    color: var(--verde-sidebar-texto);
-}
-
-.menu-movil summary {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.9rem 1rem;
-    cursor: pointer;
-    list-style: none;
-    font-weight: 600;
-}
-
-.menu-movil summary::-webkit-details-marker {
-    display: none;
-}
-
-.menu-movil nav {
-    padding: 0 1rem 1rem;
-}
-
-/* ---------- Contenido ---------- */
+/* ---------- contenido ---------- */
 
 .contenido {
     flex: 1;
-    padding: 2rem;
+    padding: var(--pad);
 }
 
 .contenido h1 {
     margin-top: 0;
 }
 
-@media (max-width: 45rem) {
-    .sidebar {
-        display: none;
+/* ---------- desktop ---------- */
+
+@media (min-width: 45rem) {
+    .app {
+        flex-direction: row;
     }
 
     .menu-movil {
-        display: block;
-        position: sticky;
-        top: 0;
-        z-index: 10;
+        display: none;
     }
 
-    .app {
+    .sidebar {
+        position: sticky;
+        top: 0;
+        display: flex;
         flex-direction: column;
+        width: var(--sidebar-w);
+        height: 100vh;
+        background: var(--verde-sidebar);
+        color: var(--verde-sidebar-texto);
+        padding: var(--pad);
+    }
+
+    .marca {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: calc(var(--pad) / 2);
+    }
+
+    .marca-logo {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+
+    .marca-nombre {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--blanco);
+    }
+
+    .rol-switch {
+        min-height: var(--pad);
+    }
+
+    .sidebar-pie {
+        margin-top: auto;
+        padding: calc(var(--pad) / 2);
+    }
+
+    .contenido {
+        padding: var(--pad-grande);
     }
 }

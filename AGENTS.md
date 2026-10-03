@@ -11,7 +11,9 @@
 - Spring Modulith 1.4.x es compatible con Spring Boot 3.5.x; `ModulesTest` verifica las fronteras con `ApplicationModules.verify()`.
 - GitHub Actions ejecuta `mvn -B verify` con Java 21 en cada push y PR; el estado remoto solo se puede verificar una vez publicado el proyecto.
 - Consola H2 desactivada por defecto; Hibernate usa `update` solo para la fase de demo, con migraciones pendientes cuando se estabilice el modelo.
-- Escucha únicamente en loopback (127.0.0.1).
+- Perfiles: `dev` por defecto (loopback 127.0.0.1, Thymeleaf sin caché, DevTools) y `prod` (0.0.0.0, caché activado) seleccionado vía `SPRING_PROFILES_ACTIVE=prod`; el puerto sale de `${PORT:8080}`.
+- Deploy: `Dockerfile` multi-stage (Maven → JRE 21) corriendo perfil `prod`; Render despliega la rama `main`.
+- Imágenes y recursos estáticos en `src/main/resources/static/` (`img/`, `css/`); un solo `app.css` mobile-first con tokens CSS.
 - Documentación interna o de trabajo (notas, `CLAUDE.md`, archivos locales) va al `.gitignore`: el repo público se mantiene limpio con lo esencial.
 - Tests E2E con Selenium `HtmlUnitDriver` (sin JS, headless); reporte Allure en `target/allure-results`, generar HTML con `mvn allure:report` → `target/site/allure-maven-plugin/index.html`.
 - `Seccion` es la única lista de secciones: clave i18n, ruta, rol e ícono. La sidebar se arma desde ahí; `NavegacionAdvice` agrega `rutaActual` y `secciones` (filtradas por rol) al modelo.

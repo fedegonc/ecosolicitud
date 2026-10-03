@@ -1,0 +1,11 @@
+.git
+.github
+target/
+data/
+src/test/
+scratch/
+.allure/
+CLAUDE.md
+*.log
+*.pid
+.seed
