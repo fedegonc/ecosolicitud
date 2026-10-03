@@ -4,32 +4,48 @@
    ============================================================ */
 
 :root {
-    /* color */
-    --verde-sidebar: #1b4332;
-    --verde-sidebar-activo: #2d6a4f;
-    --verde-sidebar-texto: #d8f3dc;
-    --fondo: #f4f6f4;
-    --acento: #f4d35e;
-    --acento-texto: #1f2933;
-    --texto: #1f2933;
-    --borde: #d9e2d9;
-    --blanco: #ffffff;
+    /* papel y tinta */
+    --papel: #ece4d0;
+    --papel-claro: #f7f1e2;
+    --tinta: #37342a;
+    --borde: #d5cbb2;
+
+    /* tonos orgánicos */
+    --ocre: #c9a227;
+    --oliva: #6d7434;
+    --oliva-oscuro: #434a27;
+    --oliva-activo: #585f2e;
+    --ardosia: #5e7a88;
+    --teja: #a85a28;
+    --crema: #f6efdc;
+
+    /* grano de papel (ruido sutil) */
+    --textura: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.055'/%3E%3C/svg%3E");
 
     /* materiales (E3+) */
-    --mat-papel: #2d6a4f;
-    --mat-carton: #8a5a2b;
-    --mat-plastico: #277da1;
-    --mat-vidrio: #43aa8b;
-    --mat-metal: #6c757d;
-    --mat-organico: #7d4f22;
+    --mat-papel: #a9976b;
+    --mat-carton: var(--teja);
+    --mat-plastico: var(--ocre);
+    --mat-vidrio: var(--ardosia);
+    --mat-metal: #807d6c;
+    --mat-organico: var(--oliva);
+
+    /* roles semánticos */
+    --fondo: var(--papel);
+    --acento: var(--ocre);
+    --acento-texto: #33301f;
+    --texto: var(--tinta);
+    --nav-fondo: var(--oliva-oscuro);
+    --nav-activo: var(--oliva-activo);
+    --nav-texto: #efe8d4;
 
     /* forma y ritmo */
-    --radio: 8px;
+    --radio: 10px;
     --pad: 1rem;
     --pad-grande: 2rem;
     --sidebar-w: 15rem;
-    --icono-tam: 1.25rem;
-    --foco: 3px solid var(--acento);
+    --icono-tam: 1.3rem;
+    --foco: 3px solid var(--teja);
     --bp-menu: 45rem;
 }
 
@@ -42,7 +58,8 @@
 body {
     margin: 0;
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--fondo);
+    background-color: var(--fondo);
+    background-image: var(--textura);
     color: var(--texto);
 }
 
@@ -75,11 +92,7 @@ body {
     width: var(--icono-tam);
     height: var(--icono-tam);
     flex-shrink: 0;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    fill: currentColor;
 }
 
 /* ---------- lista de secciones (sidebar y menú móvil) ---------- */
@@ -96,12 +109,12 @@ body {
     gap: 0.7rem;
     padding: 0.65rem 0.75rem;
     border-radius: var(--radio);
-    color: var(--verde-sidebar-texto);
+    color: var(--nav-texto);
     text-decoration: none;
 }
 
 .secciones a:hover {
-    background: var(--verde-sidebar-activo);
+    background: var(--nav-activo);
 }
 
 .secciones a.activa {
@@ -116,8 +129,9 @@ body {
     position: sticky;
     top: 0;
     z-index: 10;
-    background: var(--verde-sidebar);
-    color: var(--verde-sidebar-texto);
+    background-color: var(--nav-fondo);
+    background-image: var(--textura);
+    color: var(--nav-texto);
 }
 
 .menu-movil summary {
@@ -156,7 +170,7 @@ body {
 .menu-marca .marca-nombre {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--blanco);
+    color: var(--crema);
 }
 
 .menu-pie {
@@ -181,17 +195,17 @@ body {
 .rol-switch button {
     flex: 1;
     padding: 0.55rem 0.4rem;
-    border: 1px solid var(--verde-sidebar-activo);
+    border: 1px solid var(--nav-activo);
     border-radius: var(--radio);
     background: transparent;
-    color: var(--verde-sidebar-texto);
+    color: var(--nav-texto);
     font: inherit;
     font-size: 0.85rem;
     cursor: pointer;
 }
 
 .rol-switch button:hover {
-    background: var(--verde-sidebar-activo);
+    background: var(--nav-activo);
 }
 
 .rol-switch button.activa {
@@ -247,8 +261,9 @@ body {
         flex-direction: column;
         width: var(--sidebar-w);
         height: 100vh;
-        background: var(--verde-sidebar);
-        color: var(--verde-sidebar-texto);
+        background-color: var(--nav-fondo);
+        background-image: var(--textura);
+        color: var(--nav-texto);
         padding: var(--pad);
     }
 
@@ -267,7 +282,7 @@ body {
     .marca-nombre {
         font-size: 1.5rem;
         font-weight: 700;
-        color: var(--blanco);
+        color: var(--crema);
     }
 
     .sidebar-pie {
