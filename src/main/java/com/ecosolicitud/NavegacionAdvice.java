@@ -2,18 +2,29 @@ package com.ecosolicitud;
 
 import java.util.List;
 
+import com.ecosolicitud.organizacion.OrganizacionInfo;
+import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Rol;
+
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice
 class NavegacionAdvice {
 
-    private final RolSesion rolSesion;
+    private final ActorSesion actor;
+    private final OrganizacionService organizaciones;
+    private final boolean demoHabilitada;
 
-    NavegacionAdvice(RolSesion rolSesion) {
-        this.rolSesion = rolSesion;
+    NavegacionAdvice(ActorSesion actor, OrganizacionService organizaciones,
+            @Value("${ecosolicitud.demo.habilitada:true}") boolean demoHabilitada) {
+        this.actor = actor;
+        this.organizaciones = organizaciones;
+        this.demoHabilitada = demoHabilitada;
     }
 
     @ModelAttribute("rutaActual")
@@ -23,11 +34,26 @@ class NavegacionAdvice {
 
     @ModelAttribute("rolActual")
     Rol rolActual() {
-        return rolSesion.get();
+        return actor.get();
     }
 
     @ModelAttribute("secciones")
     List<Seccion> secciones() {
-        return Seccion.paraRol(rolSesion.get());
+        return Seccion.paraRol(actor.get());
+    }
+
+    @ModelAttribute("organizaciones")
+    List<OrganizacionInfo> organizaciones() {
+        return organizaciones.todas();
+    }
+
+    @ModelAttribute("organizacionActiva")
+    OrganizacionInfo organizacionActiva() {
+        return organizaciones.actual();
+    }
+
+    @ModelAttribute("demoHabilitada")
+    boolean demoHabilitada() {
+        return demoHabilitada;
     }
 }

@@ -1,0 +1,100 @@
+package com.ecosolicitud.organizacion;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Optional;
+
+import com.ecosolicitud.organizacion.interno.Organizacion;
+import com.ecosolicitud.organizacion.interno.OrganizacionRepository;
+import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Ciudad;
+import com.ecosolicitud.shared.Material;
+
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+
+@Service
+public class OrganizacionService {
+
+    private final OrganizacionRepository repositorio;
+    private final ActorSesion actor;
+
+    public OrganizacionService(OrganizacionRepository repositorio, ActorSesion actor) {
+        this.repositorio = repositorio;
+        this.actor = actor;
+    }
+
+    public List<OrganizacionInfo> todas() {
+        return repositorio.findAll(Sort.by("nombre")).stream()
+                .map(OrganizacionService::aInfo).toList();
+    }
+
+    public List<AcopiosCiudad> porCiudad() {
+        var agrupadas = todas().stream().collect(groupingBy(OrganizacionInfo::ciudad,
+                () -> new EnumMap<>(Ciudad.class), toList()));
+        return Arrays.stream(Ciudad.values())
+                .map(c -> new AcopiosCiudad(c, agrupadas.getOrDefault(c, List.of())))
+                .toList();
+    }
+
+    public OrganizacionInfo actual() {
+        String id = actor.getOrganizacionId();
+        var encontrada = id != null ? buscar(id) : Optional.<OrganizacionInfo>empty();
+        return encontrada.orElseGet(this::primera);
+    }
+
+    public Optional<OrganizacionInfo> buscar(String id) {
+        return repositorio.findById(id).map(OrganizacionService::aInfo);
+    }
+
+    public boolean vacia() {
+        return repositorio.count() == 0;
+    }
+
+    @Transactional
+    public boolean actualizarPerfil(String id, List<Material> materiales,
+            String horario, String telefono, long version) {
+        var org = repositorio.findById(id).orElseThrow();
+        if (org.getVersion() != version) {
+            return false;
+        }
+        org.setMateriales(new ArrayList<>(materiales));
+        org.setHorario(horario);
+        org.setTelefono(telefono);
+        repositorio.save(org);
+        return true;
+    }
+
+    @Transactional
+    public void reemplazarTodas(List<OrganizacionInfo> dataset) {
+        repositorio.deleteAll();
+        dataset.forEach(this::guardarNueva);
+    }
+
+    private void guardarNueva(OrganizacionInfo info) {
+        var org = new Organizacion();
+        org.setId(info.id());
+        org.setNombre(info.nombre());
+        org.setCiudad(info.ciudad());
+        org.setMateriales(new ArrayList<>(info.materiales()));
+        org.setHorario(info.horario());
+        org.setTelefono(info.telefono());
+        repositorio.save(org);
+    }
+
+    private OrganizacionInfo primera() {
+        return repositorio.findAll(Sort.by("id")).stream().findFirst()
+                .map(OrganizacionService::aInfo).orElseThrow();
+    }
+
+    private static OrganizacionInfo aInfo(Organizacion o) {
+        return new OrganizacionInfo(o.getId(), o.getNombre(), o.getCiudad(),
+                List.copyOf(o.getMateriales()), o.getHorario(), o.getTelefono(), o.getVersion());
+    }
+}

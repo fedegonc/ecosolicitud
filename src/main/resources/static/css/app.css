@@ -22,13 +22,13 @@
     /* grano de papel (ruido sutil) */
     --textura: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.055'/%3E%3C/svg%3E");
 
-    /* materiales (E3+) */
+    /* materiales */
     --mat-papel: #a9976b;
     --mat-carton: var(--teja);
     --mat-plastico: var(--ocre);
     --mat-vidrio: var(--ardosia);
     --mat-metal: #807d6c;
-    --mat-organico: var(--oliva);
+    --mat-electronicos: #4c6270;
 
     /* roles semánticos */
     --fondo: var(--papel);
@@ -218,6 +218,199 @@ body {
 .rol-switch button:focus-visible {
     outline: var(--foco);
     outline-offset: 2px;
+}
+
+/* ---------- selector de organización ---------- */
+
+.org-switch {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem calc(var(--pad) / 2);
+    border: none;
+    font-size: 0.85rem;
+}
+
+.org-switch label {
+    color: var(--nav-texto);
+    font-weight: 600;
+}
+
+.org-switch select {
+    flex: 1;
+    min-width: 0;
+    padding: 0.4rem 0.3rem;
+    border: 1px solid var(--nav-activo);
+    border-radius: var(--radio);
+    background: var(--nav-activo);
+    color: var(--nav-texto);
+    font: inherit;
+}
+
+.org-switch button {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--nav-activo);
+    border-radius: var(--radio);
+    background: transparent;
+    color: var(--nav-texto);
+    font: inherit;
+    cursor: pointer;
+}
+
+.org-switch button:hover {
+    background: var(--nav-activo);
+}
+
+/* ---------- reiniciar demo ---------- */
+
+.reiniciar button {
+    margin-top: 0.6rem;
+    padding: 0.4rem 0.7rem;
+    border: 1px dashed var(--nav-activo);
+    border-radius: var(--radio);
+    background: transparent;
+    color: var(--nav-texto);
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.reiniciar button:hover {
+    background: var(--nav-activo);
+}
+
+/* ---------- etiquetas de material ---------- */
+
+.etiqueta-material {
+    display: inline-block;
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--crema);
+}
+
+.mat-plastico {
+    background: var(--mat-plastico);
+    color: var(--acento-texto);
+}
+
+.mat-carton {
+    background: var(--mat-carton);
+}
+
+.mat-papel {
+    background: var(--mat-papel);
+    color: var(--acento-texto);
+}
+
+.mat-vidrio {
+    background: var(--mat-vidrio);
+}
+
+.mat-metal {
+    background: var(--mat-metal);
+}
+
+.mat-electronicos {
+    background: var(--mat-electronicos);
+}
+
+/* ---------- centros de acopio ---------- */
+
+.acopio {
+    background: var(--papel-claro);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: var(--pad);
+    margin-bottom: var(--pad);
+}
+
+.acopio h3 {
+    margin-top: 0;
+}
+
+.detalle {
+    margin: 0.2rem 0 0.6rem;
+    font-size: 0.9rem;
+}
+
+.materiales {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- formularios ---------- */
+
+.ficha {
+    max-width: 34rem;
+}
+
+.campo {
+    display: block;
+    margin-bottom: 0.9rem;
+    border: none;
+    padding: 0;
+}
+
+.campo > span {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.campo input[type="text"] {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    background: var(--papel-claro);
+    color: var(--texto);
+    font: inherit;
+}
+
+.opcion-material {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0.2rem 0.5rem 0.2rem 0;
+    cursor: pointer;
+}
+
+.accion {
+    padding: 0.6rem 1.4rem;
+    border: none;
+    border-radius: var(--radio);
+    background: var(--acento);
+    color: var(--acento-texto);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.error {
+    color: var(--teja);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.aviso {
+    background: var(--oliva);
+    color: var(--crema);
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radio);
+}
+
+.alerta {
+    background: var(--teja);
+    color: var(--crema);
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radio);
 }
 
 /* ---------- insignia demo ---------- */

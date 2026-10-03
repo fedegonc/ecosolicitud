@@ -1,12 +1,22 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
     <title th:text="#{seccion.acopios}">Centros de acopio</title>
 </head>
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.acopios}">Centros de acopio</h1>
-    <p th:text="#{demo.construccion}">Sección en construcción</p>
+    <section th:each="g : ${grupos}">
+        <h2 th:text="#{${g.ciudad.clave}}">Ciudad</h2>
+        <article th:each="o : ${g.organizaciones}" class="acopio">
+            <h3 th:text="${o.nombre}">Nombre</h3>
+            <p class="detalle"><span th:text="${o.horario}">Horario</span> · <span th:text="${o.telefono}">Teléfono</span></p>
+            <ul class="materiales">
+                <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
+                    th:text="#{${m.clave}}">Material</li>
+            </ul>
+        </article>
+    </section>
 </main>
 </body>
 </html>

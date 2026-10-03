@@ -1,12 +1,39 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
     <title th:text="#{seccion.org.perfil}">Perfil del acopio</title>
 </head>
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.org.perfil}">Perfil del acopio</h1>
-    <p th:text="#{demo.construccion}">Sección en construcción</p>
+    <p class="aviso" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>
+    <p class="alerta" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
+    <form th:action="@{/org/perfil}" method="post" th:object="${form}" class="ficha">
+        <p class="detalle"><strong th:text="#{perfil.nombre}">Nombre</strong>:
+            <span th:text="${organizacionActiva.nombre}">Nombre</span></p>
+        <p class="detalle"><strong th:text="#{perfil.ciudad}">Ciudad</strong>:
+            <span th:text="#{${organizacionActiva.ciudad.clave}}">Ciudad</span></p>
+        <fieldset class="campo">
+            <legend th:text="#{perfil.materiales}">Materiales aceptados</legend>
+            <label th:each="m : ${materialesTodos}" class="opcion-material">
+                <input type="checkbox" th:field="*{materiales}" th:value="${m}">
+                <span th:class="'etiqueta-material ' + ${m.claseCss}" th:text="#{${m.clave}}">Material</span>
+            </label>
+            <p class="error" th:if="${#fields.hasErrors('materiales')}" th:errors="*{materiales}">Error</p>
+        </fieldset>
+        <label class="campo">
+            <span th:text="#{perfil.horario}">Horario</span>
+            <input type="text" th:field="*{horario}">
+            <span class="error" th:if="${#fields.hasErrors('horario')}" th:errors="*{horario}">Error</span>
+        </label>
+        <label class="campo">
+            <span th:text="#{perfil.telefono}">Teléfono</span>
+            <input type="text" th:field="*{telefono}">
+            <span class="error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}">Error</span>
+        </label>
+        <input type="hidden" th:field="*{version}">
+        <button type="submit" class="accion" th:text="#{perfil.guardar}">Guardar</button>
+    </form>
 </main>
 </body>
 </html>

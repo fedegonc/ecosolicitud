@@ -25,6 +25,17 @@
                         th:attr="aria-pressed=${rolActual.name() == 'ORGANIZACION'}"
                         th:text="#{rol.organizacion}">Organización</button>
             </form>
+            <form th:fragment="selectorOrg" th:if="${rolActual.name() == 'ORGANIZACION'}"
+                  th:action="@{/demo/organizacion}" method="post" class="org-switch">
+                <label for="org-select" th:text="#{demo.acopio}">Acopio</label>
+                <select id="org-select" name="id">
+                    <option th:each="o : ${organizaciones}" th:value="${o.id}"
+                            th:text="${o.nombre}"
+                            th:selected="${o.id == organizacionActiva.id}"></option>
+                </select>
+                <input type="hidden" name="volver" th:value="${rutaActual}">
+                <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
+            </form>
             <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
                 <ul>
                     <li th:each="s : ${secciones}">
@@ -39,6 +50,11 @@
             </nav>
             <footer class="sidebar-pie">
                 <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
+                <form th:fragment="reiniciar" th:if="${demoHabilitada}"
+                      th:action="@{/demo/reiniciar}" method="post" class="reiniciar">
+                    <input type="hidden" name="volver" th:value="${rutaActual}">
+                    <button type="submit" th:text="#{demo.reiniciar}">Reiniciar demo</button>
+                </form>
             </footer>
         </aside>
         <details class="menu-movil">
@@ -50,9 +66,11 @@
                 <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
             </summary>
             <form th:replace="~{app :: cambioRol}"></form>
+            <form th:replace="~{app :: selectorOrg}"></form>
             <nav th:replace="~{app :: secciones}"></nav>
             <footer class="menu-pie">
                 <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
+                <form th:replace="~{app :: reiniciar}"></form>
             </footer>
         </details>
         <main class="contenido" id="contenido" layout:fragment="content"></main>

@@ -5,6 +5,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import com.ecosolicitud.shared.Rol;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -66,5 +68,13 @@ public enum Seccion {
 
     public static String[] rutas() {
         return Arrays.stream(values()).map(s -> s.ruta).toArray(String[]::new);
+    }
+
+    public static boolean existeRuta(String ruta) {
+        return Arrays.stream(values()).anyMatch(s -> s.ruta.equals(ruta));
+    }
+
+    public static String rutaSegura(String volver, Rol rol) {
+        return volver != null && existeRuta(volver) ? volver : inicioDe(rol).getRuta();
     }
 }
