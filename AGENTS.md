@@ -21,8 +21,9 @@
 ## Esquema y datos de demo
 
 - Los datos de la demo son desechables: la fuente de verdad es `DemoService`, que resiembra al arrancar si la base está vacía.
-- `ddl-auto=update` **no altera tablas de colección** (`@ElementCollection`): agregar o renombrar columnas ahí no se aplica y la app falla al leer. Tampoco elimina columnas que ya no se mapean.
-- Cuando el esquema cambia de esa forma, la salida es recrear: detener la app, borrar `data/` (`ecosolicitud.mv.db` y `ecosolicitud.trace.db`) y volver a arrancar. El demo se resiembra solo.
+- `ddl-auto=create`: el esquema se recrea en cada arranque y `DemoService` resiembra porque la base queda vacía. No hay deriva de esquema posible y no hace falta borrar `data/` a mano.
+- Consecuencia asumida: lo que se cargue durante una sesión se pierde en el próximo reinicio. Es el contrato del modo demo, no un defecto.
+- Por qué no `update`: no altera tablas de colección (`@ElementCollection`) ni elimina columnas que ya no se mapean; la app queda leyendo un esquema a medias.
 - No editar el esquema a mano con el Shell de H2 esperando que persista: el DDL se confirma solo, el DML necesita `COMMIT;` explícito.
 - `spring-boot:run` corre con `addResources=true`: los cambios en `src/main/resources` (templates, CSS, JS) se sirven en vivo sin recompilar. Los cambios de Java sí requieren recompilar.
-- Cuando los datos empiecen a importar (primer usuario real del beta), el reemplazo de `ddl-auto=update` es Flyway con `ddl-auto=validate`.
+- Cuando los datos empiecen a importar (primer usuario real del beta), el reemplazo de `create` es Flyway con `ddl-auto=validate`.
