@@ -5,6 +5,7 @@ src/test/
 *.log
 *.pid
 CLAUDE.md
+AGENTS.md
 .seed
 .allure/
 scratch/
