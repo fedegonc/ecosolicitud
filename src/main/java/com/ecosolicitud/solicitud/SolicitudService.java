@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -42,16 +41,12 @@ public class SolicitudService {
     public List<SolicitudInfo> misSolicitudes(String ciudadanoId, Filtro filtro) {
         var propias = repositorio.findByCiudadano_IdOrderByCreadaEnDesc(ciudadanoId).stream()
                 .filter(s -> filtro.muestra(s.getEstado())).toList();
-        var nombres = organizaciones.nombres(propias.stream()
-                .map(Solicitud::getOrganizacionId).collect(toSet()));
-        return propias.stream().map(s -> aInfo(s, nombres)).toList();
+        return aInfos(propias);
     }
 
     public BandejaSolicitudes recibidas(Actor actor) {
         String organizacionId = organizaciones.actual(actor).id();
-        var lista = repositorio.findByOrganizacionIdOrderByCreadaEnDesc(organizacionId)
-                .stream().map(s -> aInfo(s, organizaciones.nombres(Set.of(organizacionId))))
-                .toList();
+        var lista = aInfos(repositorio.findByOrganizacionIdOrderByCreadaEnDesc(organizacionId));
         return new BandejaSolicitudes(List.of(
                 new GrupoSolicitudes("org.grupo.pendientes",
                         lista.stream().filter(s -> s.estado() == Estado.PENDIENTE).toList()),
@@ -159,6 +154,13 @@ public class SolicitudService {
     private boolean esAutor(Actor actor, Solicitud s) {
         return actor.esCiudadano()
                 && s.getCiudadano().getId().equals(actor.ciudadanoId());
+    }
+
+    // una sola consulta de nombres para toda la lista
+    private List<SolicitudInfo> aInfos(List<Solicitud> solicitudes) {
+        var nombres = organizaciones.nombres(solicitudes.stream()
+                .map(Solicitud::getOrganizacionId).collect(toSet()));
+        return solicitudes.stream().map(s -> aInfo(s, nombres)).toList();
     }
 
     private static SolicitudInfo aInfo(Solicitud s, Map<String, String> nombres) {
