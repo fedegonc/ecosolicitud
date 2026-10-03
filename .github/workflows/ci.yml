@@ -21,3 +21,10 @@ jobs:
           cache: maven
       - name: Verify
         run: mvn -B verify
+      - name: El jar de producción no lleva mecanismos de desarrollo
+        run: |
+          if unzip -l target/ecosolicitud-*.jar | grep -iE 'devtools|jacoco|allure|junit|mockito|selenium|htmlunit'; then
+            echo "::error::El jar de producción contiene artefactos de desarrollo"
+            exit 1
+          fi
+          echo "Jar limpio: sin devtools, jacoco, allure ni frameworks de test"
