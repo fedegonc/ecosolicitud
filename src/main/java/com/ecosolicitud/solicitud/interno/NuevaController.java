@@ -3,7 +3,7 @@ package com.ecosolicitud.solicitud.interno;
 import java.util.List;
 import java.util.Optional;
 
-import com.ecosolicitud.Rutas;
+import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.ActorSesion;

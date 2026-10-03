@@ -1,6 +1,6 @@
 package com.ecosolicitud.organizacion.interno;
 
-import com.ecosolicitud.Rutas;
+import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.organizacion.OrganizacionService;
 
 import org.springframework.stereotype.Controller;

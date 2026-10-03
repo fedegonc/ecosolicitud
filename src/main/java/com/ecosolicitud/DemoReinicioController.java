@@ -1,6 +1,7 @@
 package com.ecosolicitud;
 
 import com.ecosolicitud.demo.DemoService;
+import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.shared.ActorSesion;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

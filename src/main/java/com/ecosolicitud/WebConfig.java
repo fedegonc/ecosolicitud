@@ -1,5 +1,6 @@
 package com.ecosolicitud;
 
+import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.shared.ActorSesion;
 
 import org.springframework.context.annotation.Configuration;

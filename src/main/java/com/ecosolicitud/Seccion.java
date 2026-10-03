@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.shared.Rol;
 
 import org.springframework.http.HttpStatus;

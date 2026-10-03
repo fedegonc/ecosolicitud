@@ -1,6 +1,6 @@
 package com.ecosolicitud.solicitud.interno;
 
-import com.ecosolicitud.Rutas;
+import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.solicitud.SolicitudService;
 

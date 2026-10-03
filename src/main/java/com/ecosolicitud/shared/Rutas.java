@@ -1,4 +1,4 @@
-package com.ecosolicitud;
+package com.ecosolicitud.shared;
 
 public final class Rutas {
 
