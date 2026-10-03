@@ -17,7 +17,7 @@
             <legend th:text="#{perfil.materiales}">Materiales aceptados</legend>
             <label th:each="m : ${materialesTodos}" class="opcion-material">
                 <input type="checkbox" th:field="*{materiales}" th:value="${m}">
-                <span th:class="'etiqueta-material ' + ${m.claseCss}" th:text="#{${m.clave}}">Material</span>
+                <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}" th:text="#{${m.clave}}">Material</span>
             </label>
             <p class="error" th:if="${#fields.hasErrors('materiales')}" th:errors="*{materiales}">Error</p>
         </fieldset>

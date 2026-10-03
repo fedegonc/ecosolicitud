@@ -12,7 +12,7 @@
             <h3 th:text="${o.nombre}">Nombre</h3>
             <p class="detalle"><span th:text="${o.horario}">Horario</span> · <span th:text="${o.telefono}">Teléfono</span></p>
             <ul class="materiales">
-                <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
+                <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}"
                     th:text="#{${m.clave}}">Material</li>
             </ul>
             <p class="detalle"><a th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"

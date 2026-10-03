@@ -1,26 +1,20 @@
 package com.ecosolicitud.shared;
 
 public enum Material {
-    PLASTICO("material.plastico", "mat-plastico"),
-    CARTON("material.carton", "mat-carton"),
-    PAPEL("material.papel", "mat-papel"),
-    VIDRIO("material.vidrio", "mat-vidrio"),
-    METAL("material.metal", "mat-metal"),
-    ELECTRONICOS("material.electronicos", "mat-electronicos");
+    PLASTICO("material.plastico"),
+    CARTON("material.carton"),
+    PAPEL("material.papel"),
+    VIDRIO("material.vidrio"),
+    METAL("material.metal"),
+    ELECTRONICOS("material.electronicos");
 
     private final String clave;
-    private final String claseCss;
 
-    Material(String clave, String claseCss) {
+    Material(String clave) {
         this.clave = clave;
-        this.claseCss = claseCss;
     }
 
     public String getClave() {
         return clave;
-    }
-
-    public String getClaseCss() {
-        return claseCss;
     }
 }

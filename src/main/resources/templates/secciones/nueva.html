@@ -45,7 +45,7 @@
                 <label th:each="m : ${materialesCentro}" class="opcion-material">
                     <input type="checkbox" name="materiales" th:value="${m}"
                            th:checked="${form.materiales.contains(m)}">
-                    <span th:class="'etiqueta-material ' + ${m.claseCss}"
+                    <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}"
                           th:text="#{${m.clave}}">Material</span>
                 </label>
                 <span class="ayuda" th:text="#{nueva.materiales.ayuda}">Ayuda</span>

@@ -8,9 +8,9 @@
             th:text="' · ' + ${s.referencia}"></span></p>
     <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}" th:text="${s.nota}">Nota</p>
     <ul class="materiales">
-        <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
+        <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}"
             th:text="#{${m.clave}}">Material</li>
-        <li th:class="'etiqueta-material ' + ${s.estado.claseCss}" th:text="#{${s.estado.clave}}">Estado</li>
+        <li th:class="'etiqueta-material ' + 'est-' + ${#strings.toLowerCase(s.estado.name())}" th:text="#{${s.estado.clave}}">Estado</li>
     </ul>
     <p class="detalle"><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
             th:if="${s.finalizadaEn != null}"
