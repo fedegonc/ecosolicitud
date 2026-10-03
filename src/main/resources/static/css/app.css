@@ -442,6 +442,22 @@ body {
     cursor: pointer;
 }
 
+.accion.peligro {
+    background: var(--teja);
+    color: var(--crema);
+}
+
+.acciones {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.acciones .accion {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+}
+
 .error {
     color: var(--teja);
     font-size: 0.85rem;

@@ -7,6 +7,8 @@
 <main layout:fragment="content">
     <h1 th:text="#{seccion.mis-solicitudes}">Mis solicitudes</h1>
     <p class="aviso" th:if="${enviada}" th:text="#{mis.enviada(${enviada},${enviadaA})}">Aviso</p>
+    <p class="aviso" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
+    <p class="alerta" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
     <nav class="filtros">
         <a th:each="f : ${filtros}" th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(f.name())})}"
            th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
@@ -30,6 +32,12 @@
         <p class="detalle"><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
                 th:if="${s.finalizadaEn != null}"
                 th:text="' · ' + #{mis.finalizada(${s.finalizada})}">Fin</span></p>
+        <div class="acciones" th:if="${s.estado.name() == 'PENDIENTE'}">
+            <form th:action="@{/mis-solicitudes/{id}/cancelar(id=${s.id})}" method="post">
+                <input type="hidden" name="version" th:value="${s.version}">
+                <button type="submit" class="accion peligro" th:text="#{accion.cancelar}">Cancelar</button>
+            </form>
+        </div>
     </article>
 </main>
 </body>

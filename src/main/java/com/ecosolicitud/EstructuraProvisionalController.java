@@ -22,7 +22,7 @@ class EstructuraProvisionalController {
     }
 
     @GetMapping({Rutas.INICIO, Rutas.NOTIFICACIONES, Rutas.PERFIL, Rutas.ORG_PANEL,
-            Rutas.ORG_SOLICITUDES, Rutas.ORG_REPORTE})
+            Rutas.ORG_REPORTE})
     String seccion(HttpServletRequest request) {
         return "secciones" + Seccion.desdeRuta(request.getRequestURI()).getRuta();
     }

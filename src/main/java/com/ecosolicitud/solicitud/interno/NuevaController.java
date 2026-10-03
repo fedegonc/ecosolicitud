@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ecosolicitud.Rutas;
 import com.ecosolicitud.organizacion.OrganizacionService;
-import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.solicitud.SolicitudService;
@@ -28,13 +27,10 @@ class NuevaController {
 
     private final SolicitudService solicitudes;
     private final OrganizacionService organizaciones;
-    private final ActorSesion actor;
 
-    NuevaController(SolicitudService solicitudes, OrganizacionService organizaciones,
-            ActorSesion actor) {
+    NuevaController(SolicitudService solicitudes, OrganizacionService organizaciones) {
         this.solicitudes = solicitudes;
         this.organizaciones = organizaciones;
-        this.actor = actor;
     }
 
     @GetMapping(Rutas.NUEVA)
@@ -71,7 +67,7 @@ class NuevaController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         if (!errores.hasErrors()) {
-            var creada = solicitudes.crear(actor.getCiudadanoId(), form.getCiudad(),
+            var creada = solicitudes.crear(form.getCiudad(),
                     form.getDireccion(), form.getReferencia(), form.getMateriales(),
                     form.getOrganizacionId(), form.getNota());
             if (creada.isPresent()) {

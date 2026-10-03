@@ -7,6 +7,8 @@ import java.util.List;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.solicitud.Estado;
+import com.ecosolicitud.solicitud.SolicitudSemilla;
+import com.ecosolicitud.solicitud.TransicionInvalidaException;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -23,18 +25,17 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "solicitudes")
 @Getter
-@Setter
 public class Solicitud {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String ciudadanoId;
+    private String nombreCiudadano;
     @Enumerated(EnumType.STRING)
     private Ciudad ciudad;
     private String direccion;
@@ -52,4 +53,63 @@ public class Solicitud {
     private Instant finalizadaEn;
     @Version
     private long version;
+
+    protected Solicitud() {
+    }
+
+    public static Solicitud nueva(SolicitudSemilla s) {
+        if (s.estado().esFinal() != (s.finalizadaEn() != null)) {
+            throw new IllegalArgumentException("finalizadaEn inconsistente con el estado");
+        }
+        if (s.finalizadaEn() != null && s.finalizadaEn().isBefore(s.creadaEn())) {
+            throw new IllegalArgumentException("finalizadaEn anterior a creadaEn");
+        }
+        var sol = new Solicitud();
+        sol.ciudadanoId = s.ciudadanoId();
+        sol.nombreCiudadano = s.nombreCiudadano();
+        sol.ciudad = s.ciudad();
+        sol.direccion = s.direccion();
+        sol.referencia = s.referencia();
+        sol.materiales = new ArrayList<>(s.materiales());
+        sol.organizacionId = s.organizacionId();
+        sol.nota = s.nota();
+        sol.estado = s.estado();
+        sol.creadaEn = s.creadaEn();
+        sol.finalizadaEn = s.finalizadaEn();
+        return sol;
+    }
+
+    public void aceptar() {
+        exigir("aceptar", Estado.PENDIENTE);
+        estado = Estado.EN_CURSO;
+    }
+
+    public void rechazar(Instant ahora) {
+        exigir("rechazar", Estado.PENDIENTE, Estado.EN_CURSO);
+        cerrar(Estado.RECHAZADA, ahora);
+    }
+
+    public void completar(Instant ahora) {
+        exigir("completar", Estado.EN_CURSO);
+        cerrar(Estado.COMPLETADA, ahora);
+    }
+
+    public void cancelar(Instant ahora) {
+        exigir("cancelar", Estado.PENDIENTE);
+        cerrar(Estado.CANCELADA, ahora);
+    }
+
+    private void exigir(String accion, Estado... desde) {
+        for (var e : desde) {
+            if (estado == e) {
+                return;
+            }
+        }
+        throw new TransicionInvalidaException(estado, accion);
+    }
+
+    private void cerrar(Estado destino, Instant ahora) {
+        estado = destino;
+        finalizadaEn = ahora;
+    }
 }

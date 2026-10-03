@@ -8,7 +8,10 @@ import com.ecosolicitud.solicitud.SolicitudService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 class MisSolicitudesController {
@@ -29,5 +32,12 @@ class MisSolicitudesController {
         modelo.addAttribute("solicitudes",
                 servicio.misSolicitudes(actor.getCiudadanoId(), activo));
         return "secciones/mis-solicitudes";
+    }
+
+    @PostMapping(Rutas.MIS_SOLICITUDES + "/{id}/cancelar")
+    String cancelar(@PathVariable long id, @RequestParam long version,
+            RedirectAttributes redir) {
+        return Respuestas.responder(servicio.cancelar(id, version), "mis.cancelada",
+                id, Rutas.MIS_SOLICITUDES, redir);
     }
 }
