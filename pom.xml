@@ -80,11 +80,14 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
+        <!-- Postgres para Supabase en prod: se habilita junto con application-prod.properties
+             cuando Render tenga DATABASE_URL/DATABASE_USER/DATABASE_PASSWORD.
+             Mientras tanto prod usa H2 para no romper el deploy. -->
+        <!-- <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>htmlunit3-driver</artifactId>
