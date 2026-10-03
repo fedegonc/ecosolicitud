@@ -10,7 +10,8 @@
         <h2 th:text="#{${g.ciudad.clave}}">Ciudad</h2>
         <article th:each="o : ${g.organizaciones}" class="tarjeta">
             <h3 th:text="${o.nombre}">Nombre</h3>
-            <p class="detalle"><span th:text="${o.horario}">Horario</span> · <span th:text="${o.telefono}">Teléfono</span></p>
+            <p class="detalle"><span th:text="${o.horario}">Horario</span> · <a th:href="'tel:' + ${#strings.replace(o.telefono, ' ', '')}"
+               th:text="${o.telefono}">Teléfono</a></p>
             <ul class="materiales">
                 <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}"
                     th:text="#{${m.clave}}">Material</li>

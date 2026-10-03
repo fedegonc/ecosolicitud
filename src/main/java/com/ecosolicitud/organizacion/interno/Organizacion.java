@@ -47,6 +47,7 @@ public class Organizacion {
 
     private String horario;
 
+    @Column(nullable = false, length = 30)
     private String telefono;
 
     @Version
