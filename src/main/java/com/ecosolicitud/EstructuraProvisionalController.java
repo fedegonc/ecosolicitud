@@ -14,13 +14,14 @@ class EstructuraProvisionalController {
         this.rolSesion = rolSesion;
     }
 
-    @GetMapping("/")
+    @GetMapping(Rutas.RAIZ)
     String raiz() {
         return "redirect:" + Seccion.inicioDe(rolSesion.get()).getRuta();
     }
 
-    @GetMapping({"/inicio", "/nueva", "/mis-solicitudes", "/acopios", "/notificaciones", "/perfil",
-            "/org/panel", "/org/solicitudes", "/org/reporte", "/org/perfil"})
+    @GetMapping({Rutas.INICIO, Rutas.NUEVA, Rutas.MIS_SOLICITUDES, Rutas.ACOPIOS,
+            Rutas.NOTIFICACIONES, Rutas.PERFIL, Rutas.ORG_PANEL, Rutas.ORG_SOLICITUDES,
+            Rutas.ORG_REPORTE, Rutas.ORG_PERFIL})
     String seccion(HttpServletRequest request) {
         return "secciones" + Seccion.desdeRuta(request.getRequestURI()).getRuta();
     }

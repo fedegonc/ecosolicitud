@@ -13,7 +13,7 @@ class DemoController {
         this.rolSesion = rolSesion;
     }
 
-    @PostMapping("/demo/rol")
+    @PostMapping(Rutas.DEMO_ROL)
     String cambiarRol(@RequestParam Rol rol) {
         rolSesion.cambiar(rol);
         return "redirect:" + Seccion.inicioDe(rol).getRuta();
