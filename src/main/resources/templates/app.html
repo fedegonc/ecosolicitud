@@ -15,7 +15,16 @@
                 <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
                 <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
             </div>
-            <div class="rol-switch"><!-- E2: interruptor de rol --></div>
+            <form th:fragment="cambioRol" th:action="@{/demo/rol}" method="post" class="rol-switch">
+                <button type="submit" name="rol" value="CIUDADANO"
+                        th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
+                        th:attr="aria-pressed=${rolActual.name() == 'CIUDADANO'}"
+                        th:text="#{rol.ciudadano}">Ciudadano</button>
+                <button type="submit" name="rol" value="ORGANIZACION"
+                        th:classappend="${rolActual.name() == 'ORGANIZACION'} ? 'activa'"
+                        th:attr="aria-pressed=${rolActual.name() == 'ORGANIZACION'}"
+                        th:text="#{rol.organizacion}">Organización</button>
+            </form>
             <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
                 <ul>
                     <li th:each="s : ${secciones}">
@@ -40,6 +49,7 @@
                 </span>
                 <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
             </summary>
+            <form th:replace="~{app :: cambioRol}"></form>
             <nav th:replace="~{app :: secciones}"></nav>
             <footer class="menu-pie">
                 <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>

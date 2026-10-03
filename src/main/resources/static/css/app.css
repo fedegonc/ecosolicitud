@@ -138,6 +138,10 @@ body {
     padding: 0 var(--pad) var(--pad);
 }
 
+.menu-movil .rol-switch {
+    padding: 0.75rem var(--pad) 0.5rem;
+}
+
 .menu-marca {
     display: flex;
     align-items: center;
@@ -163,6 +167,43 @@ body {
 
 .sidebar {
     display: none;
+}
+
+/* ---------- interruptor de rol ---------- */
+
+.rol-switch {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.6rem calc(var(--pad) / 2);
+    border: none;
+}
+
+.rol-switch button {
+    flex: 1;
+    padding: 0.55rem 0.4rem;
+    border: 1px solid var(--verde-sidebar-activo);
+    border-radius: var(--radio);
+    background: transparent;
+    color: var(--verde-sidebar-texto);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.rol-switch button:hover {
+    background: var(--verde-sidebar-activo);
+}
+
+.rol-switch button.activa {
+    background: var(--acento);
+    border-color: var(--acento);
+    color: var(--acento-texto);
+    font-weight: 600;
+}
+
+.rol-switch button:focus-visible {
+    outline: var(--foco);
+    outline-offset: 2px;
 }
 
 /* ---------- insignia demo ---------- */
@@ -219,18 +260,14 @@ body {
     }
 
     .marca-logo {
-        width: 2.25rem;
-        height: 2.25rem;
+        width: 4.5rem;
+        height: 4.5rem;
     }
 
     .marca-nombre {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         font-weight: 700;
         color: var(--blanco);
-    }
-
-    .rol-switch {
-        min-height: var(--pad);
     }
 
     .sidebar-pie {

@@ -10,14 +10,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 class NavegacionAdvice {
 
+    private final RolSesion rolSesion;
+
+    NavegacionAdvice(RolSesion rolSesion) {
+        this.rolSesion = rolSesion;
+    }
+
     @ModelAttribute("rutaActual")
     String rutaActual(HttpServletRequest request) {
         return request.getRequestURI();
     }
 
+    @ModelAttribute("rolActual")
+    Rol rolActual() {
+        return rolSesion.get();
+    }
+
     @ModelAttribute("secciones")
     List<Seccion> secciones() {
-        // E2: reemplazar CIUDADANO por el rol de la sesión
-        return Seccion.paraRol(Rol.CIUDADANO);
+        return Seccion.paraRol(rolSesion.get());
     }
 }

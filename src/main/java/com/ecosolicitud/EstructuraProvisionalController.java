@@ -14,7 +14,7 @@ class EstructuraProvisionalController {
     }
 
     @GetMapping({"/inicio", "/nueva", "/mis-solicitudes", "/acopios", "/notificaciones", "/perfil",
-            "/org/panel", "/org/solicitudes", "/org/materiales", "/org/reportes"})
+            "/org/panel", "/org/solicitudes", "/org/reporte", "/org/perfil"})
     String seccion(HttpServletRequest request) {
         return "secciones" + Seccion.desdeRuta(request.getRequestURI()).getRuta();
     }
