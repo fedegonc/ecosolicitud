@@ -16,6 +16,10 @@ public class ActorSesion {
         return rol;
     }
 
+    public Actor actual() {
+        return new Actor(rol, ciudadanoId, nombreCiudadano, organizacionId);
+    }
+
     public String getCiudadanoId() {
         return ciudadanoId;
     }

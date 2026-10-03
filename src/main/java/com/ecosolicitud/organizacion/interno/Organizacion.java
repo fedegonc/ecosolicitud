@@ -15,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class Organizacion {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "organizacion_materiales",
             joinColumns = @JoinColumn(name = "organizacion_id"))
+    @OrderColumn(name = "orden")
     @Enumerated(EnumType.STRING)
     @Column(name = "material")
     private List<Material> materiales = new ArrayList<>();

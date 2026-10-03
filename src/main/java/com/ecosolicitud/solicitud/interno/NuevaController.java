@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.ecosolicitud.Rutas;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.solicitud.SolicitudService;
 
@@ -27,10 +28,13 @@ class NuevaController {
 
     private final SolicitudService solicitudes;
     private final OrganizacionService organizaciones;
+    private final ActorSesion actor;
 
-    NuevaController(SolicitudService solicitudes, OrganizacionService organizaciones) {
+    NuevaController(SolicitudService solicitudes, OrganizacionService organizaciones,
+            ActorSesion actor) {
         this.solicitudes = solicitudes;
         this.organizaciones = organizaciones;
+        this.actor = actor;
     }
 
     @GetMapping(Rutas.NUEVA)
@@ -58,7 +62,7 @@ class NuevaController {
             errores.rejectValue("materiales", "nueva.error.material.no-recibido");
         }
         if (!errores.hasErrors()) {
-            var creada = solicitudes.crear(form.getCiudad(),
+            var creada = solicitudes.crear(actor.actual(), form.getCiudad(),
                     form.getDireccion(), form.getReferencia(), form.getMateriales(),
                     form.getOrganizacionId(), form.getNota());
             if (creada.isPresent()) {

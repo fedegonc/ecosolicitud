@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import com.ecosolicitud.organizacion.interno.Organizacion;
 import com.ecosolicitud.organizacion.interno.OrganizacionRepository;
-import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Actor;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 
@@ -26,11 +26,9 @@ import static java.util.stream.Collectors.toMap;
 public class OrganizacionService {
 
     private final OrganizacionRepository repositorio;
-    private final ActorSesion actor;
 
-    public OrganizacionService(OrganizacionRepository repositorio, ActorSesion actor) {
+    public OrganizacionService(OrganizacionRepository repositorio) {
         this.repositorio = repositorio;
-        this.actor = actor;
     }
 
     public List<OrganizacionInfo> todas() {
@@ -46,8 +44,8 @@ public class OrganizacionService {
                 .toList();
     }
 
-    public OrganizacionInfo actual() {
-        String id = actor.getOrganizacionId();
+    public OrganizacionInfo actual(Actor actor) {
+        String id = actor.organizacionId();
         var encontrada = id != null ? buscar(id) : Optional.<OrganizacionInfo>empty();
         return encontrada.orElseGet(this::primera);
     }

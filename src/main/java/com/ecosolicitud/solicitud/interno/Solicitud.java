@@ -21,6 +21,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
@@ -42,6 +43,7 @@ public class Solicitud {
     private String referencia;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "solicitud_materiales", joinColumns = @JoinColumn(name = "solicitud_id"))
+    @OrderColumn(name = "orden")
     @Enumerated(EnumType.STRING)
     @Column(name = "material")
     private List<Material> materiales = new ArrayList<>();

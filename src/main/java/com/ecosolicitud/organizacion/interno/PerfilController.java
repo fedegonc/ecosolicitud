@@ -2,6 +2,7 @@ package com.ecosolicitud.organizacion.interno;
 
 import com.ecosolicitud.Rutas;
 import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Material;
 
 import jakarta.validation.Valid;
@@ -18,14 +19,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 class PerfilController {
 
     private final OrganizacionService servicio;
+    private final ActorSesion actor;
 
-    PerfilController(OrganizacionService servicio) {
+    PerfilController(OrganizacionService servicio, ActorSesion actor) {
         this.servicio = servicio;
+        this.actor = actor;
     }
 
     @GetMapping(Rutas.ORG_PERFIL)
     String perfil(Model modelo) {
-        modelo.addAttribute("form", PerfilForm.de(servicio.actual()));
+        modelo.addAttribute("form", PerfilForm.de(servicio.actual(actor.actual())));
         return formulario(modelo);
     }
 
@@ -35,7 +38,7 @@ class PerfilController {
         if (errores.hasErrors()) {
             return formulario(modelo);
         }
-        var org = servicio.actual();
+        var org = servicio.actual(actor.actual());
         if (!servicio.actualizarPerfil(org.id(), form.getMateriales(),
                 form.getHorario(), form.getTelefono(), form.getVersion())) {
             modelo.addAttribute("conflicto", true);

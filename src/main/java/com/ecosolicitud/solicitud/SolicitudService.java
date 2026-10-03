@@ -10,10 +10,9 @@ import java.util.function.Predicate;
 
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
-import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Actor;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
-import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.solicitud.interno.Solicitud;
 import com.ecosolicitud.solicitud.interno.SolicitudRepository;
 
@@ -29,13 +28,11 @@ public class SolicitudService {
 
     private final SolicitudRepository repositorio;
     private final OrganizacionService organizaciones;
-    private final ActorSesion actor;
 
     public SolicitudService(SolicitudRepository repositorio,
-            OrganizacionService organizaciones, ActorSesion actor) {
+            OrganizacionService organizaciones) {
         this.repositorio = repositorio;
         this.organizaciones = organizaciones;
-        this.actor = actor;
     }
 
     public List<SolicitudInfo> misSolicitudes(String ciudadanoId, Filtro filtro) {
@@ -60,7 +57,7 @@ public class SolicitudService {
     }
 
     @Transactional
-    public Optional<SolicitudInfo> crear(Ciudad ciudad, String direccion,
+    public Optional<SolicitudInfo> crear(Actor actor, Ciudad ciudad, String direccion,
             String referencia, List<Material> materiales, String organizacionId,
             String nota) {
         boolean compatible = organizaciones.compatibles(ciudad, materiales).stream()
@@ -68,8 +65,8 @@ public class SolicitudService {
         if (!compatible) {
             return Optional.empty();
         }
-        var s = Solicitud.nueva(new SolicitudSemilla(actor.getCiudadanoId(),
-                actor.getNombreCiudadano(), ciudad, direccion, referencia, materiales,
+        var s = Solicitud.nueva(new SolicitudSemilla(actor.ciudadanoId(),
+                actor.nombreCiudadano(), ciudad, direccion, referencia, materiales,
                 organizacionId, nota, Estado.PENDIENTE, Instant.now(), null));
         repositorio.save(s);
         String nombre = organizaciones.buscar(organizacionId)
@@ -78,23 +75,23 @@ public class SolicitudService {
     }
 
     @Transactional
-    public Resultado aceptar(long id, long version) {
-        return aplicar(id, version, this::esDestinataria, Solicitud::aceptar);
+    public Resultado aceptar(Actor actor, long id, long version) {
+        return aplicar(actor, id, version, s -> esDestinataria(actor, s), Solicitud::aceptar);
     }
 
     @Transactional
-    public Resultado rechazar(long id, long version) {
-        return aplicar(id, version, this::esDestinataria, s -> s.rechazar(Instant.now()));
+    public Resultado rechazar(Actor actor, long id, long version) {
+        return aplicar(actor, id, version, s -> esDestinataria(actor, s), s -> s.rechazar(Instant.now()));
     }
 
     @Transactional
-    public Resultado completar(long id, long version) {
-        return aplicar(id, version, this::esDestinataria, s -> s.completar(Instant.now()));
+    public Resultado completar(Actor actor, long id, long version) {
+        return aplicar(actor, id, version, s -> esDestinataria(actor, s), s -> s.completar(Instant.now()));
     }
 
     @Transactional
-    public Resultado cancelar(long id, long version) {
-        return aplicar(id, version, this::esAutor, s -> s.cancelar(Instant.now()));
+    public Resultado cancelar(Actor actor, long id, long version) {
+        return aplicar(actor, id, version, s -> esAutor(actor, s), s -> s.cancelar(Instant.now()));
     }
 
     public List<SolicitudInfo> todas() {
@@ -114,7 +111,7 @@ public class SolicitudService {
         dataset.forEach(s -> repositorio.save(Solicitud.nueva(s)));
     }
 
-    private Resultado aplicar(long id, long version, Predicate<Solicitud> permiso,
+    private Resultado aplicar(Actor actor, long id, long version, Predicate<Solicitud> permiso,
             Consumer<Solicitud> transicion) {
         var s = repositorio.findById(id).orElse(null);
         if (s == null) {
@@ -137,14 +134,14 @@ public class SolicitudService {
         }
     }
 
-    private boolean esDestinataria(Solicitud s) {
-        return actor.get() == Rol.ORGANIZACION
-                && s.getOrganizacionId().equals(actor.getOrganizacionId());
+    private boolean esDestinataria(Actor actor, Solicitud s) {
+        return actor.esOrganizacion()
+                && s.getOrganizacionId().equals(actor.organizacionId());
     }
 
-    private boolean esAutor(Solicitud s) {
-        return actor.get() == Rol.CIUDADANO
-                && s.getCiudadanoId().equals(actor.getCiudadanoId());
+    private boolean esAutor(Actor actor, Solicitud s) {
+        return actor.esCiudadano()
+                && s.getCiudadanoId().equals(actor.ciudadanoId());
     }
 
     private static SolicitudInfo aInfo(Solicitud s, Map<String, String> nombres) {

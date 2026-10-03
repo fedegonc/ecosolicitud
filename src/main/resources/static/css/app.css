@@ -4,6 +4,12 @@
    ============================================================ */
 
 :root {
+    /* escala tipográfica */
+    --t-xs: 0.75rem;
+    --t-sm: 0.85rem;
+    --t-base: 1rem;
+    --t-lg: 1.15rem;
+
     /* papel y tinta */
     --papel: #f4f0e5;
     --papel-claro: #fbf9f4;
@@ -60,6 +66,7 @@
 
 body {
     margin: 0;
+    font-size: var(--t-base);
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     background-color: var(--fondo);
     background-image: var(--textura);
@@ -144,18 +151,41 @@ body {
     color: var(--nav-texto);
 }
 
-.menu-movil summary {
+.menu-barra {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.9rem var(--pad);
-    cursor: pointer;
-    list-style: none;
-    font-weight: 600;
 }
 
-.menu-movil summary::-webkit-details-marker {
+.menu-panel {
+    position: relative;
+}
+
+.menu-panel summary {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+.menu-panel summary::-webkit-details-marker {
     display: none;
+}
+
+.menu-panel-cuerpo {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    z-index: 30;
+    width: min(16rem, calc(100vw - 2 * var(--pad)));
+    padding-bottom: 0.6rem;
+    background-color: var(--nav-fondo);
+    background-image: var(--textura);
+    border: 1px solid var(--nav-activo);
+    border-radius: var(--radio);
+    box-shadow: 0 10px 24px rgb(0 0 0 / 0.28);
 }
 
 .menu-movil .secciones {
@@ -185,7 +215,7 @@ body {
 }
 
 .menu-marca .marca-nombre {
-    font-size: 1.1rem;
+    font-size: var(--t-lg);
     font-weight: 700;
     color: var(--crema);
 }
@@ -228,7 +258,7 @@ body {
     background: transparent;
     color: var(--nav-texto);
     font: inherit;
-    font-size: 0.85rem;
+    font-size: var(--t-sm);
     cursor: pointer;
 }
 
@@ -258,13 +288,13 @@ body {
     gap: 0.4rem;
     padding: 0;
     border: none;
-    font-size: 0.85rem;
+    font-size: var(--t-sm);
 }
 
 .org-switch label {
     color: var(--nav-texto);
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: var(--t-xs);
     opacity: 0.8;
 }
 
@@ -303,7 +333,7 @@ body {
     background: transparent;
     color: var(--nav-texto);
     font: inherit;
-    font-size: 0.8rem;
+    font-size: var(--t-sm);
     cursor: pointer;
 }
 
@@ -317,7 +347,7 @@ body {
     display: inline-block;
     padding: 0.18rem 0.6rem;
     border-radius: 999px;
-    font-size: 0.78rem;
+    font-size: var(--t-xs);
     font-weight: 600;
     color: var(--crema);
 }
@@ -385,7 +415,7 @@ body {
     border-radius: 999px;
     text-decoration: none;
     color: var(--texto);
-    font-size: 0.85rem;
+    font-size: var(--t-sm);
 }
 
 .filtros a.activa {
@@ -411,7 +441,7 @@ body {
 
 .detalle {
     margin: 0.2rem 0 0.6rem;
-    font-size: 0.9rem;
+    font-size: var(--t-sm);
 }
 
 .materiales {
@@ -488,12 +518,12 @@ body {
 
 .acciones .accion {
     padding: 0.4rem 0.9rem;
-    font-size: 0.85rem;
+    font-size: var(--t-sm);
 }
 
 .error {
     color: var(--teja-texto);
-    font-size: 0.85rem;
+    font-size: var(--t-sm);
     font-weight: 600;
 }
 
@@ -514,7 +544,7 @@ body {
 /* ---------- etiqueta de modo demo ---------- */
 
 .demo {
-    font-size: 0.7rem;
+    font-size: var(--t-xs);
     font-weight: 700;
     letter-spacing: 0.06em;
     color: var(--ocre-claro);
@@ -582,7 +612,7 @@ body {
     }
 
     .marca-nombre {
-        font-size: 1.15rem;
+        font-size: var(--t-lg);
         font-weight: 700;
         color: var(--crema);
         min-width: 0;
@@ -621,7 +651,7 @@ body {
 .ayuda {
     display: block;
     margin-top: 0.25rem;
-    font-size: 0.8rem;
+    font-size: var(--t-sm);
     color: var(--ardosia-texto);
 }
 
@@ -643,7 +673,7 @@ body {
 
 .opcion-centro .detalle {
     margin: 0;
-    font-size: 0.8rem;
+    font-size: var(--t-sm);
 }
 
 .opcion-centro:hover {

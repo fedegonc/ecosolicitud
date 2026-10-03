@@ -32,21 +32,21 @@ class OrgSolicitudesController {
     @PostMapping(Rutas.ORG_SOLICITUDES + "/{id}/aceptar")
     String aceptar(@PathVariable long id, @RequestParam long version,
             RedirectAttributes redir) {
-        return Respuestas.responder(servicio.aceptar(id, version), "org.aceptada",
+        return Respuestas.responder(servicio.aceptar(actor.actual(), id, version), "org.aceptada",
                 id, Rutas.ORG_SOLICITUDES, redir);
     }
 
     @PostMapping(Rutas.ORG_SOLICITUDES + "/{id}/rechazar")
     String rechazar(@PathVariable long id, @RequestParam long version,
             RedirectAttributes redir) {
-        return Respuestas.responder(servicio.rechazar(id, version), "org.rechazada",
+        return Respuestas.responder(servicio.rechazar(actor.actual(), id, version), "org.rechazada",
                 id, Rutas.ORG_SOLICITUDES, redir);
     }
 
     @PostMapping(Rutas.ORG_SOLICITUDES + "/{id}/completar")
     String completar(@PathVariable long id, @RequestParam long version,
             RedirectAttributes redir) {
-        return Respuestas.responder(servicio.completar(id, version), "org.completada",
+        return Respuestas.responder(servicio.completar(actor.actual(), id, version), "org.completada",
                 id, Rutas.ORG_SOLICITUDES, redir);
     }
 }

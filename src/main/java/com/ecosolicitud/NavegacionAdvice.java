@@ -49,7 +49,7 @@ class NavegacionAdvice {
 
     @ModelAttribute("organizacionActiva")
     OrganizacionInfo organizacionActiva() {
-        return organizaciones.actual();
+        return organizaciones.actual(actor.actual());
     }
 
     @ModelAttribute("demoHabilitada")

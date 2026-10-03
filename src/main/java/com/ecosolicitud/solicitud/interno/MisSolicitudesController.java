@@ -37,7 +37,7 @@ class MisSolicitudesController {
     @PostMapping(Rutas.MIS_SOLICITUDES + "/{id}/cancelar")
     String cancelar(@PathVariable long id, @RequestParam long version,
             RedirectAttributes redir) {
-        return Respuestas.responder(servicio.cancelar(id, version), "mis.cancelada",
+        return Respuestas.responder(servicio.cancelar(actor.actual(), id, version), "mis.cancelada",
                 id, Rutas.MIS_SOLICITUDES, redir);
     }
 }
