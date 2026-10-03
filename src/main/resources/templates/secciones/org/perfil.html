@@ -29,7 +29,9 @@
         <label class="campo">
             <span th:text="#{perfil.telefono}">Teléfono</span>
             <input type="text" th:field="*{telefono}" inputmode="tel"
-                       autocomplete="tel" maxlength="30">
+                   autocomplete="tel" maxlength="30"
+                   th:placeholder="#{perfil.telefono.ejemplo}">
+            <span class="ayuda" th:text="#{perfil.telefono.ayuda}">Ayuda</span>
             <span class="error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}">Error</span>
         </label>
         <input type="hidden" th:field="*{version}">
