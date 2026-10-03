@@ -21,9 +21,8 @@ class EstructuraProvisionalController {
         return "redirect:" + Seccion.inicioDe(actor.get()).getRuta();
     }
 
-    @GetMapping({Rutas.INICIO, Rutas.NUEVA, Rutas.MIS_SOLICITUDES,
-            Rutas.NOTIFICACIONES, Rutas.PERFIL, Rutas.ORG_PANEL, Rutas.ORG_SOLICITUDES,
-            Rutas.ORG_REPORTE})
+    @GetMapping({Rutas.INICIO, Rutas.NOTIFICACIONES, Rutas.PERFIL, Rutas.ORG_PANEL,
+            Rutas.ORG_SOLICITUDES, Rutas.ORG_REPORTE})
     String seccion(HttpServletRequest request) {
         return "secciones" + Seccion.desdeRuta(request.getRequestURI()).getRuta();
     }

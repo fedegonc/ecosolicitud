@@ -317,6 +317,53 @@ body {
     background: var(--mat-electronicos);
 }
 
+/* ---------- etiquetas de estado ---------- */
+
+.est-pendiente {
+    background: var(--ocre);
+    color: var(--acento-texto);
+}
+
+.est-en-curso {
+    background: var(--ardosia);
+}
+
+.est-completada {
+    background: var(--oliva);
+}
+
+.est-rechazada {
+    background: var(--teja);
+}
+
+.est-cancelada {
+    background: var(--mat-metal);
+}
+
+/* ---------- filtros de lista ---------- */
+
+.filtros {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.filtros a {
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--borde);
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--texto);
+    font-size: 0.85rem;
+}
+
+.filtros a.activa {
+    background: var(--acento);
+    border-color: var(--acento);
+    color: var(--acento-texto);
+    font-weight: 600;
+}
+
 /* ---------- centros de acopio ---------- */
 
 .acopio {
@@ -364,7 +411,9 @@ body {
     margin-bottom: 0.25rem;
 }
 
-.campo input[type="text"] {
+.campo input[type="text"],
+.campo select,
+.campo textarea {
     width: 100%;
     padding: 0.5rem 0.6rem;
     border: 1px solid var(--borde);

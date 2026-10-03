@@ -15,6 +15,8 @@
                 <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
                     th:text="#{${m.clave}}">Material</li>
             </ul>
+            <p class="detalle"><a th:href="@{/nueva(ciudad=${o.ciudad},organizacion=${o.id})}"
+                th:text="#{acopios.pedir}">Pedir retiro</a></p>
         </article>
     </section>
 </main>

@@ -1,12 +1,36 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
     <title th:text="#{seccion.mis-solicitudes}">Mis solicitudes</title>
 </head>
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.mis-solicitudes}">Mis solicitudes</h1>
-    <p th:text="#{demo.construccion}">Sección en construcción</p>
+    <p class="aviso" th:if="${enviada}" th:text="#{mis.enviada(${enviada},${enviadaA})}">Aviso</p>
+    <nav class="filtros">
+        <a th:each="f : ${filtros}" th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(f.name())})}"
+           th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
+           th:text="#{${'mis.filtro.' + #strings.toLowerCase(f.name())}}">Todas</a>
+    </nav>
+    <p class="detalle" th:if="${solicitudes.isEmpty()}">
+        <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
+        <a th:href="@{/nueva}" th:text="#{mis.nueva}">Nueva solicitud</a>
+    </p>
+    <article th:each="s : ${solicitudes}" class="acopio">
+        <h3><span th:text="'#' + ${s.id}">#1</span> · <span th:text="${s.organizacionNombre}">Org</span></h3>
+        <p class="detalle"><span th:text="${s.direccion}">Dirección</span><span
+                th:if="${s.referencia != null and !s.referencia.isEmpty()}"
+                th:text="' · ' + ${s.referencia}"></span></p>
+        <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}" th:text="${s.nota}">Nota</p>
+        <ul class="materiales">
+            <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
+                th:text="#{${m.clave}}">Material</li>
+            <li th:class="'etiqueta-material ' + ${s.estado.claseCss}" th:text="#{${s.estado.clave}}">Estado</li>
+        </ul>
+        <p class="detalle"><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
+                th:if="${s.finalizadaEn != null}"
+                th:text="' · ' + #{mis.finalizada(${s.finalizada})}">Fin</span></p>
+    </article>
 </main>
 </body>
 </html>

@@ -2,8 +2,10 @@ package com.ecosolicitud.organizacion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.ecosolicitud.organizacion.interno.Organizacion;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 public class OrganizacionService {
@@ -51,6 +54,18 @@ public class OrganizacionService {
 
     public Optional<OrganizacionInfo> buscar(String id) {
         return repositorio.findById(id).map(OrganizacionService::aInfo);
+    }
+
+    public List<OrganizacionInfo> compatibles(Ciudad ciudad,
+            Collection<Material> materiales) {
+        return repositorio.findByCiudadOrderByNombre(ciudad).stream()
+                .filter(o -> o.getMateriales().containsAll(materiales))
+                .map(OrganizacionService::aInfo).toList();
+    }
+
+    public Map<String, String> nombres(Collection<String> ids) {
+        return repositorio.findAllById(ids).stream()
+                .collect(toMap(Organizacion::getId, Organizacion::getNombre));
     }
 
     public boolean vacia() {
