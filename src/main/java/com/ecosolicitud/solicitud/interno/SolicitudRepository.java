@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
 
-    List<Solicitud> findByCiudadanoIdOrderByCreadaEnDesc(String ciudadanoId);
+    List<Solicitud> findByCiudadano_IdOrderByCreadaEnDesc(String ciudadanoId);
 
     List<Solicitud> findByOrganizacionIdOrderByCreadaEnDesc(String organizacionId);
 }

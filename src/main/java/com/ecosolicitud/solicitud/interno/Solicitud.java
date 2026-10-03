@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.solicitud.Estado;
 import com.ecosolicitud.solicitud.SolicitudSemilla;
@@ -20,7 +19,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
@@ -28,17 +29,18 @@ import jakarta.persistence.Version;
 import lombok.Getter;
 
 @Entity
-@Table(name = "solicitudes")
+@Table(name = "solicitudes", indexes = {
+        @Index(name = "ix_sol_ciudadano", columnList = "ciudadano_id, creada_en"),
+        @Index(name = "ix_sol_org", columnList = "organizacion_id, estado")})
 @Getter
 public class Solicitud {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String ciudadanoId;
-    private String nombreCiudadano;
-    @Enumerated(EnumType.STRING)
-    private Ciudad ciudad;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "ciudadano_id")
+    private Ciudadano ciudadano;
     private String direccion;
     private String referencia;
     @ElementCollection(fetch = FetchType.EAGER)
@@ -59,7 +61,7 @@ public class Solicitud {
     protected Solicitud() {
     }
 
-    public static Solicitud nueva(SolicitudSemilla s) {
+    public static Solicitud nueva(SolicitudSemilla s, Ciudadano ciudadano) {
         if (s.estado().esFinal() != (s.finalizadaEn() != null)) {
             throw new IllegalArgumentException("finalizadaEn inconsistente con el estado");
         }
@@ -67,9 +69,7 @@ public class Solicitud {
             throw new IllegalArgumentException("finalizadaEn anterior a creadaEn");
         }
         var sol = new Solicitud();
-        sol.ciudadanoId = s.ciudadanoId();
-        sol.nombreCiudadano = s.nombreCiudadano();
-        sol.ciudad = s.ciudad();
+        sol.ciudadano = ciudadano;
         sol.direccion = s.direccion();
         sol.referencia = s.referencia();
         sol.materiales = new ArrayList<>(s.materiales());

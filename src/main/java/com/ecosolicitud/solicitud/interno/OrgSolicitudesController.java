@@ -25,7 +25,7 @@ class OrgSolicitudesController {
 
     @GetMapping(Rutas.ORG_SOLICITUDES)
     String lista(Model modelo) {
-        modelo.addAttribute("bandeja", servicio.recibidas(actor.getOrganizacionId()));
+        modelo.addAttribute("bandeja", servicio.recibidas(actor.actual()));
         return "secciones/org/solicitudes";
     }
 

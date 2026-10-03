@@ -13,6 +13,8 @@ import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.Actor;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.solicitud.interno.Ciudadano;
+import com.ecosolicitud.solicitud.interno.CiudadanoRepository;
 import com.ecosolicitud.solicitud.interno.Solicitud;
 import com.ecosolicitud.solicitud.interno.SolicitudRepository;
 
@@ -27,23 +29,26 @@ import static java.util.stream.Collectors.toSet;
 public class SolicitudService {
 
     private final SolicitudRepository repositorio;
+    private final CiudadanoRepository ciudadanos;
     private final OrganizacionService organizaciones;
 
     public SolicitudService(SolicitudRepository repositorio,
-            OrganizacionService organizaciones) {
+            CiudadanoRepository ciudadanos, OrganizacionService organizaciones) {
         this.repositorio = repositorio;
+        this.ciudadanos = ciudadanos;
         this.organizaciones = organizaciones;
     }
 
     public List<SolicitudInfo> misSolicitudes(String ciudadanoId, Filtro filtro) {
-        var propias = repositorio.findByCiudadanoIdOrderByCreadaEnDesc(ciudadanoId).stream()
+        var propias = repositorio.findByCiudadano_IdOrderByCreadaEnDesc(ciudadanoId).stream()
                 .filter(s -> filtro.muestra(s.getEstado())).toList();
         var nombres = organizaciones.nombres(propias.stream()
                 .map(Solicitud::getOrganizacionId).collect(toSet()));
         return propias.stream().map(s -> aInfo(s, nombres)).toList();
     }
 
-    public BandejaSolicitudes recibidas(String organizacionId) {
+    public BandejaSolicitudes recibidas(Actor actor) {
+        String organizacionId = organizaciones.actual(actor).id();
         var lista = repositorio.findByOrganizacionIdOrderByCreadaEnDesc(organizacionId)
                 .stream().map(s -> aInfo(s, organizaciones.nombres(Set.of(organizacionId))))
                 .toList();
@@ -66,8 +71,9 @@ public class SolicitudService {
             return Optional.empty();
         }
         var s = Solicitud.nueva(new SolicitudSemilla(actor.ciudadanoId(),
-                actor.nombreCiudadano(), ciudad, direccion, referencia, materiales,
-                organizacionId, nota, Estado.PENDIENTE, Instant.now(), null));
+                actor.nombreCiudadano(), direccion, referencia, materiales,
+                organizacionId, nota, Estado.PENDIENTE, Instant.now(), null),
+                ciudadano(actor.ciudadanoId(), actor.nombreCiudadano()));
         repositorio.save(s);
         String nombre = organizaciones.buscar(organizacionId)
                 .map(OrganizacionInfo::nombre).orElse(organizacionId);
@@ -108,7 +114,18 @@ public class SolicitudService {
     @Transactional
     public void reemplazarTodas(List<SolicitudSemilla> dataset) {
         repositorio.deleteAll();
-        dataset.forEach(s -> repositorio.save(Solicitud.nueva(s)));
+        ciudadanos.deleteAll();
+        dataset.forEach(s -> repositorio.save(
+                Solicitud.nueva(s, ciudadano(s.ciudadanoId(), s.nombreCiudadano()))));
+    }
+
+    private Ciudadano ciudadano(String id, String nombre) {
+        return ciudadanos.findById(id).orElseGet(() -> {
+            var nuevo = new Ciudadano();
+            nuevo.setId(id);
+            nuevo.setNombre(nombre);
+            return ciudadanos.save(nuevo);
+        });
     }
 
     private Resultado aplicar(Actor actor, long id, long version, Predicate<Solicitud> permiso,
@@ -141,14 +158,14 @@ public class SolicitudService {
 
     private boolean esAutor(Actor actor, Solicitud s) {
         return actor.esCiudadano()
-                && s.getCiudadanoId().equals(actor.ciudadanoId());
+                && s.getCiudadano().getId().equals(actor.ciudadanoId());
     }
 
     private static SolicitudInfo aInfo(Solicitud s, Map<String, String> nombres) {
-        return new SolicitudInfo(s.getId(), s.getCiudad(), s.getDireccion(),
+        return new SolicitudInfo(s.getId(), s.getDireccion(),
                 s.getReferencia(), List.copyOf(s.getMateriales()),
                 nombres.getOrDefault(s.getOrganizacionId(), s.getOrganizacionId()),
-                s.getNombreCiudadano(), s.getNota(), s.getEstado(), s.getCreadaEn(),
+                s.getCiudadano().getNombre(), s.getNota(), s.getEstado(), s.getCreadaEn(),
                 s.getFinalizadaEn(), s.getVersion());
     }
 }
