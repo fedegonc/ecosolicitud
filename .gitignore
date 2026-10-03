@@ -1,0 +1,8 @@
+target/
+data/
+src/test/
+*.log
+*.pid
+CLAUDE.md
+.seed
+.allure/

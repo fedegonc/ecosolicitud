@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE · $LAYOUT_TITLE">EcoSolicitud</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+</head>
+<body>
+    <a class="salto" href="#contenido" th:text="#{nav.saltar}">Saltar al contenido</a>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="marca">
+                <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
+                <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
+            </div>
+            <div class="rol-switch"><!-- E2: interruptor de rol --></div>
+            <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
+                <ul>
+                    <li th:each="s : ${secciones}">
+                        <a th:href="${s.ruta}"
+                           th:classappend="${s.ruta == rutaActual} ? 'activa'"
+                           th:attr="aria-current=${s.ruta == rutaActual} ? 'page' : null">
+                            <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
+                            <span th:text="#{${s.clave}}">Sección</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <footer class="sidebar-pie">
+                <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
+            </footer>
+        </aside>
+        <details class="menu-movil">
+            <summary>
+                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
+                <span th:text="#{nav.menu}">Menú</span>
+            </summary>
+            <nav th:replace="~{app :: secciones}"></nav>
+        </details>
+        <main class="contenido" id="contenido" layout:fragment="content"></main>
+    </div>
+</body>
+</html>
