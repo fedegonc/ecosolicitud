@@ -20,20 +20,8 @@ public class ActorSesion {
         return new Actor(rol, ciudadanoId, nombreCiudadano, organizacionId);
     }
 
-    public String getCiudadanoId() {
-        return ciudadanoId;
-    }
-
-    public String getNombreCiudadano() {
-        return nombreCiudadano;
-    }
-
     public void cambiar(Rol rol) {
         this.rol = rol;
-    }
-
-    public String getOrganizacionId() {
-        return organizacionId;
     }
 
     public void elegirOrganizacion(String organizacionId) {

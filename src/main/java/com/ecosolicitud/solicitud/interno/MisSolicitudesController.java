@@ -30,7 +30,7 @@ class MisSolicitudesController {
         modelo.addAttribute("filtro", activo);
         modelo.addAttribute("filtros", Filtro.values());
         modelo.addAttribute("solicitudes",
-                servicio.misSolicitudes(actor.getCiudadanoId(), activo));
+                servicio.misSolicitudes(actor.actual().ciudadanoId(), activo));
         return "secciones/mis-solicitudes";
     }
 
