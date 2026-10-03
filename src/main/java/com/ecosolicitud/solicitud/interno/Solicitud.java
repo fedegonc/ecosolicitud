@@ -27,6 +27,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(name = "solicitudes", indexes = {
@@ -43,6 +44,7 @@ public class Solicitud {
     private Ciudadano ciudadano;
     private String direccion;
     private String referencia;
+    @BatchSize(size = 50)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "solicitud_materiales", joinColumns = @JoinColumn(name = "solicitud_id"))
     @OrderColumn(name = "orden")

@@ -44,12 +44,12 @@ class NavegacionAdvice {
 
     @ModelAttribute("organizaciones")
     List<OrganizacionInfo> organizaciones() {
-        return organizaciones.todas();
+        return actor.get() == Rol.ORGANIZACION ? organizaciones.todas() : List.of();
     }
 
     @ModelAttribute("organizacionActiva")
     OrganizacionInfo organizacionActiva() {
-        return organizaciones.actual(actor.actual());
+        return actor.get() == Rol.ORGANIZACION ? organizaciones.actual(actor.actual()) : null;
     }
 
     @ModelAttribute("demoHabilitada")

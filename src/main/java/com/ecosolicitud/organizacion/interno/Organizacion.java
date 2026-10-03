@@ -19,6 +19,7 @@ import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
 import lombok.Setter;
 
 @Entity
@@ -35,6 +36,7 @@ public class Organizacion {
     @Enumerated(EnumType.STRING)
     private Ciudad ciudad;
 
+    @BatchSize(size = 50)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "organizacion_materiales",
             joinColumns = @JoinColumn(name = "organizacion_id"))
