@@ -1,45 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
-    <title th:text="#{seccion.org.solicitudes}">Solicitudes recibidas</title>
+    <title th:text="#{org.solicitudes.titulo}">Solicitudes recibidas</title>
 </head>
 <body>
 <main layout:fragment="content">
-    <h1 th:text="#{seccion.org.solicitudes}">Solicitudes recibidas</h1>
-    <p class="aviso" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
-    <p class="alerta" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
+    <h1 th:text="#{org.solicitudes.titulo}">Solicitudes recibidas</h1>
+    <p class="aviso" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
+    <p class="alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
     <section th:each="g : ${bandeja.grupos}">
         <h2 th:text="#{${g.clave}}">Grupo</h2>
         <p class="detalle" th:if="${g.solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
-        <article th:each="s : ${g.solicitudes}" class="acopio">
-            <h3><span th:text="'#' + ${s.id}">#1</span> ·
-                <span th:text="${s.nombreCiudadano}">Ciudadano</span></h3>
-            <p class="detalle"><span th:text="${s.direccion}">Dirección</span><span
-                    th:if="${s.referencia != null and !s.referencia.isEmpty()}"
-                    th:text="' · ' + ${s.referencia}"></span></p>
-            <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}"
-               th:text="${s.nota}">Nota</p>
-            <ul class="materiales">
-                <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
-                    th:text="#{${m.clave}}">Material</li>
-                <li th:class="'etiqueta-material ' + ${s.estado.claseCss}"
-                    th:text="#{${s.estado.clave}}">Estado</li>
-            </ul>
-            <p class="detalle"><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
-                    th:if="${s.finalizadaEn != null}"
-                    th:text="' · ' + #{mis.finalizada(${s.finalizada})}">Fin</span></p>
-            <div class="acciones">
-                <form th:if="${s.estado.name() == 'PENDIENTE'}"
+        <article th:each="s : ${g.solicitudes}" class="tarjeta">
+            <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano})}"></th:block>
+            <div class="acciones" th:if="${!s.estado.esFinal()}">
+                <form th:if="${s.estado.permiteAceptar()}"
                       th:action="@{/org/solicitudes/{id}/aceptar(id=${s.id})}" method="post">
                     <input type="hidden" name="version" th:value="${s.version}">
                     <button type="submit" class="accion" th:text="#{accion.aceptar}">Aceptar</button>
                 </form>
-                <form th:if="${s.estado.name() == 'PENDIENTE' or s.estado.name() == 'EN_CURSO'}"
+                <form th:if="${s.estado.permiteRechazar()}"
                       th:action="@{/org/solicitudes/{id}/rechazar(id=${s.id})}" method="post">
                     <input type="hidden" name="version" th:value="${s.version}">
                     <button type="submit" class="accion peligro" th:text="#{accion.rechazar}">Rechazar</button>
                 </form>
-                <form th:if="${s.estado.name() == 'EN_CURSO'}"
+                <form th:if="${s.estado.permiteCompletar()}"
                       th:action="@{/org/solicitudes/{id}/completar(id=${s.id})}" method="post">
                     <input type="hidden" name="version" th:value="${s.version}">
                     <button type="submit" class="accion" th:text="#{accion.completar}">Completar</button>

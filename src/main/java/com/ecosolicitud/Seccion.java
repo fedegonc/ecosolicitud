@@ -11,17 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 public enum Seccion {
-    ORG_PANEL("seccion.org.panel", Rutas.ORG_PANEL, "panel", Rol.ORGANIZACION),
     ORG_SOLICITUDES("seccion.org.solicitudes", Rutas.ORG_SOLICITUDES, "bandeja", Rol.ORGANIZACION),
-    ORG_REPORTE("seccion.org.reporte", Rutas.ORG_REPORTE, "grafico", Rol.ORGANIZACION),
     ORG_PERFIL("seccion.org.perfil", Rutas.ORG_PERFIL, "edificio", Rol.ORGANIZACION),
-    INICIO("seccion.inicio", Rutas.INICIO, "casa", Rol.CIUDADANO),
     NUEVA("seccion.nueva", Rutas.NUEVA, "mas", Rol.CIUDADANO),
     MIS_SOLICITUDES("seccion.mis-solicitudes", Rutas.MIS_SOLICITUDES, "lista", Rol.CIUDADANO),
-    ACOPIOS("seccion.acopios", Rutas.ACOPIOS, "edificio", Rol.CIUDADANO),
-    NOTIFICACIONES("seccion.notificaciones", Rutas.NOTIFICACIONES, "campana",
-            Rol.CIUDADANO, Rol.ORGANIZACION),
-    PERFIL("seccion.perfil", Rutas.PERFIL, "usuario", Rol.CIUDADANO);
+    ACOPIOS("seccion.acopios", Rutas.ACOPIOS, "edificio", Rol.CIUDADANO);
 
     private final String clave;
     private final String ruta;
@@ -55,8 +49,8 @@ public enum Seccion {
         return Arrays.stream(values()).filter(s -> s.permite(rol)).toList();
     }
 
-    public static Seccion inicioDe(Rol rol) {
-        return paraRol(rol).getFirst();
+    public static String inicioDe(Rol rol) {
+        return rol == Rol.ORGANIZACION ? Rutas.ORG_SOLICITUDES : Rutas.MIS_SOLICITUDES;
     }
 
     public static Seccion desdeRuta(String ruta) {
@@ -75,6 +69,6 @@ public enum Seccion {
     }
 
     public static String rutaSegura(String volver, Rol rol) {
-        return volver != null && existeRuta(volver) ? volver : inicioDe(rol).getRuta();
+        return volver != null && existeRuta(volver) ? volver : inicioDe(rol);
     }
 }

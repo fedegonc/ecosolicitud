@@ -8,14 +8,14 @@
     <h1 th:text="#{seccion.acopios}">Centros de acopio</h1>
     <section th:each="g : ${grupos}">
         <h2 th:text="#{${g.ciudad.clave}}">Ciudad</h2>
-        <article th:each="o : ${g.organizaciones}" class="acopio">
+        <article th:each="o : ${g.organizaciones}" class="tarjeta">
             <h3 th:text="${o.nombre}">Nombre</h3>
             <p class="detalle"><span th:text="${o.horario}">Horario</span> · <span th:text="${o.telefono}">Teléfono</span></p>
             <ul class="materiales">
                 <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
                     th:text="#{${m.clave}}">Material</li>
             </ul>
-            <p class="detalle"><a th:href="@{/nueva(ciudad=${o.ciudad},organizacion=${o.id})}"
+            <p class="detalle"><a th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
                 th:text="#{acopios.pedir}">Pedir retiro</a></p>
         </article>
     </section>

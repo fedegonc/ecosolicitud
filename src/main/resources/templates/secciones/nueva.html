@@ -1,66 +1,86 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<html lang="es" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
     <title th:text="#{seccion.nueva}">Nueva solicitud</title>
 </head>
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.nueva}">Nueva solicitud</h1>
-    <form th:action="@{/nueva}" method="get" th:object="${form}" class="ficha">
-        <input type="hidden" name="organizacion" th:if="${form.organizacionId != null}"
-               th:value="${form.organizacionId}">
+    <form th:action="@{/nueva}" method="post" th:object="${form}" class="ficha">
         <label class="campo">
             <span th:text="#{nueva.ciudad}">Ciudad</span>
-            <select name="ciudad">
-                <option th:each="c : ${ciudades}" th:value="${c}" th:text="#{${c.clave}}"
-                        th:selected="${form.ciudad == c}">Ciudad</option>
+            <select th:field="*{ciudad}" required th:attr="hx-get=@{/nueva}"
+                    hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
+                    hx-include="closest form" hx-params="not _csrf">
+                <option value="" th:text="#{nueva.ciudad.elegir}">Elegí una ciudad</option>
+                <option th:each="c : ${ciudades}" th:value="${c}" th:text="#{${c.clave}}">Ciudad</option>
             </select>
+            <span class="ayuda" th:text="#{nueva.ciudad.ayuda}">Ayuda</span>
+            <span class="error" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}">Error</span>
         </label>
-        <fieldset class="campo">
-            <legend th:text="#{nueva.materiales}">Materiales</legend>
-            <label th:each="m : ${materialesTodos}" class="opcion-material">
-                <input type="checkbox" name="material" th:value="${m}"
-                       th:checked="${form.materiales.contains(m)}">
-                <span th:class="'etiqueta-material ' + ${m.claseCss}" th:text="#{${m.clave}}">Material</span>
-            </label>
-            <p class="error" th:if="${#fields.hasErrors('materiales')}" th:errors="*{materiales}">Error</p>
-        </fieldset>
-        <button type="submit" class="accion" th:text="#{nueva.buscar}">Buscar centros</button>
-    </form>
-    <section th:if="${busqueda}">
-        <p class="alerta" th:if="${preseleccionCaida}" th:text="#{nueva.preseleccion.caida}">Aviso</p>
-        <p class="alerta" th:if="${#lists.isEmpty(compatibles)}" th:text="#{nueva.sin.centros}">Sin centros</p>
-        <form th:if="${!#lists.isEmpty(compatibles)}" th:action="@{/nueva}" method="post"
-              th:object="${form}" class="ficha">
-            <input type="hidden" name="ciudad" th:value="${form.ciudad}">
-            <input type="hidden" name="materiales" th:each="m : ${form.materiales}" th:value="${m}">
-            <fieldset class="campo">
-                <legend th:text="#{nueva.organizacion}">Organización</legend>
-                <label th:each="o : ${compatibles}" class="opcion-material">
-                    <input type="radio" th:field="*{organizacionId}" th:value="${o.id}">
-                    <span th:text="${o.nombre}">Nombre</span>
+
+        <div id="flujo" aria-live="polite">
+            <fieldset class="campo" th:if="${!#lists.isEmpty(centros)}">
+                <legend th:text="#{nueva.centro}">Centro de acopio</legend>
+                <label th:each="o : ${centros}" class="opcion-centro">
+                    <input type="radio" th:field="*{organizacionId}" th:value="${o.id}"
+                           th:attr="hx-get=@{/nueva}"
+                           hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
+                           hx-include="closest form" hx-params="not _csrf">
+                    <span>
+                        <strong th:text="${o.nombre}">Nombre</strong>
+                        <span class="detalle" th:text="${o.horario}">Horario</span>
+                    </span>
                 </label>
+                <span class="ayuda" th:text="#{nueva.centro.ayuda}">Ayuda</span>
                 <p class="error" th:if="${#fields.hasErrors('organizacionId')}"
                    th:errors="*{organizacionId}">Error</p>
             </fieldset>
-            <label class="campo">
-                <span th:text="#{nueva.direccion}">Dirección</span>
-                <input type="text" th:field="*{direccion}">
-                <span class="error" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}">Error</span>
-            </label>
-            <label class="campo">
-                <span th:text="#{nueva.referencia}">Referencia</span>
-                <input type="text" th:field="*{referencia}">
-                <span class="error" th:if="${#fields.hasErrors('referencia')}" th:errors="*{referencia}">Error</span>
-            </label>
-            <label class="campo">
-                <span th:text="#{nueva.nota}">Nota</span>
-                <textarea th:field="*{nota}" rows="3"></textarea>
-                <span class="error" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">Error</span>
-            </label>
-            <button type="submit" class="accion" th:text="#{nueva.enviar}">Enviar solicitud</button>
-        </form>
-    </section>
+
+            <p class="alerta" th:if="${form.ciudad != null and #lists.isEmpty(centros)}"
+               th:text="#{nueva.sin.centros}">Sin centros</p>
+
+            <fieldset class="campo" th:if="${centro != null}">
+                <legend th:text="#{nueva.materiales.del.centro(${centro.nombre})}">Materiales</legend>
+                <label th:each="m : ${materialesCentro}" class="opcion-material">
+                    <input type="checkbox" name="materiales" th:value="${m}"
+                           th:checked="${form.materiales.contains(m)}">
+                    <span th:class="'etiqueta-material ' + ${m.claseCss}"
+                          th:text="#{${m.clave}}">Material</span>
+                </label>
+                <span class="ayuda" th:text="#{nueva.materiales.ayuda}">Ayuda</span>
+                <p class="error" th:if="${#fields.hasErrors('materiales')}"
+                   th:errors="*{materiales}">Error</p>
+            </fieldset>
+
+            <div th:if="${centro != null}">
+                <label class="campo">
+                    <span th:text="#{nueva.direccion}">Dirección</span>
+                    <input type="text" th:field="*{direccion}" required maxlength="120"
+                           autocomplete="street-address">
+                    <span class="error" th:if="${#fields.hasErrors('direccion')}"
+                          th:errors="*{direccion}">Error</span>
+                </label>
+                <label class="campo">
+                    <span th:text="#{nueva.referencia}">Referencia</span>
+                    <input type="text" th:field="*{referencia}" maxlength="120">
+                    <span class="error" th:if="${#fields.hasErrors('referencia')}"
+                          th:errors="*{referencia}">Error</span>
+                </label>
+                <label class="campo">
+                    <span th:text="#{nueva.nota}">Nota</span>
+                    <textarea th:field="*{nota}" rows="3" maxlength="300"></textarea>
+                    <span class="error" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">Error</span>
+                </label>
+                <button type="submit" class="accion" th:text="#{nueva.enviar}">Enviar solicitud</button>
+            </div>
+        </div>
+
+        <noscript>
+            <button type="submit" formmethod="get" class="accion secundaria"
+                    th:if="${centro == null}" th:text="#{nueva.continuar}">Continuar</button>
+        </noscript>
+    </form>
 </main>
 </body>
 </html>

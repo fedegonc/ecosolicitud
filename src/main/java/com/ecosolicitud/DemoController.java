@@ -24,7 +24,7 @@ class DemoController {
     @PostMapping(Rutas.DEMO_ROL)
     String cambiarRol(@RequestParam Rol rol) {
         actor.cambiar(rol);
-        return "redirect:" + Seccion.inicioDe(rol).getRuta();
+        return "redirect:" + Seccion.inicioDe(rol);
     }
 
     @PostMapping(Rutas.DEMO_ORGANIZACION)

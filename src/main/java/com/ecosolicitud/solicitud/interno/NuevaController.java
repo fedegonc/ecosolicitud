@@ -1,11 +1,12 @@
 package com.ecosolicitud.solicitud.interno;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ecosolicitud.Rutas;
+import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.Ciudad;
-import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.solicitud.SolicitudService;
 
 import jakarta.validation.Valid;
@@ -18,7 +19,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -34,30 +34,12 @@ class NuevaController {
     }
 
     @GetMapping(Rutas.NUEVA)
-    String nueva(@RequestParam(required = false) Ciudad ciudad,
-            @RequestParam(required = false) List<Material> material,
-            @RequestParam(required = false) String organizacion, Model modelo) {
-        if (ciudad == null || material == null || material.isEmpty()) {
-            var form = new NuevaForm();
-            if (organizacion != null && !organizacion.isBlank()) {
-                form.setOrganizacionId(organizacion);
-                organizaciones.buscar(organizacion)
-                        .ifPresent(o -> form.setCiudad(o.ciudad()));
-            }
-            return formulario(modelo, form, false);
-        }
-        var compatibles = organizaciones.compatibles(ciudad, material);
-        var form = new NuevaForm();
-        form.setCiudad(ciudad);
-        form.setMateriales(material);
-        if (organizacion != null && compatibles.stream()
-                .noneMatch(o -> o.id().equals(organizacion))) {
-            modelo.addAttribute("preseleccionCaida", true);
-        } else {
-            form.setOrganizacionId(organizacion);
-        }
-        modelo.addAttribute("compatibles", compatibles);
-        return formulario(modelo, form, true);
+    String nueva(@ModelAttribute("form") NuevaForm form, Model modelo) {
+        var centros = centrosDe(form);
+        var centro = centroElegido(centros, form);
+        centro.ifPresentOrElse(o -> form.getMateriales().retainAll(o.materiales()),
+                () -> form.getMateriales().clear());
+        return formulario(modelo, form, centros, centro);
     }
 
     @PostMapping(Rutas.NUEVA)
@@ -65,6 +47,15 @@ class NuevaController {
             Model modelo, RedirectAttributes redir) {
         if (errores.getFieldErrors().stream().anyMatch(FieldError::isBindingFailure)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        var centros = centrosDe(form);
+        var centro = centroElegido(centros, form);
+        if (!errores.hasErrors() && centro.isEmpty()) {
+            errores.rejectValue("organizacionId", "nueva.error.centro");
+        }
+        if (!errores.hasErrors()
+                && !centro.get().materiales().containsAll(form.getMateriales())) {
+            errores.rejectValue("materiales", "nueva.error.material.no-recibido");
         }
         if (!errores.hasErrors()) {
             var creada = solicitudes.crear(form.getCiudad(),
@@ -77,18 +68,26 @@ class NuevaController {
             }
             errores.rejectValue("organizacionId", "nueva.error.organizacion");
         }
-        boolean conBusqueda = form.getCiudad() != null && !form.getMateriales().isEmpty();
-        modelo.addAttribute("compatibles", conBusqueda
-                ? organizaciones.compatibles(form.getCiudad(), form.getMateriales())
-                : List.of());
-        return formulario(modelo, form, conBusqueda);
+        return formulario(modelo, form, centros, centro);
     }
 
-    private String formulario(Model modelo, NuevaForm form, boolean busqueda) {
+    private List<OrganizacionInfo> centrosDe(NuevaForm form) {
+        return form.getCiudad() == null ? List.of() : organizaciones.enCiudad(form.getCiudad());
+    }
+
+    private Optional<OrganizacionInfo> centroElegido(
+            List<OrganizacionInfo> centros, NuevaForm form) {
+        return centros.stream().filter(o -> o.id().equals(form.getOrganizacionId())).findFirst();
+    }
+
+    private String formulario(Model modelo, NuevaForm form,
+            List<OrganizacionInfo> centros, Optional<OrganizacionInfo> centro) {
         modelo.addAttribute("form", form);
-        modelo.addAttribute("busqueda", busqueda);
         modelo.addAttribute("ciudades", Ciudad.values());
-        modelo.addAttribute("materialesTodos", Material.values());
+        modelo.addAttribute("centros", centros);
+        modelo.addAttribute("centro", centro.orElse(null));
+        modelo.addAttribute("materialesCentro",
+                centro.map(OrganizacionInfo::materiales).orElse(List.of()));
         return "secciones/nueva";
     }
 }

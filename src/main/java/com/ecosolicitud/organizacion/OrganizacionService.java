@@ -63,6 +63,11 @@ public class OrganizacionService {
                 .map(OrganizacionService::aInfo).toList();
     }
 
+    public List<OrganizacionInfo> enCiudad(Ciudad ciudad) {
+        return repositorio.findByCiudadOrderByNombre(ciudad).stream()
+                .map(OrganizacionService::aInfo).toList();
+    }
+
     public Map<String, String> nombres(Collection<String> ids) {
         return repositorio.findAllById(ids).stream()
                 .collect(toMap(Organizacion::getId, Organizacion::getNombre));

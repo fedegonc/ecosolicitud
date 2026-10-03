@@ -80,32 +80,29 @@ public class Solicitud {
     }
 
     public void aceptar() {
-        exigir("aceptar", Estado.PENDIENTE);
+        exigir(estado.permiteAceptar(), "aceptar");
         estado = Estado.EN_CURSO;
     }
 
     public void rechazar(Instant ahora) {
-        exigir("rechazar", Estado.PENDIENTE, Estado.EN_CURSO);
+        exigir(estado.permiteRechazar(), "rechazar");
         cerrar(Estado.RECHAZADA, ahora);
     }
 
     public void completar(Instant ahora) {
-        exigir("completar", Estado.EN_CURSO);
+        exigir(estado.permiteCompletar(), "completar");
         cerrar(Estado.COMPLETADA, ahora);
     }
 
     public void cancelar(Instant ahora) {
-        exigir("cancelar", Estado.PENDIENTE);
+        exigir(estado.permiteCancelar(), "cancelar");
         cerrar(Estado.CANCELADA, ahora);
     }
 
-    private void exigir(String accion, Estado... desde) {
-        for (var e : desde) {
-            if (estado == e) {
-                return;
-            }
+    private void exigir(boolean permitido, String accion) {
+        if (!permitido) {
+            throw new TransicionInvalidaException(estado, accion);
         }
-        throw new TransicionInvalidaException(estado, accion);
     }
 
     private void cerrar(Estado destino, Instant ahora) {

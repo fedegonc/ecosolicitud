@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
-    <title th:text="#{seccion.org.perfil}">Perfil del acopio</title>
+    <title th:text="#{org.perfil.titulo}">Perfil del acopio</title>
 </head>
 <body>
 <main layout:fragment="content">
-    <h1 th:text="#{seccion.org.perfil}">Perfil del acopio</h1>
-    <p class="aviso" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>
-    <p class="alerta" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
+    <h1 th:text="#{org.perfil.titulo}">Perfil del acopio</h1>
+    <p class="aviso" role="status" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>
+    <p class="alerta" role="alert" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
     <form th:action="@{/org/perfil}" method="post" th:object="${form}" class="ficha">
         <p class="detalle"><strong th:text="#{perfil.nombre}">Nombre</strong>:
             <span th:text="${organizacionActiva.nombre}">Nombre</span></p>

@@ -6,36 +6,17 @@
     <title layout:title-pattern="$CONTENT_TITLE · $LAYOUT_TITLE">EcoSolicitud</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
     <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+    <script th:src="@{/js/htmx.min.js}" defer></script>
 </head>
-<body>
+<body hx-boost="true" hx-indicator="#carga">
+    <div id="carga" class="carga" aria-hidden="true"></div>
     <a class="salto" href="#contenido" th:text="#{nav.saltar}">Saltar al contenido</a>
     <div class="app">
         <aside class="sidebar">
-            <div class="marca">
+            <a class="marca" th:href="@{/}">
                 <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
                 <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
-            </div>
-            <form th:fragment="cambioRol" th:action="@{/demo/rol}" method="post" class="rol-switch">
-                <button type="submit" name="rol" value="CIUDADANO"
-                        th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
-                        th:attr="aria-pressed=${rolActual.name() == 'CIUDADANO'}"
-                        th:text="#{rol.ciudadano}">Ciudadano</button>
-                <button type="submit" name="rol" value="ORGANIZACION"
-                        th:classappend="${rolActual.name() == 'ORGANIZACION'} ? 'activa'"
-                        th:attr="aria-pressed=${rolActual.name() == 'ORGANIZACION'}"
-                        th:text="#{rol.organizacion}">Organización</button>
-            </form>
-            <form th:fragment="selectorOrg" th:if="${rolActual.name() == 'ORGANIZACION'}"
-                  th:action="@{/demo/organizacion}" method="post" class="org-switch">
-                <label for="org-select" th:text="#{demo.acopio}">Acopio</label>
-                <select id="org-select" name="id">
-                    <option th:each="o : ${organizaciones}" th:value="${o.id}"
-                            th:text="${o.nombre}"
-                            th:selected="${o.id == organizacionActiva.id}"></option>
-                </select>
-                <input type="hidden" name="volver" th:value="${rutaActual}">
-                <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
-            </form>
+            </a>
             <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
                 <ul>
                     <li th:each="s : ${secciones}">
@@ -50,6 +31,27 @@
             </nav>
             <footer class="sidebar-pie">
                 <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
+                <form th:fragment="cambioRol" th:action="@{/demo/rol}" method="post" class="rol-switch">
+                    <button type="submit" name="rol" value="CIUDADANO"
+                            th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
+                            th:attr="aria-pressed=${rolActual.name() == 'CIUDADANO'}"
+                            th:text="#{rol.ciudadano}">Ciudadano</button>
+                    <button type="submit" name="rol" value="ORGANIZACION"
+                            th:classappend="${rolActual.name() == 'ORGANIZACION'} ? 'activa'"
+                            th:attr="aria-pressed=${rolActual.name() == 'ORGANIZACION'}"
+                            th:text="#{rol.organizacion}">Organización</button>
+                </form>
+                <form th:fragment="selectorOrg" th:if="${rolActual.name() == 'ORGANIZACION'}"
+                      th:action="@{/demo/organizacion}" method="post" class="org-switch">
+                    <label for="org-select" th:text="#{demo.acopio}">Acopio</label>
+                    <select id="org-select" name="id">
+                        <option th:each="o : ${organizaciones}" th:value="${o.id}"
+                                th:text="${o.nombre}"
+                                th:selected="${o.id == organizacionActiva.id}"></option>
+                    </select>
+                    <input type="hidden" name="volver" th:value="${rutaActual}">
+                    <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
+                </form>
                 <form th:fragment="reiniciar" th:if="${demoHabilitada}"
                       th:action="@{/demo/reiniciar}" method="post" class="reiniciar">
                     <input type="hidden" name="volver" th:value="${rutaActual}">
@@ -58,11 +60,11 @@
             </footer>
         </aside>
         <details class="menu-movil">
-            <summary>
-                <span class="menu-marca">
+            <summary th:aria-label="#{nav.menu}">
+                <a class="menu-marca" th:href="@{/}">
                     <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
                     <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
-                </span>
+                </a>
                 <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
             </summary>
             <form th:replace="~{app :: cambioRol}"></form>

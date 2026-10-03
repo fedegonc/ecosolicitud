@@ -26,4 +26,20 @@ public enum Estado {
     public boolean esFinal() {
         return this == COMPLETADA || this == RECHAZADA || this == CANCELADA;
     }
+
+    public boolean permiteAceptar() {
+        return this == PENDIENTE;
+    }
+
+    public boolean permiteRechazar() {
+        return this == PENDIENTE || this == EN_CURSO;
+    }
+
+    public boolean permiteCompletar() {
+        return this == EN_CURSO;
+    }
+
+    public boolean permiteCancelar() {
+        return this == PENDIENTE;
+    }
 }

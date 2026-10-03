@@ -25,7 +25,7 @@ class RolSeccionInterceptor implements HandlerInterceptor {
         if (Seccion.desdeRuta(request.getRequestURI()).permite(rol)) {
             return true;
         }
-        response.sendRedirect(Seccion.inicioDe(rol).getRuta());
+        response.sendRedirect(Seccion.inicioDe(rol));
         return false;
     }
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="cuerpo(s, titulo)">
+    <h3><span th:text="'#' + ${s.id}">#1</span> · <span th:text="${titulo}">Nombre</span></h3>
+    <p class="detalle"><span th:text="${s.direccion}">Dirección</span><span
+            th:if="${s.referencia != null and !s.referencia.isEmpty()}"
+            th:text="' · ' + ${s.referencia}"></span></p>
+    <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}" th:text="${s.nota}">Nota</p>
+    <ul class="materiales">
+        <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
+            th:text="#{${m.clave}}">Material</li>
+        <li th:class="'etiqueta-material ' + ${s.estado.claseCss}" th:text="#{${s.estado.clave}}">Estado</li>
+    </ul>
+    <p class="detalle"><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
+            th:if="${s.finalizadaEn != null}"
+            th:text="' · ' + #{mis.finalizada(${s.finalizada})}">Fin</span></p>
+</th:block>
+</body>
+</html>

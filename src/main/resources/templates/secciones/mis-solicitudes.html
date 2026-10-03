@@ -6,9 +6,9 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.mis-solicitudes}">Mis solicitudes</h1>
-    <p class="aviso" th:if="${enviada}" th:text="#{mis.enviada(${enviada},${enviadaA})}">Aviso</p>
-    <p class="aviso" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
-    <p class="alerta" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
+    <p class="aviso" role="status" th:if="${enviada}" th:text="#{mis.enviada(${enviada},${enviadaA})}">Aviso</p>
+    <p class="aviso" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
+    <p class="alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
     <nav class="filtros">
         <a th:each="f : ${filtros}" th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(f.name())})}"
            th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
@@ -18,21 +18,9 @@
         <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
         <a th:href="@{/nueva}" th:text="#{mis.nueva}">Nueva solicitud</a>
     </p>
-    <article th:each="s : ${solicitudes}" class="acopio">
-        <h3><span th:text="'#' + ${s.id}">#1</span> · <span th:text="${s.organizacionNombre}">Org</span></h3>
-        <p class="detalle"><span th:text="${s.direccion}">Dirección</span><span
-                th:if="${s.referencia != null and !s.referencia.isEmpty()}"
-                th:text="' · ' + ${s.referencia}"></span></p>
-        <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}" th:text="${s.nota}">Nota</p>
-        <ul class="materiales">
-            <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + ${m.claseCss}"
-                th:text="#{${m.clave}}">Material</li>
-            <li th:class="'etiqueta-material ' + ${s.estado.claseCss}" th:text="#{${s.estado.clave}}">Estado</li>
-        </ul>
-        <p class="detalle"><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
-                th:if="${s.finalizadaEn != null}"
-                th:text="' · ' + #{mis.finalizada(${s.finalizada})}">Fin</span></p>
-        <div class="acciones" th:if="${s.estado.name() == 'PENDIENTE'}">
+    <article th:each="s : ${solicitudes}" class="tarjeta">
+        <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre})}"></th:block>
+        <div class="acciones" th:if="${s.estado.permiteCancelar()}">
             <form th:action="@{/mis-solicitudes/{id}/cancelar(id=${s.id})}" method="post">
                 <input type="hidden" name="version" th:value="${s.version}">
                 <button type="submit" class="accion peligro" th:text="#{accion.cancelar}">Cancelar</button>
