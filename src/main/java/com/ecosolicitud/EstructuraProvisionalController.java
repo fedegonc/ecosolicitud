@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 class EstructuraProvisionalController {
 
+    private final RolSesion rolSesion;
+
+    EstructuraProvisionalController(RolSesion rolSesion) {
+        this.rolSesion = rolSesion;
+    }
+
     @GetMapping("/")
     String raiz() {
-        return "redirect:/inicio";
+        return "redirect:" + Seccion.inicioDe(rolSesion.get()).getRuta();
     }
 
     @GetMapping({"/inicio", "/nueva", "/mis-solicitudes", "/acopios", "/notificaciones", "/perfil",
