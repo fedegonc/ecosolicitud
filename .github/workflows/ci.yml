@@ -19,6 +19,8 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
+      - name: Reglas de arquitectura
+        run: bash .github/scripts/arquitectura.sh
       - name: Verify
         run: mvn -B verify
       - name: El jar de producción no lleva mecanismos de desarrollo
