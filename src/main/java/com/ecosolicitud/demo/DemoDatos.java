@@ -17,6 +17,7 @@ import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.solicitud.AvisoSemilla;
 import com.ecosolicitud.solicitud.Estado;
+import com.ecosolicitud.solicitud.SolicitudInfo;
 import com.ecosolicitud.solicitud.SolicitudSemilla;
 import com.ecosolicitud.solicitud.TipoAviso;
 
@@ -87,16 +88,29 @@ final class DemoDatos {
                         ahora.minus(5, ChronoUnit.DAYS)));
     }
 
-    static List<AvisoSemilla> avisos() {
+    // los avisos semilla se atan a solicitudes reales para mostrar su #id
+    static List<AvisoSemilla> avisos(List<SolicitudInfo> solicitudes) {
         var ahora = Instant.now();
         return List.of(
-                new AvisoSemilla("frontera-limpia", TipoAviso.NUEVA,
+                new AvisoSemilla("frontera-limpia", idDe(solicitudes,
+                        "Ana Rodríguez", Estado.PENDIENTE), TipoAviso.NUEVA,
                         "Ana Rodríguez", false, ahora.minus(2, ChronoUnit.DAYS)),
-                new AvisoSemilla("ciudadano-demo", TipoAviso.RECHAZADA,
-                        "Acopio Verde Rivera", false, ahora.minus(5, ChronoUnit.DAYS)),
-                new AvisoSemilla("ciudadano-demo", TipoAviso.COMPLETADA,
+                new AvisoSemilla("ciudadano-demo", idDe(solicitudes,
+                        "Martina López", Estado.EN_CURSO), TipoAviso.ACEPTADA,
+                        "Cooperativa Frontera Limpia", false,
+                        ahora.minus(3, ChronoUnit.DAYS)),
+                new AvisoSemilla("ciudadano-demo", idDe(solicitudes,
+                        "Martina López", Estado.COMPLETADA), TipoAviso.COMPLETADA,
                         "Cooperativa Frontera Limpia", true,
                         ahora.minus(4, ChronoUnit.DAYS)));
+    }
+
+    private static Long idDe(List<SolicitudInfo> solicitudes, String nombre,
+            Estado estado) {
+        return solicitudes.stream()
+                .filter(s -> s.nombreCiudadano().equals(nombre)
+                        && s.estado() == estado)
+                .map(SolicitudInfo::id).findFirst().orElse(null);
     }
 
     static List<PublicacionSemilla> comunidad() {

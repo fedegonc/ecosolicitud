@@ -24,6 +24,7 @@ class AvisosController {
     String avisos(Model modelo) {
         var a = actor.actual();
         modelo.addAttribute("avisos", servicio.avisosPara(a));
+        modelo.addAttribute("columnas", servicio.kanbanPara(a));
         servicio.marcarLeidas(a);
         return "secciones/avisos";
     }

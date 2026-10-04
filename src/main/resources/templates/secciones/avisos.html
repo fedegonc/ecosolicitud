@@ -7,13 +7,33 @@
 <main layout:fragment="content">
     <h1 th:text="#{avisos.titulo}">Avisos</h1>
     <p class="detalle" th:if="${avisos.isEmpty()}" th:text="#{avisos.vacia}">Vacía</p>
-    <ul class="lista-avisos">
-        <li th:each="a : ${avisos}" class="aviso-item" th:classappend="${!a.leida()} ? 'nueva'">
-            <span th:text="#{${a.tipo().clave}(${a.detalle()})}">Texto</span>
+
+    <!-- ciudadano: timeline con el estado actual de cada pedido -->
+    <ol class="timeline" th:if="${rolActual.name() == 'CIUDADANO'}">
+        <li th:each="a : ${avisos}" th:classappend="${!a.leida()} ? 'nueva'">
+            <span class="aviso-id" th:if="${a.solicitudId() != null}"
+                  th:text="'#' + ${a.solicitudId()}">#3</span>
+            <span class="etiqueta" th:text="#{${a.estado().clave}}">Estado</span>
+            <p class="aviso-texto" th:text="#{${a.tipo().clave}(${a.detalle()})}">Texto</p>
             <span class="detalle"
                   th:text="${#temporals.format(a.creadaEn(), 'dd/MM HH:mm')}">fecha</span>
         </li>
-    </ul>
+    </ol>
+
+    <!-- organización: kanban por dónde está el pedido ahora -->
+    <div class="kanban" th:if="${rolActual.name() == 'ORGANIZACION'}">
+        <section class="kanban-col" th:each="c : ${columnas}">
+            <h2 th:text="#{${c.clave()}}">Columna</h2>
+            <article class="aviso-card" th:each="a : ${c.avisos()}"
+                     th:classappend="${!a.leida()} ? 'nueva'">
+                <span class="aviso-id" th:if="${a.solicitudId() != null}"
+                      th:text="'#' + ${a.solicitudId()}">#3</span>
+                <p class="aviso-texto" th:text="#{${a.tipo().clave}(${a.detalle()})}">Texto</p>
+                <span class="detalle"
+                      th:text="${#temporals.format(a.creadaEn(), 'dd/MM HH:mm')}">fecha</span>
+            </article>
+        </section>
+    </div>
 </main>
 </body>
 </html>

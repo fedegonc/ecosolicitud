@@ -44,7 +44,7 @@ public class DemoService implements ApplicationRunner {
     public void reiniciar() {
         organizaciones.reemplazarTodas(DemoDatos.organizaciones());
         solicitudes.reemplazarTodas(DemoDatos.solicitudes());
-        avisos.reemplazarAvisos(DemoDatos.avisos());
+        avisos.reemplazarAvisos(DemoDatos.avisos(solicitudes.todas()));
         guia.reemplazarTodos(DemoDatos.guia());
         comunidad.reemplazarTodas(DemoDatos.comunidad());
         opiniones.reemplazarTodas(DemoDatos.opiniones());

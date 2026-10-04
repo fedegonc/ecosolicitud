@@ -844,27 +844,77 @@ fieldset.campo legend {
     text-align: center;
 }
 
-.lista-avisos {
+/* avisos: timeline (ciudadano) + kanban (organización) */
+
+.timeline {
     list-style: none;
     padding: 0;
-    display: grid;
-    gap: var(--pad);
 }
 
-.aviso-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--pad);
+.timeline li {
+    position: relative;
+    padding: 0 0 var(--pad-grande) var(--pad-grande);
+    margin-left: 6px;
+    border-left: 2px solid var(--borde);
+}
+
+.timeline li::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--borde-fuerte);
+}
+
+.timeline li.nueva::before {
+    background: var(--acento);
+}
+
+.aviso-id {
+    font-weight: 700;
+    margin-right: var(--pad);
+}
+
+.aviso-texto {
+    margin: 4px 0;
+}
+
+.timeline .detalle,
+.aviso-card .detalle {
+    font-size: var(--t-sm);
+}
+
+.kanban {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--pad-grande);
+    align-items: start;
+}
+
+.kanban-col h2 {
+    font-size: var(--t-base);
+    margin-bottom: var(--pad);
+}
+
+.aviso-card {
     background: var(--superficie);
     border: 1px solid var(--borde);
     border-radius: var(--radio);
-    padding: var(--pad) var(--pad-grande);
+    padding: var(--pad);
+    margin-bottom: var(--pad);
 }
 
-.aviso-item.nueva {
+.aviso-card.nueva {
     border-left: 4px solid var(--acento);
-    font-weight: 600;
+}
+
+@media (max-width: 700px) {
+    .kanban {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ---------- portada ---------- */
