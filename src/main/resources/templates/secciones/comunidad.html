@@ -23,6 +23,21 @@
             </p>
         </article>
     </div>
+    <section>
+        <h2 th:text="#{comunidad.recicladores}">Recicladores independientes</h2>
+        <p class="detalle" th:text="#{comunidad.recicladores.ayuda}">Ayuda</p>
+        <p class="detalle" th:if="${recicladores.isEmpty()}"
+           th:text="#{comunidad.recicladores.vacia}">Vacío</p>
+        <ul class="equipo">
+            <li th:each="r : ${recicladores}">
+                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#persona'"></use></svg>
+                <span th:text="${r.nombre}">Nombre</span>
+                <a class="enlace" th:if="${r.telefono != null}"
+                   th:href="'tel:' + ${#strings.replace(r.telefono, ' ', '')}"
+                   ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg><span th:text="${r.telefono}">Teléfono</span></a>
+            </li>
+        </ul>
+    </section>
 </main>
 </body>
 </html>

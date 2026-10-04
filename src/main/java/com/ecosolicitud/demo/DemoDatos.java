@@ -11,7 +11,7 @@ import com.ecosolicitud.comunidad.TipoPublicacion;
 import com.ecosolicitud.guia.ArticuloSemilla;
 import com.ecosolicitud.opinion.OpinionSemilla;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
-import com.ecosolicitud.organizacion.RecuperadorInfo;
+import com.ecosolicitud.comunidad.RecicladorInfo;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.shared.Rol;
@@ -44,16 +44,13 @@ final class DemoDatos {
                         "Seg a Sex 8 às 18 h", "+55 55 9000 0000", 0));
     }
 
-    static Map<String, List<RecuperadorInfo>> equipos() {
-        return Map.of(
-                "frontera-limpia", List.of(
-                        new RecuperadorInfo("Luis Pereira", "+598 92 111 222"),
-                        new RecuperadorInfo("María Dos Santos", null)),
-                "acopio-verde", List.of(
-                        new RecuperadorInfo("Oscar Ríos", "+598 91 333 444")),
-                "coleta-solidaria", List.of(
-                        new RecuperadorInfo("José Silva", "+55 55 9111 2222"),
-                        new RecuperadorInfo("Ana Costa", null)));
+    static List<RecicladorInfo> recicladores() {
+        return List.of(
+                new RecicladorInfo("Luis Pereira", "+598 92 111 222"),
+                new RecicladorInfo("María Dos Santos", null),
+                new RecicladorInfo("Oscar Ríos", "+598 91 333 444"),
+                new RecicladorInfo("José Silva", "+55 55 9111 2222"),
+                new RecicladorInfo("Ana Costa", null));
     }
 
     static List<SolicitudSemilla> solicitudes() {

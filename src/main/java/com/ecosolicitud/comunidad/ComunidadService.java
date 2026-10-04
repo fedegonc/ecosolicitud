@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.ecosolicitud.comunidad.interno.Publicacion;
 import com.ecosolicitud.comunidad.interno.PublicacionRepository;
+import com.ecosolicitud.comunidad.interno.Reciclador;
+import com.ecosolicitud.comunidad.interno.RecicladorRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +20,12 @@ public class ComunidadService {
     private static final int ULTIMAS = 10;
 
     private final PublicacionRepository repositorio;
+    private final RecicladorRepository recicladores;
 
-    public ComunidadService(PublicacionRepository repositorio) {
+    public ComunidadService(PublicacionRepository repositorio,
+            RecicladorRepository recicladores) {
         this.repositorio = repositorio;
+        this.recicladores = recicladores;
     }
 
     public List<PublicacionInfo> publicadas(FiltroComunidad filtro) {
@@ -41,6 +46,17 @@ public class ComunidadService {
 
     public boolean vacia() {
         return repositorio.count() == 0;
+    }
+
+    public List<RecicladorInfo> recicladores() {
+        return recicladores.findAllByOrderByNombre().stream()
+                .map(r -> new RecicladorInfo(r.getNombre(), r.getTelefono())).toList();
+    }
+
+    @Transactional
+    public void reemplazarRecicladores(List<RecicladorInfo> dataset) {
+        recicladores.deleteAllInBatch();
+        dataset.forEach(r -> recicladores.save(new Reciclador(r.nombre(), r.telefono())));
     }
 
     @Transactional

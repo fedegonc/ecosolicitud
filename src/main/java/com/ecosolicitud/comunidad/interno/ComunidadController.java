@@ -27,6 +27,7 @@ class ComunidadController {
         modelo.addAttribute("filtro", activo);
         modelo.addAttribute("filtros", FiltroComunidad.values());
         modelo.addAttribute("publicaciones", comunidad.publicadas(activo));
+        modelo.addAttribute("recicladores", comunidad.recicladores());
         return "secciones/comunidad";
     }
 

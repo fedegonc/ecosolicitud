@@ -48,6 +48,6 @@ public class DemoService implements ApplicationRunner {
         guia.reemplazarTodos(DemoDatos.guia());
         comunidad.reemplazarTodas(DemoDatos.comunidad());
         opiniones.reemplazarTodas(DemoDatos.opiniones());
-        DemoDatos.equipos().forEach(organizaciones::reemplazarEquipo);
+        comunidad.reemplazarRecicladores(DemoDatos.recicladores());
     }
 }

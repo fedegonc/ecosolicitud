@@ -10,8 +10,6 @@ import java.util.Optional;
 
 import com.ecosolicitud.organizacion.interno.Organizacion;
 import com.ecosolicitud.organizacion.interno.OrganizacionRepository;
-import com.ecosolicitud.organizacion.interno.Recuperador;
-import com.ecosolicitud.organizacion.interno.RecuperadorRepository;
 import com.ecosolicitud.shared.Actor;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
@@ -28,12 +26,9 @@ import static java.util.stream.Collectors.toMap;
 public class OrganizacionService {
 
     private final OrganizacionRepository repositorio;
-    private final RecuperadorRepository recuperadores;
 
-    public OrganizacionService(OrganizacionRepository repositorio,
-            RecuperadorRepository recuperadores) {
+    public OrganizacionService(OrganizacionRepository repositorio) {
         this.repositorio = repositorio;
-        this.recuperadores = recuperadores;
     }
 
     public List<OrganizacionInfo> todas() {
@@ -64,12 +59,6 @@ public class OrganizacionService {
         return repositorio.findByCiudadOrderByNombre(ciudad).stream()
                 .filter(o -> o.getMateriales().containsAll(materiales))
                 .map(OrganizacionService::aInfo).toList();
-    }
-
-    public List<RecuperadorInfo> equipo(Actor actor) {
-        String id = actual(actor).id();
-        return recuperadores.findByOrganizacion_IdOrderByNombre(id).stream()
-                .map(r -> new RecuperadorInfo(r.getNombre(), r.getTelefono())).toList();
     }
 
     public List<OrganizacionInfo> queReciben(Material material) {
@@ -108,16 +97,8 @@ public class OrganizacionService {
 
     @Transactional
     public void reemplazarTodas(List<OrganizacionInfo> dataset) {
-        recuperadores.deleteAllInBatch();
         repositorio.deleteAll();
         dataset.forEach(this::guardarNueva);
-    }
-
-    @Transactional
-    public void reemplazarEquipo(String organizacionId, List<RecuperadorInfo> dataset) {
-        var org = repositorio.findById(organizacionId).orElseThrow();
-        dataset.forEach(r -> recuperadores
-                .save(new Recuperador(org, r.nombre(), r.telefono())));
     }
 
     private void guardarNueva(OrganizacionInfo info) {
