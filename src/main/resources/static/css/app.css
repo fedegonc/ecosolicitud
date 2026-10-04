@@ -4,59 +4,71 @@
    ============================================================ */
 
 :root {
+    /* ============================================================
+       CONTRATO DE TEMA — un tema nuevo redefine SOLO este bloque de roles.
+       La capa de componentes no usa colores ni medidas literales: solo roles.
+       ============================================================ */
+
     /* escala tipográfica */
     --t-xs: 0.75rem;
     --t-sm: 0.85rem;
     --t-base: 1rem;
     --t-lg: 1.15rem;
 
-    /* papel y tinta */
-    --papel: #f4f0e5;
-    --papel-claro: #fbf9f4;
-    --tinta: #37342a;
+    /* roles de superficie y texto */
+    --fondo: #f4f0e5;
+    --superficie: #fbf9f4;
+    --texto: #37342a;
+    --texto-suave: #546d7a;
+    --texto-inverso: #f6efdc;
+
+    /* roles de línea */
     --borde: #ddd5c3;
+    --borde-fuerte: #5e7a88;
 
-    /* tonos orgánicos */
-    --ocre: #c9a227;
-    --oliva: #6d7434;
-    --oliva-oscuro: #434a27;
-    --oliva-activo: #585f2e;
-    --ardosia: #5e7a88;
-    --ardosia-texto: #546d7a;
-    --teja: #a85a28;
-    --teja-texto: #9c5222;
-    --ocre-claro: #d9b64a;
-    --crema: #f6efdc;
+    /* roles de acción */
+    --acento: #c9a227;
+    --acento-texto: #33301f;
+    --acento-suave: #d9b64a;
+    --enlace: #9c5222;
+    --peligro: #a85a28;
+    --error-texto: #9c5222;
+    --exito: #6d7434;
 
-    /* grano de papel (ruido sutil, desaturado para no teñir el fondo) */
+    /* roles de estado de la solicitud */
+    --estado-pendiente: #c9a227;
+    --estado-en-curso: #5e7a88;
+    --estado-completada: #6d7434;
+    --estado-rechazada: #a85a28;
+
+    /* navegación */
+    --nav-fondo: #434a27;
+    --nav-texto: #efe8d4;
+    --nav-activo: #585f2e;
+
+    /* foco (se reescribe sobre superficies oscuras) */
+    --foco: 3px solid var(--enlace);
+
+    /* textura de papel: un tema puede dejarla vacía */
     --textura: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.055'/%3E%3C/svg%3E");
 
-    /* materiales */
+    /* colores de material: identidad de cada residuo, parte del tema */
     --mat-papel: #a9976b;
-    --mat-carton: var(--teja);
-    --mat-plastico: var(--ocre);
-    --mat-vidrio: var(--ardosia);
+    --mat-carton: #a85a28;
+    --mat-plastico: #c9a227;
+    --mat-vidrio: #5e7a88;
     --mat-metal: #807d6c;
     --mat-electronicos: #4c6270;
 
-    /* roles semánticos */
-    --fondo: var(--papel);
-    --acento: var(--ocre);
-    --acento-texto: #33301f;
-    --texto: var(--tinta);
-    --nav-fondo: var(--oliva-oscuro);
-    --nav-activo: var(--oliva-activo);
-    --nav-texto: #efe8d4;
-
-    /* forma y ritmo */
+    /* medidas */
     --radio: 10px;
     --pad: 1rem;
     --pad-grande: 2rem;
     --sidebar-w: 15rem;
     --icono-tam: 1.3rem;
-    --foco: 3px solid var(--teja);
     --bp-menu: 45rem;
 }
+
 
 /* ---------- base ---------- */
 
@@ -217,7 +229,7 @@ body {
 .menu-marca .marca-nombre {
     font-size: var(--t-lg);
     font-weight: 700;
-    color: var(--crema);
+    color: var(--texto-inverso);
 }
 
 .menu-pie,
@@ -233,7 +245,7 @@ body {
 
 .sidebar,
 .menu-movil {
-    --foco: 3px solid var(--crema);
+    --foco: 3px solid var(--texto-inverso);
 }
 
 .sidebar {
@@ -349,7 +361,7 @@ body {
     border-radius: 999px;
     font-size: var(--t-xs);
     font-weight: 600;
-    color: var(--crema);
+    color: var(--texto-inverso);
 }
 
 .mat-plastico {
@@ -381,20 +393,20 @@ body {
 /* ---------- etiquetas de estado ---------- */
 
 .est-pendiente {
-    background: var(--ocre);
+    background: var(--estado-pendiente);
     color: var(--acento-texto);
 }
 
 .est-en-curso {
-    background: var(--ardosia);
+    background: var(--estado-en-curso);
 }
 
 .est-completada {
-    background: var(--oliva);
+    background: var(--estado-completada);
 }
 
 .est-rechazada {
-    background: var(--teja);
+    background: var(--estado-rechazada);
 }
 
 .est-cancelada {
@@ -428,7 +440,7 @@ body {
 /* ---------- centros de acopio ---------- */
 
 .tarjeta {
-    background: var(--papel-claro);
+    background: var(--superficie);
     border: 1px solid var(--borde);
     border-radius: var(--radio);
     padding: var(--pad);
@@ -481,7 +493,7 @@ body {
     padding: 0.5rem 0.6rem;
     border: 1px solid var(--borde);
     border-radius: var(--radio);
-    background: var(--papel-claro);
+    background: var(--superficie);
     color: var(--texto);
     font: inherit;
 }
@@ -506,8 +518,8 @@ body {
 }
 
 .accion.peligro {
-    background: var(--teja);
-    color: var(--crema);
+    background: var(--peligro);
+    color: var(--texto-inverso);
 }
 
 .acciones {
@@ -522,21 +534,21 @@ body {
 }
 
 .error {
-    color: var(--teja-texto);
+    color: var(--error-texto);
     font-size: var(--t-sm);
     font-weight: 600;
 }
 
 .aviso {
-    background: var(--oliva);
-    color: var(--crema);
+    background: var(--exito);
+    color: var(--texto-inverso);
     padding: 0.5rem 0.8rem;
     border-radius: var(--radio);
 }
 
 .alerta {
-    background: var(--teja);
-    color: var(--crema);
+    background: var(--peligro);
+    color: var(--texto-inverso);
     padding: 0.5rem 0.8rem;
     border-radius: var(--radio);
 }
@@ -547,7 +559,7 @@ body {
     font-size: var(--t-xs);
     font-weight: 700;
     letter-spacing: 0.06em;
-    color: var(--ocre-claro);
+    color: var(--acento-suave);
 }
 
 /* ---------- contenido ---------- */
@@ -558,7 +570,7 @@ body {
 }
 
 .enlace {
-    color: var(--teja-texto);
+    color: var(--enlace);
     text-decoration: underline;
     text-underline-offset: 2px;
 }
@@ -642,7 +654,7 @@ a.accion {
     .marca-nombre {
         font-size: var(--t-lg);
         font-weight: 700;
-        color: var(--crema);
+        color: var(--texto-inverso);
         min-width: 0;
     }
 
@@ -660,7 +672,7 @@ a.accion {
     left: 0;
     right: 0;
     height: 3px;
-    background: var(--ocre);
+    background: var(--acento);
     transform: scaleX(0);
     transform-origin: left;
     opacity: 0;
@@ -680,7 +692,7 @@ a.accion {
     display: block;
     margin-top: 0.25rem;
     font-size: var(--t-sm);
-    color: var(--ardosia-texto);
+    color: var(--texto-suave);
 }
 
 .opcion-centro {
@@ -691,7 +703,7 @@ a.accion {
     padding: 0.6rem 0.6rem;
     border: 1px solid var(--borde);
     border-radius: var(--radio);
-    background: var(--papel-claro);
+    background: var(--superficie);
     cursor: pointer;
 }
 
@@ -705,7 +717,7 @@ a.accion {
 }
 
 .opcion-centro:hover {
-    border-color: var(--ardosia);
+    border-color: var(--borde-fuerte);
 }
 
 .opcion-centro:has(input:checked) {
@@ -743,7 +755,7 @@ a.accion {
 
     .tarjeta {
         break-inside: avoid;
-        border: 1px solid #999;
+        border: 1px solid var(--texto);
     }
 }
 

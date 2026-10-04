@@ -53,6 +53,15 @@ if grep -rqE "estado\.name\(\) *==|estado *== *'" src/main/resources/templates/ 
     grep -rnE "estado\.name\(\) *==|estado *== *'" src/main/resources/templates/
 fi
 
+# 7. La capa de componentes solo usa roles: un color literal o de paleta ahí
+#    rompe el intercambio de tema (el tema reescribe roles, no componentes).
+capa=$(awk '/^:root \{/{en=1} en && /^\}/{en=0; next} !en' src/main/resources/static/css/app.css)
+literales=$(printf '%s' "$capa" | grep -nE "#[0-9a-fA-F]{3,6}|var\(--(ocre|oliva|oliva-oscuro|oliva-activo|ardosia|ardosia-texto|teja|teja-texto|crema|papel|papel-claro|tinta)\)" || true)
+if [ -n "$literales" ]; then
+    fallo "la capa de componentes usa color literal o de paleta: el tema deja de ser intercambiable"
+    printf '%s\n' "$literales" | head -5
+fi
+
 if [ "$fallas" -eq 0 ]; then
     echo "arquitectura: OK — fronteras, tamaño, abstracciones y vistas en regla"
 fi

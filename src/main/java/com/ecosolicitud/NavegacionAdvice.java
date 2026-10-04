@@ -19,12 +19,15 @@ class NavegacionAdvice {
     private final ActorSesion actor;
     private final OrganizacionService organizaciones;
     private final boolean demoHabilitada;
+    private final String tema;
 
     NavegacionAdvice(ActorSesion actor, OrganizacionService organizaciones,
-            @Value("${ecosolicitud.demo.habilitada:true}") boolean demoHabilitada) {
+            @Value("${ecosolicitud.demo.habilitada:true}") boolean demoHabilitada,
+            @Value("${ecosolicitud.tema:}") String tema) {
         this.actor = actor;
         this.organizaciones = organizaciones;
         this.demoHabilitada = demoHabilitada;
+        this.tema = tema;
     }
 
     @ModelAttribute("rutaActual")
@@ -50,6 +53,11 @@ class NavegacionAdvice {
     @ModelAttribute("organizacionActiva")
     OrganizacionInfo organizacionActiva() {
         return actor.get() == Rol.ORGANIZACION ? organizaciones.actual(actor.actual()) : null;
+    }
+
+    @ModelAttribute("tema")
+    String tema() {
+        return tema;
     }
 
     @ModelAttribute("demoHabilitada")

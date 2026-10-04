@@ -1,0 +1,63 @@
+/* ============================================================
+   Tema "clásico" (estilo GOV.UK) — prueba de que el tema es intercambiable.
+   Redefine SOLO el bloque de roles: ningún template ni componente cambia.
+   Se activa con ecosolicitud.tema=clasico
+   ============================================================ */
+
+:root {
+    /* escala tipográfica: GOV.UK usa 19px de cuerpo */
+    --t-xs: 0.875rem;
+    --t-sm: 1rem;
+    --t-base: 1.1875rem;
+    --t-lg: 1.5rem;
+
+    /* superficies y texto */
+    --fondo: #ffffff;
+    --superficie: #f3f2f1;
+    --texto: #0b0c0c;
+    --texto-suave: #505a5f;
+    --texto-inverso: #ffffff;
+
+    /* líneas */
+    --borde: #b1b4b6;
+    --borde-fuerte: #0b0c0c;
+
+    /* acción: verde institucional, enlaces azules */
+    --acento: #00703c;
+    --acento-texto: #ffffff;
+    --acento-suave: #1d70b8;
+    --enlace: #1d70b8;
+    --peligro: #d4351c;
+    --error-texto: #d4351c;
+    --exito: #00703c;
+
+    /* estados */
+    --estado-pendiente: #f47738;
+    --estado-en-curso: #1d70b8;
+    --estado-completada: #00703c;
+    --estado-rechazada: #d4351c;
+
+    /* navegación */
+    --nav-fondo: #0b0c0c;
+    --nav-texto: #ffffff;
+    --nav-activo: #1d70b8;
+
+    /* foco */
+    --foco: 3px solid #ffdd00;
+
+    /* sin textura: el clásico no tiene grano */
+    --textura: none;
+
+    /* etiquetas de material con la paleta de tags del sistema clásico */
+    --mat-papel: #4c2c92;
+    --mat-carton: #b58840;
+    --mat-plastico: #d4351c;
+    --mat-vidrio: #1d70b8;
+    --mat-metal: #505a5f;
+    --mat-electronicos: #00703c;
+
+    /* esquinas rectas y densidad mayor */
+    --radio: 0;
+    --pad: 1rem;
+    --pad-grande: 2rem;
+}
