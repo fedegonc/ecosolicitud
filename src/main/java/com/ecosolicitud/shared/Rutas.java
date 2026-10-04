@@ -11,6 +11,7 @@ public final class Rutas {
     public static final String COMUNIDAD = "/comunidad";
     public static final String ESTADISTICAS = "/estadisticas";
     public static final String OPINION = "/opinion";
+    public static final String AVISOS = "/avisos";
 
     public static final String ORG_SOLICITUDES = "/org/solicitudes";
     public static final String ORG_PERFIL = "/org/perfil";

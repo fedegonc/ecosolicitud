@@ -829,3 +829,82 @@ fieldset.campo legend {
     text-decoration: underline;
     text-underline-offset: 3px;
 }
+
+/* ---------- avisos ---------- */
+
+.badge {
+    margin-left: auto;
+    min-width: 1.4em;
+    padding: 0 0.45em;
+    border-radius: 1em;
+    background: var(--acento);
+    color: var(--acento-texto);
+    font-size: 0.8em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.lista-avisos {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--pad);
+}
+
+.aviso-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--pad);
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: var(--pad) var(--pad-grande);
+}
+
+.aviso-item.nueva {
+    border-left: 4px solid var(--acento);
+    font-weight: 600;
+}
+
+/* ---------- portada ---------- */
+
+.portada {
+    max-width: 42rem;
+    padding: var(--pad-grande) 0;
+}
+
+.portada h1 {
+    font-size: 1.9rem;
+    line-height: 1.15;
+}
+
+.acciones-portada {
+    display: flex;
+    align-items: center;
+    gap: var(--pad-grande);
+    flex-wrap: wrap;
+    margin-top: var(--pad-grande);
+}
+
+/* selector de idioma junto al pie */
+.idiomas {
+    display: inline-flex;
+    gap: var(--pad);
+    margin-top: var(--pad);
+    margin-left: var(--pad);
+    font-size: 0.85em;
+}
+
+.idiomas a {
+    color: var(--nav-texto);
+    opacity: 0.7;
+    text-decoration: none;
+}
+
+.idiomas a.activa {
+    opacity: 1;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}

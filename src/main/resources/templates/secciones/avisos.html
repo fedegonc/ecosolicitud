@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{seccion.avisos}">Avisos</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="#{avisos.titulo}">Avisos</h1>
+    <p class="detalle" th:if="${avisos.isEmpty()}" th:text="#{avisos.vacia}">Vacía</p>
+    <ul class="lista-avisos">
+        <li th:each="a : ${avisos}" class="aviso-item" th:classappend="${!a.leida()} ? 'nueva'">
+            <span th:text="#{${a.tipo().clave}(${a.detalle()})}">Texto</span>
+            <span class="detalle"
+                  th:text="${#temporals.format(a.creadaEn(), 'dd/MM HH:mm')}">fecha</span>
+        </li>
+    </ul>
+</main>
+</body>
+</html>

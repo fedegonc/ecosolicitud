@@ -16,6 +16,7 @@ public enum Seccion {
     ORG_PERFIL("seccion.org.perfil", Rutas.ORG_PERFIL, "edificio", Rol.ORGANIZACION),
     NUEVA("seccion.nueva", Rutas.NUEVA, "mas", Rol.CIUDADANO),
     MIS_SOLICITUDES("seccion.mis-solicitudes", Rutas.MIS_SOLICITUDES, "lista", Rol.CIUDADANO),
+    AVISOS("seccion.avisos", Rutas.AVISOS, "campana", Rol.CIUDADANO, Rol.ORGANIZACION),
     ACOPIOS("seccion.acopios", Rutas.ACOPIOS, "edificio", Rol.CIUDADANO),
     GUIA("seccion.guia", Rutas.GUIA, "libro", Rol.CIUDADANO, Rol.ORGANIZACION),
     COMUNIDAD("seccion.comunidad", Rutas.COMUNIDAD, "gente", Rol.CIUDADANO,

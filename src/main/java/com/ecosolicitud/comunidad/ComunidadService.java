@@ -30,6 +30,11 @@ public class ComunidadService {
                 .map(ComunidadService::aInfo).toList();
     }
 
+    public List<PublicacionInfo> ultimas(int cantidad) {
+        return publicadas(FiltroComunidad.TODAS).stream()
+                .limit(cantidad).toList();
+    }
+
     public Optional<PublicacionInfo> buscar(long id) {
         return repositorio.findById(id).map(ComunidadService::aInfo);
     }

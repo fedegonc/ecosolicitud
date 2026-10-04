@@ -10,7 +10,7 @@ public class ActorSesion {
     private Rol rol = Rol.CIUDADANO;
     private String organizacionId;
     private String ciudadanoId = "ciudadano-demo";
-    private String nombreCiudadano = "Ciudadano demo";
+    private String nombreCiudadano = "Martina López";
 
     public Rol get() {
         return rol;

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{app.nombre}">EcoSolicitud</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <section class="portada">
+        <h1 th:text="#{portada.claim}">Qué es</h1>
+        <p class="detalle" th:text="#{portada.intro}">Intro</p>
+        <p class="acciones-portada">
+            <a class="accion" th:href="${inicio}" th:text="#{${cta}}">Pedir retiro</a>
+            <a class="enlace" th:href="@{/acopios}" th:text="#{portada.secundaria}">Ver centros</a>
+        </p>
+    </section>
+    <section th:if="${!ultimas.isEmpty()}">
+        <h2 th:text="#{portada.ultimas}">Lo último</h2>
+        <div class="rejilla">
+            <article th:each="p : ${ultimas}" class="tarjeta">
+                <h3><a class="enlace" th:href="@{/comunidad/{id}(id=${p.id})}"
+                       th:text="${p.titulo}">Título</a></h3>
+                <p class="detalle" th:text="${p.resumen}">Resumen</p>
+                <p class="detalle">
+                    <span class="etiqueta" th:text="#{${p.tipo.clave}}">Tipo</span>
+                    <span th:text="${p.fecha}">Fecha</span>
+                </p>
+            </article>
+        </div>
+    </section>
+</main>
+</body>
+</html>

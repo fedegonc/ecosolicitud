@@ -1,6 +1,5 @@
 package com.ecosolicitud.solicitud;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +29,15 @@ public class SolicitudService {
 
     private final SolicitudRepository repositorio;
     private final CiudadanoRepository ciudadanos;
+    private final AvisoService avisos;
     private final OrganizacionService organizaciones;
 
     public SolicitudService(SolicitudRepository repositorio,
-            CiudadanoRepository ciudadanos, OrganizacionService organizaciones) {
+            CiudadanoRepository ciudadanos, AvisoService avisos,
+            OrganizacionService organizaciones) {
         this.repositorio = repositorio;
         this.ciudadanos = ciudadanos;
+        this.avisos = avisos;
         this.organizaciones = organizaciones;
     }
 
@@ -71,6 +73,7 @@ public class SolicitudService {
                 organizacionId, nota, Estado.PENDIENTE, Instant.now(), null, null),
                 ciudadano(actor.ciudadanoId(), actor.nombreCiudadano()));
         repositorio.save(s);
+        avisos.nueva(s);
         String nombre = organizaciones.buscar(organizacionId)
                 .map(OrganizacionInfo::nombre).orElse(organizacionId);
         return Optional.of(aInfo(s, Map.of(organizacionId, nombre)));
@@ -78,22 +81,26 @@ public class SolicitudService {
 
     @Transactional
     public Resultado aceptar(Actor actor, long id, long version) {
-        return aplicar(actor, id, version, s -> esDestinataria(actor, s), s -> s.aceptar(Instant.now()));
+        return aplicar(actor, id, version, s -> esDestinataria(actor, s),
+                s -> s.aceptar(Instant.now()), TipoAviso.ACEPTADA);
     }
 
     @Transactional
     public Resultado rechazar(Actor actor, long id, long version) {
-        return aplicar(actor, id, version, s -> esDestinataria(actor, s), s -> s.rechazar(Instant.now()));
+        return aplicar(actor, id, version, s -> esDestinataria(actor, s),
+                s -> s.rechazar(Instant.now()), TipoAviso.RECHAZADA);
     }
 
     @Transactional
     public Resultado completar(Actor actor, long id, long version) {
-        return aplicar(actor, id, version, s -> esDestinataria(actor, s), s -> s.completar(Instant.now()));
+        return aplicar(actor, id, version, s -> esDestinataria(actor, s),
+                s -> s.completar(Instant.now()), TipoAviso.COMPLETADA);
     }
 
     @Transactional
     public Resultado cancelar(Actor actor, long id, long version) {
-        return aplicar(actor, id, version, s -> esAutor(actor, s), s -> s.cancelar(Instant.now()));
+        return aplicar(actor, id, version, s -> esAutor(actor, s),
+                s -> s.cancelar(Instant.now()), TipoAviso.CANCELADA);
     }
 
     public List<SolicitudInfo> todas() {
@@ -108,31 +115,12 @@ public class SolicitudService {
     }
 
     public SolicitudMetricas metricas() {
-        var todas = repositorio.findAll();
-        long aceptadas = todas.stream().filter(s -> s.getEstado() == Estado.EN_CURSO
-                || s.getEstado() == Estado.COMPLETADA).count();
-        long completadas = todas.stream()
-                .filter(s -> s.getEstado() == Estado.COMPLETADA).count();
-        var respuestas = todas.stream().filter(s -> s.getRespondidaEn() != null)
-                .map(s -> Duration.between(s.getCreadaEn(), s.getRespondidaEn()))
-                .sorted().toList();
-        Duration mediana = mediana(respuestas);
-        return new SolicitudMetricas(todas.size(), aceptadas, completadas, mediana);
-    }
-
-    private static Duration mediana(List<Duration> tiempos) {
-        if (tiempos.isEmpty()) {
-            return null;
-        }
-        int n = tiempos.size();
-        if (n % 2 == 1) {
-            return tiempos.get(n / 2);
-        }
-        return tiempos.get(n / 2 - 1).plus(tiempos.get(n / 2)).dividedBy(2);
+        return SolicitudMetricas.desde(repositorio.findAll());
     }
 
     @Transactional
     public void reemplazarTodas(List<SolicitudSemilla> dataset) {
+        avisos.borrarTodas();
         repositorio.deleteAll();
         ciudadanos.deleteAll();
         dataset.forEach(s -> repositorio.save(
@@ -149,7 +137,7 @@ public class SolicitudService {
     }
 
     private Resultado aplicar(Actor actor, long id, long version, Predicate<Solicitud> permiso,
-            Consumer<Solicitud> transicion) {
+            Consumer<Solicitud> transicion, TipoAviso tipoAviso) {
         var s = repositorio.findById(id).orElse(null);
         if (s == null) {
             return Resultado.NO_ENCONTRADA;
@@ -163,6 +151,7 @@ public class SolicitudService {
         try {
             transicion.accept(s);
             repositorio.saveAndFlush(s);
+            avisos.avisar(s, tipoAviso);
             return Resultado.OK;
         } catch (TransicionInvalidaException e) {
             return Resultado.INVALIDA;

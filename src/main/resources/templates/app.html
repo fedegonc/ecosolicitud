@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html th:lang="${#locale.language}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,6 +33,8 @@
                            th:attr="aria-current=${s.ruta == rutaActual} ? 'page' : null">
                             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
                             <span th:text="#{${s.clave}}">Sección</span>
+                            <span class="badge" th:if="${s.name() == 'AVISOS' and avisosSinLeer > 0}"
+                                  th:text="${avisosSinLeer}">2</span>
                         </a>
                     </li>
                 </ul>
@@ -67,6 +69,12 @@
                 </form>
                 <a th:fragment="enlaceOpinion" class="enlace-pie"
                    th:href="@{/opinion}" th:text="#{opinion.enlace}">Dejanos tu opinión</a>
+                <span th:fragment="idiomas" class="idiomas">
+                    <a th:href="${rutaActual} + '?lang=es'"
+                       th:classappend="${#locale.language == 'es'} ? 'activa'">ES</a>
+                    <a th:href="${rutaActual} + '?lang=pt'"
+                       th:classappend="${#locale.language == 'pt'} ? 'activa'">PT</a>
+                </span>
             </footer>
         </aside>
         <div class="menu-movil">
@@ -87,6 +95,7 @@
                             <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
                             <form th:replace="~{app :: reiniciar}"></form>
                             <a th:replace="~{app :: enlaceOpinion}"></a>
+                            <span th:replace="~{app :: idiomas}"></span>
                         </footer>
                     </div>
                 </details>
