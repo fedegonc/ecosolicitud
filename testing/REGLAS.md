@@ -38,6 +38,13 @@ Las validaciones se ejecutan con el `Validator` real, no contra una copia del re
 | `EcoSolicitudApplicationTests` | 2 | Contexto con H2 en memoria y ausencia de consola H2 |
 | `CasosDeUsoDevTest` | 1 | Catálogo JSON con actores, casos y relaciones en dev |
 | `CasosDeUsoProdTest` | 1 | Endpoint del catálogo ausente en prod, con H2 de test en memoria |
+| `RecursosProdTest` | 1 | HTML prod referencia CSS/JS/logo con hash; URLs accesibles, contenido idéntico y caché de 7 días |
+
+### Regresión de recursos de producción
+
+Se añadió un solo método de integración con perfiles `prod,test` y puerto aleatorio. Falló inicialmente porque el HTML pedía `/css/app.css` sin versión y pasó tras activar `spring.web.resources.chain.strategy.content` para `/css/**,/js/**,/img/**`. La suite actual pasó con 79 ejecuciones; no se duplicó una matriz de escenarios.
+
+Se mantiene la caché de 7 días en prod y la configuración de dev sin cambios. Thymeleaf/Spring reescriben URLs por contenido sin editar templates. El SW y manifest conservan rutas estables fuera de la estrategia. Un hash cambia cuando cambian los bytes, no por cada deploy. Esto previene reutilizar CSS/JS/imágenes anteriores bajo la misma URL; no demuestra por sí solo qué recurso estaba usando el navegador de la captura. Verificación visual pendiente tras publicar, con el mismo viewport y zoom.
 
 El controller del catálogo tiene `@Profile("dev & !prod")`. La combinación simultánea dev/prod se excluye por esa expresión, pero todavía no hay un test separado de ese perfil combinado.
 

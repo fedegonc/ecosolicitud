@@ -1,0 +1,71 @@
+{
+  "fecha": "2026-10-04",
+  "host": "ecosolicitud.onrender.com",
+  "commit_confirmado_live": "22dc7fcb17064b19cf0029c8b6a2b4b42a231e5b",
+  "jmeter_version": "5.6.3",
+  "tipo": "Navegación GET sin escrituras; campaña condicional 10 -> 15 -> 20",
+  "nivel_10": {
+    "estado": "Detenido por criterio de latencia; no completó el recorrido planificado",
+    "usuarios": 10,
+    "rampa_segundos": 15,
+    "pausa_ms": 500,
+    "recorridos_planificados_por_usuario": 30,
+    "inicio_supervisor_utc": "2026-10-04T23:11:43.093131Z",
+    "inicio_jmeter_utc_aproximado": "2026-10-04T23:12:17Z",
+    "fin_trafico_utc_aproximado": "2026-10-04T23:13:29Z",
+    "fin_supervisor_utc": "2026-10-04T23:13:33.220206Z",
+    "motivo_parada": "p95 de ventana móvil de un minuto > 3000 ms durante un minuto",
+    "corte": "Shutdown ordenado por puerto local 4447; generación de reporte",
+    "objetivo_navegacion_cumplido": false,
+    "muestras_planificadas": 2400,
+    "muestras_observadas": 226,
+    "respuestas_http_200": 226,
+    "errores_http_o_assertions": 0,
+    "promedio_ms": 2264.8274336283175,
+    "mediana_ms": 2190,
+    "p95_ms": 3911.25,
+    "p99_ms": 5775.31,
+    "maximo_ms": 6976,
+    "peticiones_por_segundo": 3.3049149642454996,
+    "fuente_local": "target/render-escalon-10-20261004-231143Z-reporte/statistics.json",
+    "supervision_local": "scratch/carga_controlada.py; ayuda operativa no versionada; p95 de corte por rango más cercano, reporte JMeter interpolado",
+    "limitacion": "Ejecución corta truncada sin warm-up separado; no establece capacidad máxima ni demuestra causa de regresión"
+  },
+  "recursos_render": {
+    "plan": "free",
+    "region": "oregon",
+    "ventana_inicio_utc": "2026-10-04T23:11:00Z",
+    "ventana_fin_utc": "2026-10-04T23:16:00Z",
+    "resolucion_segundos": 30,
+    "cpu_agregacion": "MAX",
+    "cpu_limite": 0.15,
+    "memoria_limite_bytes_reportados": 536870900,
+    "cpu_maxima_ventana": 0.11833243,
+    "cpu_recuperacion_23_15_utc": 0.0045158,
+    "memoria_antes_bytes": 353153020,
+    "memoria_maxima_ventana_bytes": 371884030,
+    "logs_error_devueltos_en_consulta": 0,
+    "series": [
+      {"utc": "2026-10-04T23:11:00Z", "cpu": 0.0070106, "memoria_bytes": 353153020},
+      {"utc": "2026-10-04T23:11:30Z", "cpu": 0.0043958, "memoria_bytes": 353415170},
+      {"utc": "2026-10-04T23:12:00Z", "cpu": 0.0020156666, "memoria_bytes": 353480700},
+      {"utc": "2026-10-04T23:12:30Z", "cpu": 0.0010569667, "memoria_bytes": 353488900},
+      {"utc": "2026-10-04T23:13:00Z", "cpu": 0.095732965, "memoria_bytes": 359514100},
+      {"utc": "2026-10-04T23:13:30Z", "cpu": 0.11611277, "memoria_bytes": 367996930},
+      {"utc": "2026-10-04T23:14:00Z", "cpu": 0.11833243, "memoria_bytes": 371605500},
+      {"utc": "2026-10-04T23:14:30Z", "cpu": 0.010249667, "memoria_bytes": 371834880},
+      {"utc": "2026-10-04T23:15:00Z", "cpu": 0.0045158, "memoria_bytes": 371884030},
+      {"utc": "2026-10-04T23:15:30Z", "cpu": 0.0045158, "memoria_bytes": 371884030},
+      {"utc": "2026-10-04T23:16:00Z", "cpu": 0.0045158, "memoria_bytes": 371884030}
+    ]
+  },
+  "comprobaciones_post_carga": [
+    {"http": 200, "total_segundos": 0.539410},
+    {"http": 200, "total_segundos": 0.686295}
+  ],
+  "niveles_pendientes": [
+    {"usuarios": 15, "estado": "Bloqueado: nivel 10 incumplió criterio previo"},
+    {"usuarios": 20, "estado": "Bloqueado: nivel 10 incumplió criterio previo"}
+  ],
+  "conclusion": "Degradación de latencia sin caída ni fallos HTTP observados. No atribuir causa a código, CPU, red o JIT sin experimento controlado. No escalar antes de reproducir una referencia aceptable."
+}

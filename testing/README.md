@@ -9,7 +9,8 @@ Este directorio concentra procedimientos, reglas de aceptación, resultados y pe
 | [Carga](CARGA.md) | JMeter, resultados locales y en Render, interpretación de capacidad, escalones y criterios de parada |
 | [E2E](E2E.md) | Flujos de los dos actores, pruebas HTTP/HtmlUnit y comprobaciones manuales en navegador |
 | [Reglas y regresiones](REGLAS.md) | Validaciones, estados, permisos, arquitectura, perfiles, redundancias y riesgos pendientes |
-| [Resultados agregados del 2026-10-04](resultados/2026-10-04.json) | Evidencia resumida sin cookies, credenciales ni datos personales |
+| [Resultados agregados del 2026-10-04](resultados/2026-10-04.json) | Primera ejecución local y remota, sin cookies ni credenciales |
+| [Repetición con escalones](resultados/2026-10-04-escalones.json) | Nivel 10 detenido por latencia; 15/20 bloqueados; recursos y recuperación |
 
 Los planes y el código ejecutable están en [src/test](../src/test/). Son parte del repositorio público, pero Maven no los incluye en el jar de producción. Las dependencias de pruebas conservan su scope `test`.
 
@@ -38,6 +39,8 @@ JMeter se ejecuta por separado: `mvn verify` no ejecuta el plan de carga ni cont
 El 2026-10-04 se verificaron 11 archivos Java, 12 clases y 23 métodos de prueba. JUnit informó 78 ejecuciones: 19 métodos normales y cuatro métodos parametrizados que producen 59 ejecuciones. Resultado: 0 fallos, 0 errores y 0 omitidos. El gate de arquitectura también pasó.
 
 El contador no constituye una meta. Una matriz de datos puede generar varias ejecuciones; un método largo puede esconder muchos escenarios bajo una sola ejecución. La calidad se evalúa por trazabilidad con requisitos, independencia y capacidad de detectar regresiones.
+
+Después se añadió una única regresión, `RecursosProdTest`, para URLs con hash y caché de recursos en producción. La verificación local pasó con 79 ejecuciones, cero fallos y cero errores. El inventario actual es de 12 archivos Java, 13 clases y 24 métodos. El resultado inicial de 78 se conserva como evidencia histórica, no se reescribe. La comprobación visual en el navegador afectado sigue pendiente; el despliegue se verifica consultando el commit live y las URLs de los recursos.
 
 ## Estados y registro de resultados
 

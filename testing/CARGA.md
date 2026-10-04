@@ -13,7 +13,7 @@ Distinguir:
 
 Ejemplo orientativo de demanda: 50 personas que generan una petición cada 10 segundos producen aproximadamente 5 peticiones/s. Diez que generan una por segundo producen aproximadamente 10 peticiones/s. No incluye recursos estáticos, htmx ni pausas por respuestas lentas.
 
-**Decisión provisional:** usar 10 usuarios de navegación intensiva como referencia operativa inicial del piloto, no como máximo certificado. El escenario observado fue correcto, pero alcanzó la cuota de CPU. No hay evidencia para prometer 25 o 50 usuarios activos ni un número de POST/s. La próxima medición propuesta es 15 usuarios, no saltar directamente a 50.
+**Decisión actualizada:** la primera prueba con 10 usuarios fue correcta, pero la repetición sobre `22dc7fc` activó el corte por latencia. Diez usuarios intensivos no constituyen una garantía estable para el piloto. Los niveles de 15 y 20 quedan bloqueados hasta reproducir una referencia aceptable y explicar la variabilidad. No hay evidencia para prometer 25 o 50 usuarios activos ni un número de POST/s.
 
 ## 2. Plan disponible y límites
 
@@ -88,7 +88,37 @@ Artefactos locales originales, no publicados y eliminables por `mvn clean`:
 - `target/render-20261004-164533.jtl`
 - `target/reporte-render-20261004-164533/statistics.json`
 
-**Conclusión:** diez usuarios de navegación completaron el escenario sin errores y con p95 de 1,30 s en Render. CPU fue el recurso con menor margen observado. No se midieron escrituras ni la capacidad máxima.
+**Conclusión de la primera ejecución:** diez usuarios de navegación completaron el escenario sin errores y con p95 de 1,30 s en Render. CPU fue el recurso con menor margen observado. No se midieron escrituras ni la capacidad máxima. La repetición siguiente impide tratar este dato como capacidad estable.
+
+### Repetición controlada sobre `22dc7fc`: corte en el primer nivel
+
+El 2026-10-04 se confirmó por MCP que `22dc7fcb17064b19cf0029c8b6a2b4b42a231e5b` estaba live. Se inició la campaña condicional 10 → 15 → 20 con el mismo JMX, 30 recorridos planificados, pausa de 500 ms y rampa de 15 segundos. No se modificaron datos ni configuración de Render.
+
+Un supervisor local (`scratch/carga_controlada.py`, ayuda operativa no versionada) revisó el JTL cada dos segundos y ejecutó `shutdown.sh 4447` cuando el p95 de una ventana móvil de un minuto permaneció por encima de 3 s durante un minuto. También tenía cortes por 5xx, timeouts repetidos, tasa de errores y duración máxima operativa de 600 s. CPU y memoria se supervisaron por MCP, no automáticamente desde ese script. La campaña no avanzó al siguiente nivel.
+
+| Métrica | Nivel de 10 usuarios |
+|---|---:|
+| Peticiones previstas | 2.400 |
+| Peticiones completadas antes del corte | 226 |
+| HTTP 200 / errores de assertions | 226 / 0 |
+| Promedio | 2.264,83 ms |
+| Mediana | 2.190 ms |
+| p95 del reporte JMeter | 3.911,25 ms |
+| p99 | 5.775,31 ms |
+| Máximo | 6.976 ms |
+| Throughput observado | 3,30 peticiones/s |
+| Objetivo de navegación | No cumplido |
+| Niveles 15 y 20 | No ejecutados: bloqueados por el criterio previo |
+
+Tráfico aproximado entre 23:12:17 y 23:13:29 UTC; la preparación del generador y generación de informe se registran aparte. La ejecución quedó truncada: no comparar sus 226 muestras como si fueran otro recorrido completo de 2.400. El supervisor usó p95 por rango más cercano; JMeter informa percentiles interpolados, de modo que pueden diferir levemente.
+
+Métricas de Render en 23:11–23:16 UTC: CPU máxima de 0,11833 sobre cuota 0,15, aproximadamente 79 %; memoria máxima de aproximadamente 354,66 MiB sobre 512 MiB, aproximadamente 69 %. En 23:15 UTC la CPU volvió a 0,00452. La consulta de logs de nivel error no devolvió entradas. Son datos agregados con posible retardo de muestreo, no medición por petición.
+
+Después de detener JMeter la portada siguió devolviendo HTTP 200, con dos comprobaciones de 0,54 y 0,69 s. El servidor no cayó en las comprobaciones realizadas. El corte fue por latencia, no por falta de memoria ni un 500.
+
+Evidencia agregada y series: [resultados/2026-10-04-escalones.json](resultados/2026-10-04-escalones.json). Informe local: `target/render-escalon-10-20261004-231143Z-reporte/`.
+
+**Conclusión limitada:** esta repetición incumplió el criterio de tiempos, sin fallos funcionales observados. CPU no llegó a su cuota en la ventana consultada, por lo que no se demuestra que sea la única causa. El cambio de versión, calentamiento JVM, red, condiciones del alojamiento y del generador no están aislados. Próximo paso propuesto: comprobar por endpoint con pocos usuarios, separar calentamiento y repetir 10 con condiciones controladas; no forzar 15/20 antes de ese diagnóstico.
 
 ## 4. Ejecución reproducible
 
@@ -134,13 +164,13 @@ Detener la ejecución y no subir al escalón siguiente si aparece:
 
 El JMX actual no implementa estos cortes automáticamente. Requiere un operador mirando resultados y métricas. Para detenerlo de forma ordenada, ejecutar `shutdown.sh` o `shutdown.cmd` de la instalación JMeter que lanzó el ensayo. En este repositorio hay una instalación local bajo `target/apache-jmeter-5.6.3/bin/`. No lanzar varias instancias para superar artificialmente los límites.
 
-## 6. Campaña propuesta: no ejecutada todavía
+## 6. Campaña y estado de ejecución
 
 | ID | Escenario | Entorno y condición | Estado |
 |---|---|---|---|
 | C-01 | 1 usuario × 1 recorrido para validar rutas y assertions | Local o remoto autorizado, sin POST | Ejecutado local, 8 muestras correctas |
 | C-02 | 10 usuarios de navegación | Local dev y Render | Ejecutado; resultados arriba |
-| C-03 | 5 → 10 → 15 → 20 usuarios, rampa de 15 s y 30 recorridos por nivel | Ejecutar un nivel por vez, aplicar cortes y esperar recuperación | Pendiente; 25/50 solo después de pasar niveles anteriores |
+| C-03 | 5 → 10 → 15 → 20 usuarios, rampa de 15 s y 30 recorridos por nivel | Ejecutar un nivel por vez, aplicar cortes y esperar recuperación | Repetición desde 10 detenida por latencia; 15/20 bloqueados. El nivel 5 sigue pendiente |
 | C-04 | 10 usuarios con 100 recorridos y pausa de 500 ms | Resistencia: registrar duración real, tendencia de RAM y recuperación | Pendiente |
 | C-05 | 10 usuarios, un recorrido, rampa de 1 s y sin pausa | Ráfaga acotada de 80 GET, primero en entorno aislado | Pendiente |
 | C-06 | Navegación y creación de solicitudes con identidades distintas | Base descartable aislada, CSRF real y datos sintéticos | Pendiente; requiere plan de POST distinto |
