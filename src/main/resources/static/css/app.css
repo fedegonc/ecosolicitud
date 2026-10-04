@@ -568,6 +568,21 @@ body {
     border-radius: var(--radio);
 }
 
+/* ---------- bloque demo colapsable ---------- */
+
+.demo-bloque {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.demo-bloque > form {
+    margin-top: 0.5rem;
+}
+
+.demo-bloque > summary {
+    cursor: pointer;
+}
+
 /* ---------- etiqueta de modo demo ---------- */
 
 .demo {
@@ -645,6 +660,13 @@ a.accion {
         background-image: var(--textura);
         color: var(--nav-texto);
         padding: var(--pad);
+    }
+
+    .marca-fila {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
     }
 
     .marca {
@@ -952,13 +974,18 @@ fieldset.campo legend {
     margin-top: var(--pad-grande);
 }
 
-/* selector de idioma junto al pie */
+/* selector de idioma junto a la marca */
 .idiomas {
     display: inline-flex;
-    gap: var(--pad);
-    margin-top: var(--pad);
-    margin-left: var(--pad);
+    align-items: center;
+    gap: 0.4rem;
+    padding: calc(var(--pad) / 2);
     font-size: 0.85em;
+    flex-shrink: 0;
+}
+
+.idiomas .icono {
+    opacity: 0.7;
 }
 
 .idiomas a {

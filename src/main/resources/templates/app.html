@@ -21,10 +21,18 @@
     <a class="salto" href="#contenido" th:text="#{nav.saltar}">Saltar al contenido</a>
     <div class="app">
         <aside class="sidebar">
-            <a class="marca" th:href="@{/}">
-                <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
-                <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
-            </a>
+            <header class="marca-fila">
+                <a class="marca" th:href="@{/}">
+                    <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
+                    <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
+                </a>
+                <span th:fragment="idiomas" class="idiomas">
+                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#mundo'"></use></svg><a th:href="${rutaActual} + '?lang=es'"
+                       th:classappend="${#locale.language == 'es'} ? 'activa'">ES</a>
+                    <a th:href="${rutaActual} + '?lang=pt'"
+                       th:classappend="${#locale.language == 'pt'} ? 'activa'">PT</a>
+                </span>
+            </header>
             <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
                 <ul>
                     <li th:each="s : ${secciones}">
@@ -40,7 +48,8 @@
                 </ul>
             </nav>
             <footer class="sidebar-pie">
-                <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
+                <details class="demo-bloque">
+                    <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
                 <form th:fragment="cambioRol" th:action="@{/demo/rol}" method="post" class="rol-switch">
                     <button type="submit" name="rol" value="CIUDADANO"
                             th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
@@ -67,15 +76,8 @@
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
                 </form>
+                </details>
                 <a th:fragment="enlaceInstalar" class="enlace-pie instalar-app" href="#" hidden><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{instalar.boton}">Instalar</span></a>
-                <a th:fragment="enlaceOpinion" class="enlace-pie"
-                   th:href="@{/opinion}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#globo'"></use></svg><span th:text="#{opinion.enlace}">Opinión</span></a>
-                <span th:fragment="idiomas" class="idiomas">
-                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#mundo'"></use></svg><a th:href="${rutaActual} + '?lang=es'"
-                       th:classappend="${#locale.language == 'es'} ? 'activa'">ES</a>
-                    <a th:href="${rutaActual} + '?lang=pt'"
-                       th:classappend="${#locale.language == 'pt'} ? 'activa'">PT</a>
-                </span>
             </footer>
         </aside>
         <div class="menu-movil">
@@ -84,20 +86,21 @@
                     <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
                     <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
                 </a>
+                <span th:replace="~{app :: idiomas}"></span>
                 <details class="menu-panel">
                     <summary th:aria-label="#{nav.menu}">
                         <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
                     </summary>
                     <div class="menu-panel-cuerpo">
-                        <form th:replace="~{app :: cambioRol}"></form>
-                        <form th:replace="~{app :: selectorOrg}"></form>
                         <nav th:replace="~{app :: secciones}"></nav>
                         <footer class="menu-pie">
-                            <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
-                            <form th:replace="~{app :: reiniciar}"></form>
+                            <details class="demo-bloque">
+                                <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
+                                <form th:replace="~{app :: cambioRol}"></form>
+                                <form th:replace="~{app :: selectorOrg}"></form>
+                                <form th:replace="~{app :: reiniciar}"></form>
+                            </details>
                             <a th:replace="~{app :: enlaceInstalar}"></a>
-                            <a th:replace="~{app :: enlaceOpinion}"></a>
-                            <span th:replace="~{app :: idiomas}"></span>
                         </footer>
                     </div>
                 </details>

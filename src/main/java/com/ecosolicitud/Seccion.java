@@ -22,7 +22,9 @@ public enum Seccion {
     COMUNIDAD("seccion.comunidad", Rutas.COMUNIDAD, "gente", Rol.CIUDADANO,
             Rol.ORGANIZACION),
     ESTADISTICAS("seccion.estadisticas", Rutas.ESTADISTICAS, "grafico",
-            Rol.CIUDADANO, Rol.ORGANIZACION);
+            Rol.CIUDADANO, Rol.ORGANIZACION),
+    OPINION("opinion.enlace", Rutas.OPINION, "mensaje", Rol.CIUDADANO,
+            Rol.ORGANIZACION);
 
     private final String clave;
     private final String ruta;
