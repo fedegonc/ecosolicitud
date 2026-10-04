@@ -6,12 +6,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "ciudadanos")
 @Getter
-@Setter
 public class Ciudadano {
 
     @Id
@@ -20,4 +18,16 @@ public class Ciudadano {
 
     @Column(nullable = false, length = 80)
     private String nombre;
+
+    protected Ciudadano() {
+    }
+
+    public Ciudadano(String id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
+    public void renombrar(String nombre) {
+        this.nombre = nombre;
+    }
 }

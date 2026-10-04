@@ -20,12 +20,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.Getter;
 import org.hibernate.annotations.BatchSize;
-import lombok.Setter;
 
 @Entity
 @Table(name = "organizaciones")
 @Getter
-@Setter
 public class Organizacion {
 
     @Id
@@ -52,4 +50,23 @@ public class Organizacion {
 
     @Version
     private long version;
+
+    protected Organizacion() {
+    }
+
+    public Organizacion(String id, String nombre, Ciudad ciudad,
+            List<Material> materiales, String horario, String telefono) {
+        this.id = id;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.materiales = new ArrayList<>(materiales);
+        this.horario = horario;
+        this.telefono = telefono;
+    }
+
+    public void actualizar(List<Material> materiales, String horario, String telefono) {
+        this.materiales = new ArrayList<>(materiales);
+        this.horario = horario;
+        this.telefono = telefono;
+    }
 }

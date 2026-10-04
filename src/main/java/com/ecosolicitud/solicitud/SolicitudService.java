@@ -130,15 +130,10 @@ public class SolicitudService {
     private Ciudadano ciudadano(String id, String nombre) {
         return ciudadanos.findById(id).map(c -> {
             if (!c.getNombre().equals(nombre)) {
-                c.setNombre(nombre);
+                c.renombrar(nombre);
             }
             return c;
-        }).orElseGet(() -> {
-            var nuevo = new Ciudadano();
-            nuevo.setId(id);
-            nuevo.setNombre(nombre);
-            return ciudadanos.save(nuevo);
-        });
+        }).orElseGet(() -> ciudadanos.save(new Ciudadano(id, nombre)));
     }
 
     private Resultado aplicar(Actor actor, long id, long version, Predicate<Solicitud> permiso,

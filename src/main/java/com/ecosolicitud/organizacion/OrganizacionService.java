@@ -1,6 +1,5 @@
 package com.ecosolicitud.organizacion;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -88,9 +87,7 @@ public class OrganizacionService {
         if (org.getVersion() != version) {
             return false;
         }
-        org.setMateriales(new ArrayList<>(materiales));
-        org.setHorario(horario);
-        org.setTelefono(telefono);
+        org.actualizar(materiales, horario, telefono);
         repositorio.save(org);
         return true;
     }
@@ -102,14 +99,8 @@ public class OrganizacionService {
     }
 
     private void guardarNueva(OrganizacionInfo info) {
-        var org = new Organizacion();
-        org.setId(info.id());
-        org.setNombre(info.nombre());
-        org.setCiudad(info.ciudad());
-        org.setMateriales(new ArrayList<>(info.materiales()));
-        org.setHorario(info.horario());
-        org.setTelefono(info.telefono());
-        repositorio.save(org);
+        repositorio.save(new Organizacion(info.id(), info.nombre(), info.ciudad(),
+                info.materiales(), info.horario(), info.telefono()));
     }
 
     private OrganizacionInfo primera() {
