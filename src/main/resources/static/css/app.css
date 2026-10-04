@@ -958,3 +958,16 @@ fieldset.campo legend {
     text-decoration: underline;
     text-underline-offset: 3px;
 }
+
+/* centro ya elegido en la solicitud: resumen en vez de la lista */
+.centro-resumen {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--pad);
+    flex-wrap: wrap;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: var(--pad) var(--pad-grande);
+}

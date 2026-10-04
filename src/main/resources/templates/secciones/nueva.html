@@ -20,7 +20,26 @@
         </label>
 
         <div id="flujo" aria-live="polite">
-            <fieldset class="campo" th:if="${!#lists.isEmpty(centros)}">
+            <!-- ya elegido (desde el centro o por la lista): resumen, no otra elección -->
+            <div class="campo" th:if="${centro != null}">
+                <span th:text="#{nueva.centro}">Centro de acopio</span>
+                <p class="centro-resumen">
+                    <span>
+                        <strong th:text="${centro.nombre}">Nombre</strong>
+                        <span class="detalle" th:text="${centro.horario}">Horario</span>
+                    </span>
+                    <a class="enlace" th:href="@{/nueva(ciudad=${form.ciudad})}"
+                       th:attr="hx-get=@{/nueva}"
+                       hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
+                       hx-include="closest form" hx-params="not _csrf,organizacionId"
+                       th:text="#{nueva.centro.cambiar}">Cambiar</a>
+                </p>
+                <input type="hidden" th:field="*{organizacionId}">
+                <p class="error" th:if="${#fields.hasErrors('organizacionId')}"
+                   th:errors="*{organizacionId}">Error</p>
+            </div>
+
+            <fieldset class="campo" th:if="${centro == null and !#lists.isEmpty(centros)}">
                 <legend th:text="#{nueva.centro}">Centro de acopio</legend>
                 <label th:each="o : ${centros}" class="opcion-centro">
                     <input type="radio" th:field="*{organizacionId}" th:value="${o.id}"
