@@ -662,11 +662,10 @@ a.accion {
         padding: var(--pad);
     }
 
-    .marca-fila {
+    .marca-bloque {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
+        flex-direction: column;
+        gap: 0.25rem;
     }
 
     .marca {
@@ -679,13 +678,8 @@ a.accion {
         min-width: 0;
     }
 
-    .marca-fila .idiomas {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .marca-fila .idiomas .icono {
-        display: none;
+    .marca-bloque .idiomas {
+        margin-left: calc(var(--pad) / 2);
     }
 
     .marca:hover .marca-nombre {
