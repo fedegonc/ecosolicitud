@@ -1,0 +1,71 @@
+/* ============================================================
+   Tema "uswds" (US Web Design System) — tercera prueba del pivote.
+   Estética institucional: azul federal, esquinas casi rectas, tipografía
+   grande, etiquetas oscuras con texto claro.
+   Se activa con ecosolicitud.tema=uswds
+
+   Tokens tomados del USWDS (tokens de color y escala tipográfica).
+   ============================================================ */
+
+:root {
+    /* escala tipográfica USWDS: cuerpo más grande que el promedio */
+    --t-xs: 0.87rem;
+    --t-sm: 0.93rem;
+    --t-base: 1.06rem;
+    --t-lg: 1.35rem;
+
+    /* superficies y texto (white / base-lightest / base-darkest) */
+    --fondo: #ffffff;
+    --superficie: #f0f0f0;
+    --texto: #1b1b1b;
+    --texto-suave: #71767a;
+    --texto-inverso: #ffffff;
+
+    /* líneas (base-light / base) */
+    --borde: #dfe1e2;
+    --borde-fuerte: #71767a;
+
+    /* acción (primary / primary-dark) */
+    --acento: #005ea2;
+    --acento-texto: #ffffff;
+    --acento-suave: #d9e8f6;
+    --enlace: #005ea2;
+    --peligro: #b50909;
+    --error-texto: #b50909;
+    --exito: #008817;
+
+    /* etiquetas de estado: oscuras, con texto claro (estilo usa-tag) */
+    --estado-pendiente: #936f00;
+    --estado-en-curso: #1a4480;
+    --estado-completada: #00561b;
+    --estado-rechazada: #b50909;
+    --estado-cancelada: #3d4551;
+
+    /* navegación: el header azul oscuro del sistema */
+    --nav-fondo: #162e51;
+    --nav-texto: #ffffff;
+    --nav-activo: #1a4480;
+
+    /* foco: USWDS usa un anillo amarillo de alto contraste */
+    --foco: 3px solid #ffbe2e;
+
+    /* sin textura */
+    --textura: none;
+
+    /* etiquetas de material: oscuras, con texto claro */
+    --mat-papel: #3d4551;
+    --mat-carton: #8b4a1f;
+    --mat-plastico: #936f00;
+    --mat-vidrio: #1a4480;
+    --mat-metal: #5c5c5c;
+    --mat-electronicos: #0f4b56;
+
+    /* forma: esquinas casi rectas */
+    --radio: 4px;
+    --pad: 1rem;
+    --pad-grande: 2rem;
+    --sidebar-w: 16rem;
+
+    /* el texto de las etiquetas pasa a claro, porque los fondos son oscuros */
+    --chip-texto: #ffffff;
+}

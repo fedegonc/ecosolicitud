@@ -53,6 +53,9 @@
     /* textura de papel: un tema puede dejarla vacía */
     --textura: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.055'/%3E%3C/svg%3E");
 
+    /* etiquetas: un tema puede usar fondos claros (texto oscuro) u oscuros (texto claro) */
+    --chip-texto: var(--texto);
+
     /* etiquetas de material: fondo tonal claro, texto oscuro (--texto) */
     --mat-papel: #e6dcc4;
     --mat-carton: #f0d7c4;
@@ -362,7 +365,7 @@ body {
     border-radius: 999px;
     font-size: var(--t-xs);
     font-weight: 600;
-    color: var(--texto);
+    color: var(--chip-texto);
 }
 
 .mat-plastico {
