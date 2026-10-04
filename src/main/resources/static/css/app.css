@@ -832,6 +832,10 @@ fieldset.campo legend {
     font-weight: 600;
 }
 
+.instalar-app[hidden] {
+    display: none;
+}
+
 .enlace-pie {
     display: inline-block;
     margin-top: var(--pad);

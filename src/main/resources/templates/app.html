@@ -67,6 +67,7 @@
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
                 </form>
+                <a th:fragment="enlaceInstalar" class="enlace-pie instalar-app" href="#" hidden><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{instalar.boton}">Instalar</span></a>
                 <a th:fragment="enlaceOpinion" class="enlace-pie"
                    th:href="@{/opinion}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#globo'"></use></svg><span th:text="#{opinion.enlace}">Opinión</span></a>
                 <span th:fragment="idiomas" class="idiomas">
@@ -94,6 +95,7 @@
                         <footer class="menu-pie">
                             <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
                             <form th:replace="~{app :: reiniciar}"></form>
+                            <a th:replace="~{app :: enlaceInstalar}"></a>
                             <a th:replace="~{app :: enlaceOpinion}"></a>
                             <span th:replace="~{app :: idiomas}"></span>
                         </footer>
@@ -107,6 +109,27 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');
         }
+        // botón "Instalar": solo se muestra cuando el navegador confirma
+        // que el PWA es instalable (HTTPS/localhost + manifest + SW)
+        var pendienteInstalar = null;
+        var enlacesInstalar = document.querySelectorAll('.instalar-app');
+        window.addEventListener('beforeinstallprompt', function (e) {
+            e.preventDefault();
+            pendienteInstalar = e;
+            enlacesInstalar.forEach(function (el) { el.hidden = false; });
+        });
+        enlacesInstalar.forEach(function (el) {
+            el.addEventListener('click', function (ev) {
+                ev.preventDefault();
+                if (pendienteInstalar) {
+                    pendienteInstalar.prompt();
+                }
+            });
+        });
+        window.addEventListener('appinstalled', function () {
+            pendienteInstalar = null;
+            enlacesInstalar.forEach(function (el) { el.hidden = true; });
+        });
     </script>
 </body>
 </html>
