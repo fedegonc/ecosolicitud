@@ -72,7 +72,27 @@
                    th:errors="*{materiales}">Error</p>
             </fieldset>
 
-            <div th:if="${centro != null}">
+            <fieldset class="campo" th:if="${centro != null}">
+                <legend th:text="#{nueva.grupo.contacto}">Contacto</legend>
+                <label class="campo">
+                    <span th:text="#{nueva.nombre}">Nombre</span>
+                    <input type="text" th:field="*{nombre}" required maxlength="80"
+                           autocomplete="name" th:placeholder="#{nueva.nombre.ejemplo}">
+                    <span class="error" th:if="${#fields.hasErrors('nombre')}"
+                          th:errors="*{nombre}">Error</span>
+                </label>
+                <label class="campo">
+                    <span th:text="#{nueva.contacto}">Celular o contacto</span>
+                    <input type="tel" th:field="*{contacto}" required maxlength="40"
+                           autocomplete="tel" th:placeholder="#{nueva.contacto.ejemplo}">
+                    <span class="ayuda" th:text="#{nueva.contacto.ayuda}">Ayuda</span>
+                    <span class="error" th:if="${#fields.hasErrors('contacto')}"
+                          th:errors="*{contacto}">Error</span>
+                </label>
+            </fieldset>
+
+            <fieldset class="campo bloque-ubicacion" th:if="${centro != null}">
+                <legend th:text="#{nueva.grupo.ubicacion}">Ubicación</legend>
                 <label class="campo">
                     <span th:text="#{nueva.direccion}">Dirección</span>
                     <input type="text" th:field="*{direccion}" required maxlength="120"
@@ -92,7 +112,7 @@
                     <span class="error" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">Error</span>
                 </label>
                 <button type="submit" class="accion" th:text="#{nueva.enviar}">Enviar solicitud</button>
-            </div>
+            </fieldset>
         </div>
 
         <noscript>

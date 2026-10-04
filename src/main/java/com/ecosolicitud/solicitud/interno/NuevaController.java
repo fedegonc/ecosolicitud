@@ -39,6 +39,9 @@ class NuevaController {
 
     @GetMapping(Rutas.NUEVA)
     String nueva(@ModelAttribute("form") NuevaForm form, Model modelo) {
+        if (form.getNombre() == null || form.getNombre().isBlank()) {
+            form.setNombre(actor.actual().nombreCiudadano());
+        }
         var centros = centrosDe(form);
         var centro = centroElegido(centros, form);
         centro.ifPresentOrElse(o -> form.getMateriales().retainAll(o.materiales()),
@@ -64,7 +67,8 @@ class NuevaController {
         if (!errores.hasErrors()) {
             var creada = solicitudes.crear(actor.actual(), form.getCiudad(),
                     form.getDireccion(), form.getReferencia(), form.getMateriales(),
-                    form.getOrganizacionId(), form.getNota());
+                    form.getOrganizacionId(), form.getNombre(), form.getContacto(),
+                    form.getNota());
             if (creada.isPresent()) {
                 redir.addFlashAttribute("enviada", creada.get().id());
                 redir.addFlashAttribute("enviadaA", creada.get().organizacionNombre());

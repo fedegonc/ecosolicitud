@@ -8,7 +8,11 @@ import com.ecosolicitud.shared.Material;
 
 public record SolicitudInfo(long id, String direccion, String referencia,
         List<Material> materiales, String organizacionNombre, String nombreCiudadano,
-        String nota, Estado estado, Instant creadaEn, Instant finalizadaEn, long version) {
+        String contacto, String nota, Estado estado, Instant creadaEn, Instant finalizadaEn, long version) {
+
+    public boolean contactoEsTelefono() {
+        return contacto != null && contacto.matches("^[+0-9 ().-]{6,}$");
+    }
 
     public String creada() {
         return Fechas.corta(creadaEn);

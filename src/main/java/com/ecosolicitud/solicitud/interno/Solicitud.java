@@ -52,6 +52,7 @@ public class Solicitud {
     @Column(name = "material")
     private List<Material> materiales = new ArrayList<>();
     private String organizacionId;
+    private String contacto;
     private String nota;
     @Enumerated(EnumType.STRING)
     private Estado estado;
@@ -83,6 +84,7 @@ public class Solicitud {
         sol.referencia = s.referencia();
         sol.materiales = new ArrayList<>(s.materiales());
         sol.organizacionId = s.organizacionId();
+        sol.contacto = s.contacto();
         sol.nota = s.nota();
         sol.estado = s.estado();
         sol.creadaEn = s.creadaEn();

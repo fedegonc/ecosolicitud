@@ -6,6 +6,12 @@
     <p class="detalle"><span th:text="${s.direccion}">Dirección</span><span
             th:if="${s.referencia != null and !s.referencia.isEmpty()}"
             th:text="' · ' + ${s.referencia}"></span></p>
+    <p class="detalle" th:if="${s.contacto != null and !s.contacto.isEmpty()}">
+        <a th:if="${s.contactoEsTelefono()}"
+           th:href="'tel:' + ${#strings.replace(s.contacto, ' ', '')}"
+           th:text="${s.contacto}">Contacto</a>
+        <span th:unless="${s.contactoEsTelefono()}" th:text="${s.contacto}">Contacto</span>
+    </p>
     <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}" th:text="${s.nota}">Nota</p>
     <ul class="materiales">
         <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}"

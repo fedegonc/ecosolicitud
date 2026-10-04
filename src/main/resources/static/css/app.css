@@ -959,6 +959,12 @@ fieldset.campo legend {
     text-underline-offset: 3px;
 }
 
+/* cascada: la ubicación aparece cuando nombre y contacto están llenos */
+#flujo:has(#nombre:placeholder-shown) .bloque-ubicacion,
+#flujo:has(#contacto:placeholder-shown) .bloque-ubicacion {
+    display: none;
+}
+
 /* centro ya elegido en la solicitud: resumen en vez de la lista */
 .centro-resumen {
     display: flex;

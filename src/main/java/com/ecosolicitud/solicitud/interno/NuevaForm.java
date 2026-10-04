@@ -24,6 +24,12 @@ public class NuevaForm {
     private List<Material> materiales = new ArrayList<>();
     @NotBlank(message = "{nueva.error.organizacion}")
     private String organizacionId;
+    @NotBlank(message = "{nueva.error.nombre}")
+    @Size(max = 80, message = "{nueva.error.nombre}")
+    private String nombre;
+    @NotBlank(message = "{nueva.error.contacto}")
+    @Size(max = 40, message = "{nueva.error.contacto}")
+    private String contacto;
     @NotBlank(message = "{nueva.error.direccion}")
     @Size(max = 120, message = "{nueva.error.direccion}")
     private String direccion;

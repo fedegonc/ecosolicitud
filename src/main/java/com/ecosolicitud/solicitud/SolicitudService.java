@@ -62,21 +62,21 @@ public class SolicitudService {
     @Transactional
     public Optional<SolicitudInfo> crear(Actor actor, Ciudad ciudad, String direccion,
             String referencia, List<Material> materiales, String organizacionId,
-            String nota) {
+            String nombre, String contacto, String nota) {
         boolean compatible = organizaciones.compatibles(ciudad, materiales).stream()
                 .anyMatch(o -> o.id().equals(organizacionId));
         if (!compatible) {
             return Optional.empty();
         }
         var s = Solicitud.nueva(new SolicitudSemilla(actor.ciudadanoId(),
-                actor.nombreCiudadano(), direccion, referencia, materiales,
+                nombre, contacto, direccion, referencia, materiales,
                 organizacionId, nota, Estado.PENDIENTE, Instant.now(), null, null),
-                ciudadano(actor.ciudadanoId(), actor.nombreCiudadano()));
+                ciudadano(actor.ciudadanoId(), nombre));
         repositorio.save(s);
         avisos.nueva(s);
-        String nombre = organizaciones.buscar(organizacionId)
+        String nombreOrg = organizaciones.buscar(organizacionId)
                 .map(OrganizacionInfo::nombre).orElse(organizacionId);
-        return Optional.of(aInfo(s, Map.of(organizacionId, nombre)));
+        return Optional.of(aInfo(s, Map.of(organizacionId, nombreOrg)));
     }
 
     @Transactional
@@ -128,7 +128,12 @@ public class SolicitudService {
     }
 
     private Ciudadano ciudadano(String id, String nombre) {
-        return ciudadanos.findById(id).orElseGet(() -> {
+        return ciudadanos.findById(id).map(c -> {
+            if (!c.getNombre().equals(nombre)) {
+                c.setNombre(nombre);
+            }
+            return c;
+        }).orElseGet(() -> {
             var nuevo = new Ciudadano();
             nuevo.setId(id);
             nuevo.setNombre(nombre);
@@ -181,7 +186,8 @@ public class SolicitudService {
         return new SolicitudInfo(s.getId(), s.getDireccion(),
                 s.getReferencia(), List.copyOf(s.getMateriales()),
                 nombres.getOrDefault(s.getOrganizacionId(), s.getOrganizacionId()),
-                s.getCiudadano().getNombre(), s.getNota(), s.getEstado(), s.getCreadaEn(),
+                s.getCiudadano().getNombre(), s.getContacto(), s.getNota(),
+                s.getEstado(), s.getCreadaEn(),
                 s.getFinalizadaEn(), s.getVersion());
     }
 }
