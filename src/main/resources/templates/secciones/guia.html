@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{seccion.guia}">Guía</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="#{guia.titulo}">Guía de reciclaje</h1>
+    <p class="detalle" th:text="#{guia.intro}">Intro</p>
+    <p class="detalle" th:if="${articulos.isEmpty()}" th:text="#{guia.vacia}">Vacía</p>
+    <div class="rejilla">
+        <article th:each="a : ${articulos}" class="tarjeta">
+            <h3><a class="enlace" th:href="@{/guia/{id}(id=${a.id})}"
+                   th:text="${a.titulo}">Título</a></h3>
+            <p class="detalle" th:if="${a.material != null}">
+                <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(a.material.name())}"
+                      th:text="#{${a.material.clave}}">Material</span>
+            </p>
+            <p class="detalle" th:text="#{guia.leer}">Leer</p>
+        </article>
+    </div>
+</main>
+</body>
+</html>

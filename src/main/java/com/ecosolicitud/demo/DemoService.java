@@ -5,6 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ecosolicitud.guia.ArticuloSemilla;
+import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.Ciudad;
@@ -37,11 +39,13 @@ public class DemoService implements ApplicationRunner {
 
     private final OrganizacionService organizaciones;
     private final SolicitudService solicitudes;
+    private final GuiaService guia;
 
     public DemoService(OrganizacionService organizaciones,
-            SolicitudService solicitudes) {
+            SolicitudService solicitudes, GuiaService guia) {
         this.organizaciones = organizaciones;
         this.solicitudes = solicitudes;
+        this.guia = guia;
     }
 
     @Override
@@ -55,6 +59,39 @@ public class DemoService implements ApplicationRunner {
     public void reiniciar() {
         organizaciones.reemplazarTodas(DATASET);
         solicitudes.reemplazarTodas(datasetSolicitudes());
+        guia.reemplazarTodos(datasetGuia());
+    }
+
+    private List<ArticuloSemilla> datasetGuia() {
+        return List.of(
+                new ArticuloSemilla("C\u00f3mo separar en casa", """
+                        Separá por material en bolsas o cajas distintas: cuanto menos se mezcle,
+                        menos trabajo tiene el acopio y más se recupera.
+
+                        Enjuagá los envases. No hace falta que queden brillantes: alcanza con
+                        que no tengan restos de comida, porque eso contamina el resto.
+
+                        Plegá el cartón y las botellas para ocupar menos lugar.""", null, 1),
+                new ArticuloSemilla("Vidrio", """
+                        El vidrio se recicla infinitas veces sin perder calidad.
+
+                        Se aceptan botellas y frascos. NO se aceptan espejos, vidrio de ventana,
+                        cerámicas, focos ni vajilla: tienen composiciones distintas y arruinan el lote.
+
+                        Sacá las tapas y no lo rompas: el vidrio partido lastima a quien lo manipula.""",
+                        Material.VIDRIO, 2),
+                new ArticuloSemilla("Cart\u00f3n y papel", """
+                        Tiene que estar seco. El cartón mojado o engrasado (una caja de pizza,
+                        por ejemplo) no se puede reciclar: va a la basura común.
+
+                        No hace falta sacar la cinta adhesiva ni los ganchos de metal.""",
+                        Material.CARTON, 3),
+                new ArticuloSemilla("Electr\u00f3nicos", """
+                        Nunca van a la basura común: tienen metales pesados que contaminan el agua.
+
+                        Se reciben cables, cargadores, celulares y electrodomésticos chicos.
+                        Si todavía funciona, primero intentá repararlo o donarlo.""",
+                        Material.ELECTRONICOS, 4));
     }
 
     private List<SolicitudSemilla> datasetSolicitudes() {

@@ -582,6 +582,13 @@ body {
     text-decoration-thickness: 2px;
 }
 
+/* cuerpo de un artículo: respeta los párrafos sin interpretar HTML */
+.prosa {
+    max-width: 42rem;
+    margin: 0 0 var(--pad-grande);
+    white-space: pre-line;
+}
+
 /* una acción con forma de acción, aunque sea un enlace */
 a.accion {
     display: inline-block;

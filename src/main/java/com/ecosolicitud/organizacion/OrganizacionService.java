@@ -61,6 +61,12 @@ public class OrganizacionService {
                 .map(OrganizacionService::aInfo).toList();
     }
 
+    public List<OrganizacionInfo> queReciben(Material material) {
+        return repositorio.findAll(Sort.by("nombre")).stream()
+                .filter(o -> o.getMateriales().contains(material))
+                .map(OrganizacionService::aInfo).toList();
+    }
+
     public List<OrganizacionInfo> enCiudad(Ciudad ciudad) {
         return repositorio.findByCiudadOrderByNombre(ciudad).stream()
                 .map(OrganizacionService::aInfo).toList();

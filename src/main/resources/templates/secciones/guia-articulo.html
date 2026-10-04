@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="${articulo.titulo}">Artículo</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <p class="detalle"><a class="enlace" th:href="@{/guia}" th:text="#{guia.volver}">Volver</a></p>
+    <h1 th:text="${articulo.titulo}">Título</h1>
+    <p class="detalle" th:if="${articulo.material != null}">
+        <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(articulo.material.name())}"
+              th:text="#{${articulo.material.clave}}">Material</span>
+    </p>
+    <div class="prosa" th:text="${articulo.cuerpo}">Cuerpo</div>
+    <section th:if="${!centros.isEmpty()}">
+        <h2 th:text="#{guia.donde}">Dónde llevarlo</h2>
+        <div class="rejilla">
+            <article th:each="o : ${centros}" class="tarjeta">
+                <h3 th:text="${o.nombre}">Centro</h3>
+                <p class="detalle">
+                    <span th:text="#{${o.ciudad.clave}}">Ciudad</span> ·
+                    <span th:text="${o.horario}">Horario</span> ·
+                    <a class="enlace" th:href="'tel:' + ${#strings.replace(o.telefono, ' ', '')}"
+                       th:text="${o.telefono}">Teléfono</a>
+                </p>
+                <p><a class="accion secundaria"
+                      th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
+                      th:text="#{acopios.pedir}">Pedir retiro</a></p>
+            </article>
+        </div>
+    </section>
+</main>
+</body>
+</html>
