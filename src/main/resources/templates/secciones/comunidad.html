@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{seccion.comunidad}">Comunidad</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="#{seccion.comunidad}">Comunidad</h1>
+    <nav class="filtros">
+        <a th:each="f : ${filtros}" th:href="@{/comunidad(tipo=${#strings.toLowerCase(f.name())})}"
+           th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
+           th:text="#{${'comunidad.filtro.' + #strings.toLowerCase(f.name())}}">Todas</a>
+    </nav>
+    <p class="detalle" th:if="${publicaciones.isEmpty()}" th:text="#{comunidad.vacia}">Vacía</p>
+    <div class="rejilla">
+        <article th:each="p : ${publicaciones}" class="tarjeta">
+            <h3><a class="enlace" th:href="@{/comunidad/{id}(id=${p.id})}"
+                   th:text="${p.titulo}">Título</a></h3>
+            <p class="detalle" th:text="${p.resumen}">Resumen</p>
+            <p class="detalle">
+                <span class="etiqueta" th:text="#{${p.tipo.clave}}">Tipo</span>
+                <span th:text="${p.fecha}">Fecha</span>
+            </p>
+        </article>
+    </div>
+</main>
+</body>
+</html>

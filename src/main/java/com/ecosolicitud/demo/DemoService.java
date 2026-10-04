@@ -5,6 +5,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ecosolicitud.comunidad.ComunidadService;
+import com.ecosolicitud.comunidad.PublicacionSemilla;
+import com.ecosolicitud.comunidad.TipoPublicacion;
 import com.ecosolicitud.guia.ArticuloSemilla;
 import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
@@ -40,12 +43,15 @@ public class DemoService implements ApplicationRunner {
     private final OrganizacionService organizaciones;
     private final SolicitudService solicitudes;
     private final GuiaService guia;
+    private final ComunidadService comunidad;
 
     public DemoService(OrganizacionService organizaciones,
-            SolicitudService solicitudes, GuiaService guia) {
+            SolicitudService solicitudes, GuiaService guia,
+            ComunidadService comunidad) {
         this.organizaciones = organizaciones;
         this.solicitudes = solicitudes;
         this.guia = guia;
+        this.comunidad = comunidad;
     }
 
     @Override
@@ -60,6 +66,39 @@ public class DemoService implements ApplicationRunner {
         organizaciones.reemplazarTodas(DATASET);
         solicitudes.reemplazarTodas(datasetSolicitudes());
         guia.reemplazarTodos(datasetGuia());
+        comunidad.reemplazarTodas(datasetComunidad());
+    }
+
+    private List<PublicacionSemilla> datasetComunidad() {
+        var ahora = Instant.now();
+        return List.of(
+                new PublicacionSemilla("Nuevo horario en Acopio Verde", """
+                        Desde este mes el acopio abre también los sábados de 9 a 13.
+
+                        Si tenés vidrio acumulado, es el mejor momento para llevarlo.""",
+                        "El acopio de Rivera suma los sábados a su horario.",
+                        TipoPublicacion.NOVEDAD, ahora.minus(2, ChronoUnit.DAYS)),
+                new PublicacionSemilla("La cooperativa recuperó 3 toneladas", """
+                        En lo que va del año, la Cooperativa Frontera Limpia recuperó tres
+                        toneladas de cartón y papel: el equivalente a 50 árboles que no se talaron.
+
+                        El mérito es de los vecinos que separan en casa.""",
+                        "Frontera Limpia recuperó 3 toneladas de cartón y papel este año.",
+                        TipoPublicacion.HISTORIA, ahora.minus(5, ChronoUnit.DAYS)),
+                new PublicacionSemilla("Campaña de electrónicos", """
+                        Durante octubre se reciben cables, cargadores y celulares viejos
+                        sin costo en los tres centros.
+
+                        Los aparatos que todavía funcionan se donan a escuelas.""",
+                        "Todo octubre: electrónicos sin costo en los tres centros.",
+                        TipoPublicacion.NOVEDAD, ahora.minus(9, ChronoUnit.DAYS)),
+                new PublicacionSemilla("Don Luis y su carrito", """
+                        Hace doce años que Don Luis pasa por el barrio juntando cartón.
+
+                        Dice que lo que más cambió es la conciencia: \"antes había que
+                        revolver, ahora la gente ya lo deja separado\".""",
+                        "Doce años juntando cartón en el barrio, y una sola frase.",
+                        TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
     }
 
     private List<ArticuloSemilla> datasetGuia() {

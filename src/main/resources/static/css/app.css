@@ -359,6 +359,7 @@ body {
 
 /* ---------- etiquetas de material ---------- */
 
+.etiqueta,
 .etiqueta-material {
     display: inline-block;
     padding: 0.18rem 0.6rem;

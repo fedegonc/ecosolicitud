@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="${publicacion.titulo}">Publicación</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <p class="detalle"><a class="enlace" th:href="@{/comunidad}" th:text="#{comunidad.volver}">Volver</a></p>
+    <h1 th:text="${publicacion.titulo}">Título</h1>
+    <p class="detalle">
+        <span class="etiqueta" th:text="#{${publicacion.tipo.clave}}">Tipo</span>
+        <span th:text="${publicacion.fecha}">Fecha</span>
+    </p>
+    <div class="prosa" th:text="${publicacion.cuerpo}">Cuerpo</div>
+</main>
+</body>
+</html>

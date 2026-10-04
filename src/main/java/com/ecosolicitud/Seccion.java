@@ -17,7 +17,9 @@ public enum Seccion {
     NUEVA("seccion.nueva", Rutas.NUEVA, "mas", Rol.CIUDADANO),
     MIS_SOLICITUDES("seccion.mis-solicitudes", Rutas.MIS_SOLICITUDES, "lista", Rol.CIUDADANO),
     ACOPIOS("seccion.acopios", Rutas.ACOPIOS, "edificio", Rol.CIUDADANO),
-    GUIA("seccion.guia", Rutas.GUIA, "libro", Rol.CIUDADANO, Rol.ORGANIZACION);
+    GUIA("seccion.guia", Rutas.GUIA, "libro", Rol.CIUDADANO, Rol.ORGANIZACION),
+    COMUNIDAD("seccion.comunidad", Rutas.COMUNIDAD, "gente", Rol.CIUDADANO,
+            Rol.ORGANIZACION);
 
     private final String clave;
     private final String ruta;
