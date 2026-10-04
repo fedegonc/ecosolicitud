@@ -29,6 +29,7 @@ class PerfilController {
     @GetMapping(Rutas.ORG_PERFIL)
     String perfil(Model modelo) {
         modelo.addAttribute("form", PerfilForm.de(servicio.actual(actor.actual())));
+        modelo.addAttribute("equipo", servicio.equipo(actor.actual()));
         return formulario(modelo);
     }
 

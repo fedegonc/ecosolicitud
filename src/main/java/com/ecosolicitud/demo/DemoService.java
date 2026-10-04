@@ -12,6 +12,7 @@ import com.ecosolicitud.guia.ArticuloSemilla;
 import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.organizacion.RecuperadorInfo;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.solicitud.Estado;
@@ -67,6 +68,14 @@ public class DemoService implements ApplicationRunner {
         solicitudes.reemplazarTodas(datasetSolicitudes());
         guia.reemplazarTodos(datasetGuia());
         comunidad.reemplazarTodas(datasetComunidad());
+        organizaciones.reemplazarEquipo("frontera-limpia", List.of(
+                new RecuperadorInfo("Luis Pereira", "+598 92 111 222"),
+                new RecuperadorInfo("María Dos Santos", null)));
+        organizaciones.reemplazarEquipo("acopio-verde", List.of(
+                new RecuperadorInfo("Oscar Ríos", "+598 91 333 444")));
+        organizaciones.reemplazarEquipo("coleta-solidaria", List.of(
+                new RecuperadorInfo("José Silva", "+55 55 9111 2222"),
+                new RecuperadorInfo("Ana Costa", null)));
     }
 
     private List<PublicacionSemilla> datasetComunidad() {
