@@ -18,6 +18,7 @@
         <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
         <a th:href="@{/nueva}" th:text="#{mis.nueva}">Nueva solicitud</a>
     </p>
+    <div class="rejilla">
     <article th:each="s : ${solicitudes}" class="tarjeta">
         <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre})}"></th:block>
         <div class="acciones" th:if="${s.estado.permiteCancelar()}">
@@ -27,6 +28,7 @@
             </form>
         </div>
     </article>
+    </div>
 </main>
 </body>
 </html>

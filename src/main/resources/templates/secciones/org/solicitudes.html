@@ -11,6 +11,7 @@
     <section th:each="g : ${bandeja.grupos}">
         <h2 th:text="#{${g.clave}}">Grupo</h2>
         <p class="detalle" th:if="${g.solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
+        <div class="rejilla">
         <article th:each="s : ${g.solicitudes}" class="tarjeta">
             <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano})}"></th:block>
             <div class="acciones" th:if="${!s.estado.esFinal()}">
@@ -31,6 +32,7 @@
                 </form>
             </div>
         </article>
+        </div>
     </section>
 </main>
 </body>
