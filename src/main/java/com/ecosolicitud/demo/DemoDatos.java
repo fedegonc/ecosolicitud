@@ -177,11 +177,14 @@ final class DemoDatos {
     static List<OpinionSemilla> opiniones() {
         var ahora = Instant.now();
         return List.of(
-                new OpinionSemilla(4, "Fácil, pedí el retiro en un minuto.",
-                        Rol.CIUDADANO, ahora.minus(3, ChronoUnit.DAYS)),
-                new OpinionSemilla(5, null, Rol.CIUDADANO,
+                new OpinionSemilla("NUEVA", 4,
+                        "Fácil, pedí el retiro en un minuto.", Rol.CIUDADANO,
+                        ahora.minus(3, ChronoUnit.DAYS)),
+                new OpinionSemilla("MIS_SOLICITUDES", 5, null, Rol.CIUDADANO,
                         ahora.minus(2, ChronoUnit.DAYS)),
-                new OpinionSemilla(4, "Clara la bandeja.",
+                new OpinionSemilla("ACOPIOS", 3, null, Rol.CIUDADANO,
+                        ahora.minus(2, ChronoUnit.DAYS)),
+                new OpinionSemilla("ORG_SOLICITUDES", 4, "Clara la bandeja.",
                         Rol.ORGANIZACION, ahora.minus(1, ChronoUnit.DAYS)));
     }
 }

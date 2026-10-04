@@ -25,6 +25,10 @@ public class Opinion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Sección evaluada (name() de Seccion); null = valoración general.
+    @Column(length = 20)
+    private String seccion;
+
     @Column(nullable = false)
     private int valor;
 
@@ -41,10 +45,12 @@ public class Opinion {
     protected Opinion() {
     }
 
-    public Opinion(int valor, String comentario, Rol rol, Instant creadaEn) {
+    public Opinion(String seccion, int valor, String comentario, Rol rol,
+            Instant creadaEn) {
         if (valor < 1 || valor > 5) {
             throw new IllegalArgumentException("valor fuera de 1 a 5");
         }
+        this.seccion = seccion;
         this.valor = valor;
         this.comentario = comentario;
         this.rol = rol;

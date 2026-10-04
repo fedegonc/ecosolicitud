@@ -1008,6 +1008,68 @@ fieldset.campo legend {
     text-underline-offset: 3px;
 }
 
+/* matriz likert por función */
+.likert-scroll {
+    overflow-x: auto;
+}
+
+.likert {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.likert caption {
+    text-align: left;
+    padding-bottom: 0.5rem;
+}
+
+.likert th,
+.likert td {
+    padding: 0.45rem 0.35rem;
+    border-bottom: 1px solid var(--borde-suave, rgb(0 0 0 / 0.08));
+    text-align: center;
+}
+
+.likert tbody th {
+    text-align: left;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.likert tbody th .icono {
+    vertical-align: -0.2em;
+    margin-right: 0.3rem;
+}
+
+.likert input[type="radio"] {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--acento);
+}
+
+.promedios {
+    margin-top: var(--pad-grande);
+}
+
+.promedios-lista {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+}
+
+.promedios-lista li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.promedios-lista b {
+    margin-left: auto;
+}
+
 /* cascada: la ubicación aparece cuando nombre y contacto están llenos */
 #flujo:has(#nombre:placeholder-shown) .bloque-ubicacion,
 #flujo:has(#contacto:placeholder-shown) .bloque-ubicacion {

@@ -1,6 +1,10 @@
 package com.ecosolicitud.opinion.interno;
 
+import java.util.LinkedHashMap;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,14 +26,28 @@ class OpinionController {
     }
 
     @GetMapping(Rutas.OPINION)
-    String formulario() {
+    String formulario(Model modelo) {
+        var promedios = servicio.promedioPorSeccion();
+        modelo.addAttribute("promedios", promedios);
+        modelo.addAttribute("promedioGeneral", promedios.get(null));
         return "secciones/opinion";
     }
 
     @PostMapping(Rutas.OPINION)
-    String registrar(@RequestParam int valor,
-            @RequestParam(required = false) String comentario) {
-        servicio.registrar(valor, comentario, actor.actual().rol());
-        return "redirect:" + Rutas.OPINION + "?gracias";
+    String registrar(@RequestParam MultiValueMap<String, String> params) {
+        var valoraciones = new LinkedHashMap<String, Integer>();
+        params.forEach((clave, valores) -> {
+            if (clave.startsWith("valor_") && !valores.isEmpty()) {
+                try {
+                    valoraciones.put(clave.substring(6),
+                            Integer.valueOf(valores.get(0)));
+                } catch (NumberFormatException ignorado) {
+                    // param malformado: se descarta en el servicio
+                }
+            }
+        });
+        int guardadas = servicio.registrar(valoraciones,
+                params.getFirst("comentario"), actor.actual().rol());
+        return "redirect:" + Rutas.OPINION + (guardadas > 0 ? "?gracias" : "");
     }
 }
