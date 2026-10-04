@@ -8,6 +8,12 @@
     <link rel="stylesheet" th:if="${!#strings.isEmpty(tema)}"
           th:href="@{'/css/temas/' + ${tema} + '.css'}">
     <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+    <link rel="manifest" th:href="@{/manifest.json}">
+    <meta name="theme-color" content="#434a27">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" th:content="#{app.nombre}">
+    <link rel="apple-touch-icon" th:href="@{/img/icon-180.png}">
     <script th:src="@{/js/htmx.min.js}" defer></script>
 </head>
 <body hx-boost="true" hx-indicator="#carga">
@@ -88,5 +94,10 @@
         </div>
         <main class="contenido" id="contenido" layout:fragment="content"></main>
     </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
 </body>
 </html>
