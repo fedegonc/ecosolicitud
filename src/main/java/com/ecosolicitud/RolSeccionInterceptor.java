@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Rol;
+import com.ecosolicitud.shared.Seccion;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

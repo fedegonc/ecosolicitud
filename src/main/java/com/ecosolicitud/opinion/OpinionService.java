@@ -1,9 +1,12 @@
 package com.ecosolicitud.opinion;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,11 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecosolicitud.opinion.interno.Opinion;
 import com.ecosolicitud.opinion.interno.OpinionRepository;
 import com.ecosolicitud.shared.Rol;
+import com.ecosolicitud.shared.Seccion;
 
 // Recoge y resume las valoraciones de facilidad de uso.
 @Service
 @Transactional(readOnly = true)
 public class OpinionService {
+
+    private static final Set<String> SECCIONES = Arrays.stream(Seccion.values())
+            .map(Enum::name).collect(Collectors.toUnmodifiableSet());
 
     private final OpinionRepository repositorio;
 
@@ -30,8 +37,7 @@ public class OpinionService {
                 : comentario.trim();
         var ahora = Instant.now();
         var validas = valoraciones.entrySet().stream()
-                .filter(e -> e.getKey() != null
-                        && e.getKey().matches("[A-Z_]{1,20}")
+                .filter(e -> SECCIONES.contains(e.getKey())
                         && e.getValue() != null && e.getValue() >= 1
                         && e.getValue() <= 5)
                 .toList();

@@ -1,12 +1,9 @@
-package com.ecosolicitud;
+package com.ecosolicitud.shared;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-
-import com.ecosolicitud.shared.Rutas;
-import com.ecosolicitud.shared.Rol;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;

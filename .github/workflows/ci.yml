@@ -22,7 +22,7 @@ jobs:
       - name: Reglas de arquitectura
         run: bash .github/scripts/arquitectura.sh
       - name: Verify
-        run: mvn -B verify
+        run: mvn -B -DfailIfNoTests=true verify
       - name: El jar de producción no lleva mecanismos de desarrollo
         run: |
           if unzip -l target/ecosolicitud-*.jar | grep -iE 'devtools|jacoco|allure|junit|mockito|selenium|htmlunit'; then

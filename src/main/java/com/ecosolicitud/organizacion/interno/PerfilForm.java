@@ -26,7 +26,7 @@ public class PerfilForm {
 
     @NotBlank(message = "{perfil.error.telefono}")
     @Size(max = 30, message = "{perfil.error.telefono}")
-    @Pattern(regexp = "^(?=(?:\\D*\\d){8,})\\+?[0-9(][0-9 ()\\-.]{4,28}[0-9]$",
+    @Pattern(regexp = Organizacion.PATRON_TELEFONO,
             message = "{perfil.error.telefono}")
     private String telefono;
 

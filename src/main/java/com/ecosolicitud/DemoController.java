@@ -4,6 +4,7 @@ import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Rol;
+import com.ecosolicitud.shared.Seccion;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

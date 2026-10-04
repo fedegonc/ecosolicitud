@@ -1,6 +1,7 @@
 package com.ecosolicitud;
 
 import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Seccion;
 
 import java.util.Locale;
 

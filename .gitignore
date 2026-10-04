@@ -1,7 +1,6 @@
 target/
 data/
 .env
-src/test/
 *.log
 *.pid
 CLAUDE.md

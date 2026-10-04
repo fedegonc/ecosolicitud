@@ -18,6 +18,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import org.hibernate.annotations.BatchSize;
 
@@ -25,6 +29,10 @@ import org.hibernate.annotations.BatchSize;
 @Table(name = "organizaciones")
 @Getter
 public class Organizacion {
+
+    // el patrón vive acá (la regla es del dominio); PerfilForm lo referencia
+    static final String PATRON_TELEFONO =
+            "^(?=(?:\\D*\\d){8,})\\+?[0-9(][0-9 ()\\-.]{4,28}[0-9]$";
 
     @Id
     private String id;
@@ -34,6 +42,7 @@ public class Organizacion {
     @Enumerated(EnumType.STRING)
     private Ciudad ciudad;
 
+    @NotEmpty
     @BatchSize(size = 50)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "organizacion_materiales",
@@ -43,8 +52,14 @@ public class Organizacion {
     @Column(name = "material")
     private List<Material> materiales = new ArrayList<>();
 
+    @NotBlank(message = "{perfil.error.horario}")
+    @Size(max = 80, message = "{perfil.error.horario}")
+    @Column(nullable = false, length = 80)
     private String horario;
 
+    @NotBlank(message = "{perfil.error.telefono}")
+    @Size(max = 30, message = "{perfil.error.telefono}")
+    @Pattern(regexp = PATRON_TELEFONO, message = "{perfil.error.telefono}")
     @Column(nullable = false, length = 30)
     private String telefono;
 

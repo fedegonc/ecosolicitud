@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 import lombok.Getter;
 
@@ -32,6 +33,7 @@ public class Opinion {
     @Column(nullable = false)
     private int valor;
 
+    @Size(max = 500)
     @Column(length = 500)
     private String comentario;
 

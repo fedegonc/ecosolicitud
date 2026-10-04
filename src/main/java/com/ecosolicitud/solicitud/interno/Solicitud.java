@@ -25,6 +25,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import lombok.Getter;
 import org.hibernate.annotations.BatchSize;
@@ -42,8 +45,14 @@ public class Solicitud {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "ciudadano_id")
     private Ciudadano ciudadano;
+    @NotBlank
+    @Size(max = 120)
+    @Column(nullable = false, length = 120)
     private String direccion;
+    @Size(max = 120)
+    @Column(length = 120)
     private String referencia;
+    @NotEmpty
     @BatchSize(size = 50)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "solicitud_materiales", joinColumns = @JoinColumn(name = "solicitud_id"))
@@ -52,7 +61,12 @@ public class Solicitud {
     @Column(name = "material")
     private List<Material> materiales = new ArrayList<>();
     private String organizacionId;
+    @NotBlank
+    @Size(max = 40)
+    @Column(nullable = false, length = 40)
     private String contacto;
+    @Size(max = 300)
+    @Column(length = 300)
     private String nota;
     @Enumerated(EnumType.STRING)
     private Estado estado;

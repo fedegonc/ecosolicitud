@@ -7,6 +7,7 @@ import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.solicitud.AvisoService;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Rol;
+import com.ecosolicitud.shared.Seccion;
 
 import jakarta.servlet.http.HttpServletRequest;
 
