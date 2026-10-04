@@ -676,6 +676,16 @@ a.accion {
         padding: calc(var(--pad) / 2);
         color: inherit;
         text-decoration: none;
+        min-width: 0;
+    }
+
+    .marca-fila .idiomas {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .marca-fila .idiomas .icono {
+        display: none;
     }
 
     .marca:hover .marca-nombre {
@@ -700,6 +710,9 @@ a.accion {
         font-weight: 700;
         color: var(--nav-texto);
         min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .sidebar-pie {
