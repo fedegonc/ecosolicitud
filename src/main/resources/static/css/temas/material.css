@@ -1,0 +1,71 @@
+/* ============================================================
+   Tema "material" (Material Design 3) — prueba del pivote.
+   Redefine SOLO el bloque de roles con los tokens base de M3:
+   primario violeta, esquinas redondeadas, navegación clara, etiquetas tonales.
+   Se activa con ecosolicitud.tema=material
+
+   Qué NO cambia (y por eso es un tema, no una adopción):
+   - los componentes de formulario de Material (labels flotantes, ripple,
+     elevación animada) requieren su runtime JS y tocar el HTML;
+   - acá se toma la identidad visual de M3, no sus componentes.
+   ============================================================ */
+
+:root {
+    /* escala tipográfica M3 (body-large / body-medium / label-small / title-large) */
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.375rem;
+
+    /* superficies y texto (surface / surface-container-low / on-surface) */
+    --fondo: #fffbfe;
+    --superficie: #f7f2fa;
+    --texto: #1c1b1f;
+    --texto-suave: #49454f;
+    --texto-inverso: #ffffff;
+
+    /* líneas (outline-variant / outline) */
+    --borde: #cac4d0;
+    --borde-fuerte: #79747e;
+
+    /* acción (primary / on-primary / inverse-primary) */
+    --acento: #6750a4;
+    --acento-texto: #ffffff;
+    --acento-suave: #6750a4;
+    --enlace: #6750a4;
+    --peligro: #b3261e;
+    --error-texto: #b3261e;
+    --exito: #1b6b3a;
+
+    /* etiquetas tonales de estado (containers de M3) */
+    --estado-pendiente: #f6e7b4;
+    --estado-en-curso: #d7e3f4;
+    --estado-completada: #d8e8d0;
+    --estado-rechazada: #f9dedc;
+    --estado-cancelada: #e7e0ec;
+
+    /* navegación clara, como el navigation drawer de M3 */
+    --nav-fondo: #f3edf7;
+    --nav-texto: #1c1b1f;
+    --nav-activo: #eadcff;
+
+    /* foco */
+    --foco: 3px solid #6750a4;
+
+    /* sin textura */
+    --textura: none;
+
+    /* etiquetas de material con containers de M3 */
+    --mat-papel: #e8def8;
+    --mat-carton: #ffd8e4;
+    --mat-plastico: #eadcff;
+    --mat-vidrio: #d3e4ff;
+    --mat-metal: #e7e0ec;
+    --mat-electronicos: #cfe9ee;
+
+    /* forma: M3 usa esquinas redondeadas (medium = 12dp) */
+    --radio: 12px;
+    --pad: 1rem;
+    --pad-grande: 2rem;
+    --sidebar-w: 15rem;
+}

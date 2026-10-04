@@ -35,11 +35,12 @@
     --error-texto: #9c5222;
     --exito: #6d7434;
 
-    /* roles de estado de la solicitud */
-    --estado-pendiente: #c9a227;
-    --estado-en-curso: #5e7a88;
-    --estado-completada: #6d7434;
-    --estado-rechazada: #a85a28;
+    /* etiquetas de estado: mismo modelo tonal */
+    --estado-pendiente: #f4e2ac;
+    --estado-en-curso: #d5e2ea;
+    --estado-completada: #dde7c6;
+    --estado-rechazada: #f0d7c4;
+    --estado-cancelada: #e6e2d8;
 
     /* navegación */
     --nav-fondo: #434a27;
@@ -52,13 +53,13 @@
     /* textura de papel: un tema puede dejarla vacía */
     --textura: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.055'/%3E%3C/svg%3E");
 
-    /* colores de material: identidad de cada residuo, parte del tema */
-    --mat-papel: #a9976b;
-    --mat-carton: #a85a28;
-    --mat-plastico: #c9a227;
-    --mat-vidrio: #5e7a88;
-    --mat-metal: #807d6c;
-    --mat-electronicos: #4c6270;
+    /* etiquetas de material: fondo tonal claro, texto oscuro (--texto) */
+    --mat-papel: #e6dcc4;
+    --mat-carton: #f0d7c4;
+    --mat-plastico: #f2e3b4;
+    --mat-vidrio: #d5e2ea;
+    --mat-metal: #e3e1da;
+    --mat-electronicos: #d3dfe6;
 
     /* medidas */
     --radio: 10px;
@@ -229,7 +230,7 @@ body {
 .menu-marca .marca-nombre {
     font-size: var(--t-lg);
     font-weight: 700;
-    color: var(--texto-inverso);
+    color: var(--nav-texto);
 }
 
 .menu-pie,
@@ -245,7 +246,7 @@ body {
 
 .sidebar,
 .menu-movil {
-    --foco: 3px solid var(--texto-inverso);
+    --foco: 3px solid var(--nav-texto);
 }
 
 .sidebar {
@@ -361,7 +362,7 @@ body {
     border-radius: 999px;
     font-size: var(--t-xs);
     font-weight: 600;
-    color: var(--texto-inverso);
+    color: var(--texto);
 }
 
 .mat-plastico {
@@ -394,7 +395,6 @@ body {
 
 .est-pendiente {
     background: var(--estado-pendiente);
-    color: var(--acento-texto);
 }
 
 .est-en-curso {
@@ -654,7 +654,7 @@ a.accion {
     .marca-nombre {
         font-size: var(--t-lg);
         font-weight: 700;
-        color: var(--texto-inverso);
+        color: var(--nav-texto);
         min-width: 0;
     }
 
