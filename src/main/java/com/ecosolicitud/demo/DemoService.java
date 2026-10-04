@@ -12,8 +12,11 @@ import com.ecosolicitud.guia.ArticuloSemilla;
 import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.opinion.OpinionSemilla;
+import com.ecosolicitud.opinion.OpinionService;
 import com.ecosolicitud.organizacion.RecuperadorInfo;
 import com.ecosolicitud.shared.Ciudad;
+import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.solicitud.Estado;
 import com.ecosolicitud.solicitud.SolicitudSemilla;
@@ -45,14 +48,16 @@ public class DemoService implements ApplicationRunner {
     private final SolicitudService solicitudes;
     private final GuiaService guia;
     private final ComunidadService comunidad;
+    private final OpinionService opiniones;
 
     public DemoService(OrganizacionService organizaciones,
             SolicitudService solicitudes, GuiaService guia,
-            ComunidadService comunidad) {
+            ComunidadService comunidad, OpinionService opiniones) {
         this.organizaciones = organizaciones;
         this.solicitudes = solicitudes;
         this.guia = guia;
         this.comunidad = comunidad;
+        this.opiniones = opiniones;
     }
 
     @Override
@@ -68,6 +73,7 @@ public class DemoService implements ApplicationRunner {
         solicitudes.reemplazarTodas(datasetSolicitudes());
         guia.reemplazarTodos(datasetGuia());
         comunidad.reemplazarTodas(datasetComunidad());
+        opiniones.reemplazarTodas(datasetOpiniones());
         organizaciones.reemplazarEquipo("frontera-limpia", List.of(
                 new RecuperadorInfo("Luis Pereira", "+598 92 111 222"),
                 new RecuperadorInfo("María Dos Santos", null)));
@@ -110,6 +116,17 @@ public class DemoService implements ApplicationRunner {
                         TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
     }
 
+    private List<OpinionSemilla> datasetOpiniones() {
+        var ahora = Instant.now();
+        return List.of(
+                new OpinionSemilla(4, "Fácil, pedí el retiro en un minuto.",
+                        Rol.CIUDADANO, ahora.minus(3, ChronoUnit.DAYS)),
+                new OpinionSemilla(5, null, Rol.CIUDADANO,
+                        ahora.minus(2, ChronoUnit.DAYS)),
+                new OpinionSemilla(4, "Clara la bandeja.",
+                        Rol.ORGANIZACION, ahora.minus(1, ChronoUnit.DAYS)));
+    }
+
     private List<ArticuloSemilla> datasetGuia() {
         return List.of(
                 new ArticuloSemilla("C\u00f3mo separar en casa", """
@@ -145,27 +162,32 @@ public class DemoService implements ApplicationRunner {
     private List<SolicitudSemilla> datasetSolicitudes() {
         var ahora = Instant.now();
         return List.of(
-                new SolicitudSemilla("ciudadano-demo", "Ciudadano demo",
+                new SolicitudSemilla("ciudadano-demo", "Martina L\u00f3pez",
                         "Agraciada 1234", "Portón verde",
                         List.of(Material.CARTON, Material.PAPEL),
                         "frontera-limpia", null, Estado.COMPLETADA,
-                        ahora.minus(5, ChronoUnit.DAYS), ahora.minus(4, ChronoUnit.DAYS)),
-                new SolicitudSemilla("ciudadano-demo", "Ciudadano demo",
+                        ahora.minus(5, ChronoUnit.DAYS),
+                        ahora.minus(5, ChronoUnit.DAYS).plus(4, ChronoUnit.HOURS),
+                        ahora.minus(4, ChronoUnit.DAYS)),
+                new SolicitudSemilla("ciudadano-demo", "Martina L\u00f3pez",
                         "Agraciada 1234", null, List.of(Material.PLASTICO),
                         "frontera-limpia", null, Estado.EN_CURSO,
-                        ahora.minus(3, ChronoUnit.DAYS), null),
+                        ahora.minus(3, ChronoUnit.DAYS),
+                        ahora.minus(3, ChronoUnit.DAYS).plus(6, ChronoUnit.HOURS), null),
                 new SolicitudSemilla("vecina-ana", "Ana Rodríguez",
                         "Sarandí 56", "Fondo",
                         List.of(Material.PLASTICO, Material.METAL),
                         "frontera-limpia", null, Estado.PENDIENTE,
-                        ahora.minus(2, ChronoUnit.DAYS), null),
+                        ahora.minus(2, ChronoUnit.DAYS), null, null),
                 new SolicitudSemilla("vecino-bruno", "Bruno Pérez",
                         "Artigas 890", null, List.of(Material.CARTON),
                         "frontera-limpia", "Dejar en la vereda", Estado.PENDIENTE,
-                        ahora.minus(1, ChronoUnit.DAYS), null),
+                        ahora.minus(1, ChronoUnit.DAYS), null, null),
                 new SolicitudSemilla("vecina-carla", "Carla Santos",
                         "Ituzaingó 45", null, List.of(Material.VIDRIO),
                         "acopio-verde", null, Estado.RECHAZADA,
-                        ahora.minus(6, ChronoUnit.DAYS), ahora.minus(5, ChronoUnit.DAYS)));
+                        ahora.minus(6, ChronoUnit.DAYS),
+                        ahora.minus(6, ChronoUnit.DAYS).plus(9, ChronoUnit.HOURS),
+                        ahora.minus(5, ChronoUnit.DAYS)));
     }
 }

@@ -787,3 +787,45 @@ a.accion {
         padding: 0.4rem 0.5rem;
     }
 }
+
+/* ---------- estadísticas y opinión ---------- */
+
+.indicador {
+    font-size: 2rem;
+    margin: 0 0 var(--pad);
+    color: var(--acento);
+}
+
+fieldset.campo {
+    border: none;
+    padding: 0;
+}
+
+fieldset.campo legend {
+    font-weight: 600;
+    padding: 0;
+    margin-bottom: var(--pad);
+}
+
+.escala {
+    display: flex;
+    align-items: center;
+    gap: var(--pad);
+    flex-wrap: wrap;
+}
+
+.escala label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+}
+
+.enlace-pie {
+    display: inline-block;
+    margin-top: var(--pad);
+    color: var(--nav-texto);
+    opacity: 0.85;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}

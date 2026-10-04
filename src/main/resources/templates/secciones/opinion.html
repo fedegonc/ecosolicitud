@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{opinion.titulo}">Dejanos tu opinión</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="#{opinion.titulo}">Dejanos tu opinión</h1>
+    <p class="aviso" th:if="${param.gracias != null}" th:text="#{opinion.gracias}">Gracias</p>
+    <form th:if="${param.gracias == null}" th:action="@{/opinion}" method="post">
+        <fieldset class="campo">
+            <legend th:text="#{opinion.pregunta}">Pregunta</legend>
+            <div class="escala">
+                <span class="ayuda" th:text="#{opinion.escala.min}">Muy difícil</span>
+                <label th:each="n : ${#numbers.sequence(1, 5)}">
+                    <input type="radio" name="valor" th:value="${n}" required>
+                    <span th:text="${n}">1</span>
+                </label>
+                <span class="ayuda" th:text="#{opinion.escala.max}">Muy fácil</span>
+            </div>
+        </fieldset>
+        <label class="campo">
+            <span th:text="#{opinion.comentario}">Comentario</span>
+            <textarea name="comentario" rows="3" maxlength="500"></textarea>
+        </label>
+        <button type="submit" class="accion" th:text="#{opinion.enviar}">Enviar</button>
+    </form>
+</main>
+</body>
+</html>

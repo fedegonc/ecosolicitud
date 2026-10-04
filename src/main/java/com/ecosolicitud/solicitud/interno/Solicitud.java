@@ -56,6 +56,7 @@ public class Solicitud {
     @Enumerated(EnumType.STRING)
     private Estado estado;
     private Instant creadaEn;
+    private Instant respondidaEn;
     private Instant finalizadaEn;
     @Version
     private long version;
@@ -70,6 +71,12 @@ public class Solicitud {
         if (s.finalizadaEn() != null && s.finalizadaEn().isBefore(s.creadaEn())) {
             throw new IllegalArgumentException("finalizadaEn anterior a creadaEn");
         }
+        if (s.respondidaEn() != null && s.estado() == Estado.PENDIENTE) {
+            throw new IllegalArgumentException("respondidaEn en una pendiente");
+        }
+        if (s.respondidaEn() != null && s.respondidaEn().isBefore(s.creadaEn())) {
+            throw new IllegalArgumentException("respondidaEn anterior a creadaEn");
+        }
         var sol = new Solicitud();
         sol.ciudadano = ciudadano;
         sol.direccion = s.direccion();
@@ -79,17 +86,22 @@ public class Solicitud {
         sol.nota = s.nota();
         sol.estado = s.estado();
         sol.creadaEn = s.creadaEn();
+        sol.respondidaEn = s.respondidaEn();
         sol.finalizadaEn = s.finalizadaEn();
         return sol;
     }
 
-    public void aceptar() {
+    public void aceptar(Instant ahora) {
         exigir(estado.permiteAceptar(), "aceptar");
         estado = Estado.EN_CURSO;
+        respondidaEn = ahora;
     }
 
     public void rechazar(Instant ahora) {
         exigir(estado.permiteRechazar(), "rechazar");
+        if (respondidaEn == null) {
+            respondidaEn = ahora;
+        }
         cerrar(Estado.RECHAZADA, ahora);
     }
 

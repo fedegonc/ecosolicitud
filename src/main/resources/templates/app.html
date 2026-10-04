@@ -59,6 +59,8 @@
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit" th:text="#{demo.reiniciar}">Reiniciar demo</button>
                 </form>
+                <a th:fragment="enlaceOpinion" class="enlace-pie"
+                   th:href="@{/opinion}" th:text="#{opinion.enlace}">Dejanos tu opinión</a>
             </footer>
         </aside>
         <div class="menu-movil">
@@ -78,6 +80,7 @@
                         <footer class="menu-pie">
                             <span class="demo" th:text="#{demo.etiqueta}">Modo demo</span>
                             <form th:replace="~{app :: reiniciar}"></form>
+                            <a th:replace="~{app :: enlaceOpinion}"></a>
                         </footer>
                     </div>
                 </details>

@@ -9,6 +9,8 @@ public final class Rutas {
     public static final String ACOPIOS = "/acopios";
     public static final String GUIA = "/guia";
     public static final String COMUNIDAD = "/comunidad";
+    public static final String ESTADISTICAS = "/estadisticas";
+    public static final String OPINION = "/opinion";
 
     public static final String ORG_SOLICITUDES = "/org/solicitudes";
     public static final String ORG_PERFIL = "/org/perfil";

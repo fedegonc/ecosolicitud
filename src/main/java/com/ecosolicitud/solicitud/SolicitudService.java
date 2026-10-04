@@ -1,5 +1,6 @@
 package com.ecosolicitud.solicitud;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class SolicitudService {
         }
         var s = Solicitud.nueva(new SolicitudSemilla(actor.ciudadanoId(),
                 actor.nombreCiudadano(), direccion, referencia, materiales,
-                organizacionId, nota, Estado.PENDIENTE, Instant.now(), null),
+                organizacionId, nota, Estado.PENDIENTE, Instant.now(), null, null),
                 ciudadano(actor.ciudadanoId(), actor.nombreCiudadano()));
         repositorio.save(s);
         String nombre = organizaciones.buscar(organizacionId)
@@ -77,7 +78,7 @@ public class SolicitudService {
 
     @Transactional
     public Resultado aceptar(Actor actor, long id, long version) {
-        return aplicar(actor, id, version, s -> esDestinataria(actor, s), Solicitud::aceptar);
+        return aplicar(actor, id, version, s -> esDestinataria(actor, s), s -> s.aceptar(Instant.now()));
     }
 
     @Transactional
@@ -104,6 +105,30 @@ public class SolicitudService {
 
     public boolean vacia() {
         return repositorio.count() == 0;
+    }
+
+    public SolicitudMetricas metricas() {
+        var todas = repositorio.findAll();
+        long aceptadas = todas.stream().filter(s -> s.getEstado() == Estado.EN_CURSO
+                || s.getEstado() == Estado.COMPLETADA).count();
+        long completadas = todas.stream()
+                .filter(s -> s.getEstado() == Estado.COMPLETADA).count();
+        var respuestas = todas.stream().filter(s -> s.getRespondidaEn() != null)
+                .map(s -> Duration.between(s.getCreadaEn(), s.getRespondidaEn()))
+                .sorted().toList();
+        Duration mediana = mediana(respuestas);
+        return new SolicitudMetricas(todas.size(), aceptadas, completadas, mediana);
+    }
+
+    private static Duration mediana(List<Duration> tiempos) {
+        if (tiempos.isEmpty()) {
+            return null;
+        }
+        int n = tiempos.size();
+        if (n % 2 == 1) {
+            return tiempos.get(n / 2);
+        }
+        return tiempos.get(n / 2 - 1).plus(tiempos.get(n / 2)).dividedBy(2);
     }
 
     @Transactional

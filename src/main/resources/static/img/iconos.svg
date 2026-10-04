@@ -6,4 +6,5 @@
     <symbol id="libro" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M4 3.5A1.5 1.5 0 0 1 5.5 2H11a3 3 0 0 1 1 .2A3 3 0 0 1 13 2h5.5A1.5 1.5 0 0 1 20 3.5v15a1.5 1.5 0 0 1-1.5 1.5H13a1.5 1.5 0 0 0-1 .4 1.5 1.5 0 0 0-1-.4H5.5A1.5 1.5 0 0 1 4 18.5zM6 4v13.5h4.5c.5 0 1 .1 1.5.4V6a2 2 0 0 0-2-2zm8 2v11.9c.5-.3 1-.4 1.5-.4H18V4h-4a2 2 0 0 0-2 2z"/></symbol>
     <symbol id="gente" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 8c4.4 0 8 2 8 4.5V21H1v-2.5C1 16 4.6 14 9 14zm0 2c-3.2 0-5.5 1.2-5.9 2.4h11.8C14.5 17.2 12.2 16 9 16zm9-12a3.5 3.5 0 0 1 0 7 3.5 3.5 0 0 1-1.5-.3 5.9 5.9 0 0 0 0-6.4A3.5 3.5 0 0 1 18 4zm0 9c2.9 0 5 1.3 5 3v2h-4v-2c0-1.1-.5-2.1-1.4-2.9.4 0 .9-.1 1.4-.1z"/></symbol>
     <symbol id="menu" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="3" rx="1.5"/><rect x="3" y="10.5" width="18" height="3" rx="1.5"/><rect x="3" y="16" width="18" height="3" rx="1.5"/></symbol>
+    <symbol id="grafico" viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></symbol>
 </svg>
