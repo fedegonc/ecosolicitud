@@ -9,8 +9,8 @@
         <h1 th:text="#{portada.claim}">Qué es</h1>
         <p class="detalle" th:text="#{portada.intro}">Intro</p>
         <p class="acciones-portada">
-            <a class="accion" th:href="${inicio}" th:text="#{${cta}}">Pedir retiro</a>
-            <a class="enlace" th:href="@{/acopios}" th:text="#{portada.secundaria}">Ver centros</a>
+            <a class="accion" th:href="${inicio}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{${cta}}">Pedir retiro</span></a>
+            <a class="enlace" th:href="@{/acopios}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#edificio'"></use></svg><span th:text="#{portada.secundaria}">Ver centros</span></a>
         </p>
     </section>
     <section th:if="${!ultimas.isEmpty()}">

@@ -19,7 +19,7 @@
             <p class="detalle" th:text="${p.resumen}">Resumen</p>
             <p class="detalle">
                 <span class="etiqueta" th:text="#{${p.tipo.clave}}">Tipo</span>
-                <span th:text="${p.fecha}">Fecha</span>
+                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="${p.fecha}">Fecha</span>
             </p>
         </article>
     </div>

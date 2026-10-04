@@ -12,17 +12,20 @@
             <article th:each="o : ${g.organizaciones}" class="tarjeta">
                 <h3 th:text="${o.nombre}">Nombre</h3>
                 <p class="detalle">
-                    <span th:text="${o.horario}">Horario</span> ·
+                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="${o.horario}">Horario</span> ·
+                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg>
                     <a class="enlace" th:href="'tel:' + ${#strings.replace(o.telefono, ' ', '')}"
                        th:text="${o.telefono}">Teléfono</a>
                 </p>
                 <ul class="materiales">
-                    <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}"
-                        th:text="#{${m.clave}}">Material</li>
+                    <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}">
+                        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
+                        <span th:text="#{${m.clave}}">Material</span>
+                    </li>
                 </ul>
                 <p><a class="accion secundaria"
                       th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
-                      th:text="#{acopios.pedir}">Pedir retiro</a></p>
+                      ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{acopios.pedir}">Pedir retiro</span></a></p>
             </article>
         </div>
     </section>

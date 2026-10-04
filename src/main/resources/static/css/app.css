@@ -121,6 +121,17 @@ body {
     fill: currentColor;
 }
 
+/* íconos dentro de texto, botones y etiquetas: al tamaño de la fuente */
+.detalle .icono, .etiqueta-material .icono, .etiqueta .icono,
+.accion .icono, .enlace .icono, .enlace-pie .icono,
+.idiomas .icono, .opcion-material .icono, .equipo .icono,
+.indicador ~ p .icono {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.16em;
+    margin-right: 0.3em;
+}
+
 /* ---------- lista de secciones (sidebar y menú móvil) ---------- */
 
 .secciones ul {

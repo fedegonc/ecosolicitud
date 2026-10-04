@@ -65,12 +65,12 @@
                 <form th:fragment="reiniciar" th:if="${demoHabilitada}"
                       th:action="@{/demo/reiniciar}" method="post" class="reiniciar">
                     <input type="hidden" name="volver" th:value="${rutaActual}">
-                    <button type="submit" th:text="#{demo.reiniciar}">Reiniciar demo</button>
+                    <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
                 </form>
                 <a th:fragment="enlaceOpinion" class="enlace-pie"
-                   th:href="@{/opinion}" th:text="#{opinion.enlace}">Dejanos tu opinión</a>
+                   th:href="@{/opinion}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#globo'"></use></svg><span th:text="#{opinion.enlace}">Opinión</span></a>
                 <span th:fragment="idiomas" class="idiomas">
-                    <a th:href="${rutaActual} + '?lang=es'"
+                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#mundo'"></use></svg><a th:href="${rutaActual} + '?lang=es'"
                        th:classappend="${#locale.language == 'es'} ? 'activa'">ES</a>
                     <a th:href="${rutaActual} + '?lang=pt'"
                        th:classappend="${#locale.language == 'pt'} ? 'activa'">PT</a>

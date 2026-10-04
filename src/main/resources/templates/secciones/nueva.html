@@ -62,6 +62,7 @@
             <fieldset class="campo" th:if="${centro != null}">
                 <legend th:text="#{nueva.materiales.del.centro(${centro.nombre})}">Materiales</legend>
                 <label th:each="m : ${materialesCentro}" class="opcion-material">
+                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
                     <input type="checkbox" name="materiales" th:value="${m}"
                            th:checked="${form.materiales.contains(m)}">
                     <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}"
@@ -111,7 +112,7 @@
                     <textarea th:field="*{nota}" rows="3" maxlength="300"></textarea>
                     <span class="error" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">Error</span>
                 </label>
-                <button type="submit" class="accion" th:text="#{nueva.enviar}">Enviar solicitud</button>
+                <button type="submit" class="accion"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#enviar'"></use></svg><span th:text="#{nueva.enviar}">Enviar</span></button>
             </fieldset>
         </div>
 

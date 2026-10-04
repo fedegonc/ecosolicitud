@@ -3,22 +3,27 @@
 <body>
 <th:block th:fragment="cuerpo(s, titulo)">
     <h3><span th:text="'#' + ${s.id}">#1</span> · <span th:text="${titulo}">Nombre</span></h3>
-    <p class="detalle"><span th:text="${s.direccion}">Dirección</span><span
+    <p class="detalle"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="${s.direccion}">Dirección</span><span
             th:if="${s.referencia != null and !s.referencia.isEmpty()}"
             th:text="' · ' + ${s.referencia}"></span></p>
     <p class="detalle" th:if="${s.contacto != null and !s.contacto.isEmpty()}">
-        <a th:if="${s.contactoEsTelefono()}"
+        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg><a th:if="${s.contactoEsTelefono()}"
            th:href="'tel:' + ${#strings.replace(s.contacto, ' ', '')}"
            th:text="${s.contacto}">Contacto</a>
         <span th:unless="${s.contactoEsTelefono()}" th:text="${s.contacto}">Contacto</span>
     </p>
-    <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}" th:text="${s.nota}">Nota</p>
+    <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="${s.nota}">Nota</span></p>
     <ul class="materiales">
-        <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}"
-            th:text="#{${m.clave}}">Material</li>
-        <li th:class="'etiqueta-material ' + 'est-' + ${#strings.toLowerCase(s.estado.name())}" th:text="#{${s.estado.clave}}">Estado</li>
+        <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}">
+            <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
+            <span th:text="#{${m.clave}}">Material</span>
+        </li>
+        <li th:class="'etiqueta-material ' + 'est-' + ${#strings.toLowerCase(s.estado.name())}">
+            <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.estado.icono}"></use></svg>
+            <span th:text="#{${s.estado.clave}}">Estado</span>
+        </li>
     </ul>
-    <p class="detalle"><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
+    <p class="detalle"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
             th:if="${s.finalizadaEn != null}"
             th:text="' · ' + #{mis.finalizada(${s.finalizada})}">Fin</span></p>
 </th:block>

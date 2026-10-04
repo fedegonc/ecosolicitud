@@ -24,7 +24,7 @@
         <div class="acciones" th:if="${s.estado.permiteCancelar()}">
             <form th:action="@{/mis-solicitudes/{id}/cancelar(id=${s.id})}" method="post">
                 <input type="hidden" name="version" th:value="${s.version}">
-                <button type="submit" class="accion peligro" th:text="#{accion.cancelar}">Cancelar</button>
+                <button type="submit" class="accion peligro"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#cruz'"></use></svg><span th:text="#{accion.cancelar}">Cancelar</span></button>
             </form>
         </div>
     </article>

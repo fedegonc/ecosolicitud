@@ -13,7 +13,8 @@
         <li th:each="a : ${avisos}" th:classappend="${!a.leida()} ? 'nueva'">
             <span class="aviso-id" th:if="${a.solicitudId() != null}"
                   th:text="'#' + ${a.solicitudId()}">#3</span>
-            <span class="etiqueta" th:text="#{${a.estado().clave}}">Estado</span>
+            <span class="etiqueta"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${a.estado().icono}"></use></svg>
+            <span th:text="#{${a.estado().clave}}">Estado</span></span>
             <p class="aviso-texto" th:text="#{${a.tipo().clave}(${a.detalle()})}">Texto</p>
             <span class="detalle"
                   th:text="${#temporals.format(a.creadaEn(), 'dd/MM HH:mm')}">fecha</span>

@@ -46,7 +46,7 @@
                 <span th:text="${r.nombre}">Nombre</span>
                 <a class="enlace" th:if="${r.telefono != null}"
                    th:href="'tel:' + ${#strings.replace(r.telefono, ' ', '')}"
-                   th:text="${r.telefono}">Teléfono</a>
+                   ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg><span th:text="${r.telefono}">Teléfono</span></a>
             </li>
         </ul>
     </section>

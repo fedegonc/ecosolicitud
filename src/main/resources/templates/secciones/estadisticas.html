@@ -10,22 +10,22 @@
     <div class="rejilla">
         <article class="tarjeta">
             <h2 class="indicador" th:text="${resumen.aceptacion()}">40%</h2>
-            <p><strong th:text="#{estadisticas.aceptacion}">Tasa de aceptación</strong></p>
+            <p><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg><strong th:text="#{estadisticas.aceptacion}">Tasa de aceptación</strong></p>
             <p class="detalle" th:text="#{estadisticas.aceptacion.detalle}">Detalle</p>
         </article>
         <article class="tarjeta">
             <h2 class="indicador" th:text="${resumen.resolucion()}">20%</h2>
-            <p><strong th:text="#{estadisticas.resolucion}">Tasa de resolución</strong></p>
+            <p><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#grafico'"></use></svg><strong th:text="#{estadisticas.resolucion}">Tasa de resolución</strong></p>
             <p class="detalle" th:text="#{estadisticas.resolucion.detalle}">Detalle</p>
         </article>
         <article class="tarjeta">
             <h2 class="indicador" th:text="${resumen.mediana()}">6 h</h2>
-            <p><strong th:text="#{estadisticas.respuesta}">Tiempo de respuesta</strong></p>
+            <p><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><strong th:text="#{estadisticas.respuesta}">Tiempo de respuesta</strong></p>
             <p class="detalle" th:text="#{estadisticas.respuesta.detalle}">Detalle</p>
         </article>
         <article class="tarjeta">
             <h2 class="indicador" th:text="${resumen.friccion()}">4.3</h2>
-            <p><strong th:text="#{estadisticas.friccion}">Fricción percibida</strong></p>
+            <p><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#globo'"></use></svg><strong th:text="#{estadisticas.friccion}">Fricción percibida</strong></p>
             <p class="detalle" th:text="#{estadisticas.friccion.detalle}">Detalle</p>
             <p class="detalle" th:if="${resumen.cantidadOpiniones() > 0}"
                th:text="#{estadisticas.opiniones(${resumen.cantidadOpiniones()})}">N valoraciones</p>
