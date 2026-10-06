@@ -16,7 +16,6 @@ import com.ecosolicitud.solicitud.interno.CiudadanoRepository;
 import com.ecosolicitud.solicitud.interno.Solicitud;
 import com.ecosolicitud.solicitud.interno.SolicitudRepository;
 
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -155,8 +154,6 @@ public class SolicitudService {
             return Resultado.OK;
         } catch (TransicionInvalidaException e) {
             return Resultado.INVALIDA;
-        } catch (OptimisticLockingFailureException e) {
-            return Resultado.CONFLICTO;
         }
     }
 
