@@ -8,6 +8,8 @@ import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Ciudad;
+import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.solicitud.SolicitudCreacion;
 import com.ecosolicitud.solicitud.SolicitudService;
 
 import jakarta.validation.Valid;
@@ -44,7 +46,8 @@ class NuevaController {
         }
         var centros = centrosDe(form);
         var centro = centroElegido(centros, form);
-        centro.ifPresentOrElse(o -> form.getMateriales().retainAll(o.materiales()),
+        centro.ifPresentOrElse(o -> form.getMateriales().retainAll(o.materiales()
+                        .stream().filter(Material::isActivo).toList()),
                 () -> form.getMateriales().clear());
         return formulario(modelo, form, centros, centro);
     }
@@ -60,15 +63,16 @@ class NuevaController {
         if (!errores.hasErrors() && centro.isEmpty()) {
             errores.rejectValue("organizacionId", "nueva.error.centro");
         }
+        // misma regla que el service (RN-04), descompuesta para dar el error por campo
         if (!errores.hasErrors()
-                && !centro.get().materiales().containsAll(form.getMateriales())) {
+                && !centro.get().recibeTodos(form.getMateriales())) {
             errores.rejectValue("materiales", "nueva.error.material.no-recibido");
         }
         if (!errores.hasErrors()) {
-            var creada = solicitudes.crear(actor.actual(), form.getCiudad(),
-                    form.getDireccion(), form.getReferencia(), form.getMateriales(),
-                    form.getOrganizacionId(), form.getNombre(), form.getContacto(),
-                    form.getNota());
+            var datos = new SolicitudCreacion(form.getCiudad(), form.getDireccion(),
+                    form.getReferencia(), form.getMateriales(), form.getOrganizacionId(),
+                    form.getNombre(), form.getContacto(), form.getNota());
+            var creada = solicitudes.crear(actor.actual(), datos);
             if (creada.isPresent()) {
                 redir.addFlashAttribute("enviada", creada.get().id());
                 redir.addFlashAttribute("enviadaA", creada.get().organizacionNombre());
@@ -94,8 +98,8 @@ class NuevaController {
         modelo.addAttribute("ciudades", Ciudad.values());
         modelo.addAttribute("centros", centros);
         modelo.addAttribute("centro", centro.orElse(null));
-        modelo.addAttribute("materialesCentro",
-                centro.map(OrganizacionInfo::materiales).orElse(List.of()));
+        modelo.addAttribute("materialesCentro", centro.map(o -> o.materiales()
+                .stream().filter(Material::isActivo).toList()).orElse(List.of()));
         return "secciones/nueva";
     }
 }

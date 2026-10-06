@@ -25,16 +25,12 @@ class EcoSolicitudApplicationTests {
     private DataSource dataSource;
 
     @Test
-    void fullContextStartsWithIsolatedInMemoryH2() throws Exception {
+    void contextoAisladoEnH2EnMemoriaSinConsola() throws Exception {
         try (var connection = dataSource.getConnection()) {
             assertThat(connection.getMetaData().getDatabaseProductName()).isEqualTo("H2");
             assertThat(connection.getMetaData().getURL()).startsWith("jdbc:h2:mem:");
             assertThat(connection.isValid(2)).isTrue();
         }
-    }
-
-    @Test
-    void h2ConsoleIsDisabled() throws Exception {
         mockMvc.perform(get("/h2-console"))
                 .andExpect(status().isNotFound());
     }

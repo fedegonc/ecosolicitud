@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.ecosolicitud.organizacion.interno.Organizacion;
 import com.ecosolicitud.organizacion.interno.OrganizacionRepository;
 import com.ecosolicitud.shared.Actor;
+import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 
@@ -25,9 +26,12 @@ import static java.util.stream.Collectors.toMap;
 public class OrganizacionService {
 
     private final OrganizacionRepository repositorio;
+    private final CatalogoMateriales catalogo;
 
-    public OrganizacionService(OrganizacionRepository repositorio) {
+    public OrganizacionService(OrganizacionRepository repositorio,
+            CatalogoMateriales catalogo) {
         this.repositorio = repositorio;
+        this.catalogo = catalogo;
     }
 
     public List<OrganizacionInfo> todas() {
@@ -56,8 +60,8 @@ public class OrganizacionService {
     public List<OrganizacionInfo> compatibles(Ciudad ciudad,
             Collection<Material> materiales) {
         return repositorio.findByCiudadOrderByNombre(ciudad).stream()
-                .filter(o -> o.getMateriales().containsAll(materiales))
-                .map(OrganizacionService::aInfo).toList();
+                .map(OrganizacionService::aInfo)
+                .filter(o -> o.recibeTodos(materiales)).toList();
     }
 
     public List<OrganizacionInfo> queReciben(Material material) {
@@ -87,7 +91,7 @@ public class OrganizacionService {
         if (org.getVersion() != version) {
             return false;
         }
-        org.actualizar(materiales, horario, telefono);
+        org.actualizar(catalogo.seleccionActiva(materiales), horario, telefono);
         repositorio.save(org);
         return true;
     }

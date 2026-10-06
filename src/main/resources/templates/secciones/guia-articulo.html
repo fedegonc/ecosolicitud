@@ -8,8 +8,8 @@
     <p class="detalle"><a class="enlace" th:href="@{/guia}" th:text="#{guia.volver}">Volver</a></p>
     <h1 th:text="${articulo.titulo}">Título</h1>
     <p class="detalle" th:if="${articulo.material != null}">
-        <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(articulo.material.name())}"
-              th:text="#{${articulo.material.clave}}">Material</span>
+        <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(articulo.material.codigo)}"
+              th:text="${articulo.material.nombre}">Material</span>
     </p>
     <div class="prosa" th:text="${articulo.cuerpo}">Cuerpo</div>
     <section th:if="${!centros.isEmpty()}">

@@ -10,8 +10,7 @@ import java.util.function.Predicate;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.Actor;
-import com.ecosolicitud.shared.Ciudad;
-import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.solicitud.interno.Ciudadano;
 import com.ecosolicitud.solicitud.interno.CiudadanoRepository;
 import com.ecosolicitud.solicitud.interno.Solicitud;
@@ -31,14 +30,16 @@ public class SolicitudService {
     private final CiudadanoRepository ciudadanos;
     private final AvisoService avisos;
     private final OrganizacionService organizaciones;
+    private final CatalogoMateriales catalogo;
 
     public SolicitudService(SolicitudRepository repositorio,
             CiudadanoRepository ciudadanos, AvisoService avisos,
-            OrganizacionService organizaciones) {
+            OrganizacionService organizaciones, CatalogoMateriales catalogo) {
         this.repositorio = repositorio;
         this.ciudadanos = ciudadanos;
         this.avisos = avisos;
         this.organizaciones = organizaciones;
+        this.catalogo = catalogo;
     }
 
     public List<SolicitudInfo> misSolicitudes(String ciudadanoId, Filtro filtro) {
@@ -59,24 +60,23 @@ public class SolicitudService {
                         lista.stream().filter(s -> s.estado().esFinal()).toList())));
     }
 
+    // Optional.empty() = el centro no recibe esos materiales en esa ciudad (RN-04)
     @Transactional
-    public Optional<SolicitudInfo> crear(Actor actor, Ciudad ciudad, String direccion,
-            String referencia, List<Material> materiales, String organizacionId,
-            String nombre, String contacto, String nota) {
-        boolean compatible = organizaciones.compatibles(ciudad, materiales).stream()
-                .anyMatch(o -> o.id().equals(organizacionId));
+    public Optional<SolicitudInfo> crear(Actor actor, SolicitudCreacion datos) {
+        boolean compatible = organizaciones.compatibles(datos.ciudad(), datos.materiales())
+                .stream().anyMatch(o -> o.id().equals(datos.organizacionId()));
         if (!compatible) {
             return Optional.empty();
         }
-        var s = Solicitud.nueva(new SolicitudSemilla(actor.ciudadanoId(),
-                nombre, contacto, direccion, referencia, materiales,
-                organizacionId, nota, Estado.PENDIENTE, Instant.now(), null, null),
-                ciudadano(actor.ciudadanoId(), nombre));
+        var materiales = catalogo.seleccionActiva(datos.materiales());
+        var s = Solicitud.nueva(datos.direccion(), datos.referencia(), materiales,
+                datos.organizacionId(), datos.nota(), datos.contacto(),
+                ciudadano(actor.ciudadanoId(), datos.nombre()));
         repositorio.save(s);
         avisos.nueva(s);
-        String nombreOrg = organizaciones.buscar(organizacionId)
-                .map(OrganizacionInfo::nombre).orElse(organizacionId);
-        return Optional.of(aInfo(s, Map.of(organizacionId, nombreOrg)));
+        String nombreOrg = organizaciones.buscar(datos.organizacionId())
+                .map(OrganizacionInfo::nombre).orElse(datos.organizacionId());
+        return Optional.of(SolicitudInfo.desde(s, Map.of(datos.organizacionId(), nombreOrg)));
     }
 
     @Transactional
@@ -107,7 +107,7 @@ public class SolicitudService {
         var todas = repositorio.findAll(Sort.by("id"));
         var nombres = organizaciones.nombres(todas.stream()
                 .map(Solicitud::getOrganizacionId).collect(toSet()));
-        return todas.stream().map(s -> aInfo(s, nombres)).toList();
+        return todas.stream().map(s -> SolicitudInfo.desde(s, nombres)).toList();
     }
 
     public boolean vacia() {
@@ -174,15 +174,6 @@ public class SolicitudService {
     private List<SolicitudInfo> aInfos(List<Solicitud> solicitudes) {
         var nombres = organizaciones.nombres(solicitudes.stream()
                 .map(Solicitud::getOrganizacionId).collect(toSet()));
-        return solicitudes.stream().map(s -> aInfo(s, nombres)).toList();
-    }
-
-    private static SolicitudInfo aInfo(Solicitud s, Map<String, String> nombres) {
-        return new SolicitudInfo(s.getId(), s.getDireccion(),
-                s.getReferencia(), List.copyOf(s.getMateriales()),
-                nombres.getOrDefault(s.getOrganizacionId(), s.getOrganizacionId()),
-                s.getCiudadano().getNombre(), s.getContacto(), s.getNota(),
-                s.getEstado(), s.getCreadaEn(),
-                s.getFinalizadaEn(), s.getVersion());
+        return solicitudes.stream().map(s -> SolicitudInfo.desde(s, nombres)).toList();
     }
 }

@@ -13,9 +13,9 @@
             <h3><a class="enlace" th:href="@{/guia/{id}(id=${a.id})}"
                    th:text="${a.titulo}">Título</a></h3>
             <p class="detalle" th:if="${a.material != null}">
-                <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(a.material.name())}">
+                <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(a.material.codigo)}">
                         <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${a.material.icono}"></use></svg>
-                        <span th:text="#{${a.material.clave}}">Material</span>
+                        <span th:text="${a.material.nombre}">Material</span>
                     </span>
             </p>
             <p class="detalle" th:text="#{guia.leer}">Leer</p>

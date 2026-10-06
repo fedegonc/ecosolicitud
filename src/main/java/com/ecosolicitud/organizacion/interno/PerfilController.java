@@ -3,7 +3,7 @@ package com.ecosolicitud.organizacion.interno;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.ActorSesion;
-import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.CatalogoMateriales;
 
 import jakarta.validation.Valid;
 
@@ -19,10 +19,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 class PerfilController {
 
     private final OrganizacionService servicio;
+    private final CatalogoMateriales catalogo;
     private final ActorSesion actor;
 
-    PerfilController(OrganizacionService servicio, ActorSesion actor) {
+    PerfilController(OrganizacionService servicio, CatalogoMateriales catalogo,
+            ActorSesion actor) {
         this.servicio = servicio;
+        this.catalogo = catalogo;
         this.actor = actor;
     }
 
@@ -49,7 +52,7 @@ class PerfilController {
     }
 
     private String formulario(Model modelo) {
-        modelo.addAttribute("materialesTodos", Material.values());
+        modelo.addAttribute("materialesTodos", catalogo.activos());
         return "secciones/org/perfil";
     }
 }

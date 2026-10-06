@@ -14,9 +14,9 @@
     </p>
     <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="${s.nota}">Nota</span></p>
     <ul class="materiales">
-        <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.name())}">
+        <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}">
             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
-            <span th:text="#{${m.clave}}">Material</span>
+            <span th:text="${m.nombre}">Material</span>
         </li>
         <li th:class="'etiqueta-material ' + 'est-' + ${#strings.toLowerCase(s.estado.name())}">
             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.estado.icono}"></use></svg>

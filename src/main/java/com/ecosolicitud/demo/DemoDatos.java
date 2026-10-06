@@ -2,7 +2,6 @@ package com.ecosolicitud.demo;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import com.ecosolicitud.guia.ArticuloSemilla;
 import com.ecosolicitud.opinion.OpinionSemilla;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.comunidad.RecicladorInfo;
+import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.shared.Rol;
@@ -28,20 +28,25 @@ final class DemoDatos {
     private DemoDatos() {
     }
 
-    static List<OrganizacionInfo> organizaciones() {
+    static List<OrganizacionInfo> organizaciones(CatalogoMateriales cat) {
         return List.of(
                 new OrganizacionInfo("frontera-limpia", "Cooperativa Frontera Limpia",
                         Ciudad.RIVERA,
-                        List.of(Material.PLASTICO, Material.CARTON, Material.PAPEL,
-                                Material.METAL),
+                        List.of(m(cat, "PLASTICO"), m(cat, "CARTON"),
+                                m(cat, "PAPEL"), m(cat, "METAL")),
                         "Lun a Vie 8 a 17 h", "+598 92 000 111", 0),
                 new OrganizacionInfo("acopio-verde", "Acopio Verde Rivera",
                         Ciudad.RIVERA,
-                        List.of(Material.VIDRIO, Material.PLASTICO, Material.CARTON),
+                        List.of(m(cat, "VIDRIO"), m(cat, "PLASTICO"),
+                                m(cat, "CARTON")),
                         "Lun a Sáb 9 a 13 h", "+598 92 000 222", 0),
                 new OrganizacionInfo("coleta-solidaria", "Coleta Solidária Livramento",
-                        Ciudad.LIVRAMENTO, Arrays.asList(Material.values()),
+                        Ciudad.LIVRAMENTO, cat.todos(),
                         "Seg a Sex 8 às 18 h", "+55 55 9000 0000", 0));
+    }
+
+    private static Material m(CatalogoMateriales cat, String codigo) {
+        return cat.resolver(codigo);
     }
 
     static List<RecicladorInfo> recicladores() {
@@ -53,32 +58,32 @@ final class DemoDatos {
                 new RecicladorInfo("Ana Costa", null));
     }
 
-    static List<SolicitudSemilla> solicitudes() {
+    static List<SolicitudSemilla> solicitudes(CatalogoMateriales cat) {
         var ahora = Instant.now();
         return List.of(
                 new SolicitudSemilla("ciudadano-demo", "Martina López", "099 123 456",
                         "Agraciada 1234", "Portón verde",
-                        List.of(Material.CARTON, Material.PAPEL),
+                        List.of(m(cat, "CARTON"), m(cat, "PAPEL")),
                         "frontera-limpia", null, Estado.COMPLETADA,
                         ahora.minus(5, ChronoUnit.DAYS),
                         ahora.minus(5, ChronoUnit.DAYS).plus(4, ChronoUnit.HOURS),
                         ahora.minus(4, ChronoUnit.DAYS)),
                 new SolicitudSemilla("ciudadano-demo", "Martina López", "099 123 456",
-                        "Agraciada 1234", null, List.of(Material.PLASTICO),
+                        "Agraciada 1234", null, List.of(m(cat, "PLASTICO")),
                         "frontera-limpia", null, Estado.EN_CURSO,
                         ahora.minus(3, ChronoUnit.DAYS),
                         ahora.minus(3, ChronoUnit.DAYS).plus(6, ChronoUnit.HOURS), null),
                 new SolicitudSemilla("vecina-ana", "Ana Rodríguez", "098 555 111",
                         "Sarandí 56", "Fondo",
-                        List.of(Material.PLASTICO, Material.METAL),
+                        List.of(m(cat, "PLASTICO"), m(cat, "METAL")),
                         "frontera-limpia", null, Estado.PENDIENTE,
                         ahora.minus(2, ChronoUnit.DAYS), null, null),
                 new SolicitudSemilla("vecino-bruno", "Bruno Pérez", "099 444 333",
-                        "Artigas 890", null, List.of(Material.CARTON),
+                        "Artigas 890", null, List.of(m(cat, "CARTON")),
                         "frontera-limpia", "Dejar en la vereda", Estado.PENDIENTE,
                         ahora.minus(1, ChronoUnit.DAYS), null, null),
                 new SolicitudSemilla("vecina-carla", "Carla Santos", "097 222 000",
-                        "Ituzaingó 45", null, List.of(Material.VIDRIO),
+                        "Ituzaingó 45", null, List.of(m(cat, "VIDRIO")),
                         "acopio-verde", null, Estado.RECHAZADA,
                         ahora.minus(6, ChronoUnit.DAYS),
                         ahora.minus(6, ChronoUnit.DAYS).plus(9, ChronoUnit.HOURS),
@@ -142,7 +147,7 @@ final class DemoDatos {
                         TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
     }
 
-    static List<ArticuloSemilla> guia() {
+    static List<ArticuloSemilla> guia(CatalogoMateriales cat) {
         return List.of(
                 new ArticuloSemilla("Cómo separar en casa", """
                         Separá por material en bolsas o cajas distintas: cuanto menos se mezcle,
@@ -159,19 +164,19 @@ final class DemoDatos {
                         cerámicas, focos ni vajilla: tienen composiciones distintas y arruinan el lote.
 
                         Sacá las tapas y no lo rompas: el vidrio partido lastima a quien lo manipula.""",
-                        Material.VIDRIO, 2),
+                        m(cat, "VIDRIO"), 2),
                 new ArticuloSemilla("Cartón y papel", """
                         Tiene que estar seco. El cartón mojado o engrasado (una caja de pizza,
                         por ejemplo) no se puede reciclar: va a la basura común.
 
                         No hace falta sacar la cinta adhesiva ni los ganchos de metal.""",
-                        Material.CARTON, 3),
+                        m(cat, "CARTON"), 3),
                 new ArticuloSemilla("Electrónicos", """
                         Nunca van a la basura común: tienen metales pesados que contaminan el agua.
 
                         Se reciben cables, cargadores, celulares y electrodomésticos chicos.
                         Si todavía funciona, primero intentá repararlo o donarlo.""",
-                        Material.ELECTRONICOS, 4));
+                        m(cat, "ELECTRONICOS"), 4));
     }
 
     static List<OpinionSemilla> opiniones() {

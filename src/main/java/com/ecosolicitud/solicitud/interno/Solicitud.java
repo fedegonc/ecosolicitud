@@ -9,9 +9,7 @@ import com.ecosolicitud.solicitud.Estado;
 import com.ecosolicitud.solicitud.SolicitudSemilla;
 import com.ecosolicitud.solicitud.TransicionInvalidaException;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +19,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
@@ -54,11 +54,11 @@ public class Solicitud {
     private String referencia;
     @NotEmpty
     @BatchSize(size = 50)
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "solicitud_materiales", joinColumns = @JoinColumn(name = "solicitud_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "solicitud_materiales",
+            joinColumns = @JoinColumn(name = "solicitud_id"),
+            inverseJoinColumns = @JoinColumn(name = "material_id"))
     @OrderColumn(name = "orden")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "material")
     private List<Material> materiales = new ArrayList<>();
     private String organizacionId;
     @NotBlank
@@ -77,6 +77,23 @@ public class Solicitud {
     private long version;
 
     protected Solicitud() {
+    }
+
+    public static Solicitud nueva(String direccion, String referencia, List<Material> materiales,
+            String organizacionId, String nota, String contacto, Ciudadano ciudadano) {
+        var sol = new Solicitud();
+        sol.ciudadano = ciudadano;
+        sol.direccion = direccion;
+        sol.referencia = referencia;
+        sol.materiales = new ArrayList<>(materiales);
+        sol.organizacionId = organizacionId;
+        sol.contacto = contacto;
+        sol.nota = nota;
+        sol.estado = Estado.PENDIENTE;
+        sol.creadaEn = Instant.now();
+        sol.respondidaEn = null;
+        sol.finalizadaEn = null;
+        return sol;
     }
 
     public static Solicitud nueva(SolicitudSemilla s, Ciudadano ciudadano) {

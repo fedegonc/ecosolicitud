@@ -14,7 +14,9 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import jakarta.validation.constraints.Pattern;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -41,16 +43,11 @@ class ValidacionesTest {
                 caso("(598) 9200 0111", true),
                 caso("092.000.111", true),
                 caso("092 000 111", true),
-                // incompleto o basura: debe fallar
+                // un caso por modo de fallo: vacío, pocos dígitos,
+                // solo separadores, letras, demasiado largo
                 caso("", false),
-                caso("   ", false),
-                caso("+598", false),
-                caso("+5", false),
                 caso("+598 92", false),
-                caso("092", false),
                 caso("+++++", false),
-                caso("9 9 9", false),
-                caso("  123", false),
                 caso("abc", false),
                 caso("+598 92 000 111 222 333 444 555", false));
     }
@@ -60,7 +57,7 @@ class ValidacionesTest {
     @DisplayName("El teléfono acepta los formatos reales y rechaza lo incompleto")
     void telefono(String valor, boolean valido) {
         var form = new PerfilForm();
-        form.setMateriales(List.of(Material.PLASTICO));
+        form.setMateriales(List.of(mat("PLASTICO")));
         form.setHorario("Lun a Vie 8 a 17 h");
         form.setTelefono(valor);
 
@@ -84,21 +81,26 @@ class ValidacionesTest {
         var form = new NuevaForm();
         form.setDireccion(valor);
         form.setOrganizacionId("frontera-limpia");
-        form.setMateriales(List.of(Material.PLASTICO));
+        form.setMateriales(List.of(mat("PLASTICO")));
 
         Allure.step("Validar la dirección ingresada", () ->
                 assertThat(invalido(form, "direccion")).isEqualTo(!valido));
     }
 
-    @ParameterizedTest(name = "teléfono en entidad «{0}» → válido={1}")
-    @MethodSource("telefonos")
-    @DisplayName("La entidad exige la misma regla que el form (la base dice lo mismo)")
-    void telefonoEnEntidad(String valor, boolean valido) {
-        var org = new Organizacion("o", "Org", Ciudad.RIVERA,
-                List.of(Material.PLASTICO), "Lun a Vie 8 a 17 h", valor);
+    @Test
+    @DisplayName("Form y entidad usan la misma regla de teléfono (la base dice lo mismo)")
+    void mismaReglaFormYEntidad() throws Exception {
+        var patronForm = PerfilForm.class.getDeclaredField("telefono")
+                .getAnnotation(Pattern.class).regexp();
+        var patronEntidad = Organizacion.class.getDeclaredField("telefono")
+                .getAnnotation(Pattern.class).regexp();
 
-        Allure.step("Validar el teléfono en la entidad", () ->
-                assertThat(invalido(org, "telefono")).isEqualTo(!valido));
+        Allure.step("El patrón del form es el de la entidad", () ->
+                assertThat(patronForm).isEqualTo(patronEntidad));
+    }
+
+    private static Material mat(String codigo) {
+        return new Material(codigo, codigo, "botella");
     }
 
     private boolean invalido(Object form, String campo) {

@@ -6,15 +6,15 @@ import java.util.List;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
@@ -44,12 +44,11 @@ public class Organizacion {
 
     @NotEmpty
     @BatchSize(size = 50)
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "organizacion_materiales",
-            joinColumns = @JoinColumn(name = "organizacion_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "organizacion_materiales",
+            joinColumns = @JoinColumn(name = "organizacion_id"),
+            inverseJoinColumns = @JoinColumn(name = "material_id"))
     @OrderColumn(name = "orden")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "material")
     private List<Material> materiales = new ArrayList<>();
 
     @NotBlank(message = "{perfil.error.horario}")

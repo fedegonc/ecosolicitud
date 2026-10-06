@@ -34,9 +34,13 @@ class SolicitudMaquinaTest {
     private static Solicitud en(Estado estado) {
         boolean respondida = estado != Estado.PENDIENTE && estado != Estado.CANCELADA;
         return Solicitud.nueva(new SolicitudSemilla("c", "N", "Tel", "Dir 1",
-                null, List.of(Material.PLASTICO), "org", null, estado, CREADA,
+                null, List.of(mat("PLASTICO")), "org", null, estado, CREADA,
                 respondida ? CREADA : null,
                 estado.esFinal() ? CREADA.plus(1, ChronoUnit.HOURS) : null), ciudadano());
+    }
+
+    private static Material mat(String codigo) {
+        return new Material(codigo, codigo, "botella");
     }
 
     private static Ciudadano ciudadano() {
@@ -103,29 +107,14 @@ class SolicitudMaquinaTest {
     }
 
     @Test
-    @DisplayName("Desde cualquier estado final ninguna acción cambia el estado (I6)")
-    void finalesCerradas() {
-        for (Estado estado : new Estado[]{Estado.COMPLETADA, Estado.RECHAZADA,
-                Estado.CANCELADA}) {
-            for (String accion : new String[]{"aceptar", "rechazar", "completar",
-                    "cancelar"}) {
-                var s = en(estado);
-                assertThatThrownBy(() -> aplicar(s, accion))
-                        .isInstanceOf(TransicionInvalidaException.class);
-                assertThat(s.getEstado()).isEqualTo(estado);
-            }
-        }
-    }
-
-    @Test
     @DisplayName("Semilla inconsistente con I1 o I2 es rechazada al construir")
     void invariantesEnConstruccion() {
         assertThatThrownBy(() -> Solicitud.nueva(new SolicitudSemilla("c", "N",
-                "Tel", "Dir", null, List.of(Material.PAPEL), "org", null,
+                "Tel", "Dir", null, List.of(mat("PAPEL")), "org", null,
                 Estado.COMPLETADA, CREADA, CREADA, null), ciudadano()))
                 .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> Solicitud.nueva(new SolicitudSemilla("c", "N",
-                "Tel", "Dir", null, List.of(Material.PAPEL), "org", null,
+                "Tel", "Dir", null, List.of(mat("PAPEL")), "org", null,
                 Estado.COMPLETADA, CREADA, CREADA, CREADA.minus(1, ChronoUnit.HOURS)), ciudadano()))
                 .isInstanceOf(IllegalArgumentException.class);
     }

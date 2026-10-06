@@ -130,8 +130,8 @@ class OrganizacionE3Test {
             assertThat(driver.findElement(By.cssSelector("fieldset .error")).getText())
                     .contains("al menos un material");
             assertThat(servicio.buscar("frontera-limpia").orElseThrow().materiales())
-                    .containsExactlyInAnyOrder(Material.PLASTICO, Material.CARTON,
-                            Material.PAPEL, Material.METAL);
+                    .containsExactlyInAnyOrder(mat("PLASTICO"), mat("CARTON"),
+                            mat("PAPEL"), mat("METAL"));
         });
 
         Allure.step("Versión desactualizada muestra conflicto y no persiste (RN-07)", () -> {
@@ -166,7 +166,7 @@ class OrganizacionE3Test {
         });
 
         Allure.step("Reiniciar restaura el dataset y vuelve a la misma página", () -> {
-            servicio.actualizarPerfil("acopio-verde", List.of(Material.VIDRIO),
+            servicio.actualizarPerfil("acopio-verde", List.of(mat("VIDRIO")),
                     "Alterado", "+598 92 999 888",
                     servicio.buscar("acopio-verde").orElseThrow().version());
             driver.get(base + Rutas.ORG_SOLICITUDES);
@@ -185,6 +185,10 @@ class OrganizacionE3Test {
                     new HttpEntity<>(body, headers), String.class);
             assertThat(respuesta.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
         });
+    }
+
+    private static Material mat(String codigo) {
+        return new Material(codigo, codigo, "botella");
     }
 
     private org.springframework.http.ResponseEntity<String> postConCsrf(String ruta,

@@ -313,11 +313,11 @@ class SolicitudE4Test {
         Allure.step("Quitar un material del perfil no altera solicitudes existentes (RN-12)", () -> {
             var org = organizaciones.buscar("frontera-limpia").orElseThrow();
             organizaciones.actualizarPerfil("frontera-limpia",
-                    List.of(Material.CARTON, Material.PAPEL), org.horario(), org.telefono(),
+                    List.of(mat("CARTON"), mat("PAPEL")), org.horario(), org.telefono(),
                     org.version());
             var propias = servicio.misSolicitudes("ciudadano-demo", Filtro.TODAS);
             assertThat(propias).anySatisfy(s ->
-                    assertThat(s.materiales()).containsExactly(Material.PLASTICO));
+                    assertThat(s.materiales()).containsExactly(mat("PLASTICO")));
         });
 
         Allure.step("Reiniciar restaura organizaciones y solicitudes", () -> {
@@ -329,6 +329,10 @@ class SolicitudE4Test {
             assertThat(organizaciones.todas()).hasSize(3);
             assertThat(servicio.misSolicitudes("ciudadano-demo", Filtro.TODAS)).hasSize(2);
         });
+    }
+
+    private static Material mat(String codigo) {
+        return new Material(codigo, codigo, "botella");
     }
 
     private org.springframework.http.ResponseEntity<String> postConCsrf(String ruta,
