@@ -1,0 +1,30 @@
+{
+  "escenario": "C-05 ráfaga agresiva contra Render",
+  "fecha_utc": "2026-10-05",
+  "commit": "b6166685f78494a52d83003d4b135ab8118c1a89",
+  "plan": "src/test/resources/carga-rafaga.jmx",
+  "parametros": {"usuarios": 30, "rampa_s": 2, "pausa_ms": 0, "iteraciones_previstas": 5, "muestras_previstas": 1200},
+  "resultado": {
+    "muestras": 929,
+    "errores": 1,
+    "detalle_error": "una espera superior al timeout de 20 s",
+    "parada": "p95 > 3 segundos sostenido durante un minuto",
+    "mean_ms": 2122.3,
+    "median_ms": 1766,
+    "p95_ms": 4658.5,
+    "p99_ms": 6920.0,
+    "max_ms": 40043,
+    "throughput_req_s": 13.83,
+    "inicio_utc": "2026-10-05T01:30:32Z",
+    "fin_utc": "2026-10-05T01:31:44Z"
+  },
+  "render": {
+    "cpu_maxima": "0,15 (100 % de la cuota)",
+    "memoria_durante": "86 % del límite (462,5 MB de 512 MiB)",
+    "recuperacion": "HTTP 200 en 0,26-0,36 s; CPU ~0,03 tras retirar la carga",
+    "caida_o_500": false
+  },
+  "lectura": "Sin caída ni reinicio: degradación de latencia con recuperación inmediata. El throughput no superó el nivel de 20 usuarios con pausa (~13 req/s): ~13-14 req/s de páginas HTML es el techo observado del plan Free; concurrencia extra solo agrega cola.",
+  "conversion_uso_real": "14 req/s con una petición humana cada 10-30 s equivalen a ~150-400 personas navegando simultáneamente. 500 usuarios/día implican picos muy inferiores.",
+  "artefactos": "scratch/resultados-carga/rafaga-20261005/"
+}

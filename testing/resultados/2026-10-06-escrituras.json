@@ -1,0 +1,45 @@
+{
+  "fecha": "2026-10-06",
+  "plan": "src/test/resources/carga-escrituras.jmx",
+  "escenario": "25 sesiones aceptan la misma solicitud con la misma version, liberadas por SynchronizingTimer",
+  "resultado_esperado": "1 ganador, N-1 conflictos, 0 errores",
+
+  "pre_fix": {
+    "commit": "643e2a9",
+    "objetivo": "ecosolicitud.onrender.com",
+    "resultado": {
+      "ganador": 1,
+      "conflicto_version": 18,
+      "http_500": 6
+    },
+    "excepcion_raiz": "UnexpectedRollbackException: Transaction silently rolled back because it has been marked as rollback-only",
+    "causa": "catch de OptimisticLockingFailureException dentro de @Transactional; la TX queda rollback-only y el commit falla"
+  },
+
+  "post_fix_local": {
+    "commit": "ed191d4",
+    "objetivo": "localhost:8080",
+    "resultado": {
+      "ganador": 1,
+      "conflicto_version": 24,
+      "http_500": 0
+    }
+  },
+
+  "post_fix_produccion": {
+    "commit": "ed191d4",
+    "deploy": "dep-db2i3ic9v7es738kk1cg",
+    "objetivo": "ecosolicitud.onrender.com",
+    "ejecutado": "2026-10-06T13:33-03:00",
+    "muestras_totales": 105,
+    "errores_pct": 0.0,
+    "resultado": {
+      "ganador": 1,
+      "conflicto_version": 24,
+      "http_500": 0
+    },
+    "latencia_ms": { "promedio": 11178, "min": 1696, "max": 18344 }
+  },
+
+  "regresion": "SolicitudConcurrenciaTest reproduce el fallo de flush sin hilos (cache de persistencia + REQUIRES_NEW)"
+}

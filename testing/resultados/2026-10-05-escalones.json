@@ -1,0 +1,123 @@
+{
+  "campana": "Escalones controlados 5-10-15-20 contra Render",
+  "fecha_utc": "2026-10-05",
+  "commit": "b6166685f78494a52d83003d4b135ab8118c1a89",
+  "servicio": {
+    "host": "ecosolicitud.onrender.com",
+    "plan": "Free",
+    "region": "Oregon",
+    "instancias": 1,
+    "cpu_limite": 0.15,
+    "memoria_limite_bytes": 536870900
+  },
+  "plan_jmeter": {
+    "archivo": "src/test/resources/carga-10-usuarios.jmx",
+    "tipo": "GET navegación, sin escrituras",
+    "paginas_por_iteracion": 8,
+    "rampa_segundos": 15,
+    "pausa_ms": 500,
+    "muestras_por_nivel": "usuarios x iteraciones x 8"
+  },
+  "antecedente": {
+    "ejecucion_perdida": "Una primera ejecución de 10 usuarios (00:41-00:47 UTC) completó 2400 muestras, 0 errores, media 814 ms, ~7,3 req/s, pero el JTL se perdió cuando un mvn clean borró target/ durante la generación del reporte. Se repitió la serie con salida fuera de target/.",
+    "calentamiento": {
+      "usuarios": 5,
+      "iteraciones": 3,
+      "muestras": 120,
+      "errores": 0,
+      "mean_ms": 345.4,
+      "p95_ms": 600.6,
+      "nota": "Servidor ya caliente por la ejecución previa; no cuenta como medición."
+    }
+  },
+  "niveles": [
+    {
+      "usuarios": 5,
+      "iteraciones": 10,
+      "muestras": 400,
+      "errores": 0,
+      "parada": null,
+      "objetivo_cumplido": true,
+      "mean_ms": 316.3,
+      "median_ms": 297,
+      "p95_ms": 501.0,
+      "p99_ms": 594.0,
+      "max_ms": 717,
+      "throughput_req_s": 5.26,
+      "inicio_utc": "2026-10-05T00:48:09Z",
+      "fin_utc": "2026-10-05T00:49:31Z"
+    },
+    {
+      "usuarios": 10,
+      "iteraciones": 30,
+      "muestras": 2400,
+      "errores": 0,
+      "parada": null,
+      "objetivo_cumplido": true,
+      "mean_ms": 481.0,
+      "median_ms": 456,
+      "p95_ms": 811.0,
+      "p99_ms": 1084.0,
+      "max_ms": 1898,
+      "throughput_req_s": 9.66,
+      "inicio_utc": "2026-10-05T00:49:35Z",
+      "fin_utc": "2026-10-05T00:53:49Z"
+    },
+    {
+      "usuarios": 15,
+      "iteraciones": 20,
+      "muestras": 2400,
+      "errores": 0,
+      "parada": null,
+      "objetivo_cumplido": true,
+      "mean_ms": 707.7,
+      "median_ms": 612,
+      "p95_ms": 1305.0,
+      "p99_ms": 1706.9,
+      "max_ms": 2293,
+      "throughput_req_s": 11.53,
+      "inicio_utc": "2026-10-05T00:54:46Z",
+      "fin_utc": "2026-10-05T00:58:22Z"
+    },
+    {
+      "usuarios": 20,
+      "iteraciones": 15,
+      "muestras": 2400,
+      "errores": 0,
+      "parada": null,
+      "objetivo_cumplido": true,
+      "mean_ms": 929.5,
+      "median_ms": 802,
+      "p95_ms": 1883.7,
+      "p99_ms": 2613.9,
+      "max_ms": 4499,
+      "throughput_req_s": 12.78,
+      "inicio_utc": "2026-10-05T00:59:14Z",
+      "fin_utc": "2026-10-05T01:02:28Z"
+    }
+  ],
+  "render_recursos": {
+    "resolucion_segundos": 30,
+    "cpu_agregacion": "MAX",
+    "observaciones": [
+      "La CPU alcanzó la cuota de 0,15 en varios intervalos de los niveles 10, 15 y 20, sin que el p95 superara el objetivo en esa campaña.",
+      "Memoria: ~383 MiB al inicio del calentamiento, ~441 MiB al final del nivel 20 (~86 % del límite). Tendencia creciente sostenida entre niveles; no demuestra fuga por sí sola (la JVM retiene heap reservado), pero es la señal limitante si la carga sigue subiendo.",
+      "Recuperación verificada tras cada nivel: HTTP 200 en 0,3-0,77 s y CPU de vuelta a ~0,04."
+    ],
+    "cpu_maxima_observada": 0.15,
+    "memoria_maxima_bytes": 462176260,
+    "memoria_maxima_pct_limite": 86.1
+  },
+  "comparacion_campana_anterior": {
+    "2026-10-04": "10 usuarios detenidos por p95 > 3 s sostenido (226 muestras, servidor probablemente frío).",
+    "2026-10-05": "Con calentamiento previo y servidor caliente, 10, 15 y 20 usuarios cumplieron el objetivo. La variabilidad entre ejecuciones sugiere que el estado de calentamiento de la instancia Free domina el resultado más que el nivel de concurrencia en este rango."
+  },
+  "limitaciones": [
+    "Modelo cerrado: el throughput observado no es la capacidad máxima.",
+    "Solo GET de navegación; no cubre escrituras, concurrencia sobre el mismo registro ni identidades distintas.",
+    "Las métricas de Render son máximos por intervalo de 30 s con posible retardo de muestreo.",
+    "Memoria al 86 % y creciente: el siguiente escalón (25-30) probablemente active el criterio de parada por memoria antes que por latencia.",
+    "Una ejecución con servidor caliente no garantiza el mismo resultado tras un arranque en frío o redeploy."
+  ],
+  "artefactos": "scratch/resultados-carga/campana-render-20261005/ (JTL, reportes HTML JMeter, resúmenes JSON, gráficos SVG, index.html). Fuera de target/ para sobrevivir a mvn clean."
+}
