@@ -19,7 +19,7 @@
             <span class="error" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}">Error</span>
         </label>
 
-        <div id="flujo" aria-live="polite">
+        <div id="flujo" class="flujo" aria-live="polite">
             <!-- ya elegido (desde el centro o por la lista): resumen, no otra elección -->
             <div class="campo" th:if="${centro != null}">
                 <span th:text="#{nueva.centro}">Centro de acopio</span>
