@@ -32,7 +32,9 @@ class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new RolSeccionInterceptor(actor))
-                .addPathPatterns(Seccion.rutas());
+                .addPathPatterns(Seccion.rutas())
+                .addPathPatterns("/org/**")
+                .addPathPatterns("/mis-solicitudes/**");
         var lang = new LocaleChangeInterceptor();
         lang.setParamName("lang");
         registry.addInterceptor(lang);

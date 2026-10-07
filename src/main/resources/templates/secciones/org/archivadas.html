@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{org.archivadas.titulo}">Solicitudes archivadas</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="#{org.archivadas.titulo}">Solicitudes archivadas</h1>
+    <p><a class="enlace" th:href="@{/org/solicitudes}" th:text="#{panel.volver}">Volver</a></p>
+    <p class="detalle" th:if="${solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
+    <div class="rejilla">
+        <article th:each="s : ${solicitudes}" class="tarjeta">
+            <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano})}"></th:block>
+        </article>
+    </div>
+</main>
+</body>
+</html>

@@ -1,14 +1,31 @@
 package com.ecosolicitud.solicitud;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
+import com.ecosolicitud.shared.Fechas;
 import com.ecosolicitud.solicitud.interno.Solicitud;
 
 // Recuento de solicitudes desde la mirada del servicio:
 // aceptadas = pasaron por EN_CURSO alguna vez; mediana = recepción → primera respuesta.
 public record SolicitudMetricas(long recibidas, long aceptadas, long completadas,
         Duration medianaRespuesta) {
+
+    static SolicitudMetricas desdeSemana(List<Solicitud> todas) {
+        var inicio = LocalDate.now(Fechas.ZONA).with(DayOfWeek.MONDAY)
+                .atStartOfDay(Fechas.ZONA).toInstant();
+        return desde(todas.stream().filter(s -> s.getCreadaEn().isAfter(inicio)).toList());
+    }
+
+    public String mediana() {
+        if (medianaRespuesta == null) {
+            return "—";
+        }
+        long horas = medianaRespuesta.toHours();
+        return horas < 48 ? horas + " h" : medianaRespuesta.toDays() + " d";
+    }
 
     static SolicitudMetricas desde(List<Solicitud> todas) {
         long aceptadas = todas.stream().filter(s -> s.getEstado() == Estado.EN_CURSO

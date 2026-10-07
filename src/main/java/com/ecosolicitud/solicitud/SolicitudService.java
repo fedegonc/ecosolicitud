@@ -1,6 +1,7 @@
 package com.ecosolicitud.solicitud;
 
 import java.time.Instant;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -48,15 +49,29 @@ public class SolicitudService {
     }
 
     public BandejaSolicitudes recibidas(Actor actor) {
-        String organizacionId = organizaciones.actual(actor).id();
-        var lista = aInfos(repositorio.findByOrganizacionIdOrderByCreadaEnDesc(organizacionId));
+        var lista = aInfos(delActor(actor));
         return new BandejaSolicitudes(List.of(
                 new GrupoSolicitudes("org.grupo.pendientes",
                         lista.stream().filter(s -> s.estado() == Estado.PENDIENTE).toList()),
                 new GrupoSolicitudes("org.grupo.en-curso",
                         lista.stream().filter(s -> s.estado() == Estado.EN_CURSO).toList()),
                 new GrupoSolicitudes("org.grupo.cerradas",
-                        lista.stream().filter(s -> s.estado().esFinal()).toList())));
+                        lista.stream().filter(s -> s.estado().esFinal()).limit(5).toList())));
+    }
+
+    public List<SolicitudInfo> archivadas(Actor actor) {
+        return aInfos(delActor(actor).stream()
+                .filter(s -> s.getEstado().esFinal()).toList());
+    }
+
+    public SolicitudMetricas semana(Actor actor) {
+        return SolicitudMetricas.desdeSemana(delActor(actor));
+    }
+
+    public InformeMensual informe(Actor actor, YearMonth mes) {
+        var delMes = delActor(actor).stream()
+                .filter(s -> InformeMensual.esDelMes(s, mes)).toList();
+        return InformeMensual.desde(mes, delMes, aInfos(delMes));
     }
 
     // Optional.empty() = el centro no recibe esos materiales en esa ciudad (RN-04)
@@ -124,6 +139,13 @@ public class SolicitudService {
         ciudadanos.deleteAll();
         dataset.forEach(s -> repositorio.save(
                 Solicitud.nueva(s, ciudadano(s.ciudadanoId(), s.nombreCiudadano()))));
+    }
+
+    private List<Solicitud> delActor(Actor actor) {
+        return actor.esOrganizacion()
+                ? repositorio.findByOrganizacionIdOrderByCreadaEnDesc(
+                        organizaciones.actual(actor).id())
+                : repositorio.findByCiudadano_IdOrderByCreadaEnDesc(actor.ciudadanoId());
     }
 
     private Ciudadano ciudadano(String id, String nombre) {

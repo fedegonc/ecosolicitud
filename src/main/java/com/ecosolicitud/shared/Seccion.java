@@ -61,7 +61,7 @@ public enum Seccion {
 
     public static Seccion desdeRuta(String ruta) {
         return Arrays.stream(values())
-                .filter(s -> s.ruta.equals(ruta))
+                .filter(s -> s.ruta.equals(ruta) || ruta.startsWith(s.ruta + "/"))
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

@@ -1,7 +1,10 @@
 package com.ecosolicitud.solicitud.interno;
 
-import com.ecosolicitud.shared.Rutas;
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
+
 import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.solicitud.Filtro;
 import com.ecosolicitud.solicitud.SolicitudService;
 
@@ -31,7 +34,19 @@ class MisSolicitudesController {
         modelo.addAttribute("filtros", Filtro.values());
         modelo.addAttribute("solicitudes",
                 servicio.misSolicitudes(actor.actual().ciudadanoId(), activo));
+        modelo.addAttribute("usuario", actor.actual().nombreCiudadano());
+        modelo.addAttribute("semana", servicio.semana(actor.actual()));
+        modelo.addAttribute("archivadas", servicio.archivadas(actor.actual()).size());
         return "secciones/mis-solicitudes";
+    }
+
+    @GetMapping(Rutas.MIS_INFORME)
+    String informe(@RequestParam(required = false) String mes, Model modelo) {
+        modelo.addAttribute("titular", actor.actual().nombreCiudadano());
+        modelo.addAttribute("volver", Rutas.MIS_SOLICITUDES);
+        modelo.addAttribute("rutaInforme", Rutas.MIS_INFORME);
+        modelo.addAttribute("informe", servicio.informe(actor.actual(), parseMes(mes)));
+        return "secciones/informe";
     }
 
     @PostMapping(Rutas.MIS_SOLICITUDES + "/{id}/cancelar")
@@ -39,5 +54,13 @@ class MisSolicitudesController {
             RedirectAttributes redir) {
         return Respuestas.intentar(() -> servicio.cancelar(actor.actual(), id, version),
                 "mis.cancelada", id, Rutas.MIS_SOLICITUDES, redir);
+    }
+
+    private static YearMonth parseMes(String mes) {
+        try {
+            return mes == null ? YearMonth.now() : YearMonth.parse(mes);
+        } catch (DateTimeParseException e) {
+            return YearMonth.now();
+        }
     }
 }

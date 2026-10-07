@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 public final class Fechas {
 
-    private static final ZoneId ZONA = ZoneId.of("America/Montevideo");
+    public static final ZoneId ZONA = ZoneId.of("America/Montevideo");
     private static final DateTimeFormatter CORTA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private Fechas() {

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{informe.titulo}">Informe mensual</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="#{informe.titulo}">Informe mensual</h1>
+    <p class="detalle"><span th:text="${titular}">Nombre</span> ·
+        <span th:text="${informe.mes}">2026-10</span></p>
+    <p class="solo-pantalla">
+        <a class="enlace" th:href="${rutaInforme} + '?mes=' + ${informe.mes.minusMonths(1)}"
+           th:text="#{informe.anterior}">← Mes anterior</a>
+        <a class="enlace" th:href="${rutaInforme} + '?mes=' + ${informe.mes.plusMonths(1)}"
+           th:text="#{informe.siguiente}">Mes siguiente →</a>
+        <a class="enlace" th:href="${volver}" th:text="#{panel.volver}">Volver</a>
+    </p>
+    <p class="solo-pantalla"><button class="accion" type="button" onclick="window.print()"
+           th:text="#{informe.imprimir}">Imprimir</button></p>
+    <p class="detalle" th:if="${informe.metricas.recibidas() == 0}" th:text="#{informe.vacio}">Vacío</p>
+    <div class="rejilla">
+        <article class="tarjeta">
+            <h2 class="indicador" th:text="${informe.metricas.recibidas()}">4</h2>
+            <p><strong th:text="#{informe.recibidas}">Recibidas</strong></p>
+        </article>
+        <article class="tarjeta">
+            <h2 class="indicador" th:text="${informe.metricas.aceptadas()}">3</h2>
+            <p><strong th:text="#{informe.aceptadas}">Aceptadas</strong></p>
+        </article>
+        <article class="tarjeta">
+            <h2 class="indicador" th:text="${informe.metricas.completadas()}">2</h2>
+            <p><strong th:text="#{informe.completadas}">Completadas</strong></p>
+        </article>
+        <article class="tarjeta">
+            <h2 class="indicador" th:text="${informe.metricas.mediana()}">6 h</h2>
+            <p><strong th:text="#{informe.mediana}">Respuesta</strong></p>
+        </article>
+    </div>
+    <section>
+        <h2 th:text="#{informe.por-estado}">Por estado</h2>
+        <ul>
+            <li th:each="e : ${informe.porEstado}"
+                th:text="#{${e.key.clave}} + ' — ' + ${e.value}">Estado — 2</li>
+        </ul>
+        <h2 th:text="#{informe.por-material}">Por material</h2>
+        <ul>
+            <li th:each="m : ${informe.porMaterial}"
+                th:text="${m.key} + ' — ' + ${m.value}">Papel — 2</li>
+        </ul>
+    </section>
+    <section>
+        <h2 th:text="#{informe.detalle}">Detalle</h2>
+        <ul class="detalle">
+            <li th:each="s : ${informe.solicitudes}"
+                th:text="'#' + ${s.id} + ' · ' + ${s.creada()} + ' · ' + ${s.nombreCiudadano} + ' · ' + ${s.direccion} + ' · ' + #{${s.estado.clave}}">Fila</li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>

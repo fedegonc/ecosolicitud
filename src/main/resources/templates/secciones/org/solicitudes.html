@@ -8,7 +8,13 @@
     <h1 th:text="#{org.solicitudes.titulo}">Solicitudes recibidas</h1>
     <p class="aviso" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
     <p class="alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
-    <section th:each="g : ${bandeja.grupos}">
+    <header class="panel-cabecera">
+        <p class="bienvenida" th:text="#{org.bienvenida(${organizacion.nombre})}">Hola</p>
+        <p th:text="#{org.bienvenida.detalle}">Panel</p>
+        <p class="detalle" th:text="#{org.semana(${semana.recibidas}, ${semana.aceptadas}, ${semana.completadas}, ${semana.mediana()})}">Semana</p>
+    </header>
+    <div class="kanban">
+    <section class="kanban-col compacta" th:each="g : ${bandeja.grupos}">
         <h2 th:text="#{${g.clave}}">Grupo</h2>
         <p class="detalle" th:if="${g.solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
         <div class="rejilla">
@@ -34,6 +40,13 @@
         </article>
         </div>
     </section>
+    </div>
+    <footer class="panel-pie">
+        <a class="enlace" th:href="@{/org/solicitudes/archivadas}"
+           th:text="#{org.archivadas(${archivadas})}">Archivo</a>
+        <a class="enlace" th:href="@{/org/solicitudes/informe}"
+           th:text="#{panel.informe}">Informe mensual</a>
+    </footer>
 </main>
 </body>
 </html>

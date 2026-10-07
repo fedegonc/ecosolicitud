@@ -9,6 +9,11 @@
     <p class="aviso" role="status" th:if="${enviada}" th:text="#{mis.enviada(${enviada},${enviadaA})}">Aviso</p>
     <p class="aviso" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
     <p class="alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
+    <header class="panel-cabecera">
+        <p class="bienvenida" th:text="#{mis.bienvenida(${usuario})}">Hola</p>
+        <p th:text="#{mis.bienvenida.detalle}">Panel</p>
+        <p class="detalle" th:text="#{mis.semana(${semana.recibidas}, ${semana.aceptadas}, ${semana.completadas}, ${semana.mediana()})}">Semana</p>
+    </header>
     <nav class="filtros">
         <a th:each="f : ${filtros}" th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(f.name())})}"
            th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
@@ -18,7 +23,7 @@
         <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
         <a th:href="@{/nueva}" th:text="#{mis.nueva}">Nueva solicitud</a>
     </p>
-    <div class="rejilla">
+    <div class="rejilla compacta">
     <article th:each="s : ${solicitudes}" class="tarjeta">
         <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre})}"></th:block>
         <div class="acciones" th:if="${s.estado.permiteCancelar()}">
@@ -29,6 +34,12 @@
         </div>
     </article>
     </div>
+    <footer class="panel-pie">
+        <a class="enlace" th:href="@{/mis-solicitudes(filtro='cerradas')}"
+           th:text="#{mis.archivadas(${archivadas})}">Cerradas</a>
+        <a class="enlace" th:href="@{/mis-solicitudes/informe}"
+           th:text="#{panel.informe}">Informe mensual</a>
+    </footer>
 </main>
 </body>
 </html>
