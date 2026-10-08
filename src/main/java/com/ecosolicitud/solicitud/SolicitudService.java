@@ -64,6 +64,10 @@ public class SolicitudService {
                 .filter(s -> s.getEstado().esFinal()).toList());
     }
 
+
+
+
+
     public SolicitudMetricas semana(Actor actor) {
         return SolicitudMetricas.desdeSemana(delActor(actor));
     }
@@ -181,8 +185,7 @@ public class SolicitudService {
 
     private boolean esDestinataria(Actor actor, Solicitud s) {
         return actor.esOrganizacion()
-                && s.getOrganizacionId().equals(actor.organizacionId());
-    }
+                                && s.getOrganizacionId().equals(organizaciones.actual(actor).id());
 
     private boolean esAutor(Actor actor, Solicitud s) {
         return actor.esCiudadano()
