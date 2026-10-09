@@ -7,7 +7,8 @@ public record Ubicacion(double latitud, double longitud) {
     private static final double MARGEN = 0.004;
 
     public Ubicacion {
-        if (latitud < -90 || latitud > 90 || longitud < -180 || longitud > 180) {
+        // negado: NaN falla toda comparación y con la forma directa pasaría
+        if (!(latitud >= -90 && latitud <= 90 && longitud >= -180 && longitud <= 180)) {
             throw new IllegalArgumentException("Coordenadas fuera de rango");
         }
     }

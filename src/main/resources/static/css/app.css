@@ -731,6 +731,43 @@ fieldset.campo legend {
     flex-wrap: wrap;
     margin-top: var(--pad-grande);
 }
+
+/* portada: texto a la izquierda, foto a la derecha; no colapsa en móvil */
+.portada-hero {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: var(--gap-l);
+    align-items: stretch;
+    margin-bottom: var(--pad);
+}
+
+.portada-hero .foto-hero {
+    margin: 0;
+    max-width: none;
+    height: 100%;
+    min-height: 9rem;
+}
+
+.portada-hero .foto-hero img {
+    height: 100%;
+    aspect-ratio: auto;
+}
+
+.portada-texto {
+    min-width: 0;
+}
+
+.portada-texto h1 {
+    font-size: var(--t-xl);
+    line-height: 1.15;
+}
+
+@media (min-width: 45rem) {
+    .portada-hero {
+        grid-template-columns: 1.25fr 1fr;
+        gap: var(--pad-grande);
+    }
+}
 /* ============================================================
    Componente: Etiquetas de material, estado y badges
    ============================================================ */
@@ -1376,7 +1413,7 @@ fieldset.campo legend {
 }
 
 .franja {
-    height: 4rem;
+    height: 4.5rem;
     margin-bottom: var(--gap-l);
     border-radius: var(--radio);
 }

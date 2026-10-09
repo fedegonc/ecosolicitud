@@ -181,7 +181,7 @@ class SolicitudE4Test {
                     .sendKeys("099 111 000");
             driver.findElement(By.cssSelector("input[name='direccion']"))
                     .sendKeys("Uruguay 1000");
-            driver.findElement(By.cssSelector("form[method='post'] .accion")).click();
+            driver.findElement(By.cssSelector("main form[method='post'] button[type='submit']")).click();
             assertThat(driver.getCurrentUrl()).endsWith(Rutas.MIS_SOLICITUDES);
             assertThat(driver.findElement(By.cssSelector(".aviso")).getText())
                     .contains("enviada a Cooperativa Frontera Limpia");
@@ -198,7 +198,7 @@ class SolicitudE4Test {
             driver.findElement(By.cssSelector("input[name='materiales'][value='PLASTICO']"))
                     .click();
             driver.findElement(By.cssSelector("input[name='contacto']")).sendKeys("099 111 000");
-            driver.findElement(By.cssSelector("form[method='post'] .accion")).click();
+            driver.findElement(By.cssSelector("main form[method='post'] button[type='submit']")).click();
             assertThat(driver.findElements(By.cssSelector(".error"))).isNotEmpty();
             assertThat(servicio.todas()).hasSize(antes);
         });
