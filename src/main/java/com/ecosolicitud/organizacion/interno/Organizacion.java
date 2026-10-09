@@ -3,6 +3,7 @@ package com.ecosolicitud.organizacion.interno;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
 
@@ -62,6 +63,10 @@ public class Organizacion {
     @Column(nullable = false, length = 30)
     private String telefono;
 
+    // ambas null o ambas presentes: un centro puede no tener ubicación cargada
+    private Double latitud;
+    private Double longitud;
+
     @Version
     private long version;
 
@@ -69,18 +74,29 @@ public class Organizacion {
     }
 
     public Organizacion(String id, String nombre, Ciudad ciudad,
-            List<Material> materiales, String horario, String telefono) {
+            List<Material> materiales, String horario, String telefono, Ubicacion ubicacion) {
         this.id = id;
         this.nombre = nombre;
         this.ciudad = ciudad;
         this.materiales = new ArrayList<>(materiales);
         this.horario = horario;
         this.telefono = telefono;
+        if (ubicacion != null) {
+            this.latitud = ubicacion.latitud();
+            this.longitud = ubicacion.longitud();
+        }
     }
 
-    public void actualizar(List<Material> materiales, String horario, String telefono) {
+    public Ubicacion ubicacion() {
+        return latitud == null || longitud == null ? null : new Ubicacion(latitud, longitud);
+    }
+
+    public void actualizar(List<Material> materiales, String horario, String telefono,
+            Ubicacion ubicacion) {
         this.materiales = new ArrayList<>(materiales);
         this.horario = horario;
         this.telefono = telefono;
+        this.latitud = ubicacion == null ? null : ubicacion.latitud();
+        this.longitud = ubicacion == null ? null : ubicacion.longitud();
     }
 }

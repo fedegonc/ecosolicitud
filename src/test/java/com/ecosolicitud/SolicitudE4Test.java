@@ -314,7 +314,7 @@ class SolicitudE4Test {
             var org = organizaciones.buscar("frontera-limpia").orElseThrow();
             organizaciones.actualizarPerfil("frontera-limpia",
                     List.of(mat("CARTON"), mat("PAPEL")), org.horario(), org.telefono(),
-                    org.version());
+                    org.ubicacion(), org.version());
             var propias = servicio.misSolicitudes("ciudadano-demo", Filtro.TODAS);
             assertThat(propias).anySatisfy(s ->
                     assertThat(s.materiales()).containsExactly(mat("PLASTICO")));

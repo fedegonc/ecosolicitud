@@ -140,7 +140,8 @@ class OrganizacionE3Test {
                     .getAttribute("value");
             servicio.actualizarPerfil("frontera-limpia",
                     servicio.buscar("frontera-limpia").orElseThrow().materiales(),
-                    "Horario concurrente", "+598 92 000 111", Long.parseLong(version));
+                    "Horario concurrente", "+598 92 000 111", null,
+                    Long.parseLong(version));
             var telefono = driver.findElement(By.cssSelector("input[name='telefono']"));
             telefono.clear();
             telefono.sendKeys("+598 77 777 777");
@@ -167,7 +168,7 @@ class OrganizacionE3Test {
 
         Allure.step("Reiniciar restaura el dataset y vuelve a la misma página", () -> {
             servicio.actualizarPerfil("acopio-verde", List.of(mat("VIDRIO")),
-                    "Alterado", "+598 92 999 888",
+                    "Alterado", "+598 92 999 888", null,
                     servicio.buscar("acopio-verde").orElseThrow().version());
             driver.get(base + Rutas.ORG_SOLICITUDES);
             driver.findElement(By.cssSelector(".sidebar .reiniciar button")).click();

@@ -6,15 +6,17 @@ import java.util.Map;
 
 import com.ecosolicitud.shared.Fechas;
 import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.solicitud.interno.Solicitud;
 
 public record SolicitudInfo(long id, String direccion, String referencia,
-        List<Material> materiales, String organizacionNombre, String nombreCiudadano,
-        String contacto, String nota, Estado estado, Instant creadaEn, Instant finalizadaEn, long version) {
+        Ubicacion ubicacion, List<Material> materiales, String organizacionNombre,
+        String nombreCiudadano, String contacto, String nota, Estado estado,
+        Instant creadaEn, Instant finalizadaEn, long version) {
 
     static SolicitudInfo desde(Solicitud s, Map<String, String> nombres) {
         return new SolicitudInfo(s.getId(), s.getDireccion(),
-                s.getReferencia(), List.copyOf(s.getMateriales()),
+                s.getReferencia(), s.ubicacion(), List.copyOf(s.getMateriales()),
                 nombres.getOrDefault(s.getOrganizacionId(), s.getOrganizacionId()),
                 s.getCiudadano().getNombre(), s.getContacto(), s.getNota(),
                 s.getEstado(), s.getCreadaEn(), s.getFinalizadaEn(), s.getVersion());

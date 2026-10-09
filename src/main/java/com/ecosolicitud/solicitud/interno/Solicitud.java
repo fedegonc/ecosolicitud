@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.solicitud.Estado;
 import com.ecosolicitud.solicitud.SolicitudSemilla;
 import com.ecosolicitud.solicitud.TransicionInvalidaException;
@@ -52,6 +53,9 @@ public class Solicitud {
     @Size(max = 120)
     @Column(length = 120)
     private String referencia;
+    // ambas null o ambas presentes: marcar el mapa es opcional
+    private Double latitud;
+    private Double longitud;
     @NotEmpty
     @BatchSize(size = 50)
     @ManyToMany(fetch = FetchType.EAGER)
@@ -79,12 +83,14 @@ public class Solicitud {
     protected Solicitud() {
     }
 
-    public static Solicitud nueva(String direccion, String referencia, List<Material> materiales,
-            String organizacionId, String nota, String contacto, Ciudadano ciudadano) {
+    public static Solicitud nueva(String direccion, String referencia, Ubicacion ubicacion,
+            List<Material> materiales, String organizacionId, String nota, String contacto,
+            Ciudadano ciudadano) {
         var sol = new Solicitud();
         sol.ciudadano = ciudadano;
         sol.direccion = direccion;
         sol.referencia = referencia;
+        sol.ponerUbicacion(ubicacion);
         sol.materiales = new ArrayList<>(materiales);
         sol.organizacionId = organizacionId;
         sol.contacto = contacto;
@@ -113,6 +119,7 @@ public class Solicitud {
         sol.ciudadano = ciudadano;
         sol.direccion = s.direccion();
         sol.referencia = s.referencia();
+        sol.ponerUbicacion(s.ubicacion());
         sol.materiales = new ArrayList<>(s.materiales());
         sol.organizacionId = s.organizacionId();
         sol.contacto = s.contacto();
@@ -146,6 +153,18 @@ public class Solicitud {
     public void cancelar(Instant ahora) {
         exigir(estado.permiteCancelar(), "cancelar");
         cerrar(Estado.CANCELADA, ahora);
+    }
+
+    public Ubicacion ubicacion() {
+        return latitud == null || longitud == null ? null
+                : new Ubicacion(latitud, longitud);
+    }
+
+    private void ponerUbicacion(Ubicacion u) {
+        if (u != null) {
+            latitud = u.latitud();
+            longitud = u.longitud();
+        }
     }
 
     private void exigir(boolean permitido, String accion) {

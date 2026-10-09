@@ -1,0 +1,19 @@
+# Respaldo del formulario de Google. Si cambia el formulario, editar este archivo.
+# Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
+# 'opcion: pregunta | opción 1 | opción 2'.
+titulo: Questionário de Usabilidade - Ponto de Coleta
+escala: O sistema funcionou de forma estável, sem erros ou interrupções frequentes?
+escala: Os tempos de resposta foram adequados para suas atividades?
+escala: As informações apresentadas foram claras e fáceis de entender?
+escala: O design geral lhe pareceu agradável e bem organizado?
+escala: Você está satisfeito com sua experiência geral ao usar o sistema?
+escala: O processo de registro como organização foi claro e completo?
+escala: Você conseguiu fazer login e acessar as funções do seu papel sem problemas?
+escala: Você conseguiu visualizar todas as solicitações de coleta disponíveis?
+escala: Os filtros de busca ajudaram você a encontrar solicitações relevantes?
+escala: Você conseguiu ver todos os detalhes de cada solicitação (materiais, endereço, usuário)?
+escala: Foi fácil alterar o status de uma solicitação (aceitar, concluir, rejeitar)?
+escala: As informações de contato dos usuários estavam acessíveis quando você precisou?
+escala: Você conseguiu gerenciar várias solicitações de forma eficiente?
+escala: Você conseguiu atualizar as informações da sua organização corretamente?
+texto: O que você melhoraria no sistema?

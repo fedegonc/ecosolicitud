@@ -9,7 +9,43 @@
     <aside class="tarjeta cuestionario" th:with="perfil=${#strings.toLowerCase(rolActual.name())}">
         <h2 th:text="#{opinion.cuestionario.titulo}">Cuestionario</h2>
         <p th:text="#{opinion.cuestionario.texto}">Texto</p>
-        <a class="accion" th:href="#{${'opinion.cuestionario.url.' + perfil}}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{opinion.cuestionario.boton}">Responder</span></a>
+        <a class="accion cuestionario-boton" th:href="#{${'opinion.cuestionario.url.' + perfil}}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{opinion.cuestionario.boton}">Responder</span></a>
+        <iframe class="cuestionario-embebido" th:src="#{${'opinion.cuestionario.embed.' + perfil}}"
+                th:title="#{opinion.cuestionario.titulo}" loading="lazy"></iframe>
+        <a class="enlace cuestionario-externo" th:href="#{${'opinion.cuestionario.url.' + perfil}}" target="_blank" rel="noopener"
+           th:text="#{opinion.cuestionario.externo}">Abrir en una pestaña nueva</a>
+        <details class="respaldo" id="respaldo" th:open="${param.respaldo != null}"
+                 th:with="enviado=${param.respaldo != null and param.respaldo[0] == 'gracias'}">
+            <summary th:text="#{opinion.respaldo.boton}">¿No podés acceder a la evaluación?</summary>
+            <p class="aviso" role="status" th:if="${enviado}" th:text="#{opinion.respaldo.gracias}">Gracias</p>
+            <th:block th:unless="${enviado}">
+            <p class="ayuda" th:text="#{opinion.respaldo.ayuda}">Respondelo acá</p>
+            <p class="alerta" role="alert" th:if="${param.respaldo != null}" th:text="#{opinion.respaldo.incompleto}">Incompleto</p>
+            <form th:action="@{/opinion/respaldo}" method="post" hx-indicator="this">
+                <h3 th:text="${respaldo.titulo}">Cuestionario</h3>
+                <th:block th:each="p, it : ${respaldo.preguntas}">
+                    <fieldset class="campo" th:if="${p.tipo.name() != 'TEXTO'}">
+                        <legend th:text="${it.count} + '. ' + ${p.texto}">Pregunta</legend>
+                        <div class="escala" th:if="${p.tipo.name() == 'ESCALA'}">
+                            <label th:each="n : ${#numbers.sequence(1, 5)}">
+                                <input type="radio" th:name="'p' + ${it.index}" th:value="${n}"><span th:text="${n}">1</span>
+                            </label>
+                        </div>
+                        <div class="escala" th:if="${p.tipo.name() == 'OPCION'}">
+                            <label th:each="o : ${p.opciones}">
+                                <input type="radio" th:name="'p' + ${it.index}" th:value="${o}"><span th:text="${o}">Opción</span>
+                            </label>
+                        </div>
+                    </fieldset>
+                    <label class="campo" th:if="${p.tipo.name() == 'TEXTO'}">
+                        <span th:text="${it.count} + '. ' + ${p.texto}">Pregunta</span>
+                        <textarea th:name="'p' + ${it.index}" rows="3" maxlength="1000"></textarea>
+                    </label>
+                </th:block>
+                <button type="submit" class="accion" th:text="#{opinion.respaldo.enviar}">Enviar</button>
+            </form>
+            </th:block>
+        </details>
     </aside>
     <p class="aviso" th:if="${param.gracias != null}" th:text="#{opinion.gracias}">Gracias</p>
     <form th:if="${param.gracias == null}" th:action="@{/opinion}" method="post" hx-indicator="this">

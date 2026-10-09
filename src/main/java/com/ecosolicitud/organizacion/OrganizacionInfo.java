@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.Ubicacion;
 
 public record OrganizacionInfo(String id, String nombre, Ciudad ciudad,
-        List<Material> materiales, String horario, String telefono, long version) {
+        List<Material> materiales, String horario, String telefono,
+        Ubicacion ubicacion, long version) {
 
     // ¿El centro acepta todos los pedidos? Solo cuentan los activos: una
     // solicitud nueva no puede pedir un material dado de baja aunque el centro

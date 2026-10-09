@@ -7,9 +7,9 @@ import java.util.Map;
 
 import com.ecosolicitud.comunidad.PublicacionSemilla;
 import com.ecosolicitud.comunidad.TipoPublicacion;
-import com.ecosolicitud.guia.ArticuloSemilla;
 import com.ecosolicitud.opinion.OpinionSemilla;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
+import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.comunidad.RecicladorInfo;
 import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.shared.Ciudad;
@@ -34,15 +34,18 @@ final class DemoDatos {
                         Ciudad.RIVERA,
                         List.of(m(cat, "PLASTICO"), m(cat, "CARTON"),
                                 m(cat, "PAPEL"), m(cat, "METAL")),
-                        "Lun a Vie 8 a 17 h", "+598 92 000 111", 0),
+                        "Lun a Vie 8 a 17 h", "+598 92 000 111",
+                        new Ubicacion(-30.91253, -55.54708), 0),
                 new OrganizacionInfo("acopio-verde", "Acopio Verde Rivera",
                         Ciudad.RIVERA,
                         List.of(m(cat, "VIDRIO"), m(cat, "PLASTICO"),
                                 m(cat, "CARTON")),
-                        "Lun a Sáb 9 a 13 h", "+598 92 000 222", 0),
+                        "Lun a Sáb 9 a 13 h", "+598 92 000 222",
+                        new Ubicacion(-30.90006, -55.54082), 0),
                 new OrganizacionInfo("coleta-solidaria", "Coleta Solidária Livramento",
                         Ciudad.LIVRAMENTO, cat.todos(),
-                        "Seg a Sex 8 às 18 h", "+55 55 9000 0000", 0));
+                        "Seg a Sex 8 às 18 h", "+55 55 9000 0000",
+                        new Ubicacion(-30.88300, -55.52369), 0));
     }
 
     private static Material m(CatalogoMateriales cat, String codigo) {
@@ -63,27 +66,35 @@ final class DemoDatos {
         return List.of(
                 new SolicitudSemilla("ciudadano-demo", "Martina López", "099 123 456",
                         "Agraciada 1234", "Portón verde",
+                        new Ubicacion(-30.90880, -55.54990),
                         List.of(m(cat, "CARTON"), m(cat, "PAPEL")),
                         "frontera-limpia", null, Estado.COMPLETADA,
                         ahora.minus(5, ChronoUnit.DAYS),
                         ahora.minus(5, ChronoUnit.DAYS).plus(4, ChronoUnit.HOURS),
                         ahora.minus(4, ChronoUnit.DAYS)),
                 new SolicitudSemilla("ciudadano-demo", "Martina López", "099 123 456",
-                        "Agraciada 1234", null, List.of(m(cat, "PLASTICO")),
+                        "Agraciada 1234", null,
+                        new Ubicacion(-30.90880, -55.54990),
+                        List.of(m(cat, "PLASTICO")),
                         "frontera-limpia", null, Estado.EN_CURSO,
                         ahora.minus(3, ChronoUnit.DAYS),
                         ahora.minus(3, ChronoUnit.DAYS).plus(6, ChronoUnit.HOURS), null),
                 new SolicitudSemilla("vecina-ana", "Ana Rodríguez", "098 555 111",
                         "Sarandí 56", "Fondo",
+                        new Ubicacion(-30.90420, -55.54900),
                         List.of(m(cat, "PLASTICO"), m(cat, "METAL")),
                         "frontera-limpia", null, Estado.PENDIENTE,
                         ahora.minus(2, ChronoUnit.DAYS), null, null),
                 new SolicitudSemilla("vecino-bruno", "Bruno Pérez", "099 444 333",
-                        "Artigas 890", null, List.of(m(cat, "CARTON")),
+                        "Artigas 890", null,
+                        new Ubicacion(-30.90960, -55.55650),
+                        List.of(m(cat, "CARTON")),
                         "frontera-limpia", "Dejar en la vereda", Estado.PENDIENTE,
                         ahora.minus(1, ChronoUnit.DAYS), null, null),
                 new SolicitudSemilla("vecina-carla", "Carla Santos", "097 222 000",
-                        "Ituzaingó 45", null, List.of(m(cat, "VIDRIO")),
+                        "Ituzaingó 45", null,
+                        new Ubicacion(-30.90620, -55.54480),
+                        List.of(m(cat, "VIDRIO")),
                         "acopio-verde", null, Estado.RECHAZADA,
                         ahora.minus(6, ChronoUnit.DAYS),
                         ahora.minus(6, ChronoUnit.DAYS).plus(9, ChronoUnit.HOURS),
@@ -145,38 +156,6 @@ final class DemoDatos {
                         revolver, ahora la gente ya lo deja separado".""",
                         "Doce años juntando cartón en el barrio, y una sola frase.",
                         TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
-    }
-
-    static List<ArticuloSemilla> guia(CatalogoMateriales cat) {
-        return List.of(
-                new ArticuloSemilla("Cómo separar en casa", """
-                        Separá por material en bolsas o cajas distintas: cuanto menos se mezcle,
-                        menos trabajo tiene el acopio y más se recupera.
-
-                        Enjuagá los envases. No hace falta que queden brillantes: alcanza con
-                        que no tengan restos de comida, porque eso contamina el resto.
-
-                        Plegá el cartón y las botellas para ocupar menos lugar.""", null, null, 1),
-                new ArticuloSemilla("Vidrio", """
-                        El vidrio se recicla infinitas veces sin perder calidad.
-
-                        Se aceptan botellas y frascos. NO se aceptan espejos, vidrio de ventana,
-                        cerámicas, focos ni vajilla: tienen composiciones distintas y arruinan el lote.
-
-                        Sacá las tapas y no lo rompas: el vidrio partido lastima a quien lo manipula.""",
-                        null, m(cat, "VIDRIO"), 2),
-                new ArticuloSemilla("Cartón y papel", """
-                        Tiene que estar seco. El cartón mojado o engrasado (una caja de pizza,
-                        por ejemplo) no se puede reciclar: va a la basura común.
-
-                        No hace falta sacar la cinta adhesiva ni los ganchos de metal.""",
-                        null, m(cat, "CARTON"), 3),
-                new ArticuloSemilla("Electrónicos", """
-                        Nunca van a la basura común: tienen metales pesados que contaminan el agua.
-
-                        Se reciben cables, cargadores, celulares y electrodomésticos chicos.
-                        Si todavía funciona, primero intentá repararlo o donarlo.""",
-                        null, m(cat, "ELECTRONICOS"), 4));
     }
 
     static List<OpinionSemilla> opiniones() {

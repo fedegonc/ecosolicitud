@@ -29,6 +29,11 @@
                         <span th:text="${m.nombre}">Material</span>
                     </li>
                 </ul>
+                <th:block th:if="${o.ubicacion != null}">
+                    <iframe class="mapa-centro" th:src="${o.ubicacion.mapaEmbebido()}"
+                            th:title="#{acopios.mapa(${o.nombre})}" loading="lazy"></iframe>
+                    <a class="enlace detalle" th:href="${o.ubicacion.enlaceMapa()}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{acopios.mapa.ver}">Ver en el mapa</span></a>
+                </th:block>
                 <p><a class="accion secundaria"
                       th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
                       ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{acopios.pedir}">Pedir retiro</span></a></p>

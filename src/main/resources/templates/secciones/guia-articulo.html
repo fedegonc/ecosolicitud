@@ -6,13 +6,18 @@
 <body>
 <main layout:fragment="content">
     <p class="detalle"><a class="enlace" th:href="@{/guia}" th:text="#{guia.volver}">Volver</a></p>
-    <h1 th:text="${articulo.titulo}">Título</h1>
+    <figure class="foto-hero" th:if="${articulo.imagen != null}">
+        <img th:src="@{/img/guia/{s}-1600.webp(s=${articulo.imagen})}"
+             th:attr="srcset=@{/img/guia/{s}-800.webp(s=${articulo.imagen})} + ' 800w, ' + @{/img/guia/{s}-1600.webp(s=${articulo.imagen})} + ' 1600w'"
+             sizes="(min-width: 45rem) 42rem, 100vw" width="1600" height="1200"
+             th:alt="#{${'foto.guia.' + articulo.imagen}}">
+        <h1 th:text="${articulo.titulo}">Título</h1>
+    </figure>
+    <h1 th:if="${articulo.imagen == null}" th:text="${articulo.titulo}">Título</h1>
     <p class="detalle" th:if="${articulo.material != null}">
         <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(articulo.material.codigo)}"
               th:text="${articulo.material.nombre}">Material</span>
     </p>
-    <img class="articulo-img" th:if="${articulo.imagen != null}"
-         th:src="@{${articulo.imagen}}" alt="">
     <div class="prosa" th:utext="${articulo.cuerpoHtml}">Cuerpo</div>
     <section th:if="${!centros.isEmpty()}">
         <h2 th:text="#{guia.donde}">Dónde llevarlo</h2>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.Ubicacion;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -35,6 +36,21 @@ public class NuevaForm {
     private String direccion;
     @Size(max = 120, message = "{nueva.error.referencia}")
     private String referencia;
+    private Double latitud;
+    private Double longitud;
     @Size(max = 300, message = "{nueva.error.nota}")
     private String nota;
+
+    // Thymeleaf la usa como ${form.ubicacion}: solo arma el valor si el par
+    // vino completo y en rango — un input tocado a mano no rompe el render.
+    public Ubicacion getUbicacion() {
+        if (latitud == null || longitud == null) {
+            return null;
+        }
+        try {
+            return new Ubicacion(latitud, longitud);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

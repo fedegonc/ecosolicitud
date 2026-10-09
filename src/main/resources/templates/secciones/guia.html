@@ -11,7 +11,10 @@
     <div class="rejilla">
         <article th:each="a : ${articulos}" class="tarjeta">
             <img class="tarjeta-img" th:if="${a.imagen != null}"
-                 th:src="@{${a.imagen}}" alt="">
+                 th:src="@{/img/guia/{s}-800.webp(s=${a.imagen})}"
+                 th:attr="srcset=@{/img/guia/{s}-800.webp(s=${a.imagen})} + ' 800w, ' + @{/img/guia/{s}-1600.webp(s=${a.imagen})} + ' 1600w'"
+                 sizes="(min-width: 45rem) 18rem, 100vw" width="800" height="600"
+                 loading="lazy" alt="">
             <h3><a class="enlace" th:href="@{/guia/{id}(id=${a.id})}"
                    th:text="${a.titulo}">Título</a></h3>
             <p class="detalle" th:if="${a.material != null}">

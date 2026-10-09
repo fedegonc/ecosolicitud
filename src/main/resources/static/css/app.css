@@ -164,10 +164,47 @@ body {
     text-decoration-thickness: var(--linea-media);
 }
 
+/* prosa editorial: markdown renderizado por el servidor (guía, comunidad) */
 .prosa {
     max-width: var(--medida);
     margin: 0 0 var(--pad-grande);
-    white-space: pre-line;
+}
+
+.prosa p {
+    margin: 0 0 var(--pad);
+}
+
+.prosa h2 {
+    font-size: var(--t-lg);
+    margin: var(--pad-grande) 0 var(--gap-m);
+}
+
+.prosa h3 {
+    font-size: var(--t-base);
+    margin: var(--pad) 0 var(--gap-xs);
+}
+
+.prosa ul,
+.prosa ol {
+    margin: 0 0 var(--pad);
+    padding-left: var(--pad-grande);
+}
+
+.prosa li {
+    margin-bottom: var(--gap-xs);
+}
+
+.prosa a {
+    color: var(--enlace);
+    text-decoration: underline;
+    text-underline-offset: var(--linea-media);
+}
+
+.prosa blockquote {
+    margin: 0 0 var(--pad);
+    padding: var(--gap-2xs) 0 var(--gap-2xs) var(--pad);
+    border-left: var(--linea-gruesa) solid var(--borde-fuerte);
+    color: var(--texto-suave);
 }
 
 a.accion {
@@ -880,6 +917,17 @@ fieldset.campo legend {
     padding: 0;
 }
 
+/* miniatura que sangra hasta los bordes de la tarjeta */
+.tarjeta-img {
+    display: block;
+    width: calc(100% + 2 * var(--gap-l));
+    max-width: none;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    margin: calc(-1 * var(--gap-l)) calc(-1 * var(--gap-l)) 0;
+    border-radius: calc(var(--radio) - var(--linea-media)) calc(var(--radio) - var(--linea-media)) 0 0;
+}
+
 /* rejilla → kanban en desktop */
 
 .rejilla {
@@ -1300,7 +1348,7 @@ fieldset.campo legend {
 }
 
 .foto-ciudad img {
-    height: 9rem;
+    height: 6rem;
 }
 
 .foto-hero h1,
@@ -1333,6 +1381,15 @@ fieldset.campo legend {
     filter: grayscale(0.5);
 }
 
+.mapa-centro {
+    display: block;
+    width: 100%;
+    height: 10rem;
+    border: var(--linea-fina) solid var(--borde);
+    border-radius: var(--radio);
+    background: var(--superficie);
+}
+
 .cuestionario {
     max-width: var(--medida);
     border-left: var(--linea-gruesa) solid var(--acento);
@@ -1347,6 +1404,54 @@ fieldset.campo legend {
     margin: 0 0 var(--gap-l);
 }
 
+.cuestionario-embebido,
+.cuestionario-externo {
+    display: none;
+}
+
+.respaldo {
+    margin-top: var(--gap-l);
+    padding-top: var(--gap-l);
+    border-top: var(--linea-fina) solid var(--borde);
+}
+
+.respaldo summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--enlace);
+}
+
+.respaldo form {
+    margin-top: var(--pad);
+}
+
+.respaldo h3 {
+    margin: 0 0 var(--pad);
+    font-size: var(--t-base);
+}
+
+@media (min-width: 45rem) {
+    .cuestionario .cuestionario-boton {
+        display: none;
+    }
+
+    .cuestionario-embebido {
+        display: block;
+        width: 100%;
+        height: 70vh;
+        min-height: 32rem;
+        border: var(--linea-fina) solid var(--borde);
+        border-radius: var(--radio);
+        background: var(--superficie);
+    }
+
+    .cuestionario-externo {
+        display: inline-block;
+        margin-top: var(--gap-m);
+        font-size: var(--t-sm);
+    }
+}
+
 .credito-fotos {
     font-size: var(--t-xs);
     color: var(--nav-texto);
@@ -1355,7 +1460,7 @@ fieldset.campo legend {
 
 @media (min-width: 45rem) {
     .foto-ciudad img {
-        height: 12rem;
+        height: 7.5rem;
     }
 }
 
@@ -1371,6 +1476,7 @@ fieldset.campo legend {
     .org-switch,
     .reiniciar,
     .franja,
+    .mapa-centro,
     .solo-pantalla {
         display: none !important;
     }

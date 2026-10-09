@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.Ubicacion;
 
 // Contrato de entrada del service: valida todo, igual que NuevaForm en la web.
 // Si falla acá es un bug del caller, no un error de usuario.
@@ -11,6 +12,7 @@ public record SolicitudCreacion(
     Ciudad ciudad,
     String direccion,
     String referencia,
+    Ubicacion ubicacion,
     List<Material> materiales,
     String organizacionId,
     String nombre,

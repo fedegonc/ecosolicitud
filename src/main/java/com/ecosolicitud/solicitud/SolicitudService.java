@@ -83,8 +83,8 @@ public class SolicitudService {
             return Optional.empty();
         }
         var materiales = catalogo.seleccionActiva(datos.materiales());
-        var s = Solicitud.nueva(datos.direccion(), datos.referencia(), materiales,
-                datos.organizacionId(), datos.nota(), datos.contacto(),
+        var s = Solicitud.nueva(datos.direccion(), datos.referencia(), datos.ubicacion(),
+                materiales, datos.organizacionId(), datos.nota(), datos.contacto(),
                 ciudadano(actor.ciudadanoId(), datos.nombre()));
         repositorio.save(s);
         avisos.nueva(s);

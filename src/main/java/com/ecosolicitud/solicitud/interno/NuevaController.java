@@ -68,10 +68,17 @@ class NuevaController {
                 && !centro.get().recibeTodos(form.getMateriales())) {
             errores.rejectValue("materiales", "nueva.error.material.no-recibido");
         }
+        boolean parIncompleto = form.getLatitud() == null != (form.getLongitud() == null);
+        boolean fueraDeRango = form.getLatitud() != null && form.getLongitud() != null
+                && form.getUbicacion() == null;
+        if (parIncompleto || fueraDeRango) {
+            errores.rejectValue("latitud", "nueva.error.mapa");
+        }
         if (!errores.hasErrors()) {
             var datos = new SolicitudCreacion(form.getCiudad(), form.getDireccion(),
-                    form.getReferencia(), form.getMateriales(), form.getOrganizacionId(),
-                    form.getNombre(), form.getContacto(), form.getNota());
+                    form.getReferencia(), form.getUbicacion(), form.getMateriales(),
+                    form.getOrganizacionId(), form.getNombre(), form.getContacto(),
+                    form.getNota());
             var creada = solicitudes.crear(actor.actual(), datos);
             if (creada.isPresent()) {
                 redir.addFlashAttribute("enviada", creada.get().id());

@@ -1,6 +1,7 @@
 package com.ecosolicitud.opinion.interno;
 
 import java.util.LinkedHashMap;
+import java.util.Locale;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,18 +20,36 @@ class OpinionController {
 
     private final OpinionService servicio;
     private final ActorSesion actor;
+    private final CuestionariosRespaldo cuestionarios;
+    private final RespaldoService respaldo;
 
-    OpinionController(OpinionService servicio, ActorSesion actor) {
+    OpinionController(OpinionService servicio, ActorSesion actor,
+            CuestionariosRespaldo cuestionarios, RespaldoService respaldo) {
         this.servicio = servicio;
         this.actor = actor;
+        this.cuestionarios = cuestionarios;
+        this.respaldo = respaldo;
     }
 
     @GetMapping(Rutas.OPINION)
-    String formulario(Model modelo) {
+    String formulario(Model modelo, Locale locale) {
         var promedios = servicio.promedioPorSeccion();
         modelo.addAttribute("promedios", promedios);
         modelo.addAttribute("promedioGeneral", promedios.get(null));
+        modelo.addAttribute("respaldo", cuestionarios.para(actor.get(), locale));
         return "secciones/opinion";
+    }
+
+    @PostMapping(Rutas.OPINION + "/respaldo")
+    String responderRespaldo(@RequestParam MultiValueMap<String, String> params, Locale locale) {
+        var rol = actor.get();
+        var cuestionario = cuestionarios.para(rol, locale);
+        var respuestas = cuestionario.responder(i -> params.getFirst("p" + i));
+        if (respuestas.isEmpty()) {
+            return "redirect:" + Rutas.OPINION + "?respaldo=incompleto#respaldo";
+        }
+        respaldo.registrar(rol, CuestionariosRespaldo.idioma(locale), cuestionario, respuestas.get());
+        return "redirect:" + Rutas.OPINION + "?respaldo=gracias#respaldo";
     }
 
     @PostMapping(Rutas.OPINION)

@@ -41,9 +41,16 @@ class PerfilController {
         if (errores.hasErrors()) {
             return formulario(modelo);
         }
+        boolean ubicacionInvalida = form.getLatitud() == null != (form.getLongitud() == null)
+                || form.getLatitud() != null && form.getUbicacion() == null;
+        if (ubicacionInvalida) {
+            errores.rejectValue("latitud", "perfil.error.mapa");
+            return formulario(modelo);
+        }
         var org = servicio.actual(actor.actual());
         if (!servicio.actualizarPerfil(org.id(), form.getMateriales(),
-                form.getHorario(), form.getTelefono(), form.getVersion())) {
+                form.getHorario(), form.getTelefono(), form.getUbicacion(),
+                form.getVersion())) {
             modelo.addAttribute("conflicto", true);
             return formulario(modelo);
         }

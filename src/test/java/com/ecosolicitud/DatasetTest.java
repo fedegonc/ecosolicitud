@@ -44,7 +44,7 @@ class DatasetTest {
 
         servicio.actualizarPerfil("acopio-verde",
                 List.of(new Material("VIDRIO", "Vidrio", "frasco")),
-                "Horario alterado", "+598 92 999 888",
+                "Horario alterado", "+598 92 999 888", null,
                 servicio.buscar("acopio-verde").orElseThrow().version());
         demo.run(new DefaultApplicationArguments());
 

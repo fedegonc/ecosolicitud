@@ -13,6 +13,7 @@ import com.ecosolicitud.shared.Actor;
 import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.Ubicacion;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -86,12 +87,12 @@ public class OrganizacionService {
 
     @Transactional
     public boolean actualizarPerfil(String id, List<Material> materiales,
-            String horario, String telefono, long version) {
+            String horario, String telefono, Ubicacion ubicacion, long version) {
         var org = repositorio.findById(id).orElseThrow();
         if (org.getVersion() != version) {
             return false;
         }
-        org.actualizar(catalogo.seleccionActiva(materiales), horario, telefono);
+        org.actualizar(catalogo.seleccionActiva(materiales), horario, telefono, ubicacion);
         repositorio.save(org);
         return true;
     }
@@ -104,7 +105,7 @@ public class OrganizacionService {
 
     private void guardarNueva(OrganizacionInfo info) {
         repositorio.save(new Organizacion(info.id(), info.nombre(), info.ciudad(),
-                info.materiales(), info.horario(), info.telefono()));
+                info.materiales(), info.horario(), info.telefono(), info.ubicacion()));
     }
 
     private OrganizacionInfo primera() {
@@ -114,6 +115,7 @@ public class OrganizacionService {
 
     private static OrganizacionInfo aInfo(Organizacion o) {
         return new OrganizacionInfo(o.getId(), o.getNombre(), o.getCiudad(),
-                List.copyOf(o.getMateriales()), o.getHorario(), o.getTelefono(), o.getVersion());
+                List.copyOf(o.getMateriales()), o.getHorario(), o.getTelefono(),
+                o.ubicacion(), o.getVersion());
     }
 }

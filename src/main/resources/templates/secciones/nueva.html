@@ -2,6 +2,7 @@
 <html lang="es" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
     <title th:text="#{seccion.nueva}">Nueva solicitud</title>
+    <script th:src="@{/js/mapa.js}" defer></script>
 </head>
 <body>
 <main layout:fragment="content">
@@ -108,6 +109,20 @@
                     <span class="error" th:if="${#fields.hasErrors('referencia')}"
                           th:errors="*{referencia}">Error</span>
                 </label>
+                <div class="campo">
+                    <span th:text="#{mapa.titulo}">Ubicación en el mapa</span>
+                    <input type="hidden" th:field="*{latitud}">
+                    <input type="hidden" th:field="*{longitud}">
+                    <iframe class="mapa-centro" data-mapa-ubicacion loading="lazy"
+                            th:src="${form.ubicacion != null} ? ${form.ubicacion.mapaEmbebido()} : null"
+                            th:title="#{mapa.titulo}"
+                            th:attr="hidden=${form.ubicacion == null} ? '' : null"></iframe>
+                    <button type="button" class="accion secundaria" data-mapa-geolocalizar><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{mapa.boton}">Usar mi ubicación</span></button>
+                    <span class="ayuda" th:text="#{mapa.ayuda}">Ayuda</span>
+                    <span class="error" data-mapa-error hidden th:text="#{mapa.error}">Error</span>
+                    <span class="error" th:if="${#fields.hasErrors('latitud')}"
+                          th:errors="*{latitud}">Error</span>
+                </div>
                 <label class="campo">
                     <span th:text="#{nueva.nota}">Nota</span>
                     <textarea th:field="*{nota}" rows="3" maxlength="300"></textarea>

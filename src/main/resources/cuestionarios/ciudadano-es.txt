@@ -1,0 +1,20 @@
+# Respaldo del formulario de Google. Si cambia el formulario, editar este archivo.
+# Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
+# 'opcion: pregunta | opción 1 | opción 2'.
+titulo: Cuestionario de Usabilidad - Usuario Ciudadano/Reciclador
+opcion: ¿Cuál es tu localidad? | Rivera | Sant'Ana do Livramento
+escala: ¿El sistema respondió de forma estable, sin errores o interrupciones frecuentes?
+escala: ¿Los tiempos de respuesta fueron adecuados para sus actividades?
+escala: ¿La información presentada le resultó clara y comprensible?
+escala: ¿El diseño general le pareció agradable y bien organizado?
+escala: ¿El proceso de registro le resultó claro y pudo completarlo sin dificultades?
+escala: ¿Pudo iniciar sesión correctamente con sus credenciales?
+escala: ¿Pudo acceder a los contenidos educativos sobre reciclaje?
+escala: ¿Pudo crear una solicitud de recolección ?
+escala: ¿Le resultó fácil seleccionar los materiales que deseaba reciclar?
+escala: ¿Pudo visualizar el estado de sus solicitudes de forma clara?
+escala: ¿La información sobre sus solicitudes (fecha, estado, materiales) le pareció completa?
+escala: ¿Pudo editar su información de perfil correctamente?
+escala: ¿Entendió claramente qué acciones podría realizar dentro del sistema?
+escala: ¿Está satisfecho con su experiencia general de uso del sistema?
+texto: ¿Qué mejorarías del sistema?

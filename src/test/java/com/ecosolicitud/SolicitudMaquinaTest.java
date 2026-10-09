@@ -34,7 +34,7 @@ class SolicitudMaquinaTest {
     private static Solicitud en(Estado estado) {
         boolean respondida = estado != Estado.PENDIENTE && estado != Estado.CANCELADA;
         return Solicitud.nueva(new SolicitudSemilla("c", "N", "Tel", "Dir 1",
-                null, List.of(mat("PLASTICO")), "org", null, estado, CREADA,
+                null, null, List.of(mat("PLASTICO")), "org", null, estado, CREADA,
                 respondida ? CREADA : null,
                 estado.esFinal() ? CREADA.plus(1, ChronoUnit.HOURS) : null), ciudadano());
     }
@@ -110,11 +110,11 @@ class SolicitudMaquinaTest {
     @DisplayName("Semilla inconsistente con I1 o I2 es rechazada al construir")
     void invariantesEnConstruccion() {
         assertThatThrownBy(() -> Solicitud.nueva(new SolicitudSemilla("c", "N",
-                "Tel", "Dir", null, List.of(mat("PAPEL")), "org", null,
+                "Tel", "Dir", null, null, List.of(mat("PAPEL")), "org", null,
                 Estado.COMPLETADA, CREADA, CREADA, null), ciudadano()))
                 .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> Solicitud.nueva(new SolicitudSemilla("c", "N",
-                "Tel", "Dir", null, List.of(mat("PAPEL")), "org", null,
+                "Tel", "Dir", null, null, List.of(mat("PAPEL")), "org", null,
                 Estado.COMPLETADA, CREADA, CREADA, CREADA.minus(1, ChronoUnit.HOURS)), ciudadano()))
                 .isInstanceOf(IllegalArgumentException.class);
     }

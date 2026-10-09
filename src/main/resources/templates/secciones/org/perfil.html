@@ -2,6 +2,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
     <title th:text="#{org.perfil.titulo}">Perfil del acopio</title>
+    <script th:src="@{/js/mapa.js}" defer></script>
 </head>
 <body>
 <main layout:fragment="content">
@@ -34,6 +35,20 @@
             <span class="ayuda" th:text="#{perfil.telefono.ayuda}">Ayuda</span>
             <span class="error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}">Error</span>
         </label>
+        <div class="campo">
+            <span th:text="#{mapa.titulo.perfil}">Ubicación del acopio</span>
+            <input type="hidden" th:field="*{latitud}">
+            <input type="hidden" th:field="*{longitud}">
+            <iframe class="mapa-centro" data-mapa-ubicacion loading="lazy"
+                    th:src="${form.ubicacion != null} ? ${form.ubicacion.mapaEmbebido()} : null"
+                    th:title="#{mapa.titulo.perfil}"
+                    th:attr="hidden=${form.ubicacion == null} ? '' : null"></iframe>
+            <button type="button" class="accion secundaria" data-mapa-geolocalizar><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{mapa.boton}">Usar mi ubicación</span></button>
+            <span class="ayuda" th:text="#{mapa.ayuda.perfil}">Ayuda</span>
+            <span class="error" data-mapa-error hidden th:text="#{mapa.error}">Error</span>
+            <span class="error" th:if="${#fields.hasErrors('latitud')}"
+                  th:errors="*{latitud}">Error</span>
+        </div>
         <input type="hidden" th:field="*{version}">
         <button type="submit" class="accion" th:text="#{perfil.guardar}">Guardar</button>
     </form>

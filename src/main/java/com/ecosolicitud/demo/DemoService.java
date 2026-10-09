@@ -49,7 +49,7 @@ public class DemoService implements ApplicationRunner {
         organizaciones.reemplazarTodas(DemoDatos.organizaciones(catalogo));
         solicitudes.reemplazarTodas(DemoDatos.solicitudes(catalogo));
         avisos.reemplazarAvisos(DemoDatos.avisos(solicitudes.todas()));
-        guia.reemplazarTodos(DemoDatos.guia(catalogo));
+        guia.reemplazarTodos(DemoGuia.guia(catalogo));
         comunidad.reemplazarTodas(DemoDatos.comunidad());
         opiniones.reemplazarTodas(DemoDatos.opiniones());
         comunidad.reemplazarRecicladores(DemoDatos.recicladores());
