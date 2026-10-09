@@ -1,19 +1,20 @@
 # Respaldo del formulario de Google. Si cambia el formulario, editar este archivo.
 # Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
 # 'opcion: pregunta | opción 1 | opción 2'.
-titulo: Questionário de Usabilidade - Usuário Cidadão/Reciclador
-opcion: Qual é a sua localidade? | Rivera | Sant’Ana do Livramento
-escala: A plataforma web funcionou de forma estável, sem erros ou interrupções frequentes?
-escala: Os tempos de resposta foram adequados para suas atividades?
-escala: As informações apresentadas foram claras e compreensíveis?
-escala: O design geral lhe pareceu agradável e bem organizado?
-escala: O processo de registro foi claro e pôde concluí-lo sem dificuldades?
-escala: Conseguiu fazer login corretamente com suas credenciais?
-escala: Conseguiu criar uma solicitação de coleta?
+titulo: Questionário de Usabilidade – Cidadão
+opcion: Qual é a sua localidade? | Rivera | Sant'Ana do Livramento
+escala: Foi claro como começar a usar o sistema, sem se cadastrar?
+escala: Foi fácil escolher um ponto de coleta e consultar seus horários?
 escala: Foi fácil selecionar os materiais que desejava reciclar?
+escala: Conseguiu criar uma solicitação de coleta?
 escala: Conseguiu visualizar claramente o estado de suas solicitações?
 escala: As informações sobre suas solicitações (data, status, materiais) lhe pareceram completas?
-escala: Conseguiu editar suas informações de perfil corretamente?
+escala: Conseguiu cancelar uma solicitação pendente sem dificuldades?
 escala: Entendeu claramente quais ações poderia realizar dentro do sistema?
-escala: Está satisfeito com sua experiência geral de uso do sistema?
-texto: O que você melhoraria no sistema?
+escala: As informações apresentadas foram claras e compreensíveis?
+escala: O design geral lhe pareceu agradável e bem organizado?
+escala: Os tempos de resposta foram adequados para suas atividades?
+escala: O sistema funcionou de forma estável, sem erros ou interrupções frequentes?
+escala: Foi útil poder usar o sistema no seu idioma?
+escala: Você está satisfeito com sua experiência geral de uso do sistema?
+texto: O que você melhoraria ou acrescentaria no sistema?

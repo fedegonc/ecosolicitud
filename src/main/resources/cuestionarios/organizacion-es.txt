@@ -1,19 +1,21 @@
 # Respaldo del formulario de Google. Si cambia el formulario, editar este archivo.
 # Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
 # 'opcion: pregunta | opción 1 | opción 2'.
-titulo: Cuestionario de Usabilidad - Punto de Recolección
-escala: ¿El sistema respondió de forma estable, sin errores o interrupciones frecuentes?
-escala: ¿Los tiempos de respuesta fueron adecuados para sus actividades?
+titulo: Cuestionario de Usabilidad – Centro de acopio
+opcion: ¿Cuál es tu localidad? | Rivera | Sant'Ana do Livramento
+escala: ¿Le resultó claro cómo elegir el perfil Organización y su centro de acopio, sin registrarse?
+escala: ¿Pudo ver las solicitudes recibidas por su centro?
+escala: ¿La organización de las solicitudes por columnas (pendientes, en curso, cerradas) le resultó clara?
+escala: ¿Pudo ver los detalles completos de cada solicitud (materiales, dirección y ubicación)?
+escala: ¿La información de contacto de los usuarios fue accesible cuando la necesitó?
+escala: ¿Le resultó fácil cambiar el estado de una solicitud (aceptar, completar, rechazar)?
+escala: ¿Pudo gestionar múltiples solicitudes de forma eficiente?
+escala: ¿El resumen semanal y el informe mensual le resultaron útiles?
+escala: ¿Pudo actualizar la información de su organización correctamente?
 escala: ¿La información presentada le resultó clara y comprensible?
 escala: ¿El diseño general le pareció agradable y bien organizado?
+escala: ¿Los tiempos de respuesta fueron adecuados para sus actividades?
+escala: ¿El sistema respondió de forma estable, sin errores o interrupciones frecuentes?
+escala: ¿Le resultó útil poder usar el sistema en su idioma?
 escala: ¿Está satisfecho con su experiencia general de uso del sistema?
-escala: ¿El proceso de registro como organización le resultó claro y completo?
-escala: ¿Pudo iniciar sesión y acceder a las funciones de su rol sin problemas?
-escala: ¿Pudo visualizar todas las solicitudes de recolección disponibles?
-escala: ¿Los filtros de búsqueda le ayudaron a encontrar solicitudes relevantes?
-escala: ¿Pudo ver los detalles completos de cada solicitud (materiales, dirección, usuario)?
-escala: ¿Le resultó fácil cambiar el estado de una solicitud (aceptar, completar, rechazar)?
-escala: ¿La información de contacto de los usuarios fue accesible cuando la necesitó?
-escala: ¿Pudo gestionar múltiples solicitudes de forma eficiente?
-escala: ¿Pudo actualizar la información de su organización correctamente?
-texto: ¿Qué mejorarías del sistema?
+texto: ¿Qué mejorarías o agregarías del sistema?
