@@ -156,7 +156,7 @@ final class DemoDatos {
                         Enjuagá los envases. No hace falta que queden brillantes: alcanza con
                         que no tengan restos de comida, porque eso contamina el resto.
 
-                        Plegá el cartón y las botellas para ocupar menos lugar.""", null, 1),
+                        Plegá el cartón y las botellas para ocupar menos lugar.""", null, null, 1),
                 new ArticuloSemilla("Vidrio", """
                         El vidrio se recicla infinitas veces sin perder calidad.
 
@@ -164,19 +164,19 @@ final class DemoDatos {
                         cerámicas, focos ni vajilla: tienen composiciones distintas y arruinan el lote.
 
                         Sacá las tapas y no lo rompas: el vidrio partido lastima a quien lo manipula.""",
-                        m(cat, "VIDRIO"), 2),
+                        null, m(cat, "VIDRIO"), 2),
                 new ArticuloSemilla("Cartón y papel", """
                         Tiene que estar seco. El cartón mojado o engrasado (una caja de pizza,
                         por ejemplo) no se puede reciclar: va a la basura común.
 
                         No hace falta sacar la cinta adhesiva ni los ganchos de metal.""",
-                        m(cat, "CARTON"), 3),
+                        null, m(cat, "CARTON"), 3),
                 new ArticuloSemilla("Electrónicos", """
                         Nunca van a la basura común: tienen metales pesados que contaminan el agua.
 
                         Se reciben cables, cargadores, celulares y electrodomésticos chicos.
                         Si todavía funciona, primero intentá repararlo o donarlo.""",
-                        m(cat, "ELECTRONICOS"), 4));
+                        null, m(cat, "ELECTRONICOS"), 4));
     }
 
     static List<OpinionSemilla> opiniones() {

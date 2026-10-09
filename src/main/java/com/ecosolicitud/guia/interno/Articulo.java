@@ -32,6 +32,9 @@ public class Articulo {
     @Column(nullable = false, length = 4000)
     private String cuerpo;
 
+    @Column(length = 200)
+    private String imagen;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "material_id")
     private Material material;
@@ -46,6 +49,7 @@ public class Articulo {
         var a = new Articulo();
         a.titulo = s.titulo();
         a.cuerpo = s.cuerpo();
+        a.imagen = s.imagen();
         a.material = s.material();
         a.orden = s.orden();
         return a;

@@ -6,6 +6,11 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{opinion.titulo}">Dejanos tu opinión</h1>
+    <aside class="tarjeta cuestionario" th:with="perfil=${#strings.toLowerCase(rolActual.name())}">
+        <h2 th:text="#{opinion.cuestionario.titulo}">Cuestionario</h2>
+        <p th:text="#{opinion.cuestionario.texto}">Texto</p>
+        <a class="accion" th:href="#{${'opinion.cuestionario.url.' + perfil}}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{opinion.cuestionario.boton}">Responder</span></a>
+    </aside>
     <p class="aviso" th:if="${param.gracias != null}" th:text="#{opinion.gracias}">Gracias</p>
     <form th:if="${param.gracias == null}" th:action="@{/opinion}" method="post" hx-indicator="this">
         <fieldset class="campo">

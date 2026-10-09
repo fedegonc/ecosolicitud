@@ -11,7 +11,7 @@
         <span class="etiqueta" th:text="#{${publicacion.tipo.clave}}">Tipo</span>
         <span th:text="${publicacion.fecha}">Fecha</span>
     </p>
-    <div class="prosa" th:text="${publicacion.cuerpo}">Cuerpo</div>
+    <div class="prosa" th:utext="${publicacion.cuerpoHtml}">Cuerpo</div>
 </main>
 </body>
 </html>

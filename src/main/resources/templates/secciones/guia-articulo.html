@@ -11,7 +11,9 @@
         <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(articulo.material.codigo)}"
               th:text="${articulo.material.nombre}">Material</span>
     </p>
-    <div class="prosa" th:text="${articulo.cuerpo}">Cuerpo</div>
+    <img class="articulo-img" th:if="${articulo.imagen != null}"
+         th:src="@{${articulo.imagen}}" alt="">
+    <div class="prosa" th:utext="${articulo.cuerpoHtml}">Cuerpo</div>
     <section th:if="${!centros.isEmpty()}">
         <h2 th:text="#{guia.donde}">Dónde llevarlo</h2>
         <div class="rejilla">

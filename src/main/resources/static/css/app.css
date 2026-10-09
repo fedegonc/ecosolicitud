@@ -1333,6 +1333,20 @@ fieldset.campo legend {
     filter: grayscale(0.5);
 }
 
+.cuestionario {
+    max-width: var(--medida);
+    border-left: var(--linea-gruesa) solid var(--acento);
+}
+
+.cuestionario h2 {
+    margin: 0 0 var(--gap-xs);
+    font-size: var(--t-lg);
+}
+
+.cuestionario p {
+    margin: 0 0 var(--gap-l);
+}
+
 .credito-fotos {
     font-size: var(--t-xs);
     color: var(--nav-texto);

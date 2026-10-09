@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.ecosolicitud.guia.interno.Articulo;
 import com.ecosolicitud.guia.interno.ArticuloRepository;
+import com.ecosolicitud.shared.Markdown;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,18 +16,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class GuiaService {
 
     private final ArticuloRepository repositorio;
+    private final Markdown markdown;
 
-    public GuiaService(ArticuloRepository repositorio) {
+    public GuiaService(ArticuloRepository repositorio, Markdown markdown) {
         this.repositorio = repositorio;
+        this.markdown = markdown;
     }
 
     public List<ArticuloInfo> articulos() {
         return repositorio.findAllByOrderByOrdenAsc().stream()
-                .map(GuiaService::aInfo).toList();
+                .map(this::aInfo).toList();
     }
 
     public Optional<ArticuloInfo> buscar(long id) {
-        return repositorio.findById(id).map(GuiaService::aInfo);
+        return repositorio.findById(id).map(this::aInfo);
     }
 
     public boolean vacia() {
@@ -39,8 +42,8 @@ public class GuiaService {
         dataset.forEach(a -> repositorio.save(Articulo.nuevo(a)));
     }
 
-    private static ArticuloInfo aInfo(Articulo a) {
-        return new ArticuloInfo(a.getId(), a.getTitulo(), a.getCuerpo(), a.getMaterial(),
-                a.getOrden());
+    private ArticuloInfo aInfo(Articulo a) {
+        return new ArticuloInfo(a.getId(), a.getTitulo(), markdown.html(a.getCuerpo()),
+                a.getImagen(), a.getMaterial(), a.getOrden());
     }
 }

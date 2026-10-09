@@ -7,6 +7,7 @@ import com.ecosolicitud.comunidad.interno.Publicacion;
 import com.ecosolicitud.comunidad.interno.PublicacionRepository;
 import com.ecosolicitud.comunidad.interno.Reciclador;
 import com.ecosolicitud.comunidad.interno.RecicladorRepository;
+import com.ecosolicitud.shared.Markdown;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,18 +22,20 @@ public class ComunidadService {
 
     private final PublicacionRepository repositorio;
     private final RecicladorRepository recicladores;
+    private final Markdown markdown;
 
     public ComunidadService(PublicacionRepository repositorio,
-            RecicladorRepository recicladores) {
+            RecicladorRepository recicladores, Markdown markdown) {
         this.repositorio = repositorio;
         this.recicladores = recicladores;
+        this.markdown = markdown;
     }
 
     public List<PublicacionInfo> publicadas(FiltroComunidad filtro) {
         return repositorio.findAllByOrderByPublicadaEnDesc().stream()
                 .filter(p -> filtro.muestra(p.getTipo()))
                 .limit(ULTIMAS)
-                .map(ComunidadService::aInfo).toList();
+                .map(this::aInfo).toList();
     }
 
     public List<PublicacionInfo> ultimas(int cantidad) {
@@ -41,7 +44,7 @@ public class ComunidadService {
     }
 
     public Optional<PublicacionInfo> buscar(long id) {
-        return repositorio.findById(id).map(ComunidadService::aInfo);
+        return repositorio.findById(id).map(this::aInfo);
     }
 
     public boolean vacia() {
@@ -65,8 +68,8 @@ public class ComunidadService {
         dataset.forEach(p -> repositorio.save(Publicacion.nueva(p)));
     }
 
-    private static PublicacionInfo aInfo(Publicacion p) {
-        return new PublicacionInfo(p.getId(), p.getTitulo(), p.getResumen(), p.getCuerpo(),
-                p.getTipo(), p.getPublicadaEn());
+    private PublicacionInfo aInfo(Publicacion p) {
+        return new PublicacionInfo(p.getId(), p.getTitulo(), p.getResumen(),
+                markdown.html(p.getCuerpo()), p.getTipo(), p.getPublicadaEn());
     }
 }
