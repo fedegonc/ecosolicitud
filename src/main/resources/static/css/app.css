@@ -98,6 +98,11 @@
     box-sizing: border-box;
 }
 
+/* hidden gana siempre: ninguna regla de display de un componente lo pisa */
+[hidden] {
+    display: none !important;
+}
+
 body {
     margin: 0;
     font-size: var(--t-base);
@@ -847,6 +852,12 @@ fieldset.campo legend {
     line-height: 1.2;
 }
 
+/* el ritmo interno es solo el gap del flex: nada de márgenes del navegador */
+.tarjeta > p,
+.tarjeta > h2 {
+    margin: 0;
+}
+
 .tarjeta h3 span:first-child {
     font-weight: 700;
 }
@@ -922,6 +933,7 @@ fieldset.campo legend {
     display: block;
     width: calc(100% + 2 * var(--gap-l));
     max-width: none;
+    height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     margin: calc(-1 * var(--gap-l)) calc(-1 * var(--gap-l)) 0;
@@ -952,10 +964,6 @@ fieldset.campo legend {
     opacity: 0.85;
     text-decoration: underline;
     text-underline-offset: var(--linea-gruesa);
-}
-
-.instalar-app[hidden] {
-    display: none;
 }
 /* ============================================================
    Componente: Cascada (nueva solicitud - ciudad/centro/materiales)
@@ -1156,7 +1164,7 @@ fieldset.campo legend {
 
 .indicador {
     font-size: var(--t-xl);
-    margin: 0 0 var(--pad);
+    margin: 0;
     color: var(--acento);
 }
 
@@ -1381,13 +1389,37 @@ fieldset.campo legend {
     filter: grayscale(0.5);
 }
 
-.mapa-centro {
+.mapa-centro,
+.mapa-editable {
     display: block;
     width: 100%;
     height: 10rem;
     border: var(--linea-fina) solid var(--borde);
     border-radius: var(--radio);
     background: var(--superficie);
+}
+
+/* contexto propio: los z-index de Leaflet no tapan el menú móvil */
+.mapa-editable {
+    position: relative;
+    z-index: 0;
+    height: 16rem;
+}
+
+.mapa-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap-l);
+    margin: var(--gap-m) 0 var(--gap-xs);
+}
+
+.mapa-acciones .enlace {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
 }
 
 .cuestionario {

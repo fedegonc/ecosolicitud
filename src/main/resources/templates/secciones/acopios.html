@@ -34,9 +34,11 @@
                             th:title="#{acopios.mapa(${o.nombre})}" loading="lazy"></iframe>
                     <a class="enlace detalle" th:href="${o.ubicacion.enlaceMapa()}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{acopios.mapa.ver}">Ver en el mapa</span></a>
                 </th:block>
-                <p><a class="accion secundaria"
-                      th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
-                      ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{acopios.pedir}">Pedir retiro</span></a></p>
+                <div class="acciones">
+                    <a class="accion secundaria"
+                       th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
+                       ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{acopios.pedir}">Pedir retiro</span></a>
+                </div>
             </article>
         </div>
     </section>

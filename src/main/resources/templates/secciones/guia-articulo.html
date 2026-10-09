@@ -30,9 +30,11 @@
                     <a class="enlace" th:href="'tel:' + ${#strings.replace(o.telefono, ' ', '')}"
                        th:text="${o.telefono}">Teléfono</a>
                 </p>
-                <p><a class="accion secundaria"
-                      th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
-                      th:text="#{acopios.pedir}">Pedir retiro</a></p>
+                <div class="acciones">
+                    <a class="accion secundaria"
+                       th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
+                       th:text="#{acopios.pedir}">Pedir retiro</a>
+                </div>
             </article>
         </div>
     </section>
