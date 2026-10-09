@@ -14,6 +14,11 @@
     <p class="detalle" th:if="${publicaciones.isEmpty()}" th:text="#{comunidad.vacia}">Vacía</p>
     <div class="rejilla">
         <article th:each="p : ${publicaciones}" class="tarjeta">
+            <img class="tarjeta-img" th:if="${p.imagen != null}"
+                 th:src="@{/img/comunidad/{s}-800.webp(s=${p.imagen})}"
+                 th:attr="srcset=@{/img/comunidad/{s}-800.webp(s=${p.imagen})} + ' 800w, ' + @{/img/comunidad/{s}-1600.webp(s=${p.imagen})} + ' 1600w'"
+                 sizes="(min-width: 45rem) 18rem, 100vw" width="800" height="600"
+                 loading="lazy" alt="">
             <h3><a class="enlace" th:href="@{/comunidad/{id}(id=${p.id})}"
                    th:text="${p.titulo}">Título</a></h3>
             <p class="detalle" th:text="${p.resumen}">Resumen</p>

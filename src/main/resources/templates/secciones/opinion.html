@@ -47,53 +47,6 @@
             </th:block>
         </details>
     </aside>
-    <p class="aviso" th:if="${param.gracias != null}" th:text="#{opinion.gracias}">Gracias</p>
-    <form th:if="${param.gracias == null}" th:action="@{/opinion}" method="post" hx-indicator="this">
-        <fieldset class="campo">
-            <legend th:text="#{opinion.pregunta}">Pregunta</legend>
-            <p class="ayuda" th:text="#{opinion.ayuda}">Valorá solo las funciones que usaste.</p>
-            <div class="likert-scroll">
-                <table class="likert">
-                    <caption class="ayuda">
-                        <span th:text="#{opinion.escala.min}">Muy difícil</span> ← 1 · 5 →
-                        <span th:text="#{opinion.escala.max}">Muy fácil</span>
-                    </caption>
-                    <tbody>
-                        <tr th:each="s : ${secciones}">
-                            <th scope="row">
-                                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
-                                <span th:text="#{${s.clave}}">Función</span>
-                            </th>
-                            <td th:each="n : ${#numbers.sequence(1, 5)}">
-                                <input type="radio" th:name="'valor_' + ${s.name()}"
-                                       th:value="${n}"
-                                       th:aria-label="#{${s.clave}} + ' ' + ${n}">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </fieldset>
-        <label class="campo">
-            <span th:text="#{opinion.comentario}">Comentario</span>
-            <textarea name="comentario" rows="3" maxlength="500"></textarea>
-        </label>
-        <button type="submit" class="accion" th:text="#{opinion.enviar}">Enviar</button>
-    </form>
-    <section class="promedios" th:if="${!promedios.isEmpty()}">
-        <h2 th:text="#{opinion.promedios}">Valoraciones actuales</h2>
-        <ul class="promedios-lista">
-            <li th:each="s : ${secciones}" th:if="${promedios[s.name()] != null}">
-                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
-                <span th:text="#{${s.clave}}">Función</span>
-                <b th:text="${#numbers.formatDecimal(promedios[s.name()], 1, 1)}">4.0</b>
-            </li>
-            <li th:if="${promedioGeneral != null}">
-                <span th:text="#{opinion.promedio.general}">General</span>
-                <b th:text="${#numbers.formatDecimal(promedioGeneral, 1, 1)}">4.2</b>
-            </li>
-        </ul>
-    </section>
 </main>
 </body>
 </html>

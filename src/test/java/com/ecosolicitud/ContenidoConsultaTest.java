@@ -64,6 +64,11 @@ class ContenidoConsultaTest {
     void estadisticas() {
         var r = rest.getForEntity(Rutas.ESTADISTICAS, String.class);
         assertThat(r.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(r.getBody()).contains("Estadísticas del servicio");
+        assertThat(r.getBody()).contains("Estadísticas del servicio")
+                .contains("Por centro de acopio", "Cooperativa Frontera Limpia",
+                        "Coleta Solidária Livramento", "periodo=todo")
+                .doesNotContain("??");
+        assertThat(rest.getForEntity(Rutas.ESTADISTICAS + "?periodo=invalido", String.class)
+                .getStatusCode()).as("un período desconocido cae al de 30 días").isEqualTo(HttpStatus.OK);
     }
 }

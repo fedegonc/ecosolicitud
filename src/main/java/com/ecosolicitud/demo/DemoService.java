@@ -2,7 +2,6 @@ package com.ecosolicitud.demo;
 
 import com.ecosolicitud.comunidad.ComunidadService;
 import com.ecosolicitud.guia.GuiaService;
-import com.ecosolicitud.opinion.OpinionService;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.solicitud.AvisoService;
@@ -21,19 +20,17 @@ public class DemoService implements ApplicationRunner {
     private final AvisoService avisos;
     private final GuiaService guia;
     private final ComunidadService comunidad;
-    private final OpinionService opiniones;
     private final CatalogoMateriales catalogo;
 
     public DemoService(OrganizacionService organizaciones,
             SolicitudService solicitudes, AvisoService avisos, GuiaService guia,
-            ComunidadService comunidad, OpinionService opiniones,
+            ComunidadService comunidad,
             CatalogoMateriales catalogo) {
         this.organizaciones = organizaciones;
         this.solicitudes = solicitudes;
         this.avisos = avisos;
         this.guia = guia;
         this.comunidad = comunidad;
-        this.opiniones = opiniones;
         this.catalogo = catalogo;
     }
 
@@ -51,7 +48,6 @@ public class DemoService implements ApplicationRunner {
         avisos.reemplazarAvisos(DemoDatos.avisos(solicitudes.todas()));
         guia.reemplazarTodos(DemoGuia.guia(catalogo));
         comunidad.reemplazarTodas(DemoDatos.comunidad());
-        opiniones.reemplazarTodas(DemoDatos.opiniones());
         comunidad.reemplazarRecicladores(DemoDatos.recicladores());
     }
 }

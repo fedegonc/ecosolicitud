@@ -1,5 +1,6 @@
 package com.ecosolicitud.solicitud;
 
+import java.time.Instant;
 import java.time.YearMonth;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
@@ -21,7 +22,7 @@ public record InformeMensual(YearMonth mes, SolicitudMetricas metricas,
             porEstado.merge(s.getEstado(), 1L, Long::sum);
             s.getMateriales().forEach(m -> porMaterial.merge(m.getNombre(), 1L, Long::sum));
         }
-        return new InformeMensual(mes, SolicitudMetricas.desde(entidades),
+        return new InformeMensual(mes, SolicitudMetricas.desde(entidades, Instant.now()),
                 porEstado, porMaterial, infos);
     }
 

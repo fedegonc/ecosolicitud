@@ -970,8 +970,8 @@ fieldset.campo legend {
     display: block;
     width: calc(100% + 2 * var(--gap-l));
     max-width: none;
-    height: auto;
-    aspect-ratio: 16 / 9;
+    height: 11rem;
+    min-height: 0;
     object-fit: cover;
     margin: calc(-1 * var(--gap-l)) calc(-1 * var(--gap-l)) 0;
     border-radius: calc(var(--radio) - var(--linea-media)) calc(var(--radio) - var(--linea-media)) 0 0;
@@ -1161,6 +1161,31 @@ fieldset.campo legend {
     margin-top: var(--pad-grande);
 }
 
+/* perfil del acopio: formulario + vista previa de la tarjeta pública */
+.perfil-previa {
+    margin-top: var(--pad);
+}
+
+.perfil-previa h2 {
+    font-size: var(--t-lg);
+    margin: 0 0 var(--gap-s);
+}
+
+@media (min-width: 45rem) {
+    .perfil-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        gap: var(--pad-grande);
+        align-items: start;
+    }
+
+    .perfil-previa {
+        margin-top: 0;
+        position: sticky;
+        top: var(--pad);
+    }
+}
+
 .aviso-card {
     background: var(--superficie);
     border: var(--linea-fina) solid var(--borde);
@@ -1219,65 +1244,39 @@ fieldset.campo legend {
     font-weight: 600;
 }
 
-.likert-scroll {
+.tabla-scroll {
     overflow-x: auto;
 }
 
-.likert {
+.tabla-indicadores {
     border-collapse: collapse;
     width: 100%;
 }
 
-.likert caption {
-    text-align: left;
-    padding-bottom: var(--gap-m);
-}
-
-.likert th,
-.likert td {
-    padding: var(--gap-s) var(--gap-xs);
+.tabla-indicadores th,
+.tabla-indicadores td {
+    padding: var(--gap-s) var(--gap-m);
     border-bottom: var(--linea-fina) solid var(--borde-suave);
-    text-align: center;
-}
-
-.likert tbody th {
-    text-align: left;
-    font-weight: 500;
+    text-align: right;
     white-space: nowrap;
 }
 
-.likert tbody th .icono {
-    vertical-align: -0.2em;
-    margin-right: var(--gap-xs);
+.tabla-indicadores th[scope="row"],
+.tabla-indicadores thead th:first-child {
+    text-align: left;
 }
 
-.likert input[type="radio"] {
-    width: var(--icono-chico);
-    height: var(--icono-chico);
-    margin: 0;
-    cursor: pointer;
-    accent-color: var(--acento);
+.tabla-indicadores th[scope="row"] {
+    font-weight: 600;
 }
 
-.promedios {
-    margin-top: var(--pad-grande);
+.tabla-indicadores .detalle {
+    display: block;
+    font-weight: 400;
 }
 
-.promedios-lista {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    gap: var(--gap-s);
-}
-
-.promedios-lista li {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-m);
-}
-
-.promedios-lista b {
-    margin-left: auto;
+.tabla-indicadores td .detalle {
+    justify-content: flex-end;
 }
 /* ============================================================
    Responsive: desktop, impresión, táctil

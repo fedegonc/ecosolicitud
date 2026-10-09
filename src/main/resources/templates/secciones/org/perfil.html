@@ -6,8 +6,15 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{org.perfil.titulo}">Perfil del acopio</h1>
+    <header class="panel-cabecera">
+        <img class="franja" th:src="@{/img/ciudad/franja-1600.webp}"
+             th:attr="srcset=@{/img/ciudad/franja-800.webp} + ' 800w, ' + @{/img/ciudad/franja-1600.webp} + ' 1600w'"
+             sizes="100vw" width="1600" height="250" alt="">
+        <p th:text="#{perfil.intro.detalle}">Estos datos son los que ven los vecinos.</p>
+    </header>
     <p class="aviso" role="status" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>
     <p class="alerta" role="alert" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
+    <div class="perfil-grid">
     <form th:action="@{/org/perfil}" method="post" th:object="${form}" class="ficha" hx-indicator="this">
         <p class="detalle"><strong th:text="#{perfil.nombre}">Nombre</strong>:
             <span th:text="${organizacionActiva.nombre}">Nombre</span></p>
@@ -53,6 +60,32 @@
         <input type="hidden" th:field="*{version}">
         <button type="submit" class="accion" th:text="#{perfil.guardar}">Guardar</button>
     </form>
+    <aside class="perfil-previa">
+        <h2 th:text="#{perfil.previa}">Así te ven los vecinos</h2>
+        <article class="tarjeta">
+            <h3 th:text="${organizacionActiva.nombre}">Nombre</h3>
+            <p class="detalle">
+                <span th:text="#{${organizacionActiva.ciudad.clave}}">Ciudad</span> ·
+                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="${organizacionActiva.horario}">Horario</span> ·
+                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg>
+                <a class="enlace" th:href="'tel:' + ${#strings.replace(organizacionActiva.telefono, ' ', '')}"
+                   th:text="${organizacionActiva.telefono}">Teléfono</a>
+            </p>
+            <ul class="materiales">
+                <li th:each="m : ${organizacionActiva.materiales}"
+                    th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}">
+                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
+                    <span th:text="${m.nombre}">Material</span>
+                </li>
+            </ul>
+            <th:block th:if="${organizacionActiva.ubicacion != null}">
+                <iframe class="mapa-centro" th:src="${organizacionActiva.ubicacion.mapaEmbebido()}"
+                        th:title="#{acopios.mapa(${organizacionActiva.nombre})}" loading="lazy"></iframe>
+                <a class="enlace detalle" th:href="${organizacionActiva.ubicacion.enlaceMapa()}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{acopios.mapa.ver}">Ver en el mapa</span></a>
+            </th:block>
+        </article>
+    </aside>
+    </div>
 </main>
 </body>
 </html>

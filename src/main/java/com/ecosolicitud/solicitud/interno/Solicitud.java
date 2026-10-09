@@ -76,6 +76,8 @@ public class Solicitud {
     private Estado estado;
     private Instant creadaEn;
     private Instant respondidaEn;
+    // se fija al aceptar y no se borra: una aceptada que después se rechaza sigue contando
+    private Instant aceptadaEn;
     private Instant finalizadaEn;
     @Version
     private long version;
@@ -128,6 +130,7 @@ public class Solicitud {
         sol.creadaEn = s.creadaEn();
         sol.respondidaEn = s.respondidaEn();
         sol.finalizadaEn = s.finalizadaEn();
+        sol.aceptadaEn = aceptadaSegun(s.estado(), s.respondidaEn(), s.finalizadaEn());
         return sol;
     }
 
@@ -135,6 +138,22 @@ public class Solicitud {
         exigir(estado.permiteAceptar(), "aceptar");
         estado = Estado.EN_CURSO;
         respondidaEn = ahora;
+        aceptadaEn = ahora;
+    }
+
+    // Para datos sin aceptadaEn (semillas y filas previas): rechazar desde
+    // PENDIENTE fija respondida y finalizada en el mismo instante; si la
+    // respuesta es anterior al cierre, hubo una aceptación antes del rechazo.
+    // MigracionAceptadaEn aplica la misma regla en SQL.
+    private static Instant aceptadaSegun(Estado estado, Instant respondidaEn, Instant finalizadaEn) {
+        if (respondidaEn == null) {
+            return null;
+        }
+        return switch (estado) {
+            case EN_CURSO, COMPLETADA -> respondidaEn;
+            case RECHAZADA -> respondidaEn.isBefore(finalizadaEn) ? respondidaEn : null;
+            default -> null;
+        };
     }
 
     public void rechazar(Instant ahora) {

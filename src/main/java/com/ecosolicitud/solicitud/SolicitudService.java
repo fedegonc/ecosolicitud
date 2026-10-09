@@ -65,7 +65,7 @@ public class SolicitudService {
     }
 
     public SolicitudMetricas semana(Actor actor) {
-        return SolicitudMetricas.desdeSemana(delActor(actor));
+        return SolicitudMetricas.desdeSemana(delActor(actor), Instant.now());
     }
 
     public InformeMensual informe(Actor actor, YearMonth mes) {
@@ -126,10 +126,6 @@ public class SolicitudService {
 
     public boolean vacia() {
         return repositorio.count() == 0;
-    }
-
-    public SolicitudMetricas metricas() {
-        return SolicitudMetricas.desde(repositorio.findAll());
     }
 
     @Transactional

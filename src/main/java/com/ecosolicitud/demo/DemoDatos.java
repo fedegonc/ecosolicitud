@@ -7,14 +7,12 @@ import java.util.Map;
 
 import com.ecosolicitud.comunidad.PublicacionSemilla;
 import com.ecosolicitud.comunidad.TipoPublicacion;
-import com.ecosolicitud.opinion.OpinionSemilla;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.comunidad.RecicladorInfo;
 import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
-import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.solicitud.AvisoSemilla;
 import com.ecosolicitud.solicitud.Estado;
 import com.ecosolicitud.solicitud.SolicitudInfo;
@@ -97,8 +95,9 @@ final class DemoDatos {
                         List.of(m(cat, "VIDRIO")),
                         "acopio-verde", null, Estado.RECHAZADA,
                         ahora.minus(6, ChronoUnit.DAYS),
+                        // rechazo directo: respuesta y cierre en el mismo instante
                         ahora.minus(6, ChronoUnit.DAYS).plus(9, ChronoUnit.HOURS),
-                        ahora.minus(5, ChronoUnit.DAYS)));
+                        ahora.minus(6, ChronoUnit.DAYS).plus(9, ChronoUnit.HOURS)));
     }
 
     // los avisos semilla se atan a solicitudes reales para mostrar su #id
@@ -134,41 +133,27 @@ final class DemoDatos {
 
                         Si tenés vidrio acumulado, es el mejor momento para llevarlo.""",
                         "El acopio de Rivera suma los sábados a su horario.",
-                        TipoPublicacion.NOVEDAD, ahora.minus(2, ChronoUnit.DAYS)),
+                        "acopio", TipoPublicacion.NOVEDAD, ahora.minus(2, ChronoUnit.DAYS)),
                 new PublicacionSemilla("La cooperativa recuperó 3 toneladas", """
                         En lo que va del año, la Cooperativa Frontera Limpia recuperó tres
                         toneladas de cartón y papel: el equivalente a 50 árboles que no se talaron.
 
                         El mérito es de los vecinos que separan en casa.""",
                         "Frontera Limpia recuperó 3 toneladas de cartón y papel este año.",
-                        TipoPublicacion.HISTORIA, ahora.minus(5, ChronoUnit.DAYS)),
+                        "cooperativa", TipoPublicacion.HISTORIA, ahora.minus(5, ChronoUnit.DAYS)),
                 new PublicacionSemilla("Campaña de electrónicos", """
                         Durante octubre se reciben cables, cargadores y celulares viejos
                         sin costo en los tres centros.
 
                         Los aparatos que todavía funcionan se donan a escuelas.""",
                         "Todo octubre: electrónicos sin costo en los tres centros.",
-                        TipoPublicacion.NOVEDAD, ahora.minus(9, ChronoUnit.DAYS)),
+                        "campana", TipoPublicacion.NOVEDAD, ahora.minus(9, ChronoUnit.DAYS)),
                 new PublicacionSemilla("Don Luis y su carrito", """
                         Hace doce años que Don Luis pasa por el barrio juntando cartón.
 
                         Dice que lo que más cambió es la conciencia: "antes había que
                         revolver, ahora la gente ya lo deja separado".""",
                         "Doce años juntando cartón en el barrio, y una sola frase.",
-                        TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
-    }
-
-    static List<OpinionSemilla> opiniones() {
-        var ahora = Instant.now();
-        return List.of(
-                new OpinionSemilla("NUEVA", 4,
-                        "Fácil, pedí el retiro en un minuto.", Rol.CIUDADANO,
-                        ahora.minus(3, ChronoUnit.DAYS)),
-                new OpinionSemilla("MIS_SOLICITUDES", 5, null, Rol.CIUDADANO,
-                        ahora.minus(2, ChronoUnit.DAYS)),
-                new OpinionSemilla("ACOPIOS", 3, null, Rol.CIUDADANO,
-                        ahora.minus(2, ChronoUnit.DAYS)),
-                new OpinionSemilla("ORG_SOLICITUDES", 4, "Clara la bandeja.",
-                        Rol.ORGANIZACION, ahora.minus(1, ChronoUnit.DAYS)));
+                        "carrito", TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
     }
 }
