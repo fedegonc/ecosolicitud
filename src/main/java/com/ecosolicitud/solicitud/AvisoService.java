@@ -101,9 +101,8 @@ public class AvisoService {
                 .collect(toMap(Solicitud::getId, Solicitud::getEstado));
     }
 
-    private static String destino(Actor actor) {
-        return actor.esOrganizacion() ? actor.organizacionId() : actor.ciudadanoId();
-    }
+        private String destino(Actor actor) {
+        return actor.esOrganizacion() ? organizaciones.actual(actor).id() : actor.ciudadanoId();}
 
     private static AvisoInfo aInfo(Aviso a, Map<Long, Estado> estados) {
         var estado = a.getSolicitudId() != null
