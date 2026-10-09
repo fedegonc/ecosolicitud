@@ -50,7 +50,7 @@
             <footer class="sidebar-pie">
                 <details class="demo-bloque">
                     <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
-                <form th:fragment="cambioRol" th:action="@{/demo/rol}" method="post" class="rol-switch">
+                <form th:fragment="cambioRol" th:action="@{/demo/rol}" method="post" class="rol-switch" hx-indicator="this">
                     <button type="submit" name="rol" value="CIUDADANO"
                             th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
                             th:attr="aria-pressed=${rolActual.name() == 'CIUDADANO'}"
@@ -61,7 +61,7 @@
                             th:text="#{rol.organizacion}">Organización</button>
                 </form>
                 <form th:fragment="selectorOrg" th:if="${rolActual.name() == 'ORGANIZACION'}"
-                      th:action="@{/demo/organizacion}" method="post" class="org-switch">
+                      th:action="@{/demo/organizacion}" method="post" class="org-switch" hx-indicator="this">
                     <label for="org-select" th:text="#{demo.acopio}">Acopio</label>
                     <select id="org-select" name="id">
                         <option th:each="o : ${organizaciones}" th:value="${o.id}"
@@ -72,12 +72,14 @@
                     <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
                 </form>
                 <form th:fragment="reiniciar" th:if="${demoHabilitada}"
-                      th:action="@{/demo/reiniciar}" method="post" class="reiniciar">
+                      th:action="@{/demo/reiniciar}" method="post" class="reiniciar" hx-indicator="this">
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
                 </form>
                 </details>
                 <a th:fragment="enlaceInstalar" class="enlace-pie instalar-app" href="#" hidden><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{instalar.boton}">Instalar</span></a>
+                <a th:fragment="creditoFotos" class="credito-fotos" href="https://commons.wikimedia.org/wiki/User:Mx._Granger"
+                   rel="noopener" target="_blank" th:text="#{foto.credito}">Fotos</a>
             </footer>
         </aside>
         <div class="menu-movil">
@@ -101,6 +103,7 @@
                                 <form th:replace="~{app :: reiniciar}"></form>
                             </details>
                             <a th:replace="~{app :: enlaceInstalar}"></a>
+                            <a th:replace="~{app :: creditoFotos}"></a>
                         </footer>
                     </div>
                 </details>

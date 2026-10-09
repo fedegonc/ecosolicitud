@@ -8,7 +8,7 @@
     <h1 th:text="#{org.perfil.titulo}">Perfil del acopio</h1>
     <p class="aviso" role="status" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>
     <p class="alerta" role="alert" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
-    <form th:action="@{/org/perfil}" method="post" th:object="${form}" class="ficha">
+    <form th:action="@{/org/perfil}" method="post" th:object="${form}" class="ficha" hx-indicator="this">
         <p class="detalle"><strong th:text="#{perfil.nombre}">Nombre</strong>:
             <span th:text="${organizacionActiva.nombre}">Nombre</span></p>
         <p class="detalle"><strong th:text="#{perfil.ciudad}">Ciudad</strong>:

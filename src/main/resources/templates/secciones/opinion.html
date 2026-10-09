@@ -7,7 +7,7 @@
 <main layout:fragment="content">
     <h1 th:text="#{opinion.titulo}">Dejanos tu opinión</h1>
     <p class="aviso" th:if="${param.gracias != null}" th:text="#{opinion.gracias}">Gracias</p>
-    <form th:if="${param.gracias == null}" th:action="@{/opinion}" method="post">
+    <form th:if="${param.gracias == null}" th:action="@{/opinion}" method="post" hx-indicator="this">
         <fieldset class="campo">
             <legend th:text="#{opinion.pregunta}">Pregunta</legend>
             <p class="ayuda" th:text="#{opinion.ayuda}">Valorá solo las funciones que usaste.</p>

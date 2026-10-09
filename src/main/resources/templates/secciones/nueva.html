@@ -6,12 +6,12 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.nueva}">Nueva solicitud</h1>
-    <form th:action="@{/nueva}" method="post" th:object="${form}" class="ficha">
+    <form th:action="@{/nueva}" method="post" th:object="${form}" class="ficha" hx-indicator="this">
         <label class="campo">
             <span th:text="#{nueva.ciudad}">Ciudad</span>
             <select th:field="*{ciudad}" required th:attr="hx-get=@{/nueva}"
                     hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
-                    hx-include="closest form" hx-params="not _csrf">
+                    hx-include="closest form" hx-params="not _csrf" hx-indicator="#flujo">
                 <option value="" th:text="#{nueva.ciudad.elegir}">Elegí una ciudad</option>
                 <option th:each="c : ${ciudades}" th:value="${c}" th:text="#{${c.clave}}">Ciudad</option>
             </select>
@@ -32,6 +32,7 @@
                        th:attr="hx-get=@{/nueva}"
                        hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
                        hx-include="closest form" hx-params="not _csrf,organizacionId"
+                       hx-indicator="#flujo"
                        th:text="#{nueva.centro.cambiar}">Cambiar</a>
                 </p>
                 <input type="hidden" th:field="*{organizacionId}">
@@ -45,7 +46,7 @@
                     <input type="radio" th:field="*{organizacionId}" th:value="${o.id}"
                            th:attr="hx-get=@{/nueva}"
                            hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
-                           hx-include="closest form" hx-params="not _csrf">
+                           hx-include="closest form" hx-params="not _csrf" hx-indicator="#flujo">
                     <span>
                         <strong th:text="${o.nombre}">Nombre</strong>
                         <span class="detalle" th:text="${o.horario}">Horario</span>

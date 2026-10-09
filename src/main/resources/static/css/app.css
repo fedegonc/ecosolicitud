@@ -76,6 +76,7 @@
     --nav-separador: rgb(255 255 255 / 0.14);
     --borde-suave: rgb(0 0 0 / 0.08);
     --sombra-panel: 0 10px 24px rgb(0 0 0 / 0.28);
+    --velo-foto: linear-gradient(transparent, rgb(0 0 0 / 0.65));
 
     /* medidas */
     --radio: 10px;
@@ -180,6 +181,92 @@ a.accion {
 
 .contenido h1 {
     margin-top: 0;
+}
+/* ============================================================
+   Vida: transiciones suaves, respuesta táctil y entrada de página
+   ============================================================ */
+
+@keyframes aparece {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes mecer {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
+@keyframes girar {
+    to { transform: rotate(360deg); }
+}
+
+main {
+    animation: aparece .2s ease-out;
+}
+
+.accion,
+.enlace,
+.filtros a,
+.secciones a,
+.opcion-material .etiqueta-material,
+.opcion-centro,
+.tarjeta {
+    transition: background-color .15s ease, border-color .15s ease,
+        color .15s ease, transform .12s ease, box-shadow .15s ease;
+}
+
+.accion:hover {
+    filter: brightness(1.08);
+}
+
+.accion.secundaria:hover {
+    background: var(--borde-suave);
+    border-color: var(--borde-fuerte);
+}
+
+.accion:active,
+.filtros a:active,
+.enlace:active {
+    transform: scale(.97);
+}
+
+.opcion-material:hover .etiqueta-material {
+    transform: translateY(-1px);
+}
+
+.opcion-material:active .etiqueta-material {
+    transform: scale(.95);
+}
+
+.opcion-centro:hover {
+    transform: translateY(-1px);
+}
+
+/* mientras vuela la petición htmx: spinner en el botón y bloqueo de doble click */
+.htmx-request .accion {
+    pointer-events: none;
+    position: relative;
+    padding-right: calc(var(--pad) + 1.4em);
+}
+
+.htmx-request .accion::before {
+    content: "";
+    position: absolute;
+    right: .55em;
+    top: 50%;
+    width: .9em;
+    height: .9em;
+    margin-top: -.45em;
+    border: var(--linea-media) solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: girar .7s linear infinite;
+}
+
+/* la cascada se atenúa mientras se recarga su sección */
+#flujo.htmx-request {
+    opacity: .5;
+    pointer-events: none;
 }
 /* ============================================================
    Componente: Navegación (sidebar, menú móvil, secciones)
@@ -507,6 +594,16 @@ fieldset.campo legend {
     cursor: pointer;
 }
 
+/* el contorno punteado invita a elegir; al marcar, queda firme */
+.opcion-material .etiqueta-material {
+    border: var(--linea-fina) dashed var(--borde-fuerte);
+}
+
+.opcion-material:has(input:checked) .etiqueta-material {
+    border-style: solid;
+    border-color: var(--acento);
+}
+
 .error {
     color: var(--error-texto);
     font-size: var(--t-sm);
@@ -610,7 +707,6 @@ fieldset.campo legend {
 
 .mat-plastico {
     background: var(--mat-plastico);
-    color: var(--acento-texto);
 }
 
 .mat-carton {
@@ -619,7 +715,6 @@ fieldset.campo legend {
 
 .mat-papel {
     background: var(--mat-papel);
-    color: var(--acento-texto);
 }
 
 .mat-vidrio {
@@ -699,7 +794,7 @@ fieldset.campo legend {
 
 .tarjeta {
     background: var(--superficie);
-    border: var(--linea-fina) solid var(--borde);
+    border: var(--linea-media) solid var(--borde);
     border-radius: var(--radio);
     padding: var(--gap-l);
     margin-bottom: var(--pad);
@@ -731,6 +826,49 @@ fieldset.campo legend {
 
 .detalle span:empty {
     display: none;
+}
+
+/* estado vacío: borde punteado, zona todavía por llenar */
+.vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-s);
+    padding: var(--pad-grande);
+    margin-bottom: var(--pad);
+    text-align: center;
+    color: var(--texto-suave);
+    border: var(--linea-fina) dashed var(--borde);
+    border-radius: var(--radio);
+}
+
+.vacio .icono {
+    width: var(--icono-grande);
+    height: var(--icono-grande);
+    color: var(--acento-suave);
+    animation: mecer 5s ease-in-out infinite;
+}
+
+.vacio .detalle {
+    justify-content: center;
+}
+
+/* QR para compartir: el SVG usa currentColor, toma el texto del tema */
+.qr {
+    margin: var(--pad) 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-xs);
+}
+
+.qr svg {
+    width: 8rem;
+    height: 8rem;
+    color: var(--texto);
+    background: var(--superficie);
+    border-radius: var(--radio);
+    padding: var(--gap-s);
 }
 
 .materiales {
@@ -1132,6 +1270,81 @@ fieldset.campo legend {
     }
 }
 
+/* ---------- fotos de la frontera ---------- */
+
+.foto-hero,
+.foto-ciudad {
+    position: relative;
+    margin: 0 0 var(--pad);
+    border-radius: var(--radio);
+    overflow: hidden;
+}
+
+.foto-hero {
+    max-width: var(--medida);
+}
+
+.foto-hero img,
+.foto-ciudad img,
+.franja,
+.foto-error {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+}
+
+.foto-hero img {
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-position: center 60%;
+}
+
+.foto-ciudad img {
+    height: 9rem;
+}
+
+.foto-hero h1,
+.foto-ciudad h2 {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: var(--pad-grande) var(--pad) var(--pad);
+    color: var(--texto-inverso);
+    background: var(--velo-foto);
+}
+
+.foto-ciudad h2 {
+    padding: var(--pad) var(--pad) var(--gap-m);
+}
+
+.franja {
+    height: 4rem;
+    margin-bottom: var(--gap-l);
+    border-radius: var(--radio);
+}
+
+.foto-error {
+    max-width: var(--panel-w);
+    height: auto;
+    margin-bottom: var(--pad);
+    border-radius: var(--radio);
+    filter: grayscale(0.5);
+}
+
+.credito-fotos {
+    font-size: var(--t-xs);
+    color: var(--nav-texto);
+    opacity: 0.7;
+}
+
+@media (min-width: 45rem) {
+    .foto-ciudad img {
+        height: 12rem;
+    }
+}
+
 /* ---------- impresión ---------- */
 
 @media print {
@@ -1143,6 +1356,7 @@ fieldset.campo legend {
     .filtros,
     .org-switch,
     .reiniciar,
+    .franja,
     .solo-pantalla {
         display: none !important;
     }
@@ -1184,5 +1398,13 @@ fieldset.campo legend {
 @media (max-width: 44.99rem) {
     .kanban {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
     }
 }

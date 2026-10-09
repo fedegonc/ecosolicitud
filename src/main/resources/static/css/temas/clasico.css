@@ -56,6 +56,9 @@
     --mat-metal: #505a5f;
     --mat-electronicos: #00703c;
 
+    /* chips oscuros: texto claro */
+    --chip-texto: #ffffff;
+
     /* esquinas rectas y densidad mayor */
     --radio: 0;
     --pad: 1rem;

@@ -1,18 +1,20 @@
 package com.ecosolicitud.solicitud;
 
 public enum Estado {
-    PENDIENTE("estado.pendiente", "reloj"),
-    EN_CURSO("estado.en-curso", "camion"),
-    COMPLETADA("estado.completada", "tilde"),
-    RECHAZADA("estado.rechazada", "cruz"),
-    CANCELADA("estado.cancelada", "prohibido");
+    PENDIENTE("estado.pendiente", "reloj", "estado.ayuda.pendiente"),
+    EN_CURSO("estado.en-curso", "camion", "estado.ayuda.en-curso"),
+    COMPLETADA("estado.completada", "tilde", "estado.ayuda.completada"),
+    RECHAZADA("estado.rechazada", "cruz", "estado.ayuda.rechazada"),
+    CANCELADA("estado.cancelada", "prohibido", "estado.ayuda.cancelada");
 
     private final String clave;
     private final String icono;
+    private final String ayuda;
 
-    Estado(String clave, String icono) {
+    Estado(String clave, String icono, String ayuda) {
         this.clave = clave;
         this.icono = icono;
+        this.ayuda = ayuda;
     }
 
     public String getClave() {
@@ -21,6 +23,10 @@ public enum Estado {
 
     public String getIcono() {
         return icono;
+    }
+
+    public String getAyuda() {
+        return ayuda;
     }
 
     public boolean esFinal() {

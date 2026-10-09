@@ -1,0 +1,51 @@
+/* ============================================================
+   Tema "frontera" — identidad territorial Rivera–Livramento:
+   verde monte como acento, arcilla para enlaces y alertas,
+   fondo arena. Redefine SOLO roles: ningún template ni
+   componente cambia. Se activa con ecosolicitud.tema=frontera
+   ============================================================ */
+
+:root {
+    /* superficies: arena y marfil, cálidas */
+    --fondo: #f1ead8;
+    --superficie: #faf5e8;
+    --texto: #2e2c21;
+    --texto-suave: #5c6350;
+    --texto-inverso: #f5efdc;
+
+    /* líneas */
+    --borde: #d6ccaf;
+    --borde-fuerte: #69785a;
+
+    /* acción: verde monte; enlaces y alertas en arcilla */
+    --acento: #45703a;
+    --acento-texto: #faf5e8;
+    --acento-suave: #60894e;
+    --enlace: #8f4f24;
+    --peligro: #a04a24;
+    --error-texto: #8f4f24;
+    --exito: #45703a;
+
+    /* estados: mismo modelo tonal, paleta de monte */
+    --estado-pendiente: #f0dc9e;
+    --estado-en-curso: #d2e0d8;
+    --estado-completada: #d8e4b4;
+    --estado-rechazada: #eccdbd;
+    --estado-cancelada: #e0dbc9;
+
+    /* navegación: verde noche */
+    --nav-fondo: #324428;
+    --nav-texto: #efe6cc;
+    --nav-activo: #4a7a3a;
+
+    /* foco en arcilla, coherente con el enlace */
+    --foco: var(--linea-gruesa) solid var(--enlace);
+
+    /* etiquetas de material: tierras claras */
+    --mat-papel: #dcccae;
+    --mat-carton: #e8c9a0;
+    --mat-plastico: #efe0a0;
+    --mat-vidrio: #cfe0d8;
+    --mat-metal: #dcd8c8;
+    --mat-electronicos: #d0ddd0;
+}

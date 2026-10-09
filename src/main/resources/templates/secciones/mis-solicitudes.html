@@ -10,6 +10,9 @@
     <p class="aviso" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
     <p class="alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
     <header class="panel-cabecera">
+        <img class="franja" th:src="@{/img/ciudad/franja-1600.webp}"
+             th:attr="srcset=@{/img/ciudad/franja-800.webp} + ' 800w, ' + @{/img/ciudad/franja-1600.webp} + ' 1600w'"
+             sizes="100vw" width="1600" height="231" alt="">
         <p class="bienvenida" th:text="#{mis.bienvenida(${usuario})}">Hola</p>
         <p th:text="#{mis.bienvenida.detalle}">Panel</p>
         <p class="detalle" th:text="#{mis.semana(${semana.recibidas}, ${semana.aceptadas}, ${semana.completadas}, ${semana.mediana()})}">Semana</p>
@@ -17,17 +20,21 @@
     <nav class="filtros">
         <a th:each="f : ${filtros}" th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(f.name())})}"
            th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
+           hx-target="main" hx-select="main"
            th:text="#{${'mis.filtro.' + #strings.toLowerCase(f.name())}}">Todas</a>
     </nav>
-    <p class="detalle" th:if="${solicitudes.isEmpty()}">
-        <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
-        <a th:href="@{/nueva}" th:text="#{mis.nueva}">Nueva solicitud</a>
-    </p>
+    <div class="vacio" th:if="${solicitudes.isEmpty()}">
+        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#hoja'"></use></svg>
+        <p class="detalle">
+            <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
+            <a th:href="@{/nueva}" th:text="#{mis.nueva}">Nueva solicitud</a>
+        </p>
+    </div>
     <div class="rejilla compacta">
     <article th:each="s : ${solicitudes}" class="tarjeta">
         <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre})}"></th:block>
         <div class="acciones" th:if="${s.estado.permiteCancelar()}">
-            <form th:action="@{/mis-solicitudes/{id}/cancelar(id=${s.id})}" method="post">
+            <form th:action="@{/mis-solicitudes/{id}/cancelar(id=${s.id})}" method="post" hx-indicator="this">
                 <input type="hidden" name="version" th:value="${s.version}">
                 <button type="submit" class="accion peligro"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#cruz'"></use></svg><span th:text="#{accion.cancelar}">Cancelar</span></button>
             </form>

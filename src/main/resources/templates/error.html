@@ -5,6 +5,8 @@
 </head>
 <body>
 <main layout:fragment="content">
+    <img class="foto-error" th:src="@{/img/ciudad/frontera-800.webp}" width="800" height="600"
+         th:alt="#{foto.frontera}">
     <h1 th:text="#{error.titulo}">Algo salió mal</h1>
     <p class="detalle" th:text="#{error.detalle(${status})}">Error</p>
     <p><a th:href="@{/}" th:text="#{error.volver}">Volver</a></p>

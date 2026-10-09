@@ -6,14 +6,17 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{avisos.titulo}">Avisos</h1>
-    <p class="detalle" th:if="${avisos.isEmpty()}" th:text="#{avisos.vacia}">Vacía</p>
+    <div class="vacio" th:if="${avisos.isEmpty()}">
+        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#campana'"></use></svg>
+        <p class="detalle" th:text="#{avisos.vacia}">Vacía</p>
+    </div>
 
     <!-- ciudadano: timeline con el estado actual de cada pedido -->
     <ol class="timeline" th:if="${rolActual.name() == 'CIUDADANO'}">
         <li th:each="a : ${avisos}" th:classappend="${!a.leida()} ? 'nueva'">
             <span class="aviso-id" th:if="${a.solicitudId() != null}"
                   th:text="'#' + ${a.solicitudId()}">#3</span>
-            <span class="etiqueta"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${a.estado().icono}"></use></svg>
+            <span class="etiqueta" th:title="#{${a.estado().ayuda}}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${a.estado().icono}"></use></svg>
             <span th:text="#{${a.estado().clave}}">Estado</span></span>
             <p class="aviso-texto" th:text="#{${a.tipo().clave}(${a.detalle()})}">Texto</p>
             <span class="detalle"
