@@ -7,18 +7,19 @@ cd "$(dirname "$0")/../.."
 
 fallas=0
 fallo() { echo "::error::$1"; fallas=1; }
-modulos=(shared organizacion solicitud demo)
+# Módulos = subdirectorios del paquete base; la lista se deriva para que un
+# módulo nuevo quede cubierto por el gate sin tocar este script.
+mapfile -t modulos < <(find src/main/java/com/ecosolicitud -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
 
 # 1. Ningún módulo importa la raíz: el gradiente va de específico a general.
-if grep -rqE "^import com\.ecosolicitud\.[A-Z]" "src/main/java/com/ecosolicitud/${modulos[0]}/" \
-        src/main/java/com/ecosolicitud/organizacion/ src/main/java/com/ecosolicitud/solicitud/ \
-        src/main/java/com/ecosolicitud/demo/ 2>/dev/null; then
+if grep -rqE "^import com\.ecosolicitud\.[A-Z]" src/main/java/com/ecosolicitud/*/ 2>/dev/null; then
     fallo "un módulo importa la raíz (com.ecosolicitud.X): el gradiente se invirtió"
     grep -rnE "^import com\.ecosolicitud\.[A-Z]" src/main/java/com/ecosolicitud/*/ | grep -v "/interno/"
 fi
 
 # 2. shared es hoja: si importa un módulo, dejó de ser la capa general.
-if grep -rqE "^import com\.ecosolicitud\.(organizacion|solicitud|demo)" src/main/java/com/ecosolicitud/shared/ 2>/dev/null; then
+otros_shared=$(printf '%s\n' "${modulos[@]}" | grep -v '^shared$' | paste -sd'|')
+if grep -rqE "^import com\.ecosolicitud\.($otros_shared)\." src/main/java/com/ecosolicitud/shared/ 2>/dev/null; then
     fallo "shared importa un módulo: dejó de ser hoja"
 fi
 

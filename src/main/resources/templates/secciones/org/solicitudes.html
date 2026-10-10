@@ -6,8 +6,6 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{org.solicitudes.titulo}">Solicitudes recibidas</h1>
-    <p class="aviso" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
-    <p class="alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
     <header class="panel-cabecera">
         <img class="franja" th:src="@{/img/ciudad/franja-1600.webp}"
              th:attr="srcset=@{/img/ciudad/franja-800.webp} + ' 800w, ' + @{/img/ciudad/franja-1600.webp} + ' 1600w'"
@@ -16,33 +14,41 @@
         <p th:text="#{org.bienvenida.detalle}">Panel</p>
         <p class="detalle" th:text="#{org.semana(${semana.recibidas}, ${semana.aceptadas}, ${semana.completadas}, ${semana.mediana()})}">Semana</p>
     </header>
-    <div class="kanban">
-    <section class="kanban-col compacta" th:each="g : ${bandeja.grupos}">
-        <h2 th:text="#{${g.clave}}">Grupo</h2>
-        <p class="detalle" th:if="${g.solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
-        <div class="rejilla">
-        <article th:each="s : ${g.solicitudes}" class="tarjeta">
-            <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano})}"></th:block>
-            <div class="acciones" th:if="${!s.estado.esFinal()}">
-                <form th:if="${s.estado.permiteAceptar()}"
-                      th:action="@{/org/solicitudes/{id}/aceptar(id=${s.id})}" method="post" hx-indicator="this">
-                    <input type="hidden" name="version" th:value="${s.version}">
-                    <button type="submit" class="accion"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg><span th:text="#{accion.aceptar}">Aceptar</span></button>
-                </form>
-                <form th:if="${s.estado.permiteRechazar()}"
-                      th:action="@{/org/solicitudes/{id}/rechazar(id=${s.id})}" method="post" hx-indicator="this">
-                    <input type="hidden" name="version" th:value="${s.version}">
-                    <button type="submit" class="accion peligro"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#cruz'"></use></svg><span th:text="#{accion.rechazar}">Rechazar</span></button>
-                </form>
-                <form th:if="${s.estado.permiteCompletar()}"
-                      th:action="@{/org/solicitudes/{id}/completar(id=${s.id})}" method="post" hx-indicator="this">
-                    <input type="hidden" name="version" th:value="${s.version}">
-                    <button type="submit" class="accion"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg><span th:text="#{accion.completar}">Completar</span></button>
-                </form>
+    <div id="bandeja">
+        <p class="aviso" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
+        <p class="alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
+        <div class="kanban">
+        <section class="kanban-col compacta" th:each="g : ${bandeja.grupos}"
+                 th:attr="aria-label=#{${g.clave}}">
+            <h2 th:text="#{${g.clave}}">Grupo</h2>
+            <p class="detalle" th:if="${g.solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
+            <div class="rejilla">
+            <article th:each="s : ${g.solicitudes}" class="tarjeta">
+                <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano}, @{/org/solicitudes/{id}(id=${s.id})})}"></th:block>
+                <div class="acciones" th:if="${!s.estado.esFinal()}">
+                    <form th:if="${s.estado.permiteAceptar()}"
+                          th:action="@{/org/solicitudes/{id}/aceptar(id=${s.id})}" method="post" hx-indicator="this"
+                          hx-target="#bandeja" hx-select="#bandeja" hx-swap="outerHTML" hx-disabled-elt="find button">
+                        <input type="hidden" name="version" th:value="${s.version}">
+                        <button type="submit" class="accion"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg><span th:text="#{accion.aceptar}">Aceptar</span></button>
+                    </form>
+                    <form th:if="${s.estado.permiteRechazar()}"
+                          th:action="@{/org/solicitudes/{id}/rechazar(id=${s.id})}" method="post" hx-indicator="this"
+                          hx-target="#bandeja" hx-select="#bandeja" hx-swap="outerHTML" hx-disabled-elt="find button">
+                        <input type="hidden" name="version" th:value="${s.version}">
+                        <button type="submit" class="accion peligro"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#cruz'"></use></svg><span th:text="#{accion.rechazar}">Rechazar</span></button>
+                    </form>
+                    <form th:if="${s.estado.permiteCompletar()}"
+                          th:action="@{/org/solicitudes/{id}/completar(id=${s.id})}" method="post" hx-indicator="this"
+                          hx-target="#bandeja" hx-select="#bandeja" hx-swap="outerHTML" hx-disabled-elt="find button">
+                        <input type="hidden" name="version" th:value="${s.version}">
+                        <button type="submit" class="accion"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg><span th:text="#{accion.completar}">Completar</span></button>
+                    </form>
+                </div>
+            </article>
             </div>
-        </article>
+        </section>
         </div>
-    </section>
     </div>
     <footer class="panel-pie">
         <a class="enlace" th:href="@{/org/solicitudes/archivadas}"

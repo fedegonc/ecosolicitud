@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<th:block th:fragment="cuerpo(s, titulo)">
+<th:block th:fragment="cuerpo(s, titulo, detalleUrl)">
     <h3><span th:text="'#' + ${s.id}">#1</span> · <span th:text="${titulo}">Nombre</span></h3>
     <p class="detalle"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="${s.direccion}">Dirección</span><span
             th:if="${s.referencia != null and !s.referencia.isEmpty()}"
             th:text="' · ' + ${s.referencia}"></span></p>
-    <iframe class="mapa-centro" th:if="${s.ubicacion != null}" loading="lazy"
-            th:src="${s.ubicacion.mapaEmbebido()}"
-            th:title="#{mapa.titulo.solicitud(${s.id})}"></iframe>
     <p class="detalle" th:if="${s.contacto != null and !s.contacto.isEmpty()}">
         <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg><a th:if="${s.contactoEsTelefono()}"
            th:href="'tel:' + ${#strings.replace(s.contacto, ' ', '')}"
            th:text="${s.contacto}">Contacto</a>
         <span th:unless="${s.contactoEsTelefono()}" th:text="${s.contacto}">Contacto</span>
     </p>
-    <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="${s.nota}">Nota</span></p>
     <ul class="materiales">
         <li th:each="m : ${s.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}">
             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
@@ -30,6 +26,16 @@
     <p class="detalle"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="#{mis.creada(${s.creada})}">Creada</span><span
             th:if="${s.finalizadaEn != null}"
             th:text="' · ' + #{mis.finalizada(${s.finalizada})}">Fin</span></p>
+    <p class="ficha-mas" th:if="${detalleUrl != null and s.tieneDetalle()}">
+        <a class="enlace" th:href="${detalleUrl}" th:attr="hx-get=${detalleUrl}"
+           hx-target="closest .ficha-mas" hx-swap="outerHTML"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{ficha.detalle}">Detalles</span></a>
+    </p>
+</th:block>
+<th:block th:fragment="detalle(s)">
+    <iframe class="mapa-centro" th:if="${s.ubicacion != null}" loading="lazy"
+            th:src="${s.ubicacion.mapaEmbebido()}"
+            th:title="#{mapa.titulo.solicitud(${s.id})}"></iframe>
+    <p class="detalle" th:if="${s.nota != null and !s.nota.isEmpty()}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="${s.nota}">Nota</span></p>
 </th:block>
 </body>
 </html>

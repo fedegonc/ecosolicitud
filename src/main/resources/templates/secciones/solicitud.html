@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{solicitud.detalle.titulo(${s.id})}">Solicitud</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <p class="detalle"><a class="enlace" th:href="${volver}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{panel.volver}">Volver</span></a></p>
+    <h1 th:text="#{solicitud.detalle.titulo(${s.id})}">Solicitud #1</h1>
+    <article class="tarjeta ficha">
+        <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${titular}, null)}"></th:block>
+        <th:block th:replace="~{secciones/ficha :: detalle(${s})}"></th:block>
+    </article>
+</main>
+</body>
+</html>

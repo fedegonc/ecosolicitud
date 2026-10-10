@@ -13,6 +13,7 @@ import com.ecosolicitud.solicitud.SolicitudCreacion;
 import com.ecosolicitud.solicitud.SolicitudService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,21 +23,29 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 class NuevaController {
 
+    // campos de texto que se validan al salir del campo (blur)
+    private static final List<String> CAMPOS_TEXTO = List.of(
+            "nombre", "contacto", "direccion", "referencia", "nota");
+
     private final SolicitudService solicitudes;
     private final OrganizacionService organizaciones;
     private final ActorSesion actor;
+    private final Validator validador;
 
     NuevaController(SolicitudService solicitudes, OrganizacionService organizaciones,
-            ActorSesion actor) {
+            ActorSesion actor, Validator validador) {
         this.solicitudes = solicitudes;
         this.organizaciones = organizaciones;
         this.actor = actor;
+        this.validador = validador;
     }
 
     @GetMapping(Rutas.NUEVA)
@@ -88,6 +97,18 @@ class NuevaController {
             errores.rejectValue("organizacionId", "nueva.error.organizacion");
         }
         return formulario(modelo, form, centros, centro);
+    }
+
+    // valida un solo campo y devuelve el mensaje (o vacío): feedback al blur
+    @PostMapping(Rutas.NUEVA + "/validar")
+    @ResponseBody
+    String validar(@RequestParam String campo, @ModelAttribute("form") NuevaForm form,
+            BindingResult errores) {
+        if (!CAMPOS_TEXTO.contains(campo)) {
+            return "";
+        }
+        return validador.validateProperty(form, campo).stream()
+                .map(v -> v.getMessage()).findFirst().orElse("");
     }
 
     private List<OrganizacionInfo> centrosDe(NuevaForm form) {

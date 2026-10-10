@@ -26,6 +26,11 @@ public record SolicitudInfo(long id, String direccion, String referencia,
         return contacto != null && contacto.matches("^[+0-9 ().-]{6,}$");
     }
 
+    // el detalle inline (mapa + nota) solo existe si hay algo que mostrar
+    public boolean tieneDetalle() {
+        return ubicacion != null || (nota != null && !nota.isBlank());
+    }
+
     public String creada() {
         return Fechas.corta(creadaEn);
     }

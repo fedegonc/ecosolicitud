@@ -5,7 +5,7 @@
 </head>
 <body>
 <main layout:fragment="content">
-    <p class="detalle"><a class="enlace" th:href="@{/comunidad}" th:text="#{comunidad.volver}">Volver</a></p>
+    <p class="detalle"><a class="enlace" th:href="@{/comunidad}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{comunidad.volver}">Volver</span></a></p>
     <figure class="foto-hero" th:if="${publicacion.imagen != null}">
         <img th:src="@{/img/comunidad/{s}-1600.webp(s=${publicacion.imagen})}"
              th:attr="srcset=@{/img/comunidad/{s}-800.webp(s=${publicacion.imagen})} + ' 800w, ' + @{/img/comunidad/{s}-1600.webp(s=${publicacion.imagen})} + ' 1600w'"

@@ -18,6 +18,9 @@
 </head>
 <body hx-boost="true" hx-indicator="#carga">
     <div id="carga" class="carga" aria-hidden="true"></div>
+    <div id="estado-red" class="solo-lectores" role="status"
+         th:attr="data-cargando=#{app.cargando}"
+         style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"></div>
     <a class="salto" href="#contenido" th:text="#{nav.saltar}">Saltar al contenido</a>
     <div class="app">
         <aside class="sidebar">
@@ -27,10 +30,10 @@
                     <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
                 </a>
                 <span th:fragment="idiomas" class="idiomas">
-                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#mundo'"></use></svg><a th:href="${rutaActual} + '?lang=es'"
-                       th:classappend="${#locale.language == 'es'} ? 'activa'">ES</a>
+                    <a th:href="${rutaActual} + '?lang=es'"
+                       th:classappend="${#locale.language == 'es'} ? 'activa'"><svg class="bandera" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#bandera-es'"></use></svg><span>ES</span></a>
                     <a th:href="${rutaActual} + '?lang=pt'"
-                       th:classappend="${#locale.language == 'pt'} ? 'activa'">PT</a>
+                       th:classappend="${#locale.language == 'pt'} ? 'activa'"><svg class="bandera" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#bandera-pt'"></use></svg><span>PT</span></a>
                 </span>
             </header>
             <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
@@ -41,8 +44,12 @@
                            th:attr="aria-current=${s.ruta == rutaActual} ? 'page' : null">
                             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
                             <span th:text="#{${s.clave}}">Sección</span>
-                            <span class="badge" th:if="${s.name() == 'AVISOS' and avisosSinLeer > 0}"
-                                  th:text="${avisosSinLeer}">2</span>
+                            <span class="badge-live" th:if="${s.name() == 'AVISOS'}"
+                                  th:attr="hx-get=@{/avisos/contador}"
+                                  hx-trigger="every 30s" hx-swap="innerHTML"
+                                  aria-live="polite">
+                                <span th:replace="~{secciones/badge :: badge}"></span>
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -71,7 +78,7 @@
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
                 </form>
-                <form th:fragment="reiniciar" th:if="${demoHabilitada}"
+                <form th:fragment="reiniciar" th:if="${demoHabilitada and demoReinicio}"
                       th:action="@{/demo/reiniciar}" method="post" class="reiniciar" hx-indicator="this">
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
@@ -109,9 +116,30 @@
                 </details>
             </div>
         </div>
-        <main class="contenido" id="contenido" layout:fragment="content"></main>
+        <div class="pagina">
+            <nav th:replace="~{secciones/migas :: migas}"></nav>
+            <main class="contenido" id="contenido" layout:fragment="content"></main>
+        </div>
     </div>
     <script>
+        // anuncia a lectores de pantalla solo peticiones lentas (>600ms):
+        // una navegación instantánea no necesita aviso
+        var avisoRed;
+        function estadoRed() {
+            return document.getElementById('estado-red');
+        }
+        document.body.addEventListener('htmx:beforeRequest', function () {
+            clearTimeout(avisoRed);
+            avisoRed = setTimeout(function () {
+                var el = estadoRed();
+                if (el) { el.textContent = el.dataset.cargando; }
+            }, 600);
+        });
+        document.body.addEventListener('htmx:afterRequest', function () {
+            clearTimeout(avisoRed);
+            var el = estadoRed();
+            if (el) { el.textContent = ''; }
+        });
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');
         }

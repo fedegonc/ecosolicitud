@@ -30,4 +30,8 @@
     <symbol id="mensaje" viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></symbol>
     <symbol id="descargar" viewBox="0 0 24 24"><path d="M13 3h-2v8H8l4 4 4-4h-3zM5 19h14v2H5z"/></symbol>
     <symbol id="persona" viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></symbol>
+    <symbol id="calendario" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14zM5 8V6h14v2z"/></symbol>
+    <symbol id="flecha-izq" viewBox="0 0 24 24"><path d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"/></symbol>
+    <symbol id="bandera-es" viewBox="0 0 24 16"><path fill="#FFFFFF" d="M0 0h24v16H0z"/><path fill="#0038A8" d="M0 1.8h24v1.8H0zm0 3.6h24v1.8H0zm0 5.4h24v1.8H0zm0 3.6h24V16H0z"/><path fill="#FFFFFF" d="M0 0h10v9H0z"/><circle cx="5" cy="4.5" r="2" fill="#FCD116" stroke="#9C6B00" stroke-width=".4"/></symbol>
+    <symbol id="bandera-pt" viewBox="0 0 24 16"><path fill="#009B3A" d="M0 0h24v16H0z"/><path fill="#FEDF00" d="M12 1.5 22.5 8 12 14.5 1.5 8z"/><circle cx="12" cy="8" r="3.2" fill="#002776"/><path fill="#FFFFFF" d="M9.2 6.3a5.5 5.5 0 0 1 5.7 3l-.4.3a5 5 0 0 0-5-3z"/></symbol>
 </svg>

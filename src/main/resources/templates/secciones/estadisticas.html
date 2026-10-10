@@ -7,9 +7,11 @@
 <main layout:fragment="content" th:with="t=${resumen.total}">
     <h1 th:text="#{estadisticas.titulo}">Estadísticas del servicio</h1>
     <p class="detalle" th:text="#{estadisticas.intro}">Intro</p>
+    <div id="listado">
     <nav class="filtros">
         <a th:each="p : ${periodos}" th:href="@{/estadisticas(periodo=${p.parametro})}"
            th:classappend="${p == resumen.periodo} ? 'activa'" th:attr="aria-current=${p == resumen.periodo} ? 'page' : null"
+           hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
            th:text="#{${'estadisticas.periodo.' + p.parametro}}">Período</a>
     </nav>
     <p class="detalle" th:text="#{estadisticas.recibidas(${t.recibidas})}">N recibidas</p>
@@ -69,6 +71,7 @@
             </table>
         </div>
     </section>
+    </div>
     <p class="detalle" th:text="#{estadisticas.nota}">Nota</p>
 </main>
 </body>

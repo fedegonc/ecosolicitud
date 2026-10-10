@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rutas;
 
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ class GuiaController {
         var articulo = guia.buscar(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelo.addAttribute("articulo", articulo);
+        modelo.addAttribute("migaFinal", Miga.actual(articulo.titulo()));
         // la guía explica, los centros ejecutan: si el artículo es de un material,
         // se enlaza a quién lo recibe (dato que ya vive en el módulo organizacion)
         modelo.addAttribute("centros", articulo.material() == null

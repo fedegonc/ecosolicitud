@@ -5,7 +5,7 @@
 </head>
 <body>
 <main layout:fragment="content">
-    <p class="detalle"><a class="enlace" th:href="@{/guia}" th:text="#{guia.volver}">Volver</a></p>
+    <p class="detalle"><a class="enlace" th:href="@{/guia}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{guia.volver}">Volver</span></a></p>
     <figure class="foto-hero" th:if="${articulo.imagen != null}">
         <img th:src="@{/img/guia/{s}-1600.webp(s=${articulo.imagen})}"
              th:attr="srcset=@{/img/guia/{s}-800.webp(s=${articulo.imagen})} + ' 800w, ' + @{/img/guia/{s}-1600.webp(s=${articulo.imagen})} + ' 1600w'"

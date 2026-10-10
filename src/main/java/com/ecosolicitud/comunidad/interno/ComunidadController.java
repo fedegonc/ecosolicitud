@@ -2,6 +2,7 @@ package com.ecosolicitud.comunidad.interno;
 
 import com.ecosolicitud.comunidad.ComunidadService;
 import com.ecosolicitud.comunidad.FiltroComunidad;
+import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rutas;
 
 import org.springframework.http.HttpStatus;
@@ -33,8 +34,10 @@ class ComunidadController {
 
     @GetMapping(Rutas.COMUNIDAD + "/{id}")
     String publicacion(@PathVariable long id, Model modelo) {
-        modelo.addAttribute("publicacion", comunidad.buscar(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        var publicacion = comunidad.buscar(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        modelo.addAttribute("publicacion", publicacion);
+        modelo.addAttribute("migaFinal", Miga.actual(publicacion.titulo()));
         return "secciones/comunidad-publicacion";
     }
 }

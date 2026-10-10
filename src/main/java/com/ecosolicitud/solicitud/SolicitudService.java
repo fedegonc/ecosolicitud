@@ -117,6 +117,13 @@ public class SolicitudService {
                 s -> s.cancelar(Instant.now()), TipoAviso.CANCELADA);
     }
 
+    // solo el autor o la organización destinataria pueden verla
+    public Optional<SolicitudInfo> detalle(Actor actor, long id) {
+        return repositorio.findById(id)
+                .filter(s -> esDestinataria(actor, s) || esAutor(actor, s))
+                .map(s -> aInfos(List.of(s)).get(0));
+    }
+
     public List<SolicitudInfo> todas() {
         var todas = repositorio.findAll(Sort.by("id"));
         var nombres = organizaciones.nombres(todas.stream()
@@ -181,8 +188,7 @@ public class SolicitudService {
     }
 
     private boolean esAutor(Actor actor, Solicitud s) {
-        return actor.esCiudadano()
-                && s.getCiudadano().getId().equals(actor.ciudadanoId());
+        return actor.esCiudadano() && s.getCiudadano().getId().equals(actor.ciudadanoId());
     }
 
     // una sola consulta de nombres para toda la lista

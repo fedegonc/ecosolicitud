@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="migas" class="migas" th:aria-label="#{miga.aria}"
+     th:if="${migas != null and (migas.size() > 1 or migaFinal != null)}">
+    <ol>
+        <li th:each="m : ${migas}">
+            <a class="enlace" th:if="${m.url != null}" th:href="${m.url}">
+                <span th:if="${m.literal == null}" th:text="#{${m.clave}}">Miga</span>
+                <span th:if="${m.literal != null}" th:text="${m.literal}">Miga</span>
+            </a>
+            <span th:unless="${m.url != null}" aria-current="page">
+                <span th:if="${m.literal == null}" th:text="#{${m.clave}}">Miga</span>
+                <span th:if="${m.literal != null}" th:text="${m.literal}">Miga</span>
+            </span>
+        </li>
+        <li th:if="${migaFinal != null}">
+            <span aria-current="page">
+                <span th:if="${migaFinal.literal == null}" th:text="#{${migaFinal.clave}}">Miga</span>
+                <span th:if="${migaFinal.literal != null}" th:text="${migaFinal.literal}">Miga</span>
+            </span>
+        </li>
+    </ol>
+</nav>
+</body>
+</html>

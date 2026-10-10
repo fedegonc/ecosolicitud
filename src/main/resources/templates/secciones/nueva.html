@@ -83,37 +83,54 @@
 
             <fieldset class="campo" th:if="${centro != null}">
                 <legend th:text="#{nueva.grupo.contacto}">Contacto</legend>
-                <label class="campo">
-                    <span th:text="#{nueva.nombre}">Nombre</span>
+                <p class="aviso" role="note" th:text="#{nueva.datos.prueba}">Usá datos de prueba</p>
+                <label class="campo"
+                       hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
+                    <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#persona'"></use></svg><span th:text="#{nueva.nombre}">Nombre</span></span>
                     <input type="text" th:field="*{nombre}" required maxlength="80"
-                           autocomplete="name" th:placeholder="#{nueva.nombre.ejemplo}">
-                    <span class="error" th:if="${#fields.hasErrors('nombre')}"
-                          th:errors="*{nombre}">Error</span>
+                           autocomplete="name" th:placeholder="#{nueva.nombre.ejemplo}"
+                           aria-describedby="err-nombre"
+                           th:attr="hx-post=@{/nueva/validar(campo='nombre')},aria-invalid=${#fields.hasErrors('nombre')}"
+                           hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
+                           hx-include="closest form">
+                    <span class="error" id="err-nombre" role="alert"><span th:errors="*{nombre}"></span></span>
                 </label>
-                <label class="campo">
-                    <span th:text="#{nueva.contacto}">Celular o contacto</span>
+                <label class="campo"
+                       hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
+                    <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg><span th:text="#{nueva.contacto}">Celular o contacto</span></span>
                     <input type="tel" th:field="*{contacto}" required maxlength="40"
-                           autocomplete="tel" th:placeholder="#{nueva.contacto.ejemplo}">
-                    <span class="ayuda" th:text="#{nueva.contacto.ayuda}">Ayuda</span>
-                    <span class="error" th:if="${#fields.hasErrors('contacto')}"
-                          th:errors="*{contacto}">Error</span>
+                           inputmode="tel" autocomplete="tel" th:placeholder="#{nueva.contacto.ejemplo}"
+                           aria-describedby="ayuda-contacto err-contacto"
+                           th:attr="hx-post=@{/nueva/validar(campo='contacto')},aria-invalid=${#fields.hasErrors('contacto')}"
+                           hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
+                           hx-include="closest form">
+                    <span class="ayuda" id="ayuda-contacto" th:text="#{nueva.contacto.ayuda}">Ayuda</span>
+                    <span class="error" id="err-contacto" role="alert"><span th:errors="*{contacto}"></span></span>
                 </label>
             </fieldset>
 
             <fieldset class="campo bloque-ubicacion" th:if="${centro != null}">
                 <legend th:text="#{nueva.grupo.ubicacion}">Ubicación</legend>
-                <label class="campo">
-                    <span th:text="#{nueva.direccion}">Dirección</span>
+                <label class="campo"
+                       hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
+                    <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{nueva.direccion}">Dirección</span></span>
                     <input type="text" th:field="*{direccion}" required maxlength="120"
-                           autocomplete="street-address">
-                    <span class="error" th:if="${#fields.hasErrors('direccion')}"
-                          th:errors="*{direccion}">Error</span>
+                           autocomplete="street-address"
+                           aria-describedby="err-direccion"
+                           th:attr="hx-post=@{/nueva/validar(campo='direccion')},aria-invalid=${#fields.hasErrors('direccion')}"
+                           hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
+                           hx-include="closest form">
+                    <span class="error" id="err-direccion" role="alert"><span th:errors="*{direccion}"></span></span>
                 </label>
-                <label class="campo">
+                <label class="campo"
+                       hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span th:text="#{nueva.referencia}">Referencia</span>
-                    <input type="text" th:field="*{referencia}" maxlength="120">
-                    <span class="error" th:if="${#fields.hasErrors('referencia')}"
-                          th:errors="*{referencia}">Error</span>
+                    <input type="text" th:field="*{referencia}" maxlength="120"
+                           aria-describedby="err-referencia"
+                           th:attr="hx-post=@{/nueva/validar(campo='referencia')},aria-invalid=${#fields.hasErrors('referencia')}"
+                           hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
+                           hx-include="closest form">
+                    <span class="error" id="err-referencia" role="alert"><span th:errors="*{referencia}"></span></span>
                 </label>
                 <div class="campo">
                     <span th:text="#{mapa.titulo}">Ubicación en el mapa</span>
@@ -131,10 +148,15 @@
                     <span class="error" th:if="${#fields.hasErrors('latitud')}"
                           th:errors="*{latitud}">Error</span>
                 </div>
-                <label class="campo">
-                    <span th:text="#{nueva.nota}">Nota</span>
-                    <textarea th:field="*{nota}" rows="3" maxlength="300"></textarea>
-                    <span class="error" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">Error</span>
+                <label class="campo"
+                       hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
+                    <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="#{nueva.nota}">Nota</span></span>
+                    <textarea th:field="*{nota}" rows="3" maxlength="300"
+                              aria-describedby="err-nota"
+                              th:attr="hx-post=@{/nueva/validar(campo='nota')},aria-invalid=${#fields.hasErrors('nota')}"
+                              hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
+                              hx-include="closest form"></textarea>
+                    <span class="error" id="err-nota" role="alert"><span th:errors="*{nota}"></span></span>
                 </label>
                 <button type="submit" class="accion"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#enviar'"></use></svg><span th:text="#{nueva.enviar}">Enviar</span></button>
             </fieldset>

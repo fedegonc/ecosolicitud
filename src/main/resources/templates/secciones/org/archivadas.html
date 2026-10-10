@@ -6,11 +6,11 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{org.archivadas.titulo}">Solicitudes archivadas</h1>
-    <p><a class="enlace" th:href="@{/org/solicitudes}" th:text="#{panel.volver}">Volver</a></p>
+    <p><a class="enlace" th:href="@{/org/solicitudes}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{panel.volver}">Volver</span></a></p>
     <p class="detalle" th:if="${solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
     <div class="rejilla">
         <article th:each="s : ${solicitudes}" class="tarjeta">
-            <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano})}"></th:block>
+            <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano}, @{/org/solicitudes/{id}(id=${s.id})})}"></th:block>
         </article>
     </div>
 </main>

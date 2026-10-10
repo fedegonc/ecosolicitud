@@ -154,6 +154,64 @@ body {
     margin-right: 0.3em;
 }
 
+.idiomas .bandera {
+    width: 1.1em;
+    height: 0.75em;
+    vertical-align: -0.1em;
+    margin-right: 0.3em;
+    border-radius: 2px;
+    outline: var(--linea-fina) solid var(--borde-suave);
+}
+
+.campo > span .icono {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.16em;
+    margin-right: 0.3em;
+    color: var(--acento);
+}
+
+.pagina {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.migas ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap-xs);
+    list-style: none;
+    margin: 0;
+    padding: var(--gap-s) var(--pad) 0;
+    font-size: var(--t-sm);
+    color: var(--texto-suave);
+}
+
+.migas li + li::before {
+    content: "›";
+    margin-right: var(--gap-xs);
+    color: var(--borde-fuerte);
+}
+
+.migas [aria-current="page"] {
+    color: var(--texto);
+}
+
+.solo-lectores {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 .contenido {
     flex: 1;
     padding: var(--pad);
@@ -606,6 +664,7 @@ main {
 }
 
 .campo input[type="text"],
+.campo input[type="tel"],
 .campo select,
 .campo textarea {
     width: 100%;
@@ -1571,6 +1630,7 @@ fieldset.campo legend {
     .org-switch button,
     .reiniciar button,
     .campo input[type="text"],
+    .campo input[type="tel"],
     .campo select,
     .campo textarea {
         min-height: var(--toque-min);

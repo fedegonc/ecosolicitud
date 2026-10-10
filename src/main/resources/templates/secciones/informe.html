@@ -15,7 +15,7 @@
         <a class="enlace" th:href="${rutaInforme} + '?mes=' + ${informe.mes.plusMonths(1)}"
            hx-target="main" hx-select="main"
            th:text="#{informe.siguiente}">Mes siguiente →</a>
-        <a class="enlace" th:href="${volver}" th:text="#{panel.volver}">Volver</a>
+        <a class="enlace" th:href="${volver}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{panel.volver}">Volver</span></a>
     </p>
     <p class="solo-pantalla"><button class="accion" type="button" onclick="window.print()"
            th:text="#{informe.imprimir}">Imprimir</button></p>

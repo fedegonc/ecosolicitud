@@ -4,16 +4,21 @@ import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 
 import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.solicitud.Filtro;
+import com.ecosolicitud.solicitud.SolicitudInfo;
 import com.ecosolicitud.solicitud.SolicitudService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -45,8 +50,21 @@ class MisSolicitudesController {
         modelo.addAttribute("titular", actor.actual().nombreCiudadano());
         modelo.addAttribute("volver", Rutas.MIS_SOLICITUDES);
         modelo.addAttribute("rutaInforme", Rutas.MIS_INFORME);
+        modelo.addAttribute("migaFinal", Miga.actualClave("panel.informe"));
         modelo.addAttribute("informe", servicio.informe(actor.actual(), parseMes(mes)));
         return "secciones/informe";
+    }
+
+    // con HX-Request devuelve solo el detalle expandible; si no, la página
+    @GetMapping(Rutas.MIS_SOLICITUDES + "/{id}")
+    String detalle(@PathVariable long id, Model modelo,
+            @RequestHeader(name = "HX-Request", required = false) boolean htmx) {
+        var s = solicitudDelActor(id);
+        modelo.addAttribute("s", s);
+        modelo.addAttribute("titular", s.organizacionNombre());
+        modelo.addAttribute("volver", Rutas.MIS_SOLICITUDES);
+        modelo.addAttribute("migaFinal", Miga.actual("#" + s.id()));
+        return htmx ? "secciones/ficha :: detalle" : "secciones/solicitud";
     }
 
     @PostMapping(Rutas.MIS_SOLICITUDES + "/{id}/cancelar")
@@ -54,6 +72,11 @@ class MisSolicitudesController {
             RedirectAttributes redir) {
         return Respuestas.intentar(() -> servicio.cancelar(actor.actual(), id, version),
                 "mis.cancelada", id, Rutas.MIS_SOLICITUDES, redir);
+    }
+
+    private SolicitudInfo solicitudDelActor(long id) {
+        return servicio.detalle(actor.actual(), id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     private static YearMonth parseMes(String mes) {

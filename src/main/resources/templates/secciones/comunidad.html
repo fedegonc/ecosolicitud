@@ -6,31 +6,35 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.comunidad}">Comunidad</h1>
-    <nav class="filtros">
-        <a th:each="f : ${filtros}" th:href="@{/comunidad(tipo=${#strings.toLowerCase(f.name())})}"
-           th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
-           th:text="#{${'comunidad.filtro.' + #strings.toLowerCase(f.name())}}">Todas</a>
-    </nav>
-    <p class="detalle" th:if="${publicaciones.isEmpty()}" th:text="#{comunidad.vacia}">Vacía</p>
-    <div class="rejilla">
+    <div id="listado">
+        <nav class="filtros">
+            <a th:each="f : ${filtros}" th:href="@{/comunidad(tipo=${#strings.toLowerCase(f.name())})}"
+               th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
+               hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
+               th:text="#{${'comunidad.filtro.' + #strings.toLowerCase(f.name())}}">Todas</a>
+        </nav>
+        <p class="detalle" th:if="${publicaciones.isEmpty()}" th:text="#{comunidad.vacia}">Vacía</p>
+        <div class="rejilla">
         <article th:each="p : ${publicaciones}" class="tarjeta">
             <img class="tarjeta-img" th:if="${p.imagen != null}"
                  th:src="@{/img/comunidad/{s}-800.webp(s=${p.imagen})}"
                  th:attr="srcset=@{/img/comunidad/{s}-800.webp(s=${p.imagen})} + ' 800w, ' + @{/img/comunidad/{s}-1600.webp(s=${p.imagen})} + ' 1600w'"
                  sizes="(min-width: 45rem) 18rem, 100vw" width="800" height="600"
-                 loading="lazy" alt="">
+                 loading="lazy" th:alt="#{${'foto.comunidad.' + p.imagen}}">
             <h3><a class="enlace" th:href="@{/comunidad/{id}(id=${p.id})}"
                    th:text="${p.titulo}">Título</a></h3>
             <p class="detalle" th:text="${p.resumen}">Resumen</p>
             <p class="detalle">
                 <span class="etiqueta" th:text="#{${p.tipo.clave}}">Tipo</span>
-                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="${p.fecha}">Fecha</span>
+                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#calendario'"></use></svg><span th:text="${p.fecha}">Fecha</span>
             </p>
         </article>
+        </div>
     </div>
     <section>
         <h2 th:text="#{comunidad.recicladores}">Recicladores independientes</h2>
         <p class="detalle" th:text="#{comunidad.recicladores.ayuda}">Ayuda</p>
+        <p class="detalle" th:text="#{comunidad.recicladores.demo}">Datos de prueba</p>
         <p class="detalle" th:if="${recicladores.isEmpty()}"
            th:text="#{comunidad.recicladores.vacia}">Vacío</p>
         <ul class="equipo">

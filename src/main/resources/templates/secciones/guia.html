@@ -14,7 +14,7 @@
                  th:src="@{/img/guia/{s}-800.webp(s=${a.imagen})}"
                  th:attr="srcset=@{/img/guia/{s}-800.webp(s=${a.imagen})} + ' 800w, ' + @{/img/guia/{s}-1600.webp(s=${a.imagen})} + ' 1600w'"
                  sizes="(min-width: 45rem) 18rem, 100vw" width="800" height="600"
-                 loading="lazy" alt="">
+                 loading="lazy" th:alt="#{${'foto.guia.' + a.imagen}}">
             <h3><a class="enlace" th:href="@{/guia/{id}(id=${a.id})}"
                    th:text="${a.titulo}">Título</a></h3>
             <p class="detalle" th:if="${a.material != null}">
@@ -23,7 +23,7 @@
                         <span th:text="${a.material.nombre}">Material</span>
                     </span>
             </p>
-            <p class="detalle" th:text="#{guia.leer}">Leer</p>
+            <p class="detalle"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{guia.leer}">Leer</span></p>
         </article>
     </div>
 </main>

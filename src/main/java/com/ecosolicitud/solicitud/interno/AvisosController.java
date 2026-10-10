@@ -28,4 +28,10 @@ class AvisosController {
         servicio.marcarLeidas(a);
         return "secciones/avisos";
     }
+
+    // solo el badge: el nav lo pide periódicamente sin navegar
+    @GetMapping(Rutas.AVISOS + "/contador")
+    String contador() {
+        return "secciones/badge :: badge";
+    }
 }
