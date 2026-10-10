@@ -11,7 +11,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
@@ -33,8 +32,7 @@ public class RespuestaRespaldo {
     @Column(nullable = false, length = 2)
     private String idioma;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String contenido;
 
     @Column(nullable = false)

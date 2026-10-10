@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+// El reinicio borra el dataset: en prod queda apagado con
+// ecosolicitud.demo.reiniciar=false para que un usuario no lo dispare.
 @Controller
-@ConditionalOnProperty(name = "ecosolicitud.demo.habilitada",
+@ConditionalOnProperty(name = {"ecosolicitud.demo.habilitada", "ecosolicitud.demo.reiniciar"},
         havingValue = "true", matchIfMissing = true)
 class DemoReinicioController {
 
