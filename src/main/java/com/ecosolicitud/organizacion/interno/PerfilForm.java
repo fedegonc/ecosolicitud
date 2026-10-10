@@ -25,10 +25,9 @@ public class PerfilForm {
     @Size(max = 80, message = "{perfil.error.horario}")
     private String horario;
 
-    @NotBlank(message = "{perfil.error.telefono}")
-    @Size(max = 30, message = "{perfil.error.telefono}")
-    @Pattern(regexp = Organizacion.PATRON_TELEFONO,
-            message = "{perfil.error.telefono}")
+    @NotBlank(message = "{perfil.error.telefono.vacio}")
+    @Pattern(regexp = Organizacion.PATRON_TELEFONO_O_VACIO,
+            message = "{perfil.error.telefono.formato}")
     private String telefono;
 
     private Double latitud;

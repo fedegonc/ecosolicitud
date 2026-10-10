@@ -51,7 +51,15 @@
         var quitar = form.querySelector('[data-mapa-quitar]');
 
         cargarLeaflet(el).then(function () {
-            var mapa = L.map(el, { scrollWheelZoom: false });
+            // Leaflet detecta la carpeta de imágenes leyendo su CSS o buscando
+            // link[href$="leaflet.css"]; con assets versionados (leaflet-<hash>.css)
+            // o CSS aún sin aplicar, devuelve vacío y el marcador rompe. Se fija
+            // el path explícito a partir de la URL del propio leaflet.js.
+            L.Icon.Default.imagePath = el.dataset.leafletJs.replace(/[^/]+$/, '') + 'images/';
+            // en táctil el drag del mapa secuestra el scroll de la página:
+            // se apaga ahí (quedan zoom por botones, tocar para marcar y
+            // arrastrar el marcador); en escritorio sigue habilitado.
+            var mapa = L.map(el, { scrollWheelZoom: false, dragging: !L.Browser.touch });
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

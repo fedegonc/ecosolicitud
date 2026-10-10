@@ -725,6 +725,19 @@ fieldset.campo legend {
     border-radius: var(--radio);
 }
 
+.resumen-errores ul {
+    margin: var(--gap-xs) 0 0;
+    padding-left: var(--gap-l);
+}
+
+/* el campo con error se marca en el borde, no solo con el texto chico */
+.campo.invalido input[type="text"],
+.campo.invalido input[type="tel"],
+.campo.invalido select,
+.campo.invalido textarea {
+    border: var(--linea-gruesa) solid var(--error-texto);
+}
+
 .ayuda {
     display: block;
     margin-top: var(--gap-xs);
@@ -1488,7 +1501,7 @@ fieldset.campo legend {
 .mapa-editable {
     display: block;
     width: 100%;
-    height: 10rem;
+    height: 7rem;
     border: var(--linea-fina) solid var(--borde);
     border-radius: var(--radio);
     background: var(--superficie);
@@ -1498,7 +1511,15 @@ fieldset.campo legend {
 .mapa-editable {
     position: relative;
     z-index: 0;
-    height: 16rem;
+    height: 12rem;
+}
+
+/* en táctil el iframe traga el gesto de scroll: es vista previa,
+   la interacción completa queda en el enlace "Ver en el mapa" */
+@media (pointer: coarse) {
+    .mapa-centro {
+        pointer-events: none;
+    }
 }
 
 .mapa-acciones {

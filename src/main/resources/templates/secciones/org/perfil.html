@@ -16,11 +16,17 @@
     <p class="alerta" role="alert" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
     <div class="perfil-grid">
     <form th:action="@{/org/perfil}" method="post" th:object="${form}" class="ficha" hx-indicator="this">
+        <div class="alerta resumen-errores" role="alert" tabindex="-1" th:if="${#fields.hasErrors('*')}">
+            <p th:text="#{perfil.resumen.titulo}">Revisá estos datos antes de guardar</p>
+            <ul>
+                <li th:each="e : ${#fields.errors('*')}" th:text="${e}">Error</li>
+            </ul>
+        </div>
         <p class="detalle"><strong th:text="#{perfil.nombre}">Nombre</strong>:
             <span th:text="${organizacionActiva.nombre}">Nombre</span></p>
         <p class="detalle"><strong th:text="#{perfil.ciudad}">Ciudad</strong>:
             <span th:text="#{${organizacionActiva.ciudad.clave}}">Ciudad</span></p>
-        <fieldset class="campo">
+        <fieldset class="campo" th:classappend="${#fields.hasErrors('materiales')} ? 'invalido'">
             <legend th:text="#{perfil.materiales}">Materiales aceptados</legend>
             <label th:each="m : ${materialesTodos}" class="opcion-material">
                 <input type="checkbox" th:field="*{materiales}" th:value="${m.codigo}">
@@ -28,18 +34,21 @@
             </label>
             <p class="error" th:if="${#fields.hasErrors('materiales')}" th:errors="*{materiales}">Error</p>
         </fieldset>
-        <label class="campo">
+        <label class="campo" th:classappend="${#fields.hasErrors('horario')} ? 'invalido'">
             <span th:text="#{perfil.horario}">Horario</span>
-            <input type="text" th:field="*{horario}">
-            <span class="error" th:if="${#fields.hasErrors('horario')}" th:errors="*{horario}">Error</span>
+            <input type="text" th:field="*{horario}" th:aria-invalid="${#fields.hasErrors('horario')}"
+                   aria-describedby="err-horario">
+            <span class="error" id="err-horario" th:if="${#fields.hasErrors('horario')}" th:errors="*{horario}">Error</span>
         </label>
-        <label class="campo">
+        <label class="campo" th:classappend="${#fields.hasErrors('telefono')} ? 'invalido'">
             <span th:text="#{perfil.telefono}">Teléfono</span>
             <input type="text" th:field="*{telefono}" inputmode="tel"
                    autocomplete="tel" maxlength="30"
-                   th:placeholder="#{perfil.telefono.ejemplo}">
-            <span class="ayuda" th:text="#{perfil.telefono.ayuda}">Ayuda</span>
-            <span class="error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}">Error</span>
+                   th:placeholder="#{perfil.telefono.ejemplo}"
+                   th:aria-invalid="${#fields.hasErrors('telefono')}"
+                   aria-describedby="ayuda-telefono err-telefono">
+            <span class="ayuda" id="ayuda-telefono" th:text="#{perfil.telefono.ayuda}">Ayuda</span>
+            <span class="error" id="err-telefono" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}">Error</span>
         </label>
         <div class="campo">
             <span th:text="#{mapa.titulo.perfil}">Ubicación del acopio</span>
@@ -59,6 +68,7 @@
         </div>
         <input type="hidden" th:field="*{version}">
         <button type="submit" class="accion" th:text="#{perfil.guardar}">Guardar</button>
+        <script th:if="${#fields.hasErrors('*')}">document.querySelector('.resumen-errores').focus();</script>
     </form>
     <aside class="perfil-previa">
         <h2 th:text="#{perfil.previa}">Así te ven los vecinos</h2>

@@ -31,9 +31,12 @@ import org.hibernate.annotations.BatchSize;
 @Getter
 public class Organizacion {
 
-    // el patrón vive acá (la regla es del dominio); PerfilForm lo referencia
+    // el patrón vive acá (la regla es del dominio); PerfilForm lo referencia.
+    // Largo máximo 30 = columna. Vacío lo cubre @NotBlank, así que el patrón lo deja pasar
+    // para que cada caso tenga un solo mensaje.
     static final String PATRON_TELEFONO =
-            "^(?=(?:\\D*\\d){8,})\\+?[0-9(][0-9 ()\\-.]{4,28}[0-9]$";
+            "^(?=(?:\\D*\\d){8,})\\+?[0-9(][0-9 ()\\-.]{4,27}[0-9]$";
+    static final String PATRON_TELEFONO_O_VACIO = "^\\s*$|" + PATRON_TELEFONO;
 
     @Id
     private String id;
@@ -57,9 +60,8 @@ public class Organizacion {
     @Column(nullable = false, length = 80)
     private String horario;
 
-    @NotBlank(message = "{perfil.error.telefono}")
-    @Size(max = 30, message = "{perfil.error.telefono}")
-    @Pattern(regexp = PATRON_TELEFONO, message = "{perfil.error.telefono}")
+    @NotBlank(message = "{perfil.error.telefono.vacio}")
+    @Pattern(regexp = PATRON_TELEFONO_O_VACIO, message = "{perfil.error.telefono.formato}")
     @Column(nullable = false, length = 30)
     private String telefono;
 
