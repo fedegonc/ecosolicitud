@@ -785,6 +785,13 @@ fieldset.campo legend {
     color: var(--texto);
 }
 
+/* CTA principal: más grande que una acción común */
+.accion.cta {
+    padding: var(--pad) var(--pad-grande);
+    font-size: var(--t-lg);
+    box-shadow: 0 2px 6px var(--borde);
+}
+
 .acciones {
     display: flex;
     gap: var(--gap-s);
