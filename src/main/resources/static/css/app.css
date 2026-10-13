@@ -103,6 +103,10 @@
     display: none !important;
 }
 
+html {
+    scrollbar-gutter: stable;
+}
+
 body {
     margin: 0;
     font-size: var(--t-base);
@@ -286,11 +290,6 @@ a.accion {
    Vida: transiciones suaves, respuesta táctil y entrada de página
    ============================================================ */
 
-@keyframes aparece {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: none; }
-}
-
 @keyframes mecer {
     0%, 100% { transform: rotate(-3deg); }
     50% { transform: rotate(3deg); }
@@ -298,10 +297,6 @@ a.accion {
 
 @keyframes girar {
     to { transform: rotate(360deg); }
-}
-
-main {
-    animation: aparece .2s ease-out;
 }
 
 .accion,
@@ -822,12 +817,16 @@ fieldset.campo legend {
 
 .portada-hero .foto-hero {
     margin: 0;
+    width: 100%;
+    min-width: 0;
     max-width: none;
-    height: 100%;
+    aspect-ratio: 4 / 3;
     min-height: 9rem;
 }
 
 .portada-hero .foto-hero img {
+    position: absolute;
+    inset: 0;
     height: 100%;
     aspect-ratio: auto;
 }
@@ -1071,6 +1070,25 @@ fieldset.campo legend {
     object-fit: cover;
     margin: calc(-1 * var(--gap-l)) calc(-1 * var(--gap-l)) 0;
     border-radius: calc(var(--radio) - var(--linea-media)) calc(var(--radio) - var(--linea-media)) 0 0;
+}
+
+.noticias-comunidad .tarjeta-img {
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
+
+.noticia-credito {
+    font-size: var(--t-xs);
+}
+
+.noticia-fuente {
+    margin-top: auto;
+}
+
+@media (min-width: 45rem) {
+    .noticias-comunidad .rejilla {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 /* rejilla → kanban en desktop */

@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ecosolicitud.comunidad.ComunidadService;
+import java.util.List;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.CodigoQr;
 import com.ecosolicitud.shared.Rol;
@@ -15,17 +15,15 @@ import com.ecosolicitud.shared.Rutas;
 @Controller
 class PortadaController {
 
-    private final ComunidadService comunidad;
     private final ActorSesion actor;
 
-    PortadaController(ComunidadService comunidad, ActorSesion actor) {
-        this.comunidad = comunidad;
+    PortadaController(ActorSesion actor) {
         this.actor = actor;
     }
 
     @GetMapping(Rutas.RAIZ)
     String portada(Model modelo) {
-        modelo.addAttribute("ultimas", comunidad.ultimas(3));
+        modelo.addAttribute("ultimas", List.of("novo-horizonte", "rivera-verde", "punto-verde"));
         modelo.addAttribute("inicio", actor.get() == Rol.ORGANIZACION
                 ? Rutas.ORG_SOLICITUDES : Rutas.NUEVA);
         modelo.addAttribute("cta", actor.get() == Rol.ORGANIZACION

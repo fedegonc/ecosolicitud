@@ -27,17 +27,25 @@
             <figcaption class="detalle" th:text="#{portada.compartir}">Compartí</figcaption>
         </figure>
     </section>
-    <section th:if="${!ultimas.isEmpty()}">
-        <h2 th:text="#{portada.ultimas}">Lo último</h2>
+    <section class="noticias-comunidad" aria-labelledby="noticias-titulo">
+        <h2 id="noticias-titulo" th:text="#{portada.ultimas}">Lo último de la comunidad</h2>
+        <p class="detalle" th:text="#{noticias.fotos.ilustrativas}">Fotos ilustrativas de reciclaje.</p>
         <div class="rejilla">
-            <article th:each="p : ${ultimas}" class="tarjeta">
-                <h3><a class="enlace" th:href="@{/comunidad/{id}(id=${p.id})}"
-                       th:text="${p.titulo}">Título</a></h3>
-                <p class="detalle" th:text="${p.resumen}">Resumen</p>
+            <article th:each="p : ${ultimas}" class="tarjeta" th:with="clave=${'noticias.' + p}">
+                <img class="tarjeta-img" th:src="@{${#messages.msg(clave + '.imagen')}}"
+                     th:alt="#{${clave + '.alt'}}" width="800" height="450" loading="lazy">
+                <p class="noticia-credito detalle" th:text="#{${clave + '.credito'}}">Foto: autor / Unsplash</p>
+                <h3><a class="enlace" th:href="#{${clave + '.fuente'}}" target="_blank" rel="noopener"
+                       th:text="#{${clave + '.titulo'}}">Título</a></h3>
+                <p class="detalle" th:text="#{${clave + '.texto'}}">Resumen</p>
                 <p class="detalle">
-                    <span class="etiqueta" th:text="#{${p.tipo.clave}}">Tipo</span>
-                    <span th:text="${p.fecha}">Fecha</span>
+                    <span class="etiqueta" th:text="#{${clave + '.tipo'}}">Historia</span>
+                    <time th:datetime="#{${clave + '.fecha'}}"
+                          th:text="#{${clave + '.fecha.visible'}}">Fecha de la fuente</time>
                 </p>
+                <a class="enlace noticia-fuente" th:href="#{${clave + '.fuente'}}" target="_blank" rel="noopener"
+                   th:aria-label="#{noticias.ver.mas.titulo(${#messages.msg(clave + '.titulo')})}"
+                   th:text="#{noticias.ver.mas}">Ver más</a>
             </article>
         </div>
     </section>
