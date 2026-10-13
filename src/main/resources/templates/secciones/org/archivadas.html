@@ -7,12 +7,21 @@
 <main layout:fragment="content">
     <h1 th:text="#{org.archivadas.titulo}">Solicitudes archivadas</h1>
     <p><a class="enlace" th:href="@{/org/solicitudes}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{panel.volver}">Volver</span></a></p>
-    <p class="detalle" th:if="${solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
+    <p class="detalle" th:if="${pagina.empty}" th:text="#{org.vacia}">Vacío</p>
     <div class="rejilla">
-        <article th:each="s : ${solicitudes}" class="tarjeta">
+        <article th:each="s : ${pagina.content}" class="tarjeta">
             <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano}, @{/org/solicitudes/{id}(id=${s.id})})}"></th:block>
         </article>
     </div>
+    <nav class="paginacion" th:if="${pagina.totalPages > 1}" th:attr="aria-label=#{paginacion.titulo}">
+        <a class="enlace" th:if="${pagina.hasPrevious()}"
+           th:href="@{/org/solicitudes/archivadas(pagina=${pagina.number})}"
+           th:text="#{paginacion.anterior}">Anterior</a>
+        <span class="detalle" th:text="#{paginacion.estado(${pagina.number + 1}, ${pagina.totalPages})}">Página 1 de 3</span>
+        <a class="enlace" th:if="${pagina.hasNext()}"
+           th:href="@{/org/solicitudes/archivadas(pagina=${pagina.number + 2})}"
+           th:text="#{paginacion.siguiente}">Siguiente</a>
+    </nav>
 </main>
 </body>
 </html>

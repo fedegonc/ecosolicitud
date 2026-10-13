@@ -1,5 +1,9 @@
 package com.ecosolicitud.solicitud;
 
+import java.util.EnumSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public enum Estado {
     PENDIENTE("estado.pendiente", "reloj", "estado.ayuda.pendiente"),
     EN_CURSO("estado.en-curso", "camion", "estado.ayuda.en-curso"),
@@ -32,6 +36,14 @@ public enum Estado {
     public boolean esFinal() {
         return this == COMPLETADA || this == RECHAZADA || this == CANCELADA;
     }
+
+    // una sola fuente: el conjunto se deriva de esFinal(), no se repite a mano
+    public static Set<Estado> finales() {
+        return FINALES;
+    }
+
+    private static final Set<Estado> FINALES = EnumSet.allOf(Estado.class).stream()
+            .filter(Estado::esFinal).collect(Collectors.toUnmodifiableSet());
 
     public boolean permiteAceptar() {
         return this == PENDIENTE;

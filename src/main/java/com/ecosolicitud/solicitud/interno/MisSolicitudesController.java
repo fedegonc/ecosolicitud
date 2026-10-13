@@ -7,6 +7,7 @@ import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.solicitud.Filtro;
+import com.ecosolicitud.solicitud.ListadoService;
 import com.ecosolicitud.solicitud.SolicitudInfo;
 import com.ecosolicitud.solicitud.SolicitudService;
 
@@ -25,23 +26,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 class MisSolicitudesController {
 
     private final SolicitudService servicio;
+    private final ListadoService listados;
     private final ActorSesion actor;
 
-    MisSolicitudesController(SolicitudService servicio, ActorSesion actor) {
+    MisSolicitudesController(SolicitudService servicio, ListadoService listados,
+            ActorSesion actor) {
         this.servicio = servicio;
+        this.listados = listados;
         this.actor = actor;
     }
 
     @GetMapping(Rutas.MIS_SOLICITUDES)
-    String lista(@RequestParam(required = false) String filtro, Model modelo) {
+    String lista(@RequestParam(required = false) String filtro,
+            @RequestParam(defaultValue = "1") int pagina, Model modelo) {
         var activo = Filtro.desde(filtro);
         modelo.addAttribute("filtro", activo);
         modelo.addAttribute("filtros", Filtro.values());
-        modelo.addAttribute("solicitudes",
-                servicio.misSolicitudes(actor.actual().ciudadanoId(), activo));
+        modelo.addAttribute("pagina", listados.misSolicitudes(
+                actor.actual().ciudadanoId(), activo, pagina));
         modelo.addAttribute("usuario", actor.actual().nombreCiudadano());
-        modelo.addAttribute("semana", servicio.semana(actor.actual()));
-        modelo.addAttribute("archivadas", servicio.archivadas(actor.actual()).size());
+        modelo.addAttribute("semana", listados.semana(actor.actual()));
+        modelo.addAttribute("archivadas", listados.totalArchivadas(actor.actual()));
         return "secciones/mis-solicitudes";
     }
 
@@ -51,7 +56,7 @@ class MisSolicitudesController {
         modelo.addAttribute("volver", Rutas.MIS_SOLICITUDES);
         modelo.addAttribute("rutaInforme", Rutas.MIS_INFORME);
         modelo.addAttribute("migaFinal", Miga.actualClave("panel.informe"));
-        modelo.addAttribute("informe", servicio.informe(actor.actual(), parseMes(mes)));
+        modelo.addAttribute("informe", listados.informe(actor.actual(), parseMes(mes)));
         return "secciones/informe";
     }
 

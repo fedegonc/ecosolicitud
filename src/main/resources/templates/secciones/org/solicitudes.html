@@ -47,6 +47,8 @@
                 </div>
             </article>
             </div>
+            <p class="detalle" th:if="${g.solicitudes.size() < g.total}"
+               th:text="#{org.grupo.mostrando(${g.solicitudes.size()}, ${g.total})}">Mostrando 20 de 45</p>
         </section>
         </div>
     </div>

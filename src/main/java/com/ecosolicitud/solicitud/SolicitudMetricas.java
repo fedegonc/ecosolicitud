@@ -24,10 +24,10 @@ public record SolicitudMetricas(long recibidas, long pendientes, long respondida
         return new SolicitudMetricas(0, 0, 0, 0, 0, 0, null, null);
     }
 
-    static SolicitudMetricas desdeSemana(List<Solicitud> todas, Instant ahora) {
-        var inicio = LocalDate.ofInstant(ahora, Fechas.ZONA).with(DayOfWeek.MONDAY)
+    // lunes 0:00 en la zona del servicio; acota la consulta de la semana
+    static Instant inicioDeSemana(Instant ahora) {
+        return LocalDate.ofInstant(ahora, Fechas.ZONA).with(DayOfWeek.MONDAY)
                 .atStartOfDay(Fechas.ZONA).toInstant();
-        return desde(todas.stream().filter(s -> !s.getCreadaEn().isBefore(inicio)).toList(), ahora);
     }
 
     static SolicitudMetricas desde(List<Solicitud> todas, Instant ahora) {

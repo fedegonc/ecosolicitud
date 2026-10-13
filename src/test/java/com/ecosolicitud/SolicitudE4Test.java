@@ -1,15 +1,20 @@
 package com.ecosolicitud;
 
 import com.ecosolicitud.shared.Rutas;
+import java.time.Instant;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import com.ecosolicitud.demo.DemoService;
 import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.solicitud.Estado;
 import com.ecosolicitud.solicitud.Filtro;
+import com.ecosolicitud.solicitud.ListadoService;
 import com.ecosolicitud.solicitud.SolicitudInfo;
+import com.ecosolicitud.solicitud.SolicitudSemilla;
 import com.ecosolicitud.solicitud.SolicitudService;
 
 import io.qameta.allure.Allure;
@@ -52,6 +57,12 @@ class SolicitudE4Test {
     private SolicitudService servicio;
 
     @Autowired
+    private ListadoService listados;
+
+    @Autowired
+    private CatalogoMateriales catalogo;
+
+    @Autowired
     private OrganizacionService organizaciones;
 
     @Autowired
@@ -89,25 +100,25 @@ class SolicitudE4Test {
             var textos = driver.findElements(By.cssSelector(".opcion-centro")).stream()
                     .map(e -> e.getText()).toList();
             assertThat(textos).hasSize(2);
-            assertThat(textos).anyMatch(t -> t.contains("Cooperativa Frontera Limpia"));
-            assertThat(textos).anyMatch(t -> t.contains("Acopio Verde Rivera"));
-            assertThat(driver.getPageSource()).doesNotContain("Coleta Solid");
+            assertThat(textos).anyMatch(t -> t.contains("Centro de ejemplo – Paso del Enano"));
+            assertThat(textos).anyMatch(t -> t.contains("Centro de ejemplo – Microcentro"));
+            assertThat(driver.getPageSource()).doesNotContain("Centro de exemplo – Jardins");
             assertThat(driver.findElements(By.cssSelector("input[name='materiales']"))).isEmpty();
         });
 
         Allure.step("El centro elegido define los materiales posibles (FE-04)", () -> {
             driver.get(base + "/nueva?ciudad=RIVERA&organizacionId=frontera-limpia");
-            assertThat(valores("materiales")).containsExactly("PLASTICO", "CARTON", "PAPEL", "METAL");
+            assertThat(valores("materiales")).containsExactly("PLASTICO", "CARTON", "PAPEL", "VIDRIO", "METAL", "LATAS");
             assertThat(driver.getPageSource()).doesNotContain("Electrónicos");
         });
 
         Allure.step("Cambiar de centro cambia los materiales", () -> {
             driver.get(base + "/nueva?ciudad=RIVERA&organizacionId=acopio-verde");
-            assertThat(valores("materiales")).containsExactly("VIDRIO", "PLASTICO", "CARTON");
+            assertThat(valores("materiales")).containsExactly("CARTON", "PAPEL", "PLASTICO", "LATAS");
         });
 
         Allure.step("Un material que el centro no recibe se poda del estado", () -> {
-            driver.get(base + "/nueva?ciudad=RIVERA&organizacionId=frontera-limpia&materiales=VIDRIO");
+            driver.get(base + "/nueva?ciudad=RIVERA&organizacionId=frontera-limpia&materiales=ELECTRONICOS");
             assertThat(driver.findElements(By.cssSelector("input[name='materiales']:checked"))).isEmpty();
         });
 
@@ -184,7 +195,7 @@ class SolicitudE4Test {
             driver.findElement(By.cssSelector("main form[method='post'] button[type='submit']")).click();
             assertThat(driver.getCurrentUrl()).endsWith(Rutas.MIS_SOLICITUDES);
             assertThat(driver.findElement(By.cssSelector(".aviso")).getText())
-                    .contains("enviada a Cooperativa Frontera Limpia");
+                    .contains("enviada a Centro de ejemplo – Paso del Enano");
             var creada = servicio.todas().get(servicio.todas().size() - 1);
             assertThat(servicio.todas()).hasSize(antes + 1);
             assertThat(creada.estado()).isEqualTo(Estado.PENDIENTE);
@@ -235,7 +246,7 @@ class SolicitudE4Test {
             int antes = servicio.todas().size();
             var respuesta = postConCsrf(Rutas.NUEVA, body -> {
                 body.add("ciudad", "RIVERA");
-                body.add("materiales", "VIDRIO");
+                body.add("materiales", "ELECTRONICOS");
                 body.add("organizacionId", "frontera-limpia");
                 body.add("nombre", "N");
                 body.add("contacto", "T");
@@ -279,7 +290,7 @@ class SolicitudE4Test {
             assertThat(fichas).hasSize(2);
             assertThat(fichas.get(0).getText()).contains("En curso");
             assertThat(fichas.get(1).getText()).contains("Completada");
-            assertThat(driver.getPageSource()).doesNotContain("Sarandí 56");
+            assertThat(driver.getPageSource()).doesNotContain("Ana Rodríguez", "João Almeida");
         });
 
         Allure.step("Filtros abiertas y cerradas muestran los estados definidos", () -> {
@@ -315,7 +326,8 @@ class SolicitudE4Test {
             organizaciones.actualizarPerfil("frontera-limpia",
                     List.of(mat("CARTON"), mat("PAPEL")), org.horario(), org.telefono(),
                     org.ubicacion(), org.version());
-            var propias = servicio.misSolicitudes("ciudadano-demo", Filtro.TODAS);
+            var propias = listados.misSolicitudes("ciudadano-demo", Filtro.TODAS, 1)
+                    .getContent();
             assertThat(propias).anySatisfy(s ->
                     assertThat(s.materiales()).containsExactly(mat("PLASTICO")));
         });
@@ -325,9 +337,49 @@ class SolicitudE4Test {
             organizaciones.reemplazarTodas(List.of(
                     organizaciones.buscar("frontera-limpia").orElseThrow()));
             demo.reiniciar();
-            assertThat(servicio.todas()).hasSize(5);
+            assertThat(servicio.todas()).hasSize(6);
             assertThat(organizaciones.todas()).hasSize(3);
-            assertThat(servicio.misSolicitudes("ciudadano-demo", Filtro.TODAS)).hasSize(2);
+            assertThat(listados.misSolicitudes("ciudadano-demo", Filtro.TODAS, 1)
+                    .getTotalElements()).isEqualTo(2);
+        });
+    }
+
+    @Test
+    @DisplayName("Listado paginado: 12 por página en base, filtro y página fuera de rango")
+    void paginacion() {
+        var semillas = IntStream.rangeClosed(1, 15).mapToObj(i -> new SolicitudSemilla(
+                "ciudadano-demo", "Martina López", "099 000 001", "Zona " + i, null,
+                null, List.of(catalogo.resolver("PLASTICO")), "frontera-limpia", null,
+                Estado.PENDIENTE, Instant.now().minusSeconds(i), null, null)).toList();
+        servicio.reemplazarTodas(semillas);
+
+        Allure.step("Página 1 trae 12 y el total real", () -> {
+            var p = listados.misSolicitudes("ciudadano-demo", Filtro.TODAS, 1);
+            assertThat(p.getContent()).hasSize(12);
+            assertThat(p.getTotalElements()).isEqualTo(15);
+            assertThat(p.getTotalPages()).isEqualTo(2);
+        });
+        Allure.step("Página 2 trae el resto", () ->
+                assertThat(listados.misSolicitudes("ciudadano-demo", Filtro.TODAS, 2)
+                        .getContent()).hasSize(3));
+        Allure.step("Página fuera de rango cae en la última", () -> {
+            var p = listados.misSolicitudes("ciudadano-demo", Filtro.TODAS, 9);
+            assertThat(p.getNumber()).isEqualTo(1);
+            assertThat(p.getContent()).hasSize(3);
+        });
+        Allure.step("El filtro se aplica en la consulta (CERRADAS = 0)", () -> {
+            assertThat(listados.misSolicitudes("ciudadano-demo", Filtro.CERRADAS, 1)
+                    .getTotalElements()).isZero();
+            assertThat(listados.misSolicitudes("ciudadano-demo", Filtro.ABIERTAS, 1)
+                    .getTotalElements()).isEqualTo(15);
+        });
+        Allure.step("El HTML muestra 12 tarjetas y navegación entre páginas", () -> {
+            driver.get(base + Rutas.MIS_SOLICITUDES);
+            assertThat(driver.findElements(By.cssSelector("article.tarjeta"))).hasSize(12);
+            assertThat(driver.findElements(By.cssSelector(".paginacion a"))).hasSize(1);
+            driver.get(base + Rutas.MIS_SOLICITUDES + "?pagina=2");
+            assertThat(driver.findElements(By.cssSelector("article.tarjeta"))).hasSize(3);
+            assertThat(driver.findElements(By.cssSelector(".paginacion a"))).hasSize(1);
         });
     }
 

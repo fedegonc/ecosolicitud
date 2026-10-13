@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ecosolicitud.shared.Fechas;
 import com.ecosolicitud.solicitud.interno.Solicitud;
 
 public record InformeMensual(YearMonth mes, SolicitudMetricas metricas,
@@ -24,9 +23,5 @@ public record InformeMensual(YearMonth mes, SolicitudMetricas metricas,
         }
         return new InformeMensual(mes, SolicitudMetricas.desde(entidades, Instant.now()),
                 porEstado, porMaterial, infos);
-    }
-
-    static boolean esDelMes(Solicitud s, YearMonth mes) {
-        return mes.equals(YearMonth.from(s.getCreadaEn().atZone(Fechas.ZONA)));
     }
 }

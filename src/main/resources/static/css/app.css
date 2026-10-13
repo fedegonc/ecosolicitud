@@ -946,6 +946,22 @@ fieldset.campo legend {
     color: var(--acento-texto);
     font-weight: 600;
 }
+
+/* paginación */
+
+.paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-m);
+    margin: var(--gap-l) 0 var(--pad);
+}
+
+.paginacion .detalle {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
 /* ============================================================
    Componente: Tarjetas (kanban card style - vertical, compacta)
    ============================================================ */

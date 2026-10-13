@@ -37,7 +37,7 @@ public class MetricasService {
     }
 
     private List<Solicitud> creadasDesde(Instant desde) {
-        return repositorio.findAll().stream()
-                .filter(s -> desde == null || !s.getCreadaEn().isBefore(desde)).toList();
+        return desde == null ? repositorio.findAll()
+                : repositorio.findByCreadaEnGreaterThanEqual(desde);
     }
 }

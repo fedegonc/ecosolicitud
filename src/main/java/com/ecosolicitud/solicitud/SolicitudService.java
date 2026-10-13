@@ -1,7 +1,6 @@
 package com.ecosolicitud.solicitud;
 
 import java.time.Instant;
-import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,38 +39,6 @@ public class SolicitudService {
         this.avisos = avisos;
         this.organizaciones = organizaciones;
         this.catalogo = catalogo;
-    }
-
-    public List<SolicitudInfo> misSolicitudes(String ciudadanoId, Filtro filtro) {
-        var propias = repositorio.findByCiudadano_IdOrderByCreadaEnDesc(ciudadanoId).stream()
-                .filter(s -> filtro.muestra(s.getEstado())).toList();
-        return aInfos(propias);
-    }
-
-    public BandejaSolicitudes recibidas(Actor actor) {
-        var lista = aInfos(delActor(actor));
-        return new BandejaSolicitudes(List.of(
-                new GrupoSolicitudes("org.grupo.pendientes",
-                        lista.stream().filter(s -> s.estado() == Estado.PENDIENTE).toList()),
-                new GrupoSolicitudes("org.grupo.en-curso",
-                        lista.stream().filter(s -> s.estado() == Estado.EN_CURSO).toList()),
-                new GrupoSolicitudes("org.grupo.cerradas",
-                        lista.stream().filter(s -> s.estado().esFinal()).limit(5).toList())));
-    }
-
-    public List<SolicitudInfo> archivadas(Actor actor) {
-        return aInfos(delActor(actor).stream()
-                .filter(s -> s.getEstado().esFinal()).toList());
-    }
-
-    public SolicitudMetricas semana(Actor actor) {
-        return SolicitudMetricas.desdeSemana(delActor(actor), Instant.now());
-    }
-
-    public InformeMensual informe(Actor actor, YearMonth mes) {
-        var delMes = delActor(actor).stream()
-                .filter(s -> InformeMensual.esDelMes(s, mes)).toList();
-        return InformeMensual.desde(mes, delMes, aInfos(delMes));
     }
 
     // Optional.empty() = el centro no recibe esos materiales en esa ciudad (RN-04)
@@ -144,13 +111,6 @@ public class SolicitudService {
                 Solicitud.nueva(s, ciudadano(s.ciudadanoId(), s.nombreCiudadano()))));
     }
 
-    private List<Solicitud> delActor(Actor actor) {
-        return actor.esOrganizacion()
-                ? repositorio.findByOrganizacionIdOrderByCreadaEnDesc(
-                        organizaciones.actual(actor).id())
-                : repositorio.findByCiudadano_IdOrderByCreadaEnDesc(actor.ciudadanoId());
-    }
-
     private Ciudadano ciudadano(String id, String nombre) {
         return ciudadanos.findById(id).map(c -> {
             if (!c.getNombre().equals(nombre)) {
@@ -191,8 +151,8 @@ public class SolicitudService {
         return actor.esCiudadano() && s.getCiudadano().getId().equals(actor.ciudadanoId());
     }
 
-    // una sola consulta de nombres para toda la lista
-    private List<SolicitudInfo> aInfos(List<Solicitud> solicitudes) {
+    // una sola consulta de nombres para toda la lista; también la usa ListadoService
+    List<SolicitudInfo> aInfos(List<Solicitud> solicitudes) {
         var nombres = organizaciones.nombres(solicitudes.stream()
                 .map(Solicitud::getOrganizacionId).collect(toSet()));
         return solicitudes.stream().map(s -> SolicitudInfo.desde(s, nombres)).toList();

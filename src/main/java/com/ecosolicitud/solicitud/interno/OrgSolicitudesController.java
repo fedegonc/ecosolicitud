@@ -7,6 +7,7 @@ import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rutas;
+import com.ecosolicitud.solicitud.ListadoService;
 import com.ecosolicitud.solicitud.SolicitudService;
 
 import org.springframework.http.HttpStatus;
@@ -24,12 +25,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 class OrgSolicitudesController {
 
     private final SolicitudService servicio;
+    private final ListadoService listados;
     private final OrganizacionService organizaciones;
     private final ActorSesion actor;
 
-    OrgSolicitudesController(SolicitudService servicio,
+    OrgSolicitudesController(SolicitudService servicio, ListadoService listados,
             OrganizacionService organizaciones, ActorSesion actor) {
         this.servicio = servicio;
+        this.listados = listados;
         this.organizaciones = organizaciones;
         this.actor = actor;
     }
@@ -37,15 +40,15 @@ class OrgSolicitudesController {
     @GetMapping(Rutas.ORG_SOLICITUDES)
     String lista(Model modelo) {
         modelo.addAttribute("organizacion", organizaciones.actual(actor.actual()));
-        modelo.addAttribute("bandeja", servicio.recibidas(actor.actual()));
-        modelo.addAttribute("semana", servicio.semana(actor.actual()));
-        modelo.addAttribute("archivadas", servicio.archivadas(actor.actual()).size());
+        modelo.addAttribute("bandeja", listados.recibidas(actor.actual()));
+        modelo.addAttribute("semana", listados.semana(actor.actual()));
+        modelo.addAttribute("archivadas", listados.totalArchivadas(actor.actual()));
         return "secciones/org/solicitudes";
     }
 
     @GetMapping(Rutas.ORG_ARCHIVADAS)
-    String archivadas(Model modelo) {
-        modelo.addAttribute("solicitudes", servicio.archivadas(actor.actual()));
+    String archivadas(@RequestParam(defaultValue = "1") int pagina, Model modelo) {
+        modelo.addAttribute("pagina", listados.archivadas(actor.actual(), pagina));
         modelo.addAttribute("migaFinal", Miga.actualClave("org.archivadas.titulo"));
         return "secciones/org/archivadas";
     }
@@ -56,7 +59,7 @@ class OrgSolicitudesController {
         modelo.addAttribute("volver", Rutas.ORG_SOLICITUDES);
         modelo.addAttribute("rutaInforme", Rutas.ORG_INFORME);
         modelo.addAttribute("migaFinal", Miga.actualClave("panel.informe"));
-        modelo.addAttribute("informe", servicio.informe(actor.actual(), parseMes(mes)));
+        modelo.addAttribute("informe", listados.informe(actor.actual(), parseMes(mes)));
         return "secciones/informe";
     }
 
