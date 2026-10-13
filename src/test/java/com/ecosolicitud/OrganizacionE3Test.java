@@ -80,8 +80,8 @@ class OrganizacionE3Test {
                     .containsExactly("Rivera", "Sant'Ana do Livramento");
             var fichas = driver.findElements(By.cssSelector(".tarjeta h3"));
             assertThat(fichas.stream().map(e -> e.getText()).toList())
-                    .containsExactlyInAnyOrder("Cooperativa Frontera Limpia",
-                            "Acopio Verde Rivera", "Coleta Solidária Livramento");
+                    .containsExactlyInAnyOrder("Centro de ejemplo – Paso del Enano",
+                            "Centro de ejemplo – Microcentro", "Centro de exemplo – Jardins");
             assertThat(driver.findElements(By.cssSelector(".tarjeta .etiqueta-material")))
                     .isNotEmpty();
             assertThat(driver.getPageSource()).contains("+598");
@@ -101,12 +101,12 @@ class OrganizacionE3Test {
                     .click();
             driver.findElement(By.cssSelector(".org-switch button[type='submit']")).click();
             driver.get(base + Rutas.ORG_PERFIL);
-            assertThat(driver.getPageSource()).contains("Cooperativa Frontera Limpia");
+            assertThat(driver.getPageSource()).contains("Centro de ejemplo – Paso del Enano");
             var chequeados = driver.findElements(
                     By.cssSelector("input[name='materiales']:checked")).stream()
                     .map(e -> e.getAttribute("value")).toList();
             assertThat(chequeados).containsExactlyInAnyOrder(
-                    "PLASTICO", "CARTON", "PAPEL", "METAL");
+                    "PLASTICO", "CARTON", "PAPEL", "VIDRIO", "METAL", "LATAS");
         });
 
         Allure.step("Guardar un perfil válido persiste, redirige y muestra el aviso", () -> {
@@ -131,7 +131,7 @@ class OrganizacionE3Test {
                     .contains("al menos un material");
             assertThat(servicio.buscar("frontera-limpia").orElseThrow().materiales())
                     .containsExactlyInAnyOrder(mat("PLASTICO"), mat("CARTON"),
-                            mat("PAPEL"), mat("METAL"));
+                            mat("PAPEL"), mat("VIDRIO"), mat("METAL"), mat("LATAS"));
         });
 
         Allure.step("Versión desactualizada muestra conflicto y no persiste (RN-07)", () -> {
@@ -162,7 +162,7 @@ class OrganizacionE3Test {
                     .filter(o -> !o.id().equals("acopio-verde")).toList();
             servicio.reemplazarTodas(sinAcopioVerde);
             driver.get(base + Rutas.ORG_PERFIL);
-            assertThat(driver.getPageSource()).contains("Coleta Solidária Livramento");
+            assertThat(driver.getPageSource()).contains("Centro de exemplo – Jardins");
             demo.reiniciar();
         });
 
@@ -174,8 +174,20 @@ class OrganizacionE3Test {
             driver.findElement(By.cssSelector(".sidebar .reiniciar button")).click();
             assertThat(driver.getCurrentUrl()).endsWith(Rutas.ORG_SOLICITUDES);
             assertThat(servicio.buscar("acopio-verde").orElseThrow().horario())
-                    .isEqualTo("Lun a Sáb 9 a 13 h");
+                    .isEqualTo("Lunes a viernes, 8–17 h");
             assertThat(servicio.todas()).hasSize(3);
+        });
+
+        Allure.step("Jardins se muestra con materiales en portugués y sin electrónicos", () -> {
+            driver.findElement(By.cssSelector(".sidebar .rol-switch button[value='CIUDADANO']")).click();
+            driver.get(base + Rutas.ACOPIOS + "?lang=pt");
+            var jardins = driver.findElements(By.cssSelector("article.tarjeta")).stream()
+                    .filter(t -> t.getText().contains("Centro de exemplo – Jardins"))
+                    .findFirst().orElseThrow();
+            assertThat(jardins.getText()).contains("Consultar", "+55 00 0000-0003",
+                    "Plástico", "Papelão", "Papel", "Vidro", "Metal", "Latas")
+                    .doesNotContain("Eletrônicos", "Cartón", "Vidrio");
+            driver.get(base + Rutas.ACOPIOS + "?lang=es");
         });
 
         Allure.step("POST /demo/reiniciar sin CSRF responde 403", () -> {

@@ -41,6 +41,7 @@
             <li th:each="r : ${recicladores}">
                 <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#persona'"></use></svg>
                 <span th:text="${r.nombre}">Nombre</span>
+                <span class="detalle" th:if="${r.ciudad != null}" th:text="#{${r.ciudad.clave}}">Ciudad</span>
                 <a class="enlace" th:if="${r.telefono != null}"
                    th:href="'tel:' + ${#strings.replace(r.telefono, ' ', '')}"
                    ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg><span th:text="${r.telefono}">Teléfono</span></a>

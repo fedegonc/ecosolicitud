@@ -19,7 +19,7 @@ final class DemoGuia {
     }
 
     static List<ArticuloSemilla> guia(CatalogoMateriales cat) {
-        return List.of(
+        var articulos = new java.util.ArrayList<>(List.of(
                 new ArticuloSemilla("Cómo separar en casa", """
                         Separar bien en casa es la mitad del trabajo. Un envase limpio y en la
                         bolsa correcta llega al acopio listo para reciclarse; uno sucio o mezclado
@@ -116,6 +116,9 @@ final class DemoGuia {
                         _Foto de portada: [Walmart](https://commons.wikimedia.org/wiki/File:Box_baler_at_Walmart.jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0), vía Wikimedia Commons._
                         """, "carton", m(cat, "CARTON"), 3),
                 new ArticuloSemilla("Electrónicos", """
+                        No hay un servicio de recepción de electrónicos verificado en esta demo.
+                        Consultá a las autoridades locales antes de llevar estos residuos.
+
                         Los residuos electrónicos son los que más rápido crecen en el mundo:
                         el *Global E-waste Monitor* estima más de **60 millones de toneladas
                         por año** y apenas una quinta parte se recicla de forma documentada.
@@ -149,6 +152,8 @@ final class DemoGuia {
                         - [Convención de Basilea](https://www.basel.int)
 
                         _Foto de portada: [Syced](https://commons.wikimedia.org/wiki/File:Electronic_junk_separation_in_view_of_recycling.jpg), [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en), vía Wikimedia Commons._
-                        """, "electronicos", m(cat, "ELECTRONICOS"), 4));
+                        """, "electronicos", m(cat, "ELECTRONICOS"), 4)));
+        articulos.addAll(DemoGuiaSinRetiro.articulos());
+        return articulos;
     }
 }

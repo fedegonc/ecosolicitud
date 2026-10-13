@@ -74,8 +74,8 @@ class SolicitudE5Test {
         org.post(Rutas.DEMO_ROL, b -> b.add("rol", "ORGANIZACION"));
         org.post(Rutas.DEMO_ORGANIZACION, b -> b.add("id", "frontera-limpia"));
 
-        var pendiente = buscar(Estado.PENDIENTE, "Frontera");
-        var enCurso = buscar(Estado.EN_CURSO, "Frontera");
+        var pendiente = buscar(Estado.PENDIENTE, "Paso del Enano");
+        var enCurso = buscar(Estado.EN_CURSO, "Paso del Enano");
 
         Allure.step("Acepta una pendiente → EN_CURSO con mensaje", () -> {
             var r = org.post("/org/solicitudes/" + pendiente.id() + "/aceptar",
@@ -103,8 +103,10 @@ class SolicitudE5Test {
             assertThat(despues.finalizadaEn()).isNotNull();
         });
 
+        org.post(Rutas.DEMO_ORGANIZACION, b -> b.add("id", "acopio-verde"));
+
         Allure.step("Versión desactualizada → conflicto sin cambios (FE-02)", () -> {
-            var s = buscar(Estado.PENDIENTE, "Frontera");
+            var s = buscar(Estado.PENDIENTE, "Microcentro");
             var r = org.post("/org/solicitudes/" + s.id() + "/aceptar",
                     b -> b.add("version", "99"));
             assertThat(r.getBody()).contains("cambió antes");
@@ -112,7 +114,7 @@ class SolicitudE5Test {
         });
 
         Allure.step("Transición inválida → mensaje y estado intacto (FE-03)", () -> {
-            var s = buscar(Estado.PENDIENTE, "Frontera");
+            var s = buscar(Estado.PENDIENTE, "Microcentro");
             var r = org.post("/org/solicitudes/" + s.id() + "/completar",
                     b -> b.add("version", String.valueOf(s.version())));
             assertThat(r.getBody()).contains("no admite");
@@ -121,7 +123,7 @@ class SolicitudE5Test {
 
         Allure.step("Otra organización intenta aceptar → 403 sin cambios", () -> {
             org.post(Rutas.DEMO_ORGANIZACION, b -> b.add("id", "coleta-solidaria"));
-            var s = buscar(Estado.PENDIENTE, "Frontera");
+            var s = buscar(Estado.PENDIENTE, "Microcentro");
             var r = org.post("/org/solicitudes/" + s.id() + "/aceptar",
                     b -> b.add("version", String.valueOf(s.version())));
             assertThat(r.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
@@ -166,7 +168,7 @@ class SolicitudE5Test {
         });
 
         Allure.step("Cancelar una solicitud en curso es rechazado (CA-09)", () -> {
-            var s = buscar(Estado.EN_CURSO, "Frontera");
+            var s = buscar(Estado.EN_CURSO, "Paso del Enano");
             var r = ciudadano.post("/mis-solicitudes/" + s.id() + "/cancelar",
                     b -> b.add("version", String.valueOf(s.version())));
             assertThat(r.getBody()).contains("no admite");
@@ -210,9 +212,8 @@ class SolicitudE5Test {
                     .containsExactly("Pendientes", "En curso", "Cerradas");
             var secciones = driver.findElements(By.cssSelector("main section"));
             var pendientes = secciones.get(0).findElements(By.cssSelector(".tarjeta"));
-            assertThat(pendientes).hasSize(2);
-            assertThat(pendientes.get(0).getText()).contains("Bruno Pérez");
-            assertThat(pendientes.get(1).getText()).contains("Ana Rodríguez");
+            assertThat(pendientes).hasSize(1);
+            assertThat(pendientes.get(0).getText()).contains("Ana Rodríguez");
             assertThat(secciones.get(1).findElements(By.cssSelector(".tarjeta"))).hasSize(1);
             var cerradas = secciones.get(2).findElements(By.cssSelector(".tarjeta"));
             assertThat(cerradas).hasSize(1);

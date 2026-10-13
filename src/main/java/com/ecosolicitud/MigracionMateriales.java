@@ -26,7 +26,7 @@ public class MigracionMateriales implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        catalogo.semillarSiVacio();
+        catalogo.semillarFaltantes();
         migrarAsociacion("solicitud_materiales");
         migrarAsociacion("organizacion_materiales");
         migrarArticulos();

@@ -8,7 +8,6 @@ import java.util.Map;
 import com.ecosolicitud.comunidad.PublicacionSemilla;
 import com.ecosolicitud.comunidad.TipoPublicacion;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
-import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.comunidad.RecicladorInfo;
 import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.shared.Ciudad;
@@ -28,22 +27,21 @@ final class DemoDatos {
 
     static List<OrganizacionInfo> organizaciones(CatalogoMateriales cat) {
         return List.of(
-                new OrganizacionInfo("frontera-limpia", "Cooperativa Frontera Limpia",
+                new OrganizacionInfo("frontera-limpia", "Centro de ejemplo – Paso del Enano",
                         Ciudad.RIVERA,
-                        List.of(m(cat, "PLASTICO"), m(cat, "CARTON"),
-                                m(cat, "PAPEL"), m(cat, "METAL")),
-                        "Lun a Vie 8 a 17 h", "+598 92 000 111",
-                        new Ubicacion(-30.91253, -55.54708), 0),
-                new OrganizacionInfo("acopio-verde", "Acopio Verde Rivera",
+                        List.of(m(cat, "PLASTICO"), m(cat, "CARTON"), m(cat, "PAPEL"),
+                                m(cat, "VIDRIO"), m(cat, "METAL"), m(cat, "LATAS")),
+                        "Lunes a sábado, 7–19 h", "+598 00 000 001", null, 0),
+                new OrganizacionInfo("acopio-verde", "Centro de ejemplo – Microcentro",
                         Ciudad.RIVERA,
-                        List.of(m(cat, "VIDRIO"), m(cat, "PLASTICO"),
-                                m(cat, "CARTON")),
-                        "Lun a Sáb 9 a 13 h", "+598 92 000 222",
-                        new Ubicacion(-30.90006, -55.54082), 0),
-                new OrganizacionInfo("coleta-solidaria", "Coleta Solidária Livramento",
-                        Ciudad.LIVRAMENTO, cat.todos(),
-                        "Seg a Sex 8 às 18 h", "+55 55 9000 0000",
-                        new Ubicacion(-30.88300, -55.52369), 0));
+                        List.of(m(cat, "CARTON"), m(cat, "PAPEL"),
+                                m(cat, "PLASTICO"), m(cat, "LATAS")),
+                        "Lunes a viernes, 8–17 h", "+598 00 000 002", null, 0),
+                new OrganizacionInfo("coleta-solidaria", "Centro de exemplo – Jardins",
+                        Ciudad.LIVRAMENTO,
+                        List.of(m(cat, "PLASTICO"), m(cat, "CARTON"), m(cat, "PAPEL"),
+                                m(cat, "VIDRIO"), m(cat, "METAL"), m(cat, "LATAS")),
+                        "Consultar", "+55 00 0000-0003", null, 0));
     }
 
     private static Material m(CatalogoMateriales cat, String codigo) {
@@ -52,52 +50,52 @@ final class DemoDatos {
 
     static List<RecicladorInfo> recicladores() {
         return List.of(
-                new RecicladorInfo("Luis Pereira", "+598 92 111 222"),
-                new RecicladorInfo("María Dos Santos", null),
-                new RecicladorInfo("Oscar Ríos", "+598 91 333 444"),
-                new RecicladorInfo("José Silva", "+55 55 9111 2222"),
-                new RecicladorInfo("Ana Costa", null));
+                new RecicladorInfo("Luis Pereira", Ciudad.RIVERA, "+598 00 000 011"),
+                new RecicladorInfo("María Dos Santos", Ciudad.LIVRAMENTO, null),
+                new RecicladorInfo("Oscar Ríos", Ciudad.RIVERA, "+598 00 000 012"),
+                new RecicladorInfo("José Silva", Ciudad.LIVRAMENTO, "+55 00 0000-0013"),
+                new RecicladorInfo("Ana Costa", Ciudad.RIVERA, null));
     }
 
     static List<SolicitudSemilla> solicitudes(CatalogoMateriales cat) {
         var ahora = Instant.now();
         return List.of(
-                new SolicitudSemilla("ciudadano-demo", "Martina López", "099 123 456",
-                        "Agraciada 1234", "Portón verde",
-                        new Ubicacion(-30.90880, -55.54990),
+                new SolicitudSemilla("ciudadano-demo", "Martina López", "099 000 001",
+                        "Centro de Rivera, cerca de Plaza Internacional", null, null,
                         List.of(m(cat, "CARTON"), m(cat, "PAPEL")),
-                        "frontera-limpia", null, Estado.COMPLETADA,
+                        "frontera-limpia", "Portón verde", Estado.COMPLETADA,
                         ahora.minus(5, ChronoUnit.DAYS),
                         ahora.minus(5, ChronoUnit.DAYS).plus(4, ChronoUnit.HOURS),
                         ahora.minus(4, ChronoUnit.DAYS)),
-                new SolicitudSemilla("ciudadano-demo", "Martina López", "099 123 456",
-                        "Agraciada 1234", null,
-                        new Ubicacion(-30.90880, -55.54990),
+                new SolicitudSemilla("ciudadano-demo", "Martina López", "099 000 001",
+                        "Centro de Rivera", null, null,
                         List.of(m(cat, "PLASTICO")),
                         "frontera-limpia", null, Estado.EN_CURSO,
                         ahora.minus(3, ChronoUnit.DAYS),
                         ahora.minus(3, ChronoUnit.DAYS).plus(6, ChronoUnit.HOURS), null),
-                new SolicitudSemilla("vecina-ana", "Ana Rodríguez", "098 555 111",
-                        "Sarandí 56", "Fondo",
-                        new Ubicacion(-30.90420, -55.54900),
+                new SolicitudSemilla("vecina-ana", "Ana Rodríguez", "099 000 002",
+                        "Rivera, zona centro", null, null,
                         List.of(m(cat, "PLASTICO"), m(cat, "METAL")),
-                        "frontera-limpia", null, Estado.PENDIENTE,
+                        "frontera-limpia", "Fondo", Estado.PENDIENTE,
                         ahora.minus(2, ChronoUnit.DAYS), null, null),
-                new SolicitudSemilla("vecino-bruno", "Bruno Pérez", "099 444 333",
-                        "Artigas 890", null,
-                        new Ubicacion(-30.90960, -55.55650),
+                new SolicitudSemilla("vecino-bruno", "Bruno Pérez", "099 000 003",
+                        "Rivera", null, null,
                         List.of(m(cat, "CARTON")),
-                        "frontera-limpia", "Dejar en la vereda", Estado.PENDIENTE,
+                        "acopio-verde", "Dejar en la vereda", Estado.PENDIENTE,
                         ahora.minus(1, ChronoUnit.DAYS), null, null),
-                new SolicitudSemilla("vecina-carla", "Carla Santos", "097 222 000",
-                        "Ituzaingó 45", null,
-                        new Ubicacion(-30.90620, -55.54480),
+                new SolicitudSemilla("vecina-carla", "Carla Santos", "(55) 90000-0004",
+                        "Bairro Parque do Sol, Livramento", null, null,
                         List.of(m(cat, "VIDRIO")),
-                        "acopio-verde", null, Estado.RECHAZADA,
+                        "coleta-solidaria", "Fora do horário", Estado.RECHAZADA,
                         ahora.minus(6, ChronoUnit.DAYS),
                         // rechazo directo: respuesta y cierre en el mismo instante
                         ahora.minus(6, ChronoUnit.DAYS).plus(9, ChronoUnit.HOURS),
-                        ahora.minus(6, ChronoUnit.DAYS).plus(9, ChronoUnit.HOURS)));
+                        ahora.minus(6, ChronoUnit.DAYS).plus(9, ChronoUnit.HOURS)),
+                new SolicitudSemilla("vecino-joao", "João Almeida", "(55) 90000-0005",
+                        "Bairro Cohab do Armour, Livramento", null, null,
+                        List.of(m(cat, "PLASTICO"), m(cat, "LATAS")),
+                        "coleta-solidaria", "Deixar no portão", Estado.PENDIENTE,
+                        ahora.minus(1, ChronoUnit.DAYS), null, null));
     }
 
     // los avisos semilla se atan a solicitudes reales para mostrar su #id
@@ -109,11 +107,11 @@ final class DemoDatos {
                         "Ana Rodríguez", false, ahora.minus(2, ChronoUnit.DAYS)),
                 new AvisoSemilla("ciudadano-demo", idDe(solicitudes,
                         "Martina López", Estado.EN_CURSO), TipoAviso.ACEPTADA,
-                        "Cooperativa Frontera Limpia", false,
+                        "Centro de ejemplo – Paso del Enano", false,
                         ahora.minus(3, ChronoUnit.DAYS)),
                 new AvisoSemilla("ciudadano-demo", idDe(solicitudes,
                         "Martina López", Estado.COMPLETADA), TipoAviso.COMPLETADA,
-                        "Cooperativa Frontera Limpia", true,
+                        "Centro de ejemplo – Paso del Enano", true,
                         ahora.minus(4, ChronoUnit.DAYS)));
     }
 
@@ -128,32 +126,34 @@ final class DemoDatos {
     static List<PublicacionSemilla> comunidad() {
         var ahora = Instant.now();
         return List.of(
-                new PublicacionSemilla("Nuevo horario en Acopio Verde", """
-                        Desde este mes el acopio abre también los sábados de 9 a 13.
+                new PublicacionSemilla("Centros de ejemplo para probar", """
+                        Los centros de esta demostración sirven para probar solicitudes.
+                        Sus teléfonos son ficticios. No representan organizaciones participantes
+                        ni servicios de retiro confirmados.
 
-                        Si tenés vidrio acumulado, es el mejor momento para llevarlo.""",
-                        "El acopio de Rivera suma los sábados a su horario.",
+                        Usá datos de prueba y no coordines un retiro real con estos contactos.""",
+                        "Esta demostración usa centros y contactos de ejemplo.",
                         "acopio", TipoPublicacion.NOVEDAD, ahora.minus(2, ChronoUnit.DAYS)),
-                new PublicacionSemilla("La cooperativa recuperó 3 toneladas", """
-                        En lo que va del año, la Cooperativa Frontera Limpia recuperó tres
-                        toneladas de cartón y papel: el equivalente a 50 árboles que no se talaron.
+                new PublicacionSemilla("Separá tus materiales", """
+                        Separá cartón, papel, plástico, vidrio, metal y latas.
+                        Revisá los materiales que acepta el centro antes de enviar la solicitud.
 
-                        El mérito es de los vecinos que separan en casa.""",
-                        "Frontera Limpia recuperó 3 toneladas de cartón y papel este año.",
+                        Los centros de ejemplo no reciben electrónicos.""",
+                        "Revisá los materiales del centro antes de pedir el retiro.",
                         "cooperativa", TipoPublicacion.HISTORIA, ahora.minus(5, ChronoUnit.DAYS)),
-                new PublicacionSemilla("Campaña de electrónicos", """
-                        Durante octubre se reciben cables, cargadores y celulares viejos
-                        sin costo en los tres centros.
+                new PublicacionSemilla("Cómo probar una solicitud", """
+                        Elegí tu ciudad, un centro de ejemplo y los materiales.
+                        Escribí un contacto y una dirección ficticios.
 
-                        Los aparatos que todavía funcionan se donan a escuelas.""",
-                        "Todo octubre: electrónicos sin costo en los tres centros.",
+                        Luego podés cambiar al perfil Organización para probar la atención del pedido.""",
+                        "Probá el recorrido con datos ficticios, sin señalar una casa real.",
                         "campana", TipoPublicacion.NOVEDAD, ahora.minus(9, ChronoUnit.DAYS)),
-                new PublicacionSemilla("Don Luis y su carrito", """
-                        Hace doce años que Don Luis pasa por el barrio juntando cartón.
+                new PublicacionSemilla("Recolectores de demostración", """
+                        Las personas de esta lista son ejemplos para la demostración.
+                        Algunas no tienen teléfono cargado.
 
-                        Dice que lo que más cambió es la conciencia: "antes había que
-                        revolver, ahora la gente ya lo deja separado".""",
-                        "Doce años juntando cartón en el barrio, y una sola frase.",
+                        Los contactos reales se incorporarán en otra fase, con su autorización.""",
+                        "La lista incluye contactos de prueba de Rivera y Livramento.",
                         "carrito", TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
     }
 }

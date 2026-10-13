@@ -1,7 +1,11 @@
 package com.ecosolicitud.comunidad.interno;
 
+import com.ecosolicitud.shared.Ciudad;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,14 +26,17 @@ public class Reciclador {
     private Long id;
     @Column(nullable = false, length = 80)
     private String nombre;
+    @Enumerated(EnumType.STRING)
+    private Ciudad ciudad;
     @Column(length = 30)
     private String telefono;
 
     protected Reciclador() {
     }
 
-    public Reciclador(String nombre, String telefono) {
+    public Reciclador(String nombre, Ciudad ciudad, String telefono) {
         this.nombre = nombre;
+        this.ciudad = ciudad;
         this.telefono = telefono;
     }
 }

@@ -6,6 +6,7 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.acopios}">Centros de acopio</h1>
+    <p class="aviso" th:if="${demoHabilitada}" th:text="#{acopios.demo}">Centros de ejemplo</p>
     <section th:each="g : ${grupos}" th:with="foto=${#strings.toLowerCase(g.ciudad.name())}">
         <figure class="foto-ciudad">
             <img th:src="@{/img/ciudad/{f}-800.webp(f=${foto})}"
@@ -26,7 +27,7 @@
                 <ul class="materiales">
                     <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}">
                         <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
-                        <span th:text="${m.nombre}">Material</span>
+                        <span th:text="${#messages.msgOrNull('material.' + #strings.toLowerCase(m.codigo)) ?: m.nombre}">Material</span>
                     </li>
                 </ul>
                 <th:block th:if="${o.ubicacion != null}">

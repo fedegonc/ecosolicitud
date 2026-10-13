@@ -53,13 +53,13 @@ public class ComunidadService {
 
     public List<RecicladorInfo> recicladores() {
         return recicladores.findAllByOrderByNombre().stream()
-                .map(r -> new RecicladorInfo(r.getNombre(), r.getTelefono())).toList();
+                .map(r -> new RecicladorInfo(r.getNombre(), r.getCiudad(), r.getTelefono())).toList();
     }
 
     @Transactional
     public void reemplazarRecicladores(List<RecicladorInfo> dataset) {
         recicladores.deleteAllInBatch();
-        dataset.forEach(r -> recicladores.save(new Reciclador(r.nombre(), r.telefono())));
+        dataset.forEach(r -> recicladores.save(new Reciclador(r.nombre(), r.ciudad(), r.telefono())));
     }
 
     @Transactional

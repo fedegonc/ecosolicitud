@@ -19,7 +19,8 @@ public class CatalogoMateriales {
             new Material("PAPEL", "Papel", "hoja"),
             new Material("VIDRIO", "Vidrio", "frasco"),
             new Material("METAL", "Metal", "lata"),
-            new Material("ELECTRONICOS", "Electrónicos", "chip"));
+            new Material("ELECTRONICOS", "Electrónicos", "chip"),
+            new Material("LATAS", "Latas", "lata"));
 
     private final MaterialRepository repositorio;
 
@@ -52,11 +53,8 @@ public class CatalogoMateriales {
     }
 
     @Transactional
-    public void semillarSiVacio() {
-        if (repositorio.count() == 0) {
-            repositorio.saveAll(SEMILLA.stream()
-                    .map(m -> new Material(m.getCodigo(), m.getNombre(), m.getIcono()))
-                    .toList());
-        }
+    public void semillarFaltantes() {
+        SEMILLA.stream().filter(m -> repositorio.findByCodigo(m.getCodigo()).isEmpty())
+                .forEach(m -> repositorio.save(new Material(m.getCodigo(), m.getNombre(), m.getIcono())));
     }
 }
