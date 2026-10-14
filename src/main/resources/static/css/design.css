@@ -27,6 +27,7 @@ a.caja { color: inherit; text-decoration: none; }
 .menu { position: relative; }
 .menu > summary { list-style: none; }
 .menu > summary::-webkit-details-marker { display: none; }
+.menu > summary > span[aria-hidden] { margin-left: 0.25rem; }
 .lista {
     position: absolute;
     top: 100%;
@@ -97,8 +98,6 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .grupo { flex: 1; display: flex; flex-direction: column; }
 .ds .grilla { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: var(--chico); }
 .ds .grupo:only-child .grilla { grid-template-columns: repeat(4, 1fr); }
-.ds .qr { margin: 0; }
-.ds .qr svg { display: block; width: 8rem; height: 8rem; color: var(--texto); background: var(--superficie); padding: var(--chico); }
 .ds .noticia-credito { font-size: var(--t-xs); }
 .ds .noticia-fuente { margin-top: auto; align-self: flex-start; }
 

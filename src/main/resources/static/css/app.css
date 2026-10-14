@@ -507,6 +507,26 @@ main {
     opacity: 0.85;
 }
 
+/* el QR para compartir vive al pie del menú lateral, solo escritorio */
+:is(.sidebar, .menu-movil) .qr {
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+:is(.sidebar, .menu-movil) .qr svg {
+    display: block;
+    width: 5rem;
+    height: 5rem;
+    padding: var(--chico);
+    margin-bottom: var(--chico);
+    color: var(--acento);
+    background: var(--acento-texto);
+}
+
+.menu-movil .qr {
+    display: none;
+}
+
 .menu-movil {
     display: none;
     position: relative;

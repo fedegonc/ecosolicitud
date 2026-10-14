@@ -6,6 +6,7 @@ import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.solicitud.AvisoService;
 import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.CodigoQr;
 import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.shared.Seccion;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @ControllerAdvice
 class NavegacionAdvice {
@@ -89,6 +91,13 @@ class NavegacionAdvice {
     @ModelAttribute("tema")
     String tema() {
         return tema;
+    }
+
+    // el QR del pie del menú apunta a la raíz del despliegue
+    @ModelAttribute("qr")
+    String qr() {
+        return CodigoQr.svg(
+                ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
     }
 
     @ModelAttribute("demoHabilitada")

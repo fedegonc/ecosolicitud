@@ -6,36 +6,6 @@
 <body>
 <main layout:fragment="content" class="ds">
     <div th:replace="~{componentes/ds :: encabezado(${pagina})}"></div>
-    <section aria-labelledby="portada-titulo">
-        <div class="cabecera">
-            <h2 id="portada-titulo" th:text="#{portada.claim}">Qué es</h2>
-        </div>
-        <div class="rejilla">
-            <article class="caja tarjeta">
-                <div class="imagen">
-                    <img th:src="@{/img/ciudad/plaza-800.webp}" width="800" height="600"
-                         fetchpriority="high" th:alt="#{foto.plaza}">
-                </div>
-                <div class="texto">
-                    <span th:text="#{portada.intro}">Intro</span>
-                    <div class="fila">
-                        <a class="caja herramienta" th:href="${inicio}">
-                            <div class="cabeza-tarjeta">
-                                <div class="icono"><svg aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg></div>
-                                <span aria-hidden="true">→</span>
-                            </div>
-                            <div class="texto"><strong th:text="#{${cta}}">Pedir retiro</strong></div>
-                        </a>
-                        <a class="caja" th:href="@{/acopios}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#edificio'"></use></svg><span th:text="#{portada.secundaria}">Ver centros</span></a>
-                    </div>
-                </div>
-            </article>
-            <figure class="caja tarjeta qr">
-                <span th:utext="${qr}"></span>
-                <figcaption class="texto" th:text="#{portada.compartir}">Compartí</figcaption>
-            </figure>
-        </div>
-    </section>
     <div th:replace="~{componentes/ds :: grupos(${pagina})}"></div>
     <div th:replace="~{componentes/ds :: avisos(${pagina})}"></div>
     <div th:replace="~{componentes/ds :: ecosistema(${pagina})}"></div>
