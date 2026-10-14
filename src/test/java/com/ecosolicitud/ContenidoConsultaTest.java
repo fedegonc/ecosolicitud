@@ -1,7 +1,5 @@
 package com.ecosolicitud;
 
-import java.nio.charset.StandardCharsets;
-
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.comunidad.interno.PublicacionRepository;
 import com.ecosolicitud.guia.interno.ArticuloRepository;
@@ -64,44 +62,28 @@ class ContenidoConsultaTest {
     }
 
     @Test
-    @DisplayName("La portada muestra tres noticias reales con fuentes, fechas y fotos locales en ES/PT")
-    void noticiasFrontera() {
+    @DisplayName("La portada lista las tres últimas publicaciones de la comunidad, sin fotos")
+    void ultimasComunidad() {
         var navegador = new HtmlUnitDriver();
         try {
             String base = rest.getRootUri();
             for (String idioma : new String[]{"es", "pt"}) {
                 navegador.get(base + "/?lang=" + idioma);
-                var tarjetas = navegador.findElements(By.cssSelector(
-                        ".noticias-comunidad .tarjeta"));
-                assertThat(tarjetas).hasSize(3);
-                assertThat(tarjetas.stream().map(t -> t.findElement(
-                        By.tagName("time")).getAttribute("datetime")))
-                        .containsExactly("2024-11-13", "2025-03-31", "2025-12-10");
-                assertThat(tarjetas.getFirst().getText()).contains(idioma.equals("es")
-                        ? "Novo Horizonte estrena" : "Novo Horizonte inaugura");
-                for (var tarjeta : tarjetas) {
-                    var foto = tarjeta.findElement(By.tagName("img"));
-                    assertThat(foto.getAttribute("alt")).isNotBlank().doesNotContain("??");
-                    assertThat(foto.getAttribute("src")).startsWith(base + "/img/comunidad/")
-                            .endsWith(".webp");
-                    var recurso = rest.getForEntity(foto.getAttribute("src"), byte[].class);
-                    assertThat(recurso.getStatusCode()).isEqualTo(HttpStatus.OK);
-                    assertThat(new String(recurso.getBody(), 0, 4,
-                            StandardCharsets.US_ASCII)).isEqualTo("RIFF");
-                    var enlace = tarjeta.findElement(By.cssSelector(".noticia-fuente"));
-                    assertThat(enlace.getAttribute("target")).isEqualTo("_blank");
-                    assertThat(enlace.getAttribute("rel")).contains("noopener");
-                    assertThat(enlace.getText()).isEqualTo(idioma.equals("es") ? "Ver más" : "Ver mais");
-                    assertThat(tarjeta.getText()).contains("Foto:", "/ Unsplash")
-                            .doesNotContain("Acopio Verde", "Cooperativa Frontera Limpia",
-                                    "Campaña de electrónicos", "??");
+                var seccion = navegador.findElement(By.id("ds-novedades"));
+                var items = seccion.findElements(By.cssSelector(".novedades li"));
+                assertThat(items).hasSize(3);
+                for (var item : items) {
+                    assertThat(item.findElement(By.tagName("a")).getAttribute("href"))
+                            .startsWith(base + Rutas.COMUNIDAD + "/");
+                    assertThat(item.findElement(By.tagName("time"))
+                            .getAttribute("datetime")).isNotBlank();
+                    assertThat(item.findElement(By.tagName("strong")).getText()).isNotBlank();
+                    assertThat(item.findElement(By.cssSelector("a > span"))
+                            .getText()).isNotBlank();
                 }
-                assertThat(tarjetas.stream().map(t -> t.findElement(
-                        By.cssSelector(".noticia-fuente")).getAttribute("href")))
-                        .containsExactly(
-                                "https://www.santanadolivramento.rs.gov.br/noticia/impressao?id=8560",
-                                "https://americaretail-malls.com/paises/uruguay/comercios-de-rivera-impulsan-el-reciclaje-con-el-sello-verde/",
-                                "https://www.rivera.gub.uy/portal/la-intendencia-de-rivera-inaugura-el-nuevo-punto-verde-2-en-el-polo-de-desarrollo/");
+                assertThat(seccion.findElements(By.tagName("img"))).isEmpty();
+                assertThat(seccion.findElement(By.cssSelector(".cabecera a"))
+                        .getAttribute("href")).isEqualTo(base + Rutas.COMUNIDAD);
             }
         } finally {
             navegador.quit();

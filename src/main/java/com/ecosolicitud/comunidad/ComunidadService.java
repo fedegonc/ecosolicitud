@@ -70,6 +70,7 @@ public class ComunidadService {
 
     private PublicacionInfo aInfo(Publicacion p) {
         return new PublicacionInfo(p.getId(), p.getTitulo(), p.getResumen(),
-                markdown.html(p.getCuerpo()), p.getImagen(), p.getTipo(), p.getPublicadaEn());
+                markdown.html(p.getCuerpo()), p.getImagen(), p.getOrganizacion(),
+                p.getTipo(), p.getPublicadaEn());
     }
 }

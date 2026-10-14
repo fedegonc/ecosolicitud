@@ -136,7 +136,8 @@ class SolicitudE4Test {
 
         Allure.step("Pedir retiro desde /acopios fija el centro sin repetir la lista (RF-09)", () -> {
             driver.get(base + Rutas.ACOPIOS);
-            driver.findElement(By.linkText("Pedir retiro")).click();
+            driver.findElement(By.cssSelector(
+                    ".tarjeta a[href*='organizacionId=acopio-verde']")).click();
             var fijado = driver.findElements(
                     By.cssSelector("input[name='organizacionId'][type='hidden']"));
             assertThat(fijado).hasSize(1);

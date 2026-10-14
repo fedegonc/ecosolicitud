@@ -87,6 +87,14 @@ a.caja { color: inherit; text-decoration: none; }
 .indicadores span { width: var(--chico); height: var(--chico); border: 1px solid currentColor; }
 .indicadores span:first-child { background: currentColor; }
 
+/* novedades: lista compacta, cada ítem enlaza a su publicación */
+.novedades { list-style: none; margin: 0; padding: 0; }
+.novedades li + li { border-top: 1px solid var(--borde); }
+.novedades a { display: flex; align-items: baseline; gap: var(--chico); padding: var(--chico) 0; color: var(--texto); text-decoration: none; }
+.novedades time { flex-shrink: 0; color: var(--texto-suave); }
+.novedades a > span { color: var(--texto-suave); }
+.novedades a:hover strong { text-decoration: underline; }
+
 /* ============================================================
    Composición de las páginas de entrada (/ y /design), bajo .ds
    ============================================================ */
@@ -98,8 +106,6 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .grupo { flex: 1; display: flex; flex-direction: column; }
 .ds .grilla { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: var(--chico); }
 .ds .grupo:only-child .grilla { grid-template-columns: repeat(4, 1fr); }
-.ds .noticia-credito { font-size: var(--t-xs); }
-.ds .noticia-fuente { margin-top: auto; align-self: flex-start; }
 
 @media (max-width: 45rem) {
     .ds { --grande: 1rem; }
@@ -111,6 +117,7 @@ a.caja { color: inherit; text-decoration: none; }
     .banner .descripcion { order: 1; flex-basis: 100%; }
     .banner .relleno { display: none; }
     .banner .indicadores { flex-shrink: 0; }
+    .novedades time { flex-basis: 100%; }
     .ds .ecosistema .fila { flex-wrap: nowrap; overflow-x: auto; }
     .actor,
     .fila:has(> .actor:nth-child(4)) .actor { flex: 0 0 8rem; }

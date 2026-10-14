@@ -133,27 +133,27 @@ final class DemoDatos {
 
                         Usá datos de prueba y no coordines un retiro real con estos contactos.""",
                         "Esta demostración usa centros y contactos de ejemplo.",
-                        "acopio", TipoPublicacion.NOVEDAD, ahora.minus(2, ChronoUnit.DAYS)),
+                        "acopio", "EcoSolicitud", TipoPublicacion.NOVEDAD, ahora.minus(2, ChronoUnit.DAYS)),
                 new PublicacionSemilla("Separá tus materiales", """
                         Separá cartón, papel, plástico, vidrio, metal y latas.
                         Revisá los materiales que acepta el centro antes de enviar la solicitud.
 
                         Los centros de ejemplo no reciben electrónicos.""",
                         "Revisá los materiales del centro antes de pedir el retiro.",
-                        "cooperativa", TipoPublicacion.HISTORIA, ahora.minus(5, ChronoUnit.DAYS)),
+                        "cooperativa", "EcoSolicitud", TipoPublicacion.HISTORIA, ahora.minus(5, ChronoUnit.DAYS)),
                 new PublicacionSemilla("Cómo probar una solicitud", """
                         Elegí tu ciudad, un centro de ejemplo y los materiales.
                         Escribí un contacto y una dirección ficticios.
 
                         Luego podés cambiar al perfil Organización para probar la atención del pedido.""",
                         "Probá el recorrido con datos ficticios, sin señalar una casa real.",
-                        "campana", TipoPublicacion.NOVEDAD, ahora.minus(9, ChronoUnit.DAYS)),
+                        "campana", "EcoSolicitud", TipoPublicacion.NOVEDAD, ahora.minus(9, ChronoUnit.DAYS)),
                 new PublicacionSemilla("Recolectores de demostración", """
                         Las personas de esta lista son ejemplos para la demostración.
                         Algunas no tienen teléfono cargado.
 
                         Los contactos reales se incorporarán en otra fase, con su autorización.""",
                         "La lista incluye contactos de prueba de Rivera y Livramento.",
-                        "carrito", TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
+                        "carrito", "EcoSolicitud", TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
     }
 }

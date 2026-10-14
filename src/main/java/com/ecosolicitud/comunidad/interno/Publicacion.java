@@ -38,6 +38,9 @@ public class Publicacion {
     @Column(length = 200)
     private String imagen;
 
+    @Column(length = 120)
+    private String organizacion;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoPublicacion tipo;
@@ -54,6 +57,7 @@ public class Publicacion {
         p.resumen = s.resumen();
         p.cuerpo = s.cuerpo();
         p.imagen = s.imagen();
+        p.organizacion = s.organizacion();
         p.tipo = s.tipo();
         p.publicadaEn = s.publicadaEn();
         return p;

@@ -9,33 +9,18 @@
     <div th:replace="~{componentes/ds :: grupos(${pagina})}"></div>
     <div th:replace="~{componentes/ds :: avisos(${pagina})}"></div>
     <div th:replace="~{componentes/ds :: ecosistema(${pagina})}"></div>
-    <section class="noticias-comunidad" aria-labelledby="noticias-titulo">
-        <div class="cabecera">
-            <h2 id="noticias-titulo" th:text="#{portada.ultimas}">Lo último de la comunidad</h2>
-        </div>
-        <p th:text="#{noticias.fotos.ilustrativas}">Fotos ilustrativas de reciclaje.</p>
-        <div class="rejilla">
-            <article th:each="p : ${ultimas}" class="tarjeta caja" th:with="clave=${'noticias.' + p}">
-                <div class="imagen">
-                    <img th:src="@{${#messages.msg(clave + '.imagen')}}"
-                         th:alt="#{${clave + '.alt'}}" width="800" height="450" loading="lazy">
-                </div>
-                <div class="texto">
-                    <span class="noticia-credito" th:text="#{${clave + '.credito'}}">Foto: autor / Unsplash</span>
-                    <h3><a th:href="#{${clave + '.fuente'}}" target="_blank" rel="noopener"
-                           th:text="#{${clave + '.titulo'}}">Título</a></h3>
-                    <span th:text="#{${clave + '.texto'}}">Resumen</span>
-                    <span>
-                        <span class="etiqueta" th:text="#{${clave + '.tipo'}}">Historia</span>
-                        <time th:datetime="#{${clave + '.fecha'}}"
-                              th:text="#{${clave + '.fecha.visible'}}">Fecha de la fuente</time>
-                    </span>
-                    <a class="noticia-fuente" th:href="#{${clave + '.fuente'}}" target="_blank" rel="noopener"
-                       th:aria-label="#{noticias.ver.mas.titulo(${#messages.msg(clave + '.titulo')})}"
-                       th:text="#{noticias.ver.mas}">Ver más</a>
-                </div>
-            </article>
-        </div>
+    <section id="ds-novedades" th:if="${!ultimas.isEmpty()}">
+        <div th:replace="~{componentes/ds :: cabecera(#{portada.ultimas}, '/comunidad')}"></div>
+        <ul class="novedades">
+            <li th:each="p : ${ultimas}">
+                <a th:href="@{/comunidad/{id}(id=${p.id})}">
+                    <time th:datetime="${#temporals.formatISO(p.publicadaEn)}"
+                          th:text="${#temporals.format(p.publicadaEn, 'd MMM')}">12 oct</time>
+                    <strong th:text="${p.titulo}">Título</strong>
+                    <span th:if="${p.organizacion != null}" th:text="${p.organizacion}">Organización</span>
+                </a>
+            </li>
+        </ul>
     </section>
 </main>
 </body>
