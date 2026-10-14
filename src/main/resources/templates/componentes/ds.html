@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="cabecera(titulo, enlace)" class="cabecera">
+    <h2 th:text="${titulo}"></h2>
+    <a th:if="${enlace != null}" th:href="@{${enlace}}"><span th:text="#{ds.vertodo}">Ver todo</span> <span aria-hidden="true">→</span></a>
+</div>
+<a th:fragment="tarjeta(clave, imagen, enlace)" th:href="@{${enlace}}" class="caja tarjeta">
+    <div class="imagen"><img th:if="${imagen != null}" th:src="@{${imagen}}" th:alt="#{${clave + '.titulo'}}"></div>
+    <div class="texto">
+        <strong th:text="#{${clave + '.titulo'}}"></strong>
+        <span th:text="#{${clave + '.texto'}}"></span>
+    </div>
+</a>
+<a th:fragment="herramienta(icono, clave, enlace)" th:href="@{${enlace}}" class="caja herramienta">
+    <div class="cabeza-tarjeta">
+        <div class="icono">
+            <svg th:unless="${icono == 'corazon'}" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${icono}"></use></svg>
+            <svg th:if="${icono == 'corazon'}" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21 3.5 12.5a5.7 5.7 0 0 1 8-8L12 5l.5-.5a5.7 5.7 0 0 1 8 8L12 21z"></path></svg>
+        </div>
+        <span aria-hidden="true">→</span>
+    </div>
+    <div class="texto">
+        <strong th:text="#{${clave + '.titulo'}}"></strong>
+        <span th:text="#{${clave + '.texto'}}"></span>
+    </div>
+</a>
+<a th:fragment="banner(clave, enlace, total)" th:href="@{${enlace}}" class="caja banner">
+    <strong th:text="#{${clave + '.titulo'}}"></strong>
+    <span class="descripcion" th:text="#{${clave + '.texto'}}"></span>
+    <span class="relleno"></span>
+    <div class="indicadores" th:if="${total > 1}" aria-hidden="true">
+        <span th:each="i : ${#numbers.sequence(1, total)}"></span>
+    </div>
+    <span class="flecha" aria-hidden="true">→</span>
+</a>
+<a th:fragment="actor(nombre, iniciales)" th:href="@{/comunidad}" class="caja actor">
+    <div class="imagen"><span th:text="${iniciales}" aria-hidden="true"></span></div>
+    <div class="texto"><strong th:text="${nombre}"></strong></div>
+</a>
+<div th:fragment="encabezado(pagina)" id="ds-encabezado" class="encabezado">
+    <header class="intro">
+        <h1 th:text="#{${pagina.titulo}(${pagina.nombre})}">Reciclar en Rivera</h1>
+        <p th:text="#{${pagina.subtitulo}(${pagina.nombre})}"></p>
+    </header>
+    <nav id="ds-ciudad" class="fila" th:aria-label="#{ds.ciudad}">
+        <details class="menu">
+            <summary class="caja" th:classappend="${pagina.ciudad != 'livramento'} ? 'activa'"><span>Rivera</span><span aria-hidden="true"> ▾</span></summary>
+            <div class="lista">
+                <a class="caja" th:href="@{/(ciudad='rivera')}">Rivera</a>
+                <a class="caja" th:href="@{/(ciudad='tranqueras')}">Tranqueras</a>
+                <a class="caja" th:href="@{/(ciudad='minas')}">Minas de Corrales</a>
+                <a class="caja" th:href="@{/(ciudad='vichadero')}">Vichadero</a>
+            </div>
+        </details>
+        <a class="caja" th:href="@{/(ciudad='livramento')}"
+           th:classappend="${pagina.ciudad == 'livramento'} ? 'activa'">Livramento</a>
+    </nav>
+</div>
+<section th:fragment="grupos(pagina)" id="ds-grupos" class="grupos">
+    <div class="grupo">
+        <div th:replace="~{componentes/ds :: cabecera(#{ds.divulgacion}, '/guia')}"></div>
+        <div class="grilla">
+            <th:block th:each="t : ${pagina.divulgacion}">
+                <a th:replace="~{componentes/ds :: tarjeta(${t.clave}, ${t.imagen}, ${t.enlace})}"></a>
+            </th:block>
+        </div>
+    </div>
+    <div class="grupo" id="ds-recoleccion" th:if="${!pagina.recoleccion.empty}">
+        <div th:replace="~{componentes/ds :: cabecera(#{ds.recoleccion}, null)}"></div>
+        <div class="grilla">
+            <th:block th:each="h : ${pagina.recoleccion}">
+                <a th:replace="~{componentes/ds :: herramienta(${h.icono}, ${h.clave}, ${h.enlace})}"></a>
+            </th:block>
+        </div>
+    </div>
+</section>
+<section th:fragment="avisos(pagina)" id="ds-banner" th:if="${!pagina.avisos.empty}">
+    <a th:replace="~{componentes/ds :: banner(${pagina.avisos[0].clave}, '/avisos', ${pagina.avisos.size()})}"></a>
+</section>
+<section th:fragment="ecosistema(pagina)" id="ds-ecosistema" class="ecosistema">
+    <div th:replace="~{componentes/ds :: cabecera(#{ds.ecosistema}, '/comunidad')}"></div>
+    <div class="fila">
+        <th:block th:each="a : ${pagina.actores}">
+            <a th:replace="~{componentes/ds :: actor(${a.nombre}, ${a.iniciales})}"></a>
+        </th:block>
+    </div>
+</section>
+</body>
+</html>

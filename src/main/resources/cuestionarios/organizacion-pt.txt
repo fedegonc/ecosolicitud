@@ -2,8 +2,8 @@
 # Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
 # 'opcion: pregunta | opción 1 | opción 2'.
 titulo: Questionário de Usabilidade – Organização
-opcion: Qual é a sua localidade? | Rivera | Sant'Ana do Livramento
-escala: Foi claro como escolher o perfil Organização e seu ponto de coleta, sem se cadastrar?
+opcion: Qual é a sua localidade? | Rivera | Sant’Ana do Livramento
+escala: Foi claro como escolher o perfil Organização e seu ponto de coleta?
 escala: Você conseguiu ver as solicitações recebidas pelo seu ponto de coleta?
 escala: A organização das solicitações em colunas (pendentes, em andamento, fechadas) foi clara?
 escala: Você conseguiu ver todos os detalhes de cada solicitação (materiais, endereço e localização)?

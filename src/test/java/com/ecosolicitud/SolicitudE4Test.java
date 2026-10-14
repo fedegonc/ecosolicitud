@@ -194,7 +194,7 @@ class SolicitudE4Test {
                     .sendKeys("Uruguay 1000");
             driver.findElement(By.cssSelector("main form[method='post'] button[type='submit']")).click();
             assertThat(driver.getCurrentUrl()).endsWith(Rutas.MIS_SOLICITUDES);
-            assertThat(driver.findElement(By.cssSelector(".aviso")).getText())
+            assertThat(driver.findElement(By.cssSelector("main [role='status']")).getText())
                     .contains("enviada a Centro de ejemplo – Paso del Enano");
             var creada = servicio.todas().get(servicio.todas().size() - 1);
             assertThat(servicio.todas()).hasSize(antes + 1);

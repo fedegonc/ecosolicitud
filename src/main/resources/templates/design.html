@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{${pagina.titulo}(${pagina.nombre})}">Reciclar en Rivera</title>
+</head>
+<body>
+<main layout:fragment="content" class="ds">
+    <div th:replace="~{componentes/ds :: encabezado(${pagina})}"></div>
+    <div th:replace="~{componentes/ds :: grupos(${pagina})}"></div>
+    <div th:replace="~{componentes/ds :: avisos(${pagina})}"></div>
+    <div th:replace="~{componentes/ds :: ecosistema(${pagina})}"></div>
+</main>
+</body>
+</html>

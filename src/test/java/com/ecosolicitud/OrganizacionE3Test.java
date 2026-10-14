@@ -113,9 +113,9 @@ class OrganizacionE3Test {
             var telefono = driver.findElement(By.cssSelector("input[name='telefono']"));
             telefono.clear();
             telefono.sendKeys("+598 99 123 456");
-            driver.findElement(By.cssSelector(".ficha button[type='submit']")).click();
+            driver.findElement(By.cssSelector("main form button[type='submit']")).click();
             assertThat(driver.getCurrentUrl()).endsWith(Rutas.ORG_PERFIL);
-            assertThat(driver.findElement(By.cssSelector(".aviso")).getText())
+            assertThat(driver.findElement(By.cssSelector("main [role='status']")).getText())
                     .isEqualTo("Cambios guardados");
             assertThat(servicio.buscar("frontera-limpia").orElseThrow().telefono())
                     .isEqualTo("+598 99 123 456");
@@ -125,7 +125,7 @@ class OrganizacionE3Test {
             driver.get(base + Rutas.ORG_PERFIL);
             driver.findElements(By.cssSelector("input[name='materiales']:checked"))
                     .forEach(e -> e.click());
-            driver.findElement(By.cssSelector(".ficha button[type='submit']")).click();
+            driver.findElement(By.cssSelector("main form button[type='submit']")).click();
             assertThat(driver.findElements(By.cssSelector("fieldset .error"))).isNotEmpty();
             assertThat(driver.findElement(By.cssSelector("fieldset .error")).getText())
                     .contains("al menos un material");
@@ -145,7 +145,7 @@ class OrganizacionE3Test {
             var telefono = driver.findElement(By.cssSelector("input[name='telefono']"));
             telefono.clear();
             telefono.sendKeys("+598 77 777 777");
-            driver.findElement(By.cssSelector(".ficha button[type='submit']")).click();
+            driver.findElement(By.cssSelector("main form button[type='submit']")).click();
             assertThat(driver.findElement(By.cssSelector(".alerta")).getText())
                     .contains("cambió mientras editabas");
             assertThat(servicio.buscar("frontera-limpia").orElseThrow().telefono())

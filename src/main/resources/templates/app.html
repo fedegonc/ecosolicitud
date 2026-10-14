@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title layout:title-pattern="$CONTENT_TITLE · $LAYOUT_TITLE">EcoSolicitud</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/design.css}">
     <link rel="stylesheet" th:if="${!#strings.isEmpty(tema)}"
           th:href="@{'/css/temas/' + ${tema} + '.css'}">
+    <link rel="stylesheet" th:if="${demoHabilitada}" th:href="@{/css/demo.css}">
     <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
     <link rel="manifest" th:href="@{/manifest.json}">
     <meta name="theme-color" content="#434a27">
@@ -24,23 +26,22 @@
     <a class="salto" href="#contenido" th:text="#{nav.saltar}">Saltar al contenido</a>
     <div class="app">
         <aside class="sidebar">
-            <header class="marca-bloque">
-                <a class="marca" th:href="@{/}">
-                    <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
-                    <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
+            <header>
+                <a th:href="@{/}">
+                    <img th:src="@{/img/logo.svg}" alt="">
+                    <span th:text="#{app.nombre}">EcoSolicitud</span>
                 </a>
-                <span th:fragment="idiomas" class="idiomas">
+                <p th:fragment="idiomas">
                     <a th:href="${rutaActual} + '?lang=es'"
-                       th:classappend="${#locale.language == 'es'} ? 'activa'"><svg class="bandera" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#bandera-es'"></use></svg><span>ES</span></a>
+                       th:classappend="${#locale.language == 'es'} ? 'activa'"><svg aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#bandera-es'"></use></svg><span>ES</span></a>
                     <a th:href="${rutaActual} + '?lang=pt'"
-                       th:classappend="${#locale.language == 'pt'} ? 'activa'"><svg class="bandera" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#bandera-pt'"></use></svg><span>PT</span></a>
-                </span>
+                       th:classappend="${#locale.language == 'pt'} ? 'activa'"><svg aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#bandera-pt'"></use></svg><span>PT</span></a>
+                </p>
             </header>
             <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
                 <ul>
                     <li th:each="s : ${secciones}">
                         <a th:href="${s.ruta}"
-                           th:classappend="${s.ruta == rutaActual} ? 'activa'"
                            th:attr="aria-current=${s.ruta == rutaActual} ? 'page' : null">
                             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
                             <span th:text="#{${s.clave}}">Sección</span>
@@ -54,10 +55,10 @@
                     </li>
                 </ul>
             </nav>
-            <footer class="sidebar-pie">
+            <footer th:fragment="pie">
                 <details class="demo-bloque">
                     <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
-                <form th:fragment="cambioRol" th:action="@{/demo/rol}" method="post" class="rol-switch" hx-indicator="this">
+                <form th:action="@{/demo/rol}" method="post" class="rol-switch" hx-indicator="this">
                     <button type="submit" name="rol" value="CIUDADANO"
                             th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
                             th:attr="aria-pressed=${rolActual.name() == 'CIUDADANO'}"
@@ -67,7 +68,7 @@
                             th:attr="aria-pressed=${rolActual.name() == 'ORGANIZACION'}"
                             th:text="#{rol.organizacion}">Organización</button>
                 </form>
-                <form th:fragment="selectorOrg" th:if="${rolActual.name() == 'ORGANIZACION'}"
+                <form th:if="${rolActual.name() == 'ORGANIZACION'}"
                       th:action="@{/demo/organizacion}" method="post" class="org-switch" hx-indicator="this">
                     <label for="org-select" th:text="#{demo.acopio}">Acopio</label>
                     <select id="org-select" name="id">
@@ -78,43 +79,32 @@
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
                 </form>
-                <form th:fragment="reiniciar" th:if="${demoHabilitada and demoReinicio}"
+                <form th:if="${demoHabilitada and demoReinicio}"
                       th:action="@{/demo/reiniciar}" method="post" class="reiniciar" hx-indicator="this">
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
                 </form>
                 </details>
-                <a th:fragment="enlaceInstalar" class="enlace-pie instalar-app" href="#" hidden><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{instalar.boton}">Instalar</span></a>
-                <a th:fragment="creditoFotos" class="credito-fotos" href="https://commons.wikimedia.org/wiki/User:Mx._Granger"
+                <a class="instalar-app" href="#" hidden><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{instalar.boton}">Instalar</span></a>
+                <a href="https://commons.wikimedia.org/wiki/User:Mx._Granger"
                    rel="noopener" target="_blank" th:text="#{foto.credito}">Fotos</a>
             </footer>
         </aside>
         <div class="menu-movil">
-            <div class="menu-barra">
-                <a class="menu-marca" th:href="@{/}">
-                    <img th:src="@{/img/logo.svg}" alt="" class="marca-logo">
-                    <span class="marca-nombre" th:text="#{app.nombre}">EcoSolicitud</span>
+            <header>
+                <a th:href="@{/}">
+                    <img th:src="@{/img/logo.svg}" alt="">
+                    <span th:text="#{app.nombre}">EcoSolicitud</span>
                 </a>
-                <span th:replace="~{app :: idiomas}"></span>
-                <details class="menu-panel">
-                    <summary th:aria-label="#{nav.menu}">
-                        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
-                    </summary>
-                    <div class="menu-panel-cuerpo">
-                        <nav th:replace="~{app :: secciones}"></nav>
-                        <footer class="menu-pie">
-                            <details class="demo-bloque">
-                                <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
-                                <form th:replace="~{app :: cambioRol}"></form>
-                                <form th:replace="~{app :: selectorOrg}"></form>
-                                <form th:replace="~{app :: reiniciar}"></form>
-                            </details>
-                            <a th:replace="~{app :: enlaceInstalar}"></a>
-                            <a th:replace="~{app :: creditoFotos}"></a>
-                        </footer>
-                    </div>
-                </details>
-            </div>
+                <p th:replace="~{app :: idiomas}"></p>
+            </header>
+            <details>
+                <summary th:aria-label="#{nav.menu}">
+                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
+                </summary>
+                <nav th:replace="~{app :: secciones}"></nav>
+                <footer th:replace="~{app :: pie}"></footer>
+            </details>
         </div>
         <div class="pagina">
             <nav th:replace="~{secciones/migas :: migas}"></nav>

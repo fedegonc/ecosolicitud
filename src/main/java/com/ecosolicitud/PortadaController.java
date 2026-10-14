@@ -3,6 +3,7 @@ package com.ecosolicitud;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
@@ -22,7 +23,8 @@ class PortadaController {
     }
 
     @GetMapping(Rutas.RAIZ)
-    String portada(Model modelo) {
+    String portada(@RequestParam(defaultValue = "rivera") String ciudad, Model modelo) {
+        modelo.addAttribute("pagina", DesignDatos.para(ciudad));
         modelo.addAttribute("ultimas", List.of("novo-horizonte", "rivera-verde", "punto-verde"));
         modelo.addAttribute("inicio", actor.get() == Rol.ORGANIZACION
                 ? Rutas.ORG_SOLICITUDES : Rutas.NUEVA);

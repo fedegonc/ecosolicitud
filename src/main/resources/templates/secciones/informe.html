@@ -6,39 +6,36 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{informe.titulo}">Informe mensual</h1>
-    <p class="detalle"><span th:text="${titular}">Nombre</span> ·
+    <p><span th:text="${titular}">Nombre</span> ·
         <span th:text="${informe.mes}">2026-10</span></p>
-    <p class="solo-pantalla">
-        <a class="enlace" th:href="${rutaInforme} + '?mes=' + ${informe.mes.minusMonths(1)}"
+    <nav class="fila solo-pantalla">
+        <a class="caja" th:href="${rutaInforme} + '?mes=' + ${informe.mes.minusMonths(1)}"
            hx-target="main" hx-select="main"
            th:text="#{informe.anterior}">← Mes anterior</a>
-        <a class="enlace" th:href="${rutaInforme} + '?mes=' + ${informe.mes.plusMonths(1)}"
+        <a class="caja" th:href="${rutaInforme} + '?mes=' + ${informe.mes.plusMonths(1)}"
            hx-target="main" hx-select="main"
            th:text="#{informe.siguiente}">Mes siguiente →</a>
-        <a class="enlace" th:href="${volver}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{panel.volver}">Volver</span></a>
-    </p>
-    <p class="solo-pantalla"><button class="accion" type="button" onclick="window.print()"
+        <a class="caja" th:href="${volver}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{panel.volver}">Volver</span></a>
+    </nav>
+    <p class="solo-pantalla"><button type="button" onclick="window.print()"
            th:text="#{informe.imprimir}">Imprimir</button></p>
-    <div class="vacio" th:if="${informe.metricas.recibidas() == 0}">
-        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#grafico'"></use></svg>
-        <p class="detalle" th:text="#{informe.vacio}">Vacío</p>
-    </div>
+    <p th:if="${informe.metricas.recibidas() == 0}" th:text="#{informe.vacio}">Vacío</p>
     <div class="rejilla">
-        <article class="tarjeta">
-            <h3 class="indicador" th:text="${informe.metricas.recibidas()}">4</h2>
-            <p><strong th:text="#{informe.recibidas}">Recibidas</strong></p>
+        <article class="tarjeta caja">
+            <strong th:text="${informe.metricas.recibidas()}">4</strong>
+            <div class="texto"><span th:text="#{informe.recibidas}">Recibidas</span></div>
         </article>
-        <article class="tarjeta">
-            <h3 class="indicador" th:text="${informe.metricas.aceptadas()}">3</h2>
-            <p><strong th:text="#{informe.aceptadas}">Aceptadas</strong></p>
+        <article class="tarjeta caja">
+            <strong th:text="${informe.metricas.aceptadas()}">3</strong>
+            <div class="texto"><span th:text="#{informe.aceptadas}">Aceptadas</span></div>
         </article>
-        <article class="tarjeta">
-            <h3 class="indicador" th:text="${informe.metricas.completadas()}">2</h2>
-            <p><strong th:text="#{informe.completadas}">Completadas</strong></p>
+        <article class="tarjeta caja">
+            <strong th:text="${informe.metricas.completadas()}">2</strong>
+            <div class="texto"><span th:text="#{informe.completadas}">Completadas</span></div>
         </article>
-        <article class="tarjeta">
-            <h3 class="indicador" th:text="${informe.metricas.mediana()}">6 h</h2>
-            <p><strong th:text="#{informe.mediana}">Respuesta</strong></p>
+        <article class="tarjeta caja">
+            <strong th:text="${informe.metricas.mediana()}">6 h</strong>
+            <div class="texto"><span th:text="#{informe.mediana}">Respuesta</span></div>
         </article>
     </div>
     <section>
@@ -55,7 +52,7 @@
     </section>
     <section>
         <h2 th:text="#{informe.detalle}">Detalle</h2>
-        <ul class="detalle">
+        <ul>
             <li th:each="s : ${informe.solicitudes}"
                 th:text="'#' + ${s.id} + ' · ' + ${s.creada()} + ' · ' + ${s.nombreCiudadano} + ' · ' + ${s.direccion} + ' · ' + #{${s.estado.clave}}">Fila</li>
         </ul>

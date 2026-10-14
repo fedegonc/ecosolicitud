@@ -6,24 +6,27 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{guia.titulo}">Guía de reciclaje</h1>
-    <p class="detalle" th:text="#{guia.intro}">Intro</p>
-    <p class="detalle" th:if="${articulos.isEmpty()}" th:text="#{guia.vacia}">Vacía</p>
+    <p th:text="#{guia.intro}">Intro</p>
+    <p th:if="${articulos.isEmpty()}" th:text="#{guia.vacia}">Vacía</p>
     <div class="rejilla">
-        <article th:each="a : ${articulos}" class="tarjeta">
-            <img class="tarjeta-img" th:if="${a.imagen != null}"
-                 th:src="@{/img/guia/{s}-800.webp(s=${a.imagen})}"
-                 th:attr="srcset=@{/img/guia/{s}-800.webp(s=${a.imagen})} + ' 800w, ' + @{/img/guia/{s}-1600.webp(s=${a.imagen})} + ' 1600w'"
-                 sizes="(min-width: 45rem) 18rem, 100vw" width="800" height="600"
-                 loading="lazy" th:alt="#{${'foto.guia.' + a.imagen}}">
-            <h3><a class="enlace" th:href="@{/guia/{id}(id=${a.id})}"
-                   th:text="${a.titulo}">Título</a></h3>
-            <p class="detalle" th:if="${a.material != null}">
-                <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(a.material.codigo)}">
+        <article th:each="a : ${articulos}" class="tarjeta caja">
+            <div class="imagen" th:if="${a.imagen != null}">
+                <img th:src="@{/img/guia/{s}-800.webp(s=${a.imagen})}"
+                     th:attr="srcset=@{/img/guia/{s}-800.webp(s=${a.imagen})} + ' 800w, ' + @{/img/guia/{s}-1600.webp(s=${a.imagen})} + ' 1600w'"
+                     sizes="(min-width: 45rem) 18rem, 100vw" width="800" height="600"
+                     loading="lazy" th:alt="#{${'foto.guia.' + a.imagen}}">
+            </div>
+            <div class="texto">
+                <h3><a th:href="@{/guia/{id}(id=${a.id})}"
+                       th:text="${a.titulo}">Título</a></h3>
+                <span th:if="${a.material != null}">
+                    <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(a.material.codigo)}">
                         <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${a.material.icono}"></use></svg>
                         <span th:text="${a.material.nombre}">Material</span>
                     </span>
-            </p>
-            <p class="detalle"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{guia.leer}">Leer</span></p>
+                </span>
+                <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{guia.leer}">Leer</span></span>
+            </div>
         </article>
     </div>
 </main>

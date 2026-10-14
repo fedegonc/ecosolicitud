@@ -1,9 +1,9 @@
 # Respaldo del formulario de Google. Si cambia el formulario, editar este archivo.
 # Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
 # 'opcion: pregunta | opción 1 | opción 2'.
-titulo: Cuestionario de Usabilidad – Centro de acopio
-opcion: ¿Cuál es tu localidad? | Rivera | Sant'Ana do Livramento
-escala: ¿Le resultó claro cómo elegir el perfil Organización y su centro de acopio, sin registrarse?
+titulo: Cuestionario de Usabilidad - Centro de acopio
+opcion: ¿Cuál es tu localidad? | Rivera | Sant’Ana do Livramento
+escala: ¿Le resultó claro cómo elegir el perfil Organización y su centro de acopio?
 escala: ¿Pudo ver las solicitudes recibidas por su centro?
 escala: ¿La organización de las solicitudes por columnas (pendientes, en curso, cerradas) le resultó clara?
 escala: ¿Pudo ver los detalles completos de cada solicitud (materiales, dirección y ubicación)?
@@ -18,4 +18,4 @@ escala: ¿Los tiempos de respuesta fueron adecuados para sus actividades?
 escala: ¿El sistema respondió de forma estable, sin errores o interrupciones frecuentes?
 escala: ¿Le resultó útil poder usar el sistema en su idioma?
 escala: ¿Está satisfecho con su experiencia general de uso del sistema?
-texto: ¿Qué mejorarías o agregarías del sistema?
+texto: ¿Qué mejoraría o agregaría al sistema?

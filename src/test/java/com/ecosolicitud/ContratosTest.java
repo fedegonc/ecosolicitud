@@ -111,13 +111,13 @@ class ContratosTest {
         Allure.step("INV-RAIZ-01 / muestra la portada con acceso del rol activo", () -> {
             driver.get(base + Rutas.RAIZ);
             assertThat(driver.getCurrentUrl()).endsWith(Rutas.RAIZ);
-            assertThat(driver.findElement(By.cssSelector(".acciones-portada a"))
-                    .getAttribute("href")).endsWith(Rutas.ORG_SOLICITUDES);
+            driver.findElement(By.cssSelector(
+                    ".herramienta[href$='" + Rutas.ORG_SOLICITUDES + "']"));
             driver.findElement(By.cssSelector(".sidebar .rol-switch button[value='CIUDADANO']"))
                     .click();
             driver.get(base + Rutas.RAIZ);
-            assertThat(driver.findElement(By.cssSelector(".acciones-portada a"))
-                    .getAttribute("href")).endsWith(Rutas.NUEVA);
+            driver.findElement(By.cssSelector(
+                    ".herramienta[href$='" + Rutas.NUEVA + "']"));
         });
 
         Allure.step("INV-SES-01 dos sesiones mantienen roles independientes", () -> {

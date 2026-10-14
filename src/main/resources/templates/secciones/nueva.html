@@ -6,14 +6,9 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.nueva}">Nueva solicitud</h1>
-    <header class="panel-cabecera">
-        <img class="franja" th:src="@{/img/ciudad/franja-1600.webp}"
-             th:attr="srcset=@{/img/ciudad/franja-800.webp} + ' 800w, ' + @{/img/ciudad/franja-1600.webp} + ' 1600w'"
-             sizes="100vw" width="1600" height="250" alt="">
-        <p class="bienvenida" th:text="#{nueva.intro}">Pedí el retiro en cuatro pasos</p>
-        <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>
-    </header>
-    <form th:action="@{/nueva}" method="post" th:object="${form}" class="ficha" hx-indicator="this">
+    <p th:text="#{nueva.intro}">Pedí el retiro en cuatro pasos</p>
+    <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>
+    <form th:action="@{/nueva}" method="post" th:object="${form}" hx-indicator="this">
         <label class="campo">
             <span th:text="#{nueva.ciudad}">Ciudad</span>
             <select th:field="*{ciudad}" required th:attr="hx-get=@{/nueva}"
@@ -33,9 +28,9 @@
                 <p class="centro-resumen">
                     <span>
                         <strong th:text="${centro.nombre}">Nombre</strong>
-                        <span class="detalle" th:text="${centro.horario}">Horario</span>
+                        <span th:text="${centro.horario}">Horario</span>
                     </span>
-                    <a class="enlace" th:href="@{/nueva(ciudad=${form.ciudad})}"
+                    <a th:href="@{/nueva(ciudad=${form.ciudad})}"
                        th:attr="hx-get=@{/nueva}"
                        hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
                        hx-include="closest form" hx-params="not _csrf,organizacionId"
@@ -56,7 +51,7 @@
                            hx-include="closest form" hx-params="not _csrf" hx-indicator="#flujo">
                     <span>
                         <strong th:text="${o.nombre}">Nombre</strong>
-                        <span class="detalle" th:text="${o.horario}">Horario</span>
+                        <span th:text="${o.horario}">Horario</span>
                     </span>
                 </label>
                 <span class="ayuda" th:text="#{nueva.centro.ayuda}">Ayuda</span>
@@ -64,7 +59,7 @@
                    th:errors="*{organizacionId}">Error</p>
             </fieldset>
 
-            <p class="alerta" th:if="${form.ciudad != null and #lists.isEmpty(centros)}"
+            <p class="caja banner alerta" role="alert" th:if="${form.ciudad != null and #lists.isEmpty(centros)}"
                th:text="#{nueva.sin.centros}">Sin centros</p>
 
             <fieldset class="campo" th:if="${centro != null}">
@@ -83,7 +78,7 @@
 
             <fieldset class="campo" th:if="${centro != null}">
                 <legend th:text="#{nueva.grupo.contacto}">Contacto</legend>
-                <p class="aviso" role="note" th:text="#{nueva.datos.prueba}">Usá datos de prueba</p>
+                <p class="caja banner" role="note" th:text="#{nueva.datos.prueba}">Usá datos de prueba</p>
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#persona'"></use></svg><span th:text="#{nueva.nombre}">Nombre</span></span>
@@ -139,7 +134,7 @@
                     <div class="mapa-editable" data-mapa-editable role="application" th:aria-label="#{mapa.titulo}"
                          th:attr="data-leaflet-js=@{/js/leaflet/leaflet.js},data-leaflet-css=@{/js/leaflet/leaflet.css}"></div>
                     <p class="mapa-acciones">
-                        <button type="button" class="accion secundaria" data-mapa-geolocalizar><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{mapa.boton}">Usar mi ubicación</span></button>
+                        <button type="button" class="secundaria" data-mapa-geolocalizar><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{mapa.boton}">Usar mi ubicación</span></button>
                         <button type="button" class="enlace" data-mapa-quitar th:hidden="${form.ubicacion == null}" th:text="#{mapa.quitar}">Quitar ubicación</button>
                     </p>
                     <span class="ayuda" th:text="#{mapa.ayuda}">Ayuda</span>
@@ -158,12 +153,12 @@
                               hx-include="closest form"></textarea>
                     <span class="error" id="err-nota" role="alert"><span th:errors="*{nota}"></span></span>
                 </label>
-                <button type="submit" class="accion"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#enviar'"></use></svg><span th:text="#{nueva.enviar}">Enviar</span></button>
+                <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#enviar'"></use></svg><span th:text="#{nueva.enviar}">Enviar</span></button>
             </fieldset>
         </div>
 
         <noscript>
-            <button type="submit" formmethod="get" class="accion secundaria"
+            <button type="submit" formmethod="get" class="secundaria"
                     th:if="${centro == null}" th:text="#{nueva.continuar}">Continuar</button>
         </noscript>
     </form>

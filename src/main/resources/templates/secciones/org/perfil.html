@@ -6,26 +6,23 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{org.perfil.titulo}">Perfil del acopio</h1>
-    <header class="panel-cabecera">
-        <img class="franja" th:src="@{/img/ciudad/franja-1600.webp}"
-             th:attr="srcset=@{/img/ciudad/franja-800.webp} + ' 800w, ' + @{/img/ciudad/franja-1600.webp} + ' 1600w'"
-             sizes="100vw" width="1600" height="250" alt="">
-        <p th:text="#{perfil.intro.detalle}">Estos datos son los que ven los vecinos.</p>
-    </header>
-    <p class="aviso" role="status" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>
-    <p class="alerta" role="alert" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
+    <p th:text="#{perfil.intro.detalle}">Estos datos son los que ven los vecinos.</p>
+    <p class="caja banner" role="status" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>
+    <p class="caja banner alerta" role="alert" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
     <div class="perfil-grid">
-    <form th:action="@{/org/perfil}" method="post" th:object="${form}" class="ficha" hx-indicator="this">
-        <div class="alerta resumen-errores" role="alert" tabindex="-1" th:if="${#fields.hasErrors('*')}">
+    <form th:action="@{/org/perfil}" method="post" th:object="${form}" hx-indicator="this">
+        <div class="resumen-errores" role="alert" tabindex="-1" th:if="${#fields.hasErrors('*')}">
             <p th:text="#{perfil.resumen.titulo}">Revisá estos datos antes de guardar</p>
             <ul>
                 <li th:each="e : ${#fields.errors('*')}" th:text="${e}">Error</li>
             </ul>
         </div>
-        <p class="detalle"><strong th:text="#{perfil.nombre}">Nombre</strong>:
-            <span th:text="${organizacionActiva.nombre}">Nombre</span></p>
-        <p class="detalle"><strong th:text="#{perfil.ciudad}">Ciudad</strong>:
-            <span th:text="#{${organizacionActiva.ciudad.clave}}">Ciudad</span></p>
+        <dl>
+            <dt th:text="#{perfil.nombre}">Nombre</dt>
+            <dd th:text="${organizacionActiva.nombre}">Nombre</dd>
+            <dt th:text="#{perfil.ciudad}">Ciudad</dt>
+            <dd th:text="#{${organizacionActiva.ciudad.clave}}">Ciudad</dd>
+        </dl>
         <fieldset class="campo" th:classappend="${#fields.hasErrors('materiales')} ? 'invalido'">
             <legend th:text="#{perfil.materiales}">Materiales aceptados</legend>
             <label th:each="m : ${materialesTodos}" class="opcion-material">
@@ -57,7 +54,7 @@
             <div class="mapa-editable" data-mapa-editable role="application" th:aria-label="#{mapa.titulo.perfil}"
                  th:attr="data-leaflet-js=@{/js/leaflet/leaflet.js},data-leaflet-css=@{/js/leaflet/leaflet.css}"></div>
             <p class="mapa-acciones">
-                <button type="button" class="accion secundaria" data-mapa-geolocalizar><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{mapa.boton}">Usar mi ubicación</span></button>
+                <button type="button" class="secundaria" data-mapa-geolocalizar><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{mapa.boton}">Usar mi ubicación</span></button>
                 <button type="button" class="enlace" data-mapa-quitar th:hidden="${form.ubicacion == null}" th:text="#{mapa.quitar}">Quitar ubicación</button>
             </p>
             <span class="ayuda" th:text="#{mapa.ayuda.perfil}">Ayuda</span>
@@ -67,32 +64,36 @@
                   th:errors="*{latitud}">Error</span>
         </div>
         <input type="hidden" th:field="*{version}">
-        <button type="submit" class="accion" th:text="#{perfil.guardar}">Guardar</button>
+        <button type="submit" th:text="#{perfil.guardar}">Guardar</button>
         <script th:if="${#fields.hasErrors('*')}">document.querySelector('.resumen-errores').focus();</script>
     </form>
     <aside class="perfil-previa">
         <h2 th:text="#{perfil.previa}">Así te ven los vecinos</h2>
-        <article class="tarjeta">
-            <h3 th:text="${organizacionActiva.nombre}">Nombre</h3>
-            <p class="detalle">
-                <span th:text="#{${organizacionActiva.ciudad.clave}}">Ciudad</span> ·
-                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="${organizacionActiva.horario}">Horario</span> ·
-                <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg>
-                <a class="enlace" th:href="'tel:' + ${#strings.replace(organizacionActiva.telefono, ' ', '')}"
-                   th:text="${organizacionActiva.telefono}">Teléfono</a>
-            </p>
-            <ul class="materiales">
-                <li th:each="m : ${organizacionActiva.materiales}"
-                    th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}">
-                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
-                    <span th:text="${#messages.msgOrNull('material.' + #strings.toLowerCase(m.codigo)) ?: m.nombre}">Material</span>
-                </li>
-            </ul>
-            <th:block th:if="${organizacionActiva.ubicacion != null}">
-                <iframe class="mapa-centro" th:src="${organizacionActiva.ubicacion.mapaEmbebido()}"
-                        th:title="#{acopios.mapa(${organizacionActiva.nombre})}" loading="lazy"></iframe>
-                <a class="enlace detalle" th:href="${organizacionActiva.ubicacion.enlaceMapa()}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{acopios.mapa.ver}">Ver en el mapa</span></a>
-            </th:block>
+        <article class="tarjeta caja">
+            <div class="texto">
+                <h3 th:text="${organizacionActiva.nombre}">Nombre</h3>
+                <dl>
+                    <dt><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg></dt>
+                    <dd th:text="#{${organizacionActiva.ciudad.clave}}">Ciudad</dd>
+                    <dt><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg></dt>
+                    <dd th:text="${organizacionActiva.horario}">Horario</dd>
+                    <dt><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg></dt>
+                    <dd><a th:href="'tel:' + ${#strings.replace(organizacionActiva.telefono, ' ', '')}"
+                           th:text="${organizacionActiva.telefono}">Teléfono</a></dd>
+                </dl>
+                <ul class="materiales">
+                    <li th:each="m : ${organizacionActiva.materiales}"
+                        th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}">
+                        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
+                        <span th:text="${#messages.msgOrNull('material.' + #strings.toLowerCase(m.codigo)) ?: m.nombre}">Material</span>
+                    </li>
+                </ul>
+                <th:block th:if="${organizacionActiva.ubicacion != null}">
+                    <iframe class="mapa-centro" th:src="${organizacionActiva.ubicacion.mapaEmbebido()}"
+                            th:title="#{acopios.mapa(${organizacionActiva.nombre})}" loading="lazy"></iframe>
+                    <a th:href="${organizacionActiva.ubicacion.enlaceMapa()}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{acopios.mapa.ver}">Ver en el mapa</span></a>
+                </th:block>
+            </div>
         </article>
     </aside>
     </div>

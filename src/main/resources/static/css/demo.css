@@ -1,0 +1,89 @@
+/* Modo demostración: cambio de rol, de organización y reinicio.
+   app.html lo carga solo con ecosolicitud.demo.habilitada=true. */
+
+.demo-bloque {
+    display: grid;
+    gap: var(--chico);
+}
+
+.demo-bloque > summary {
+    cursor: pointer;
+}
+
+.demo {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+.rol-switch {
+    display: flex;
+    border: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+}
+
+.rol-switch button,
+.org-switch button,
+.reiniciar button {
+    padding: var(--chico);
+    border: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.rol-switch button {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+}
+
+.org-switch button,
+.reiniciar button {
+    width: 100%;
+}
+
+.reiniciar button {
+    border-style: dashed;
+}
+
+.rol-switch button:hover,
+.org-switch button:hover,
+.reiniciar button:hover {
+    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+}
+
+.rol-switch button.activa {
+    background: var(--acento-texto);
+    color: var(--acento);
+    font-weight: 600;
+}
+
+.org-switch {
+    display: grid;
+    gap: var(--chico);
+    font-size: 0.85rem;
+}
+
+.org-switch label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+.org-switch select {
+    padding: var(--chico);
+    border: 0;
+    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    color: inherit;
+    font: inherit;
+}
+
+@media (pointer: coarse) {
+    .rol-switch button,
+    .org-switch button,
+    .reiniciar button {
+        min-height: var(--icono);
+    }
+}

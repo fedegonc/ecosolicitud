@@ -6,37 +6,36 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.acopios}">Centros de acopio</h1>
-    <p class="aviso" th:if="${demoHabilitada}" th:text="#{acopios.demo}">Centros de ejemplo</p>
+    <p class="caja banner" th:if="${demoHabilitada}" th:text="#{acopios.demo}">Centros de ejemplo</p>
     <section th:each="g : ${grupos}" th:with="foto=${#strings.toLowerCase(g.ciudad.name())}">
-        <figure class="foto-ciudad">
-            <img th:src="@{/img/ciudad/{f}-800.webp(f=${foto})}"
-                 th:attr="srcset=@{/img/ciudad/{f}-800.webp(f=${foto})} + ' 800w, ' + @{/img/ciudad/{f}-1600.webp(f=${foto})} + ' 1600w'"
-                 sizes="(min-width: 45rem) 60rem, 100vw" width="800" height="600" loading="lazy"
-                 th:alt="#{${'foto.' + foto}}">
-            <h2 th:text="#{${g.ciudad.clave}}">Ciudad</h2>
-        </figure>
+        <h2 th:text="#{${g.ciudad.clave}}">Ciudad</h2>
         <div class="rejilla">
-            <article th:each="o : ${g.organizaciones}" class="tarjeta">
-                <h3 th:text="${o.nombre}">Nombre</h3>
-                <p class="detalle">
-                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="${o.horario}">Horario</span> ·
-                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg>
-                    <a class="enlace" th:href="'tel:' + ${#strings.replace(o.telefono, ' ', '')}"
-                       th:text="${o.telefono}">Teléfono</a>
-                </p>
-                <ul class="materiales">
-                    <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}">
-                        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
-                        <span th:text="${#messages.msgOrNull('material.' + #strings.toLowerCase(m.codigo)) ?: m.nombre}">Material</span>
-                    </li>
-                </ul>
-                <th:block th:if="${o.ubicacion != null}">
-                    <iframe class="mapa-centro" th:src="${o.ubicacion.mapaEmbebido()}"
-                            th:title="#{acopios.mapa(${o.nombre})}" loading="lazy"></iframe>
-                    <a class="enlace detalle" th:href="${o.ubicacion.enlaceMapa()}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{acopios.mapa.ver}">Ver en el mapa</span></a>
-                </th:block>
-                <div class="acciones">
-                    <a class="accion secundaria"
+            <article th:each="o : ${g.organizaciones}" class="tarjeta caja">
+                <div class="texto">
+                    <h3 th:text="${o.nombre}">Nombre</h3>
+                    <dl>
+                        <dt><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg></dt>
+                        <dd><span th:text="${o.horario}">Horario</span></dd>
+                    </dl>
+                    <dl>
+                        <dt><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg></dt>
+                        <dd><a th:href="'tel:' + ${#strings.replace(o.telefono, ' ', '')}"
+                               th:text="${o.telefono}">Teléfono</a></dd>
+                    </dl>
+                    <ul class="materiales">
+                        <li th:each="m : ${o.materiales}" th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}">
+                            <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
+                            <span th:text="${#messages.msgOrNull('material.' + #strings.toLowerCase(m.codigo)) ?: m.nombre}">Material</span>
+                        </li>
+                    </ul>
+                    <th:block th:if="${o.ubicacion != null}">
+                        <iframe class="mapa-centro" th:src="${o.ubicacion.mapaEmbebido()}"
+                                th:title="#{acopios.mapa(${o.nombre})}" loading="lazy"></iframe>
+                        <a th:href="${o.ubicacion.enlaceMapa()}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{acopios.mapa.ver}">Ver en el mapa</span></a>
+                    </th:block>
+                </div>
+                <div class="fila">
+                    <a class="caja"
                        th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
                        ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{acopios.pedir}">Pedir retiro</span></a>
                 </div>

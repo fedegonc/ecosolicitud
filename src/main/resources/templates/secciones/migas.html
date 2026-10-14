@@ -5,7 +5,7 @@
      th:if="${migas != null and (migas.size() > 1 or migaFinal != null)}">
     <ol>
         <li th:each="m : ${migas}">
-            <a class="enlace" th:if="${m.url != null}" th:href="${m.url}">
+            <a th:if="${m.url != null}" th:href="${m.url}">
                 <span th:if="${m.literal == null}" th:text="#{${m.clave}}">Miga</span>
                 <span th:if="${m.literal != null}" th:text="${m.literal}">Miga</span>
             </a>

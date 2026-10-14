@@ -6,59 +6,53 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{seccion.mis-solicitudes}">Mis solicitudes</h1>
-    <header class="panel-cabecera">
-        <img class="franja" th:src="@{/img/ciudad/franja-1600.webp}"
-             th:attr="srcset=@{/img/ciudad/franja-800.webp} + ' 800w, ' + @{/img/ciudad/franja-1600.webp} + ' 1600w'"
-             sizes="100vw" width="1600" height="250" alt="">
-        <p class="bienvenida" th:text="#{mis.bienvenida(${usuario})}">Hola</p>
-        <p th:text="#{mis.bienvenida.detalle}">Panel</p>
-        <p class="detalle" th:text="#{mis.semana(${semana.recibidas}, ${semana.aceptadas}, ${semana.completadas}, ${semana.mediana()})}">Semana</p>
-    </header>
+    <p class="caja banner" th:text="#{mis.bienvenida(${usuario})}">Hola</p>
+    <p th:text="#{mis.bienvenida.detalle}">Panel</p>
+    <p th:text="#{mis.semana(${semana.recibidas}, ${semana.aceptadas}, ${semana.completadas}, ${semana.mediana()})}">Semana</p>
     <div id="listado">
-        <p class="aviso" role="status" th:if="${enviada}" th:text="#{mis.enviada(${enviada},${enviadaA})}">Aviso</p>
-        <p class="aviso" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
-        <p class="alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
-        <nav class="filtros">
-            <a th:each="f : ${filtros}" th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(f.name())})}"
+        <p class="caja banner" role="status" th:if="${enviada}" th:text="#{mis.enviada(${enviada},${enviadaA})}">Aviso</p>
+        <p class="caja banner" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
+        <p class="caja banner alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
+        <nav class="fila">
+            <a class="caja" th:each="f : ${filtros}" th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(f.name())})}"
                th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
                hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
                th:text="#{${'mis.filtro.' + #strings.toLowerCase(f.name())}}">Todas</a>
         </nav>
-        <div class="vacio" th:if="${pagina.empty}">
-            <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#hoja'"></use></svg>
-            <p class="detalle">
-                <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
-                <a th:href="@{/nueva}" th:text="#{mis.nueva}">Nueva solicitud</a>
-            </p>
-        </div>
-        <div class="rejilla compacta">
-        <article th:each="s : ${pagina.content}" class="tarjeta">
-            <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre}, @{/mis-solicitudes/{id}(id=${s.id})})}"></th:block>
-            <div class="acciones" th:if="${s.estado.permiteCancelar()}">
+        <p th:if="${pagina.empty}">
+            <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
+            <a th:href="@{/nueva}" th:text="#{mis.nueva}">Nueva solicitud</a>
+        </p>
+        <div class="rejilla">
+        <article th:each="s : ${pagina.content}" class="tarjeta caja">
+            <div class="texto">
+                <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre}, @{/mis-solicitudes/{id}(id=${s.id})})}"></th:block>
+            </div>
+            <div class="fila" th:if="${s.estado.permiteCancelar()}">
                 <form th:action="@{/mis-solicitudes/{id}/cancelar(id=${s.id})}" method="post" hx-indicator="this"
                       hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-disabled-elt="find button">
                     <input type="hidden" name="version" th:value="${s.version}">
-                    <button type="submit" class="accion peligro"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#cruz'"></use></svg><span th:text="#{accion.cancelar}">Cancelar</span></button>
+                    <button type="submit" class="peligro"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#cruz'"></use></svg><span th:text="#{accion.cancelar}">Cancelar</span></button>
                 </form>
             </div>
         </article>
         </div>
-        <nav class="paginacion" th:if="${pagina.totalPages > 1}" th:attr="aria-label=#{paginacion.titulo}">
-            <a class="enlace" th:if="${pagina.hasPrevious()}"
+        <nav class="fila paginacion" th:if="${pagina.totalPages > 1}" th:attr="aria-label=#{paginacion.titulo}">
+            <a class="caja" th:if="${pagina.hasPrevious()}"
                th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(filtro.name())}, pagina=${pagina.number})}"
                hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
                th:text="#{paginacion.anterior}">Anterior</a>
-            <span class="detalle" th:text="#{paginacion.estado(${pagina.number + 1}, ${pagina.totalPages})}">Página 1 de 3</span>
-            <a class="enlace" th:if="${pagina.hasNext()}"
+            <p th:text="#{paginacion.estado(${pagina.number + 1}, ${pagina.totalPages})}">Página 1 de 3</p>
+            <a class="caja" th:if="${pagina.hasNext()}"
                th:href="@{/mis-solicitudes(filtro=${#strings.toLowerCase(filtro.name())}, pagina=${pagina.number + 2})}"
                hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
                th:text="#{paginacion.siguiente}">Siguiente</a>
         </nav>
     </div>
-    <footer class="panel-pie">
-        <a class="enlace" th:href="@{/mis-solicitudes(filtro='cerradas')}"
+    <footer class="fila">
+        <a th:href="@{/mis-solicitudes(filtro='cerradas')}"
            th:text="#{mis.archivadas(${archivadas})}">Cerradas</a>
-        <a class="enlace" th:href="@{/mis-solicitudes/informe}"
+        <a th:href="@{/mis-solicitudes/informe}"
            th:text="#{panel.informe}">Informe mensual</a>
     </footer>
 </main>
