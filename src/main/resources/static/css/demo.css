@@ -16,6 +16,12 @@
     letter-spacing: 0.06em;
 }
 
+.demo-nota {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
 .rol-switch {
     display: flex;
     border: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));

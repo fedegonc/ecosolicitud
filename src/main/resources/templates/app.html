@@ -58,6 +58,7 @@
             <footer th:fragment="pie">
                 <details class="demo-bloque">
                     <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
+                <p class="demo-nota" th:text="#{demo.centros}"></p>
                 <form th:action="@{/demo/rol}" method="post" class="rol-switch" hx-indicator="this">
                     <button type="submit" name="rol" value="CIUDADANO"
                             th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"

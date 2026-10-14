@@ -47,6 +47,11 @@ public class ComunidadService {
         return repositorio.findById(id).map(this::aInfo);
     }
 
+    // el banner de la portada enlaza a una publicación por su título
+    public Optional<PublicacionInfo> buscarPorTitulo(String titulo) {
+        return repositorio.findByTitulo(titulo).map(this::aInfo);
+    }
+
     public boolean vacia() {
         return repositorio.count() == 0;
     }

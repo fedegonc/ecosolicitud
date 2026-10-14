@@ -3,6 +3,9 @@ package com.ecosolicitud;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ecosolicitud.comunidad.ComunidadService;
+import com.ecosolicitud.shared.Rutas;
+
 // Contenido estático de /design por ciudad. Las cadenas de texto son claves
 // de messages (el template las resuelve con #{...}); nombres propios sin traducir.
 final class DesignDatos {
@@ -13,7 +16,8 @@ final class DesignDatos {
     record Herramienta(String icono, String clave, String enlace) {
     }
 
-    record Aviso(String clave) {
+    // publicacion: título exacto de la publicación a la que enlaza el banner, null si enlaza a /avisos
+    record Aviso(String clave, String publicacion) {
     }
 
     record Actor(String nombre) {
@@ -57,7 +61,8 @@ final class DesignDatos {
                         new Herramienta("pin", "ds.h.lugar", "/acopios"),
                         new Herramienta("calendario", "ds.h.dia", "/guia"),
                         new Herramienta("corazon", "ds.h.llevar", "/acopios")),
-                List.of(),
+                List.of(new Aviso("ds.aviso.puntoverde",
+                        "Nuevo Punto Verde en el Polo de Desarrollo")),
                 List.of(new Actor("Renacer del Norte"), new Actor("Plan Vale"),
                         new Actor("Intendencia"), new Actor("Campo Limpio")));
     }
@@ -70,7 +75,7 @@ final class DesignDatos {
                         new Herramienta("corazon", "ds.h.donar", "/nueva"),
                         new Herramienta("pin", "ds.h.lugar", "/acopios"),
                         new Herramienta("basurero", "ds.h.residuo", "/guia")),
-                List.of(new Aviso("ds.aviso.retiro")),
+                List.of(new Aviso("ds.aviso.retiro", null)),
                 List.of(new Actor("Novo Horizonte"), new Actor("Prefeitura")));
     }
 
@@ -98,5 +103,14 @@ final class DesignDatos {
                 new Tarjeta("ds.t2", "/img/comunidad/novo-horizonte-800.webp", "/guia"),
                 new Tarjeta("ds.t3", "/img/comunidad/punto-verde-800.webp", "/guia"),
                 new Tarjeta("ds.t4", "/img/comunidad/acopio-800.webp", "/guia"));
+    }
+
+    // el banner enlaza a su publicación cuando la hay; si no, a la bandeja de avisos
+    static String enlaceAviso(Pagina pagina, ComunidadService comunidad) {
+        if (pagina.avisos().isEmpty() || pagina.avisos().get(0).publicacion() == null) {
+            return Rutas.AVISOS;
+        }
+        return comunidad.buscarPorTitulo(pagina.avisos().get(0).publicacion())
+                .map(p -> Rutas.COMUNIDAD + "/" + p.id()).orElse(Rutas.AVISOS);
     }
 }

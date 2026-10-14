@@ -20,7 +20,9 @@ class PortadaController {
 
     @GetMapping(Rutas.RAIZ)
     String portada(@RequestParam(defaultValue = "rivera") String ciudad, Model modelo) {
-        modelo.addAttribute("pagina", DesignDatos.para(ciudad));
+        var pagina = DesignDatos.para(ciudad);
+        modelo.addAttribute("pagina", pagina);
+        modelo.addAttribute("avisoEnlace", DesignDatos.enlaceAviso(pagina, comunidad));
         modelo.addAttribute("ultimas", comunidad.ultimas(3));
         return "portada";
     }

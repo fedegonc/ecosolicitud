@@ -5,13 +5,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ecosolicitud.comunidad.ComunidadService;
+
 // /design dibuja la portada esqueleto por ciudad; el contenido vive en DesignDatos.
 @Controller
 class DesignController {
 
+    private final ComunidadService comunidad;
+
+    DesignController(ComunidadService comunidad) {
+        this.comunidad = comunidad;
+    }
+
     @GetMapping("/design")
     String design(@RequestParam(defaultValue = "rivera") String ciudad, Model model) {
-        model.addAttribute("pagina", DesignDatos.para(ciudad));
+        var pagina = DesignDatos.para(ciudad);
+        model.addAttribute("pagina", pagina);
+        model.addAttribute("avisoEnlace", DesignDatos.enlaceAviso(pagina, comunidad));
         return "design";
     }
 }

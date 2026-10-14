@@ -76,7 +76,7 @@
     </div>
 </section>
 <section th:fragment="avisos(pagina)" id="ds-banner" th:if="${!pagina.avisos.empty}">
-    <a th:replace="~{componentes/ds :: banner(${pagina.avisos[0].clave}, '/avisos', ${pagina.avisos.size()})}"></a>
+    <a th:replace="~{componentes/ds :: banner(${pagina.avisos[0].clave}, ${avisoEnlace}, ${pagina.avisos.size()})}"></a>
 </section>
 <section th:fragment="ecosistema(pagina)" id="ds-ecosistema" class="ecosistema">
     <div th:replace="~{componentes/ds :: cabecera(#{ds.ecosistema}, '/comunidad')}"></div>

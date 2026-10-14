@@ -123,37 +123,69 @@ final class DemoDatos {
                 .map(SolicitudInfo::id).findFirst().orElse(null);
     }
 
+    // Publicaciones reales de la frontera, cada una con su fuente al pie del cuerpo.
     static List<PublicacionSemilla> comunidad() {
-        var ahora = Instant.now();
         return List.of(
-                new PublicacionSemilla("Centros de ejemplo para probar", """
-                        Los centros de esta demostración sirven para probar solicitudes.
-                        Sus teléfonos son ficticios. No representan organizaciones participantes
-                        ni servicios de retiro confirmados.
+                new PublicacionSemilla("Renacer del Norte: ocho años y 27 familias",
+                        "La cooperativa de clasificadores de Rivera cumple ocho años y hoy sostiene a 27 familias.",
+                        """
+                        Hace ocho años, muchas de las personas que hoy integran la **Cooperativa Renacer del Norte** buscaban materiales entre la basura del vertedero para venderlos o usarlos en sus casas. Hoy son 27 familias con un trabajo formal.
 
-                        Usá datos de prueba y no coordines un retiro real con estos contactos.""",
-                        "Esta demostración usa centros y contactos de ejemplo.",
-                        "acopio", "EcoSolicitud", TipoPublicacion.NOVEDAD, ahora.minus(2, ChronoUnit.DAYS)),
-                new PublicacionSemilla("Separá tus materiales", """
-                        Separá cartón, papel, plástico, vidrio, metal y latas.
-                        Revisá los materiales que acepta el centro antes de enviar la solicitud.
+                        El cambio no fue de un día para el otro: llevó capacitación, acompañamiento y, sobre todo, la decisión de organizarse. La cooperativa trabaja en el predio municipal y en el circuito del microcentro de Rivera, donde recoge los reciclables de los comercios con el Sello Rivera Verde.
 
-                        Los centros de ejemplo no reciben electrónicos.""",
-                        "Revisá los materiales del centro antes de pedir el retiro.",
-                        "cooperativa", "EcoSolicitud", TipoPublicacion.HISTORIA, ahora.minus(5, ChronoUnit.DAYS)),
-                new PublicacionSemilla("Cómo probar una solicitud", """
-                        Elegí tu ciudad, un centro de ejemplo y los materiales.
-                        Escribí un contacto y una dirección ficticios.
+                        **Cómo podés ayudar:** separá en casa y no mezcles restos de comida con los reciclables. Un material limpio vale más y le facilita el trabajo a quienes lo clasifican.
 
-                        Luego podés cambiar al perfil Organización para probar la atención del pedido.""",
-                        "Probá el recorrido con datos ficticios, sin señalar una casa real.",
-                        "campana", "EcoSolicitud", TipoPublicacion.NOVEDAD, ahora.minus(9, ChronoUnit.DAYS)),
-                new PublicacionSemilla("Recolectores de demostración", """
-                        Las personas de esta lista son ejemplos para la demostración.
-                        Algunas no tienen teléfono cargado.
+                        Fuente: [la diaria Rivera](https://ladiaria.com.uy/rivera/articulo/2026/10/renacer-del-norte-la-cooperativa-de-reciclaje-que-cambio-la-vida-de-27-familias-de-rivera/)""",
+                        null, "Renacer del Norte", TipoPublicacion.HISTORIA,
+                        Instant.parse("2026-10-12T12:00:00Z")),
+                new PublicacionSemilla("Contenedores en casa: plan piloto en el barrio Racca",
+                        "La Intendencia entrega contenedores gratis en el barrio Racca y evaluará extender el plan a otros barrios.",
+                        """
+                        La Intendencia de Rivera empezó un **plan piloto de contenedores domiciliarios** en el **barrio Racca**, con entrega gratuita. El objetivo es ordenar la gestión de los residuos y mejorar la limpieza de las calles.
 
-                        Los contactos reales se incorporarán en otra fase, con su autorización.""",
-                        "La lista incluye contactos de prueba de Rivera y Livramento.",
-                        "carrito", "EcoSolicitud", TipoPublicacion.HISTORIA, ahora.minus(14, ChronoUnit.DAYS)));
+                        El plan lo coordinan la División Higiene y la Oficina de Asuntos Sociales, Comunitarios y de Juventud. La primera etapa fue de visitas casa por casa para explicar cómo funciona el sistema, con ayuda de referentes del barrio. También habrá instancias de educación ambiental.
+
+                        Si los vecinos lo adoptan bien, el plan podría extenderse a **La Virgencita, Bisio y Santa Isabel**.
+
+                        Fuente: [la diaria Rivera](https://ladiaria.com.uy/rivera/articulo/2026/9/plan-piloto-de-contenedores-intradomiciliarios-comienza-a-implementarse-en-barrio-racca/)""",
+                        null, "Intendencia de Rivera", TipoPublicacion.NOVEDAD,
+                        Instant.parse("2026-09-28T12:00:00Z")),
+                new PublicacionSemilla("Nuevo Punto Verde en el Polo de Desarrollo",
+                        "La Intendencia anunció la apertura del Punto Verde 2 para el 12 de diciembre de 2025, en el Polo de Desarrollo (ex Abasto Municipal).",
+                        """
+                        La Intendencia anunció la apertura del Punto Verde 2 para el 12 de diciembre de 2025, en el Polo de Desarrollo (ex Abasto Municipal). La nota indica que recibe residuos para clasificar de lunes a sábado, de 7 a 19 h.
+
+                        Fuente: [Intendencia de Rivera](https://www.rivera.gub.uy/portal/la-intendencia-de-rivera-inaugura-el-nuevo-punto-verde-2-en-el-polo-de-desarrollo/)""",
+                        null, "Intendencia de Rivera", TipoPublicacion.NOVEDAD,
+                        Instant.parse("2025-12-10T12:00:00Z")),
+                new PublicacionSemilla("Plan Vale: más envases recuperados en Rivera y Tranqueras",
+                        "Un acuerdo con la industria de envases fortalece las plantas de clasificación y suma ecopuntos.",
+                        """
+                        La Intendencia de Rivera firmó un convenio con la industria de envases para recuperar más envases en todo el departamento: el **Plan Vale**. Las plantas de clasificación de **Rivera y Tranqueras** quedan en manos de cooperativas de clasificadores, con apoyo técnico de la División Higiene.
+
+                        El plan incluye tres líneas de trabajo:
+                        - Controlar la calidad del material que llega a las plantas.
+                        - Hacer campañas para que la gente separe mejor en casa.
+                        - Ubicar **ecopuntos** donde dejar envases en las localidades del plan.
+
+                        Fuente: [Intendencia de Rivera](https://www.rivera.gub.uy/portal/wp-content/uploads/2025/11/LLAMADO-tdr-EXT.pdf)""",
+                        null, "Intendencia de Rivera", TipoPublicacion.NOVEDAD,
+                        Instant.parse("2025-11-01T12:00:00Z")),
+                new PublicacionSemilla("Rivera recicla desde el microcentro",
+                        "54 comercios del centro de Rivera separan sus residuos y tienen el Sello Rivera Verde.",
+                        """
+                        54 comercios del centro de Rivera separan sus residuos y tienen el Sello Rivera Verde. La Cooperativa Renacer del Norte, con 24 clasificadores, los recolecta. Se recuperan unos 700 kg por día.
+
+                        Fuente: [America Retail & Malls](https://americaretail-malls.com/paises/uruguay/comercios-de-rivera-impulsan-el-reciclaje-con-el-sello-verde/)""",
+                        null, "Renacer del Norte", TipoPublicacion.HISTORIA,
+                        Instant.parse("2025-03-31T12:00:00Z")),
+                new PublicacionSemilla("Novo Horizonte estrena su centro de reciclaje",
+                        "La Associação de Catadores Novo Horizonte tiene nueva sede en el barrio Jardins de Livramento, con equipos para separar residuos con seguridad.",
+                        """
+                        La Associação de Catadores Novo Horizonte tiene nueva sede en el barrio Jardins de Livramento, con equipos para separar residuos con seguridad. Fue parte del proyecto binacional Fronteira da Paz Sustentável.
+
+                        Fuente: [Prefeitura de Sant'Ana do Livramento](https://www.santanadolivramento.rs.gov.br/noticia/impressao?id=8560)""",
+                        null, "Novo Horizonte", TipoPublicacion.HISTORIA,
+                        Instant.parse("2024-11-13T12:00:00Z")));
     }
 }
