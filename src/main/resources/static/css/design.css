@@ -63,7 +63,7 @@ a.caja { color: inherit; text-decoration: none; }
 .texto > span { color: var(--texto-suave); font-size: calc(1.75 * var(--chico)); }
 
 /* herramienta: caja con icono, texto y flecha */
-.herramienta { align-items: flex-start; justify-content: space-between; padding: calc(1.5 * var(--chico)); }
+.herramienta { align-items: flex-start; padding: calc(1.5 * var(--chico)); }
 .cabeza-tarjeta { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; }
 :is(.cabeza-tarjeta > span, .banner .flecha) { font-size: calc(var(--icono) / 2); color: var(--acento); }
 .herramienta .icono { width: var(--icono); height: var(--icono); margin: 0; color: var(--acento); }

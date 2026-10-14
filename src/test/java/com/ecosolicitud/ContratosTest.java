@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ContratosTest {
 
     private static final Map<Seccion, String> TITULOS = Map.of(
-            Seccion.NUEVA, "Nueva solicitud",
+            Seccion.NUEVA, "Pedir retiro",
             Seccion.MIS_SOLICITUDES, "Mis solicitudes",
             Seccion.ACOPIOS, "Centros de acopio",
             Seccion.ORG_SOLICITUDES, "Solicitudes recibidas",
@@ -108,7 +108,7 @@ class ContratosTest {
                 assertThat(driver.getCurrentUrl()).endsWith(Rutas.ORG_SOLICITUDES));
         matriz(Rol.ORGANIZACION);
 
-        Allure.step("INV-RAIZ-01 / enlaza al inicio del rol: panel por el menú, /nueva por la herramienta", () -> {
+        Allure.step("INV-RAIZ-01 / enlaza al inicio del rol por el menú lateral", () -> {
             driver.get(base + Rutas.RAIZ);
             assertThat(driver.getCurrentUrl()).endsWith(Rutas.RAIZ);
             driver.findElement(By.cssSelector(
@@ -117,7 +117,7 @@ class ContratosTest {
                     .click();
             driver.get(base + Rutas.RAIZ);
             driver.findElement(By.cssSelector(
-                    ".herramienta[href$='" + Rutas.NUEVA + "']")).click();
+                    ".sidebar .secciones a[href$='" + Rutas.NUEVA + "']")).click();
             assertThat(driver.getCurrentUrl()).endsWith(Rutas.NUEVA);
         });
 

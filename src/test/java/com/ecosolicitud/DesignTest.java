@@ -22,7 +22,7 @@ class DesignTest {
 
     @Test
     void designRespondeConLasCincoSecciones() {
-        var r = rest.getForEntity("/design", String.class);
+        var r = rest.getForEntity("/design?ciudad=livramento", String.class);
         assertThat(r.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(r.getBody()).contains(SECCIONES);
     }

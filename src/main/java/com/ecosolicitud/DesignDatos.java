@@ -56,8 +56,8 @@ final class DesignDatos {
                         new Herramienta("basurero", "ds.h.residuo", "/guia"),
                         new Herramienta("pin", "ds.h.lugar", "/acopios"),
                         new Herramienta("calendario", "ds.h.dia", "/guia"),
-                        new Herramienta("corazon", "ds.h.donar", "/nueva")),
-                List.of(new Aviso("ds.aviso.puntoverde")),
+                        new Herramienta("corazon", "ds.h.llevar", "/acopios")),
+                List.of(),
                 List.of(new Actor("Renacer del Norte"), new Actor("Plan Vale"),
                         new Actor("Intendencia"), new Actor("Campo Limpio")));
     }
@@ -88,8 +88,8 @@ final class DesignDatos {
 
     private static Pagina secundaria(String ciudad, String nombre) {
         return new Pagina(ciudad, nombre, "ds.titulo", "ds.subtitulo.secundaria",
-                divulgacion(), List.of(), List.of(),
-                List.of(new Actor("Intendencia")));
+                divulgacion(), List.of(new Herramienta("corazon", "ds.h.llevar", "/acopios")),
+                List.of(), List.of(new Actor("Intendencia")));
     }
 
     private static List<Tarjeta> divulgacion() {
