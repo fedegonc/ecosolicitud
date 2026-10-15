@@ -431,9 +431,10 @@ main a:active {
 /* letra chica del modo demo: encima de las migas, sin peso visual */
 .datos-demo {
     margin: 0;
-    padding: var(--gap-xs) var(--pad) 0;
-    font-size: var(--t-xs);
+    padding: var(--gap-xs) var(--pad);
+    font-size: var(--t-sm);
     color: var(--texto-suave);
+    background: var(--fondo);
 }
 
 main {
