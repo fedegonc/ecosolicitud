@@ -17,6 +17,26 @@
     <meta name="apple-mobile-web-app-title" th:content="#{app.nombre}">
     <link rel="apple-touch-icon" th:href="@{/img/icon-180.png}">
     <script th:src="@{/js/htmx.min.js}" defer></script>
+    <!-- precarga al pasar el mouse: solo lecturas. Quedan fuera los enlaces
+         que cambian sesión (lang, ciudad), el demo, y /avisos que marca
+         lecturas al abrirse -->
+    <script type="speculationrules">
+    {
+        "prefetch": [{
+            "source": "document",
+            "where": {"and": [
+                {"href_matches": "/*"},
+                {"not": {"href_matches": "*lang=*"}},
+                {"not": {"href_matches": "*ciudad=*"}},
+                {"not": {"href_matches": "/avisos*"}},
+                {"not": {"href_matches": "/demo*"}},
+                {"not": {"href_matches": "*logout*"}},
+                {"not": {"href_matches": "*cerrar*"}}
+            ]},
+            "eagerness": "moderate"
+        }]
+    }
+    </script>
 </head>
 <body hx-boost="true" hx-indicator="#carga" hx-swap="transition:true">
     <div id="carga" class="carga" aria-hidden="true"></div>
