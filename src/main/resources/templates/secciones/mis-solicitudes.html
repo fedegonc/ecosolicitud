@@ -30,7 +30,7 @@
             </div>
             <div class="fila" th:if="${s.estado.permiteCancelar()}">
                 <form th:action="@{${rutas.MIS_CANCELAR}(id=${s.id})}" method="post" hx-indicator="this"
-                      hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-disabled-elt="find button">
+                      hx-target="#listado" hx-select="#listado" hx-swap="outerHTML">
                     <input type="hidden" name="version" th:value="${s.version}">
                     <button type="submit" class="peligro"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#cruz'"></use></svg><span th:text="#{accion.cancelar}">Cancelar</span></button>
                 </form>
