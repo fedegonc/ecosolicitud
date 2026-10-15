@@ -60,7 +60,8 @@ final class DesignDatos {
                 List.of(
                         new Herramienta("basurero", "ds.h.residuo", "/guia"),
                         new Herramienta("pin", "ds.h.lugar", "/acopios"),
-                        new Herramienta("calendario", "ds.h.dia", "/guia"),
+                        new Herramienta("calendario", "ds.h.dia",
+                                articulo(guia, "Sacarlo de casa")),
                         new Herramienta("corazon", "ds.h.llevar", "/acopios")),
                 List.of(new Aviso("ds.aviso.puntoverde",
                         "Nuevo Punto Verde en el Polo de Desarrollo")),
