@@ -4,7 +4,7 @@
     <title th:text="#{org.perfil.titulo}">Perfil del acopio</title>
 </head>
 <body>
-<main layout:fragment="content">
+<main layout:fragment="content" hx-boost="false">
     <h1 th:text="#{org.perfil.titulo}">Perfil del acopio</h1>
     <p th:text="#{perfil.intro.detalle}">Estos datos son los que ven los vecinos.</p>
     <p class="caja banner" role="status" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>

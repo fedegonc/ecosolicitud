@@ -4,7 +4,7 @@
     <title th:text="#{seccion.nueva}">Nueva solicitud</title>
 </head>
 <body>
-<main layout:fragment="content">
+<main layout:fragment="content" hx-boost="false">
     <h1 th:text="#{seccion.nueva}">Nueva solicitud</h1>
     <p th:text="#{nueva.intro}">Pedí el retiro en cuatro pasos</p>
     <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>

@@ -18,7 +18,7 @@
     <link rel="apple-touch-icon" th:href="@{/img/icon-180.png}">
     <script th:src="@{/js/htmx.min.js}" defer></script>
 </head>
-<body hx-boost="true" hx-indicator="#carga">
+<body hx-boost="true" hx-indicator="#carga" hx-swap="transition:true">
     <div id="carga" class="carga" aria-hidden="true"></div>
     <div id="estado-red" class="solo-lectores" role="status"
          th:attr="data-cargando=#{app.cargando},data-confirmar=#{accion.confirmar}"

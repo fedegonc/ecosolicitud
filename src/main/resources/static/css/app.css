@@ -324,6 +324,31 @@ main table small {
    Vida: transiciones suaves, respuesta táctil y entrada de página
    ============================================================ */
 
+/* cambio de página: sale con fundido, entra medio rem más abajo (180 ms);
+   aplica a navegaciones reales y a los swaps de htmx con transition:true */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root) {
+    animation: pagina-sale .18s ease both;
+}
+
+::view-transition-new(root) {
+    animation: pagina-entra .18s ease both;
+}
+
+@keyframes pagina-entra {
+    from {
+        opacity: 0;
+        transform: translateY(.5rem);
+    }
+}
+
+@keyframes pagina-sale {
+    to { opacity: 0; }
+}
+
 @keyframes girar {
     to { transform: rotate(360deg); }
 }
