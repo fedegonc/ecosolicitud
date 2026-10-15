@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecosolicitud.organizacion.OrganizacionInfo;
+import com.ecosolicitud.shared.Limites;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.shared.Ubicacion;
 
@@ -22,7 +23,7 @@ public class PerfilForm {
     private List<Material> materiales = new ArrayList<>();
 
     @NotBlank(message = "{perfil.error.horario}")
-    @Size(max = 80, message = "{perfil.error.horario}")
+    @Size(max = Limites.HORARIO, message = "{error.largo}")
     private String horario;
 
     @NotBlank(message = "{perfil.error.telefono.vacio}")

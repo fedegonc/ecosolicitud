@@ -32,7 +32,7 @@ class ComunidadController {
         return "secciones/comunidad";
     }
 
-    @GetMapping(Rutas.COMUNIDAD + "/{id}")
+    @GetMapping(Rutas.COMUNIDAD_PUBLICACION)
     String publicacion(@PathVariable long id, Model modelo) {
         var publicacion = comunidad.buscar(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

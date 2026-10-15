@@ -100,7 +100,7 @@ class NuevaController {
     }
 
     // valida un solo campo y devuelve el mensaje (o vacío): feedback al blur
-    @PostMapping(Rutas.NUEVA + "/validar")
+    @PostMapping(Rutas.NUEVA_VALIDAR)
     @ResponseBody
     String validar(@RequestParam String campo, @ModelAttribute("form") NuevaForm form,
             BindingResult errores) {

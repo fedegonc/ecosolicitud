@@ -1,5 +1,7 @@
 package com.ecosolicitud.opinion.interno;
 
+import com.ecosolicitud.shared.Limites;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.function.IntFunction;
 // Copia local de un formulario de Google: se muestra solo si Google falla.
 public record Cuestionario(String titulo, List<Pregunta> preguntas) {
 
-    static final int MAX_TEXTO = 1000;
+    static final int MAX_TEXTO = Limites.RESPUESTA_TEXTO;
 
     public enum Tipo { ESCALA, TEXTO, OPCION }
 

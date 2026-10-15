@@ -50,7 +50,7 @@ class DemoDeshabilitadoTest {
 
         Allure.step("El botón de reinicio no aparece en la página", () -> {
             var pagina = rest.getForEntity(Rutas.MIS_SOLICITUDES, String.class);
-            assertThat(pagina.getBody()).doesNotContain("/demo/reiniciar");
+            assertThat(pagina.getBody()).doesNotContain(Rutas.DEMO_REINICIAR);
         });
     }
 }

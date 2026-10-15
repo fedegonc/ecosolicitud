@@ -8,7 +8,7 @@
     <h1 th:text="#{seccion.comunidad}">Comunidad</h1>
     <div id="listado">
         <nav class="fila">
-            <a class="caja" th:each="f : ${filtros}" th:href="@{/comunidad(tipo=${#strings.toLowerCase(f.name())})}"
+            <a class="caja" th:each="f : ${filtros}" th:href="@{${rutas.COMUNIDAD}(tipo=${#strings.toLowerCase(f.name())})}"
                th:classappend="${f == filtro} ? 'activa'" th:attr="aria-current=${f == filtro} ? 'page' : null"
                hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
                th:text="#{${'comunidad.filtro.' + #strings.toLowerCase(f.name())}}">Todas</a>
@@ -23,7 +23,7 @@
                      loading="lazy" th:alt="#{${'foto.comunidad.' + p.imagen}}">
             </div>
             <div class="texto">
-                <h3><a th:href="@{/comunidad/{id}(id=${p.id})}"
+                <h3><a th:href="@{${rutas.COMUNIDAD_PUBLICACION}(id=${p.id})}"
                        th:text="${p.titulo}">Título</a></h3>
                 <span th:text="${p.resumen}">Resumen</span>
                 <span>

@@ -17,7 +17,7 @@
                      loading="lazy" th:alt="#{${'foto.guia.' + a.imagen}}">
             </div>
             <div class="texto">
-                <h3><a th:href="@{/guia/{id}(id=${a.id})}"
+                <h3><a th:href="@{${rutas.GUIA_ARTICULO}(id=${a.id})}"
                        th:text="${a.titulo}">Título</a></h3>
                 <span th:if="${a.material != null}">
                     <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(a.material.codigo)}">

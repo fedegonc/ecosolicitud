@@ -13,7 +13,7 @@
         <div th:replace="~{componentes/ds :: cabecera(#{portada.ultimas}, '/comunidad')}"></div>
         <ul class="novedades">
             <li th:each="p : ${ultimas}">
-                <a th:href="@{/comunidad/{id}(id=${p.id})}">
+                <a th:href="@{${rutas.COMUNIDAD_PUBLICACION}(id=${p.id})}">
                     <time th:datetime="${#temporals.formatISO(p.publicadaEn)}"
                           th:text="${#temporals.format(p.publicadaEn, 'd MMM')}">12 oct</time>
                     <strong th:text="${p.titulo}">Título</strong>

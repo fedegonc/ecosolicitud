@@ -78,14 +78,14 @@ class SolicitudE5Test {
         var enCurso = buscar(Estado.EN_CURSO, "Paso del Enano");
 
         Allure.step("Acepta una pendiente → EN_CURSO con mensaje", () -> {
-            var r = org.post("/org/solicitudes/" + pendiente.id() + "/aceptar",
+            var r = org.post(Rutas.expandir(Rutas.ORG_ACEPTAR, pendiente.id()),
                     b -> b.add("version", String.valueOf(pendiente.version())));
             assertThat(r.getBody()).contains("aceptada");
             assertThat(buscar(pendiente.id()).estado()).isEqualTo(Estado.EN_CURSO);
         });
 
         Allure.step("Completa una en curso → COMPLETADA con finalizadaEn", () -> {
-            var r = org.post("/org/solicitudes/" + enCurso.id() + "/completar",
+            var r = org.post(Rutas.expandir(Rutas.ORG_COMPLETAR, enCurso.id()),
                     b -> b.add("version", String.valueOf(enCurso.version())));
             assertThat(r.getBody()).contains("completada");
             var s = buscar(enCurso.id());
@@ -95,7 +95,7 @@ class SolicitudE5Test {
 
         Allure.step("Rechaza una en curso → RECHAZADA con finalizadaEn (Q-02)", () -> {
             var s = buscar(pendiente.id());
-            var r = org.post("/org/solicitudes/" + s.id() + "/rechazar",
+            var r = org.post(Rutas.expandir(Rutas.ORG_RECHAZAR, s.id()),
                     b -> b.add("version", String.valueOf(s.version())));
             assertThat(r.getBody()).contains("rechazada");
             var despues = buscar(pendiente.id());
@@ -107,7 +107,7 @@ class SolicitudE5Test {
 
         Allure.step("Versión desactualizada → conflicto sin cambios (FE-02)", () -> {
             var s = buscar(Estado.PENDIENTE, "Microcentro");
-            var r = org.post("/org/solicitudes/" + s.id() + "/aceptar",
+            var r = org.post(Rutas.expandir(Rutas.ORG_ACEPTAR, s.id()),
                     b -> b.add("version", "99"));
             assertThat(r.getBody()).contains("cambió antes");
             assertThat(buscar(s.id()).estado()).isEqualTo(Estado.PENDIENTE);
@@ -115,7 +115,7 @@ class SolicitudE5Test {
 
         Allure.step("Transición inválida → mensaje y estado intacto (FE-03)", () -> {
             var s = buscar(Estado.PENDIENTE, "Microcentro");
-            var r = org.post("/org/solicitudes/" + s.id() + "/completar",
+            var r = org.post(Rutas.expandir(Rutas.ORG_COMPLETAR, s.id()),
                     b -> b.add("version", String.valueOf(s.version())));
             assertThat(r.getBody()).contains("no admite");
             assertThat(buscar(s.id()).estado()).isEqualTo(Estado.PENDIENTE);
@@ -124,14 +124,14 @@ class SolicitudE5Test {
         Allure.step("Otra organización intenta aceptar → 403 sin cambios", () -> {
             org.post(Rutas.DEMO_ORGANIZACION, b -> b.add("id", "coleta-solidaria"));
             var s = buscar(Estado.PENDIENTE, "Microcentro");
-            var r = org.post("/org/solicitudes/" + s.id() + "/aceptar",
+            var r = org.post(Rutas.expandir(Rutas.ORG_ACEPTAR, s.id()),
                     b -> b.add("version", String.valueOf(s.version())));
             assertThat(r.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
             assertThat(buscar(s.id()).estado()).isEqualTo(Estado.PENDIENTE);
         });
 
         Allure.step("Acción sobre id inexistente → 404", () -> {
-            var r = org.post("/org/solicitudes/99999/aceptar",
+            var r = org.post(Rutas.expandir(Rutas.ORG_ACEPTAR, 99999),
                     b -> b.add("version", "0"));
             assertThat(r.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         });
@@ -159,7 +159,7 @@ class SolicitudE5Test {
 
         Allure.step("Cancela su pendiente → CANCELADA con finalizadaEn", () -> {
             var s = buscar(propia[0]);
-            var r = ciudadano.post("/mis-solicitudes/" + s.id() + "/cancelar",
+            var r = ciudadano.post(Rutas.expandir(Rutas.MIS_CANCELAR, s.id()),
                     b -> b.add("version", String.valueOf(s.version())));
             assertThat(r.getBody()).contains("cancelada");
             var despues = buscar(propia[0]);
@@ -169,7 +169,7 @@ class SolicitudE5Test {
 
         Allure.step("Cancelar una solicitud en curso es rechazado (CA-09)", () -> {
             var s = buscar(Estado.EN_CURSO, "Paso del Enano");
-            var r = ciudadano.post("/mis-solicitudes/" + s.id() + "/cancelar",
+            var r = ciudadano.post(Rutas.expandir(Rutas.MIS_CANCELAR, s.id()),
                     b -> b.add("version", String.valueOf(s.version())));
             assertThat(r.getBody()).contains("no admite");
             assertThat(buscar(s.id()).estado()).isEqualTo(Estado.EN_CURSO);
@@ -179,7 +179,7 @@ class SolicitudE5Test {
             var ajena = servicio.todas().stream()
                     .filter(s -> s.estado() == Estado.PENDIENTE)
                     .findFirst().orElseThrow();
-            var r = ciudadano.post("/mis-solicitudes/" + ajena.id() + "/cancelar",
+            var r = ciudadano.post(Rutas.expandir(Rutas.MIS_CANCELAR, ajena.id()),
                     b -> b.add("version", String.valueOf(ajena.version())));
             assertThat(r.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
             assertThat(buscar(ajena.id()).estado()).isEqualTo(Estado.PENDIENTE);
@@ -190,7 +190,7 @@ class SolicitudE5Test {
             body.add("version", "0");
             var headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            var r = rest.postForEntity("/mis-solicitudes/1/cancelar",
+            var r = rest.postForEntity(Rutas.expandir(Rutas.MIS_CANCELAR, 1),
                     new HttpEntity<>(body, headers), String.class);
             assertThat(r.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
         });

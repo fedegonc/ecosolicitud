@@ -34,27 +34,26 @@
     </div>
     <span class="flecha" aria-hidden="true">→</span>
 </a>
-<a th:fragment="actor(nombre, iniciales)" th:href="@{/comunidad}" class="caja actor">
+<a th:fragment="actor(nombre, iniciales)" th:href="@{${rutas.COMUNIDAD}}" class="caja actor">
     <div class="imagen"><span th:text="${iniciales}" aria-hidden="true"></span></div>
     <div class="texto"><strong th:text="${nombre}"></strong></div>
 </a>
 <div th:fragment="encabezado(pagina)" id="ds-encabezado" class="encabezado">
     <header class="intro">
-        <h1 th:text="#{${pagina.titulo}(${pagina.nombre})}">Reciclar en Rivera</h1>
-        <p th:text="#{${pagina.subtitulo}(${pagina.nombre})}"></p>
+        <h1 th:text="#{${pagina.titulo}(${pagina.localidad.nombre})}">Reciclar en Rivera</h1>
+        <p th:text="#{${pagina.subtitulo}(${pagina.localidad.nombre})}"></p>
     </header>
     <nav id="ds-ciudad" class="fila" th:aria-label="#{ds.ciudad}">
         <details class="menu">
-            <summary class="caja" th:classappend="${pagina.ciudad != 'livramento'} ? 'activa'"><span>Rivera</span><span aria-hidden="true">▾</span></summary>
+            <summary class="caja" th:classappend="${!pagina.localidad.brasilena} ? 'activa'"><span th:text="${pagina.localidades[0].nombre}">Rivera</span><span aria-hidden="true">▾</span></summary>
             <div class="lista">
-                <a class="caja" th:href="@{/(ciudad='rivera')}">Rivera</a>
-                <a class="caja" th:href="@{/(ciudad='tranqueras')}">Tranqueras</a>
-                <a class="caja" th:href="@{/(ciudad='minas')}">Minas de Corrales</a>
-                <a class="caja" th:href="@{/(ciudad='vichadero')}">Vichadero</a>
+                <a class="caja" th:each="l : ${pagina.localidades}" th:unless="${l.brasilena}"
+                   th:href="@{${rutas.RAIZ}(ciudad=${l.slug})}" th:text="${l.nombre}">Rivera</a>
             </div>
         </details>
-        <a class="caja" th:href="@{/(ciudad='livramento')}"
-           th:classappend="${pagina.ciudad == 'livramento'} ? 'activa'">Livramento</a>
+        <a class="caja" th:each="l : ${pagina.localidades}" th:if="${l.brasilena}"
+           th:href="@{${rutas.RAIZ}(ciudad=${l.slug})}"
+           th:classappend="${l == pagina.localidad} ? 'activa'" th:text="${l.nombre}">Livramento</a>
     </nav>
 </div>
 <section th:fragment="grupos(pagina)" id="ds-grupos" class="grupos">

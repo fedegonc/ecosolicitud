@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ecosolicitud.shared.Ciudad;
+import com.ecosolicitud.shared.Limites;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.shared.Ubicacion;
 
@@ -26,19 +27,19 @@ public class NuevaForm {
     @NotBlank(message = "{nueva.error.organizacion}")
     private String organizacionId;
     @NotBlank(message = "{nueva.error.nombre}")
-    @Size(max = 80, message = "{nueva.error.nombre}")
+    @Size(max = Limites.NOMBRE, message = "{error.largo}")
     private String nombre;
     @NotBlank(message = "{nueva.error.contacto}")
-    @Size(max = 40, message = "{nueva.error.contacto}")
+    @Size(max = Limites.CONTACTO, message = "{error.largo}")
     private String contacto;
     @NotBlank(message = "{nueva.error.direccion}")
-    @Size(max = 120, message = "{nueva.error.direccion}")
+    @Size(max = Limites.DIRECCION, message = "{error.largo}")
     private String direccion;
-    @Size(max = 120, message = "{nueva.error.referencia}")
+    @Size(max = Limites.REFERENCIA, message = "{error.largo}")
     private String referencia;
     private Double latitud;
     private Double longitud;
-    @Size(max = 300, message = "{nueva.error.nota}")
+    @Size(max = Limites.NOTA, message = "{error.largo}")
     private String nota;
 
     // Thymeleaf la usa como ${form.ubicacion}: solo arma el valor si el par

@@ -36,33 +36,37 @@ final class DesignDatos {
         }
     }
 
-    record Pagina(String ciudad, String nombre, String titulo, String subtitulo,
+    record Pagina(Localidad localidad, String titulo, String subtitulo,
             List<Tarjeta> divulgacion, List<Herramienta> recoleccion,
             List<Aviso> avisos, List<Actor> actores) {
+
+        // el selector de la portada recorre todas
+        public List<Localidad> getLocalidades() {
+            return Localidad.todas();
+        }
     }
 
     private DesignDatos() {
     }
 
     static Pagina para(String ciudad, GuiaService guia) {
-        return switch (ciudad) {
-            case "livramento" -> livramento(guia);
-            case "tranqueras" -> tranqueras(guia);
-            case "minas" -> minas(guia);
-            case "vichadero" -> vichadero(guia);
-            default -> rivera(guia);
+        var localidad = Localidad.desde(ciudad);
+        return switch (localidad) {
+            case RIVERA -> rivera(guia);
+            case LIVRAMENTO -> livramento(guia);
+            case TRANQUERAS, MINAS, VICHADERO -> secundaria(localidad, guia);
         };
     }
 
     static Pagina rivera(GuiaService guia) {
-        return new Pagina("rivera", "Rivera", "ds.titulo", "ds.subtitulo.rivera",
+        return new Pagina(Localidad.RIVERA, "ds.titulo", "ds.subtitulo.rivera",
                 divulgacion(guia),
                 List.of(
-                        new Herramienta("basurero", "ds.h.residuo", "/guia"),
-                        new Herramienta("pin", "ds.h.lugar", "/acopios"),
+                        new Herramienta("basurero", "ds.h.residuo", Rutas.GUIA),
+                        new Herramienta("pin", "ds.h.lugar", Rutas.ACOPIOS),
                         new Herramienta("calendario", "ds.h.dia",
                                 articulo(guia, "Sacarlo de casa")),
-                        new Herramienta("corazon", "ds.h.llevar", "/acopios")),
+                        new Herramienta("corazon", "ds.h.llevar", Rutas.ACOPIOS)),
                 List.of(new Aviso("ds.aviso.puntoverde",
                         "Nuevo Punto Verde en el Polo de Desarrollo")),
                 List.of(new Actor("Renacer del Norte"), new Actor("Plan Vale"),
@@ -70,32 +74,20 @@ final class DesignDatos {
     }
 
     static Pagina livramento(GuiaService guia) {
-        return new Pagina("livramento", "Livramento", "ds.titulo", "ds.subtitulo.livramento",
+        return new Pagina(Localidad.LIVRAMENTO, "ds.titulo", "ds.subtitulo.livramento",
                 divulgacion(guia),
                 List.of(
-                        new Herramienta("camion", "ds.h.retiro", "/nueva"),
-                        new Herramienta("corazon", "ds.h.donar", "/nueva"),
-                        new Herramienta("pin", "ds.h.lugar", "/acopios"),
-                        new Herramienta("basurero", "ds.h.residuo", "/guia")),
+                        new Herramienta("camion", "ds.h.retiro", Rutas.NUEVA),
+                        new Herramienta("corazon", "ds.h.donar", Rutas.NUEVA),
+                        new Herramienta("pin", "ds.h.lugar", Rutas.ACOPIOS),
+                        new Herramienta("basurero", "ds.h.residuo", Rutas.GUIA)),
                 List.of(new Aviso("ds.aviso.retiro", null)),
                 List.of(new Actor("Novo Horizonte"), new Actor("Prefeitura")));
     }
 
-    static Pagina tranqueras(GuiaService guia) {
-        return secundaria("tranqueras", "Tranqueras", guia);
-    }
-
-    static Pagina minas(GuiaService guia) {
-        return secundaria("minas", "Minas de Corrales", guia);
-    }
-
-    static Pagina vichadero(GuiaService guia) {
-        return secundaria("vichadero", "Vichadero", guia);
-    }
-
-    private static Pagina secundaria(String ciudad, String nombre, GuiaService guia) {
-        return new Pagina(ciudad, nombre, "ds.titulo", "ds.subtitulo.secundaria",
-                divulgacion(guia), List.of(new Herramienta("corazon", "ds.h.llevar", "/acopios")),
+    private static Pagina secundaria(Localidad localidad, GuiaService guia) {
+        return new Pagina(localidad, "ds.titulo", "ds.subtitulo.secundaria",
+                divulgacion(guia), List.of(new Herramienta("corazon", "ds.h.llevar", Rutas.ACOPIOS)),
                 List.of(), List.of(new Actor("Intendencia")));
     }
 
@@ -113,7 +105,7 @@ final class DesignDatos {
     }
 
     private static String articulo(GuiaService guia, String titulo) {
-        return guia.buscarPorTitulo(titulo).map(a -> Rutas.GUIA + "/" + a.id()).orElse(Rutas.GUIA);
+        return guia.buscarPorTitulo(titulo).map(a -> Rutas.expandir(Rutas.GUIA_ARTICULO, a.id())).orElse(Rutas.GUIA);
     }
 
     // el banner enlaza a su publicación cuando la hay; si no, a la bandeja de avisos
@@ -122,6 +114,6 @@ final class DesignDatos {
             return Rutas.AVISOS;
         }
         return comunidad.buscarPorTitulo(pagina.avisos().get(0).publicacion())
-                .map(p -> Rutas.COMUNIDAD + "/" + p.id()).orElse(Rutas.AVISOS);
+                .map(p -> Rutas.expandir(Rutas.COMUNIDAD_PUBLICACION, p.id())).orElse(Rutas.AVISOS);
     }
 }

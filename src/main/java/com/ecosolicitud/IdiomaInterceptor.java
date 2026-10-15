@@ -1,9 +1,9 @@
 package com.ecosolicitud;
 
-import java.util.Locale;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import com.ecosolicitud.shared.Rutas;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
@@ -13,9 +13,6 @@ import org.springframework.web.servlet.LocaleResolver;
 class IdiomaInterceptor implements HandlerInterceptor {
 
     private static final String MANUAL = "idiomaManual";
-    private static final Locale PT = Locale.forLanguageTag("pt");
-    private static final Locale ES = Locale.forLanguageTag("es");
-
     private final LocaleResolver locales;
 
     IdiomaInterceptor(LocaleResolver locales) {
@@ -34,13 +31,13 @@ class IdiomaInterceptor implements HandlerInterceptor {
         }
         var sesion = request.getSession(false);
         if (sesion == null || sesion.getAttribute(MANUAL) == null) {
-            locales.setLocale(request, response, "livramento".equalsIgnoreCase(ciudad) ? PT : ES);
+            locales.setLocale(request, response, Localidad.desde(ciudad).getIdioma());
         }
         return true;
     }
 
     private boolean esSelectorDeCiudad(HttpServletRequest request) {
         var ruta = request.getServletPath();
-        return "/".equals(ruta) || "/design".equals(ruta);
+        return Rutas.RAIZ.equals(ruta);
     }
 }

@@ -64,7 +64,7 @@ class OrgSolicitudesController {
     }
 
     // con HX-Request devuelve solo el detalle expandible; si no, la página
-    @GetMapping(Rutas.ORG_SOLICITUDES + "/{id}")
+    @GetMapping(Rutas.ORG_SOLICITUD)
     String detalle(@PathVariable long id, Model modelo,
             @RequestHeader(name = "HX-Request", required = false) boolean htmx) {
         var s = servicio.detalle(actor.actual(), id)
@@ -76,21 +76,21 @@ class OrgSolicitudesController {
         return htmx ? "secciones/ficha :: detalle" : "secciones/solicitud";
     }
 
-    @PostMapping(Rutas.ORG_SOLICITUDES + "/{id}/aceptar")
+    @PostMapping(Rutas.ORG_ACEPTAR)
     String aceptar(@PathVariable long id, @RequestParam long version,
             RedirectAttributes redir) {
         return Respuestas.intentar(() -> servicio.aceptar(actor.actual(), id, version),
                 "org.aceptada", id, Rutas.ORG_SOLICITUDES, redir);
     }
 
-    @PostMapping(Rutas.ORG_SOLICITUDES + "/{id}/rechazar")
+    @PostMapping(Rutas.ORG_RECHAZAR)
     String rechazar(@PathVariable long id, @RequestParam long version,
             RedirectAttributes redir) {
         return Respuestas.intentar(() -> servicio.rechazar(actor.actual(), id, version),
                 "org.rechazada", id, Rutas.ORG_SOLICITUDES, redir);
     }
 
-    @PostMapping(Rutas.ORG_SOLICITUDES + "/{id}/completar")
+    @PostMapping(Rutas.ORG_COMPLETAR)
     String completar(@PathVariable long id, @RequestParam long version,
             RedirectAttributes redir) {
         return Respuestas.intentar(() -> servicio.completar(actor.actual(), id, version),

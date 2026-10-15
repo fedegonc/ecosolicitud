@@ -8,10 +8,10 @@
     <h1 th:text="#{seccion.nueva}">Nueva solicitud</h1>
     <p th:text="#{nueva.intro}">Pedí el retiro en cuatro pasos</p>
     <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>
-    <form th:action="@{/nueva}" method="post" th:object="${form}" hx-indicator="this">
+    <form th:action="@{${rutas.NUEVA}}" method="post" th:object="${form}" hx-indicator="this">
         <label class="campo">
             <span th:text="#{nueva.ciudad}">Ciudad</span>
-            <select th:field="*{ciudad}" required th:attr="hx-get=@{/nueva}"
+            <select th:field="*{ciudad}" required th:attr="hx-get=@{${rutas.NUEVA}}"
                     hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
                     hx-include="closest form" hx-params="not _csrf" hx-indicator="#flujo">
                 <option value="" th:text="#{nueva.ciudad.elegir}">Elegí una ciudad</option>
@@ -30,8 +30,8 @@
                         <strong th:text="${centro.nombre}">Nombre</strong>
                         <span th:text="${centro.horario}">Horario</span>
                     </span>
-                    <a th:href="@{/nueva(ciudad=${form.ciudad})}"
-                       th:attr="hx-get=@{/nueva}"
+                    <a th:href="@{${rutas.NUEVA}(ciudad=${form.ciudad})}"
+                       th:attr="hx-get=@{${rutas.NUEVA}}"
                        hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
                        hx-include="closest form" hx-params="not _csrf,organizacionId"
                        hx-indicator="#flujo"
@@ -46,7 +46,7 @@
                 <legend th:text="#{nueva.centro}">Centro de acopio</legend>
                 <label th:each="o : ${centros}" class="opcion-centro">
                     <input type="radio" th:field="*{organizacionId}" th:value="${o.id}"
-                           th:attr="hx-get=@{/nueva}"
+                           th:attr="hx-get=@{${rutas.NUEVA}}"
                            hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
                            hx-include="closest form" hx-params="not _csrf" hx-indicator="#flujo">
                     <span>
@@ -82,10 +82,10 @@
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#persona'"></use></svg><span th:text="#{nueva.nombre}">Nombre</span></span>
-                    <input type="text" th:field="*{nombre}" required maxlength="80"
+                    <input type="text" th:field="*{nombre}" required th:maxlength="${limites.NOMBRE}"
                            autocomplete="name" th:placeholder="#{nueva.nombre.ejemplo}"
                            aria-describedby="err-nombre"
-                           th:attr="hx-post=@{/nueva/validar(campo='nombre')},aria-invalid=${#fields.hasErrors('nombre')}"
+                           th:attr="hx-post=@{${rutas.NUEVA_VALIDAR}(campo='nombre')},aria-invalid=${#fields.hasErrors('nombre')}"
                            hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
                            hx-include="closest form">
                     <span class="error" id="err-nombre" role="alert"><span th:errors="*{nombre}"></span></span>
@@ -93,10 +93,10 @@
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#telefono'"></use></svg><span th:text="#{nueva.contacto}">Celular o contacto</span></span>
-                    <input type="tel" th:field="*{contacto}" required maxlength="40"
+                    <input type="tel" th:field="*{contacto}" required th:maxlength="${limites.CONTACTO}"
                            inputmode="tel" autocomplete="tel" th:placeholder="#{nueva.contacto.ejemplo}"
                            aria-describedby="ayuda-contacto err-contacto"
-                           th:attr="hx-post=@{/nueva/validar(campo='contacto')},aria-invalid=${#fields.hasErrors('contacto')}"
+                           th:attr="hx-post=@{${rutas.NUEVA_VALIDAR}(campo='contacto')},aria-invalid=${#fields.hasErrors('contacto')}"
                            hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
                            hx-include="closest form">
                     <span class="ayuda" id="ayuda-contacto" th:text="#{nueva.contacto.ayuda}">Ayuda</span>
@@ -109,10 +109,10 @@
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{nueva.direccion}">Dirección</span></span>
-                    <input type="text" th:field="*{direccion}" required maxlength="120"
+                    <input type="text" th:field="*{direccion}" required th:maxlength="${limites.DIRECCION}"
                            autocomplete="street-address"
                            aria-describedby="err-direccion"
-                           th:attr="hx-post=@{/nueva/validar(campo='direccion')},aria-invalid=${#fields.hasErrors('direccion')}"
+                           th:attr="hx-post=@{${rutas.NUEVA_VALIDAR}(campo='direccion')},aria-invalid=${#fields.hasErrors('direccion')}"
                            hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
                            hx-include="closest form">
                     <span class="error" id="err-direccion" role="alert"><span th:errors="*{direccion}"></span></span>
@@ -120,9 +120,9 @@
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span th:text="#{nueva.referencia}">Referencia</span>
-                    <input type="text" th:field="*{referencia}" maxlength="120"
+                    <input type="text" th:field="*{referencia}" th:maxlength="${limites.REFERENCIA}"
                            aria-describedby="err-referencia"
-                           th:attr="hx-post=@{/nueva/validar(campo='referencia')},aria-invalid=${#fields.hasErrors('referencia')}"
+                           th:attr="hx-post=@{${rutas.NUEVA_VALIDAR}(campo='referencia')},aria-invalid=${#fields.hasErrors('referencia')}"
                            hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
                            hx-include="closest form">
                     <span class="error" id="err-referencia" role="alert"><span th:errors="*{referencia}"></span></span>
@@ -146,9 +146,9 @@
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="#{nueva.nota}">Nota</span></span>
-                    <textarea th:field="*{nota}" rows="3" maxlength="300"
+                    <textarea th:field="*{nota}" rows="3" th:maxlength="${limites.NOTA}"
                               aria-describedby="err-nota"
-                              th:attr="hx-post=@{/nueva/validar(campo='nota')},aria-invalid=${#fields.hasErrors('nota')}"
+                              th:attr="hx-post=@{${rutas.NUEVA_VALIDAR}(campo='nota')},aria-invalid=${#fields.hasErrors('nota')}"
                               hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
                               hx-include="closest form"></textarea>
                     <span class="error" id="err-nota" role="alert"><span th:errors="*{nota}"></span></span>

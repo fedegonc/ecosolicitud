@@ -45,7 +45,7 @@ class ContenidoConsultaTest {
         var lista = rest.getForEntity(Rutas.GUIA, String.class);
         assertThat(lista.getBody()).contains("Guía de reciclaje");
         var a = articulos.findAll().getFirst();
-        var ficha = rest.getForEntity(Rutas.GUIA + "/" + a.getId(), String.class);
+        var ficha = rest.getForEntity(Rutas.expandir(Rutas.GUIA_ARTICULO, a.getId()), String.class);
         assertThat(ficha.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(ficha.getBody()).contains(a.getTitulo());
     }
@@ -56,7 +56,7 @@ class ContenidoConsultaTest {
         var lista = rest.getForEntity(Rutas.COMUNIDAD, String.class);
         assertThat(lista.getBody()).contains("Comunidad");
         var p = publicaciones.findAll().getFirst();
-        var ficha = rest.getForEntity(Rutas.COMUNIDAD + "/" + p.getId(), String.class);
+        var ficha = rest.getForEntity(Rutas.expandir(Rutas.COMUNIDAD_PUBLICACION, p.getId()), String.class);
         assertThat(ficha.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(ficha.getBody()).contains(p.getTitulo());
     }

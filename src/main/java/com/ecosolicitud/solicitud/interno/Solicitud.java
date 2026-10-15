@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecosolicitud.shared.Limites;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.solicitud.Estado;
@@ -47,11 +48,11 @@ public class Solicitud {
     @JoinColumn(name = "ciudadano_id")
     private Ciudadano ciudadano;
     @NotBlank
-    @Size(max = 120)
-    @Column(nullable = false, length = 120)
+    @Size(max = Limites.DIRECCION)
+    @Column(nullable = false, length = Limites.DIRECCION)
     private String direccion;
-    @Size(max = 120)
-    @Column(length = 120)
+    @Size(max = Limites.REFERENCIA)
+    @Column(length = Limites.REFERENCIA)
     private String referencia;
     // ambas null o ambas presentes: marcar el mapa es opcional
     private Double latitud;
@@ -66,11 +67,11 @@ public class Solicitud {
     private List<Material> materiales = new ArrayList<>();
     private String organizacionId;
     @NotBlank
-    @Size(max = 40)
-    @Column(nullable = false, length = 40)
+    @Size(max = Limites.CONTACTO)
+    @Column(nullable = false, length = Limites.CONTACTO)
     private String contacto;
-    @Size(max = 300)
-    @Column(length = 300)
+    @Size(max = Limites.NOTA)
+    @Column(length = Limites.NOTA)
     private String nota;
     @Enumerated(EnumType.STRING)
     private Estado estado;

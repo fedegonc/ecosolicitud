@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.shared.Ciudad;
+import com.ecosolicitud.shared.Limites;
 import com.ecosolicitud.shared.Material;
 
 import jakarta.persistence.Column;
@@ -32,10 +33,10 @@ import org.hibernate.annotations.BatchSize;
 public class Organizacion {
 
     // el patrón vive acá (la regla es del dominio); PerfilForm lo referencia.
-    // Largo máximo 30 = columna. Vacío lo cubre @NotBlank, así que el patrón lo deja pasar
+    // Largo máximo Limites.TELEFONO = columna (prefijo opcional + primer y último dígito = 3). Vacío lo cubre @NotBlank, así que el patrón lo deja pasar
     // para que cada caso tenga un solo mensaje.
     static final String PATRON_TELEFONO =
-            "^(?=(?:\\D*\\d){8,})\\+?[0-9(][0-9 ()\\-.]{4,27}[0-9]$";
+            "^(?=(?:\\D*\\d){8,})\\+?[0-9(][0-9 ()\\-.]{4," + (Limites.TELEFONO - 3) + "}[0-9]$";
     static final String PATRON_TELEFONO_O_VACIO = "^\\s*$|" + PATRON_TELEFONO;
 
     @Id
@@ -56,13 +57,13 @@ public class Organizacion {
     private List<Material> materiales = new ArrayList<>();
 
     @NotBlank(message = "{perfil.error.horario}")
-    @Size(max = 80, message = "{perfil.error.horario}")
-    @Column(nullable = false, length = 80)
+    @Size(max = Limites.HORARIO, message = "{error.largo}")
+    @Column(nullable = false, length = Limites.HORARIO)
     private String horario;
 
     @NotBlank(message = "{perfil.error.telefono.vacio}")
     @Pattern(regexp = PATRON_TELEFONO_O_VACIO, message = "{perfil.error.telefono.formato}")
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = Limites.TELEFONO)
     private String telefono;
 
     // ambas null o ambas presentes: un centro puede no tener ubicación cargada

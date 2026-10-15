@@ -34,7 +34,7 @@ class OpinionController {
         return "secciones/opinion";
     }
 
-    @PostMapping(Rutas.OPINION + "/respaldo")
+    @PostMapping(Rutas.OPINION_RESPALDO)
     String responderRespaldo(@RequestParam MultiValueMap<String, String> params, Locale locale) {
         var rol = actor.get();
         var cuestionario = cuestionarios.para(rol, locale);

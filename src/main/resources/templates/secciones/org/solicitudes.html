@@ -20,24 +20,23 @@
             <div class="rejilla">
             <article th:each="s : ${g.solicitudes}" class="tarjeta caja">
                 <div class="texto">
-                    <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano}, @{/org/solicitudes/{id}(id=${s.id})})}"></th:block>
+                    <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano}, @{${rutas.ORG_SOLICITUD}(id=${s.id})})}"></th:block>
                 </div>
                 <div class="fila" th:if="${!s.estado.esFinal()}">
                     <form th:if="${s.estado.permiteAceptar()}"
-                          th:action="@{/org/solicitudes/{id}/aceptar(id=${s.id})}" method="post" hx-indicator="this"
+                          th:action="@{${rutas.ORG_ACEPTAR}(id=${s.id})}" method="post" hx-indicator="this"
                           hx-target="#bandeja" hx-select="#bandeja" hx-swap="outerHTML" hx-disabled-elt="find button">
                         <input type="hidden" name="version" th:value="${s.version}">
                         <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg><span th:text="#{accion.aceptar}">Aceptar</span></button>
                     </form>
                     <form th:if="${s.estado.permiteRechazar()}"
-                          th:action="@{/org/solicitudes/{id}/rechazar(id=${s.id})}" method="post"
-                          th:attr="hx-confirm=#{accion.rechazar.confirmar(${s.id})}" hx-indicator="this"
+                          th:action="@{${rutas.ORG_RECHAZAR}(id=${s.id})}" method="post" hx-indicator="this"
                           hx-target="#bandeja" hx-select="#bandeja" hx-swap="outerHTML" hx-disabled-elt="find button">
                         <input type="hidden" name="version" th:value="${s.version}">
                         <button type="submit" class="peligro"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#cruz'"></use></svg><span th:text="#{accion.rechazar}">Rechazar</span></button>
                     </form>
                     <form th:if="${s.estado.permiteCompletar()}"
-                          th:action="@{/org/solicitudes/{id}/completar(id=${s.id})}" method="post" hx-indicator="this"
+                          th:action="@{${rutas.ORG_COMPLETAR}(id=${s.id})}" method="post" hx-indicator="this"
                           hx-target="#bandeja" hx-select="#bandeja" hx-swap="outerHTML" hx-disabled-elt="find button">
                         <input type="hidden" name="version" th:value="${s.version}">
                         <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg><span th:text="#{accion.completar}">Completar</span></button>
@@ -51,9 +50,9 @@
         </div>
     </div>
     <footer class="fila">
-        <a th:href="@{/org/solicitudes/archivadas}"
+        <a th:href="@{${rutas.ORG_ARCHIVADAS}}"
            th:text="#{org.archivadas(${archivadas})}">Archivo</a>
-        <a th:href="@{/org/solicitudes/informe}"
+        <a th:href="@{${rutas.ORG_INFORME}}"
            th:text="#{panel.informe}">Informe mensual</a>
     </footer>
 </main>

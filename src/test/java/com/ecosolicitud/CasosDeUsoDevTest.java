@@ -1,5 +1,6 @@
 package com.ecosolicitud;
 
+import com.ecosolicitud.shared.Rutas;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,7 +23,7 @@ class CasosDeUsoDevTest {
 
     @Test
     void muestraActoresCasosYRelaciones() throws Exception {
-        mvc.perform(get("/dev/casos-de-uso"))
+        mvc.perform(get(Rutas.DEV_CASOS_DE_USO))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.actores.length()").value(2))
                 .andExpect(jsonPath("$.casosDeUso.length()").value(15))
@@ -45,7 +46,7 @@ class CasosDeUsoProdTest {
 
     @Test
     void noExponeElEndpoint() throws Exception {
-        mvc.perform(get("/dev/casos-de-uso"))
+        mvc.perform(get(Rutas.DEV_CASOS_DE_USO))
                 .andExpect(status().isNotFound());
     }
 }

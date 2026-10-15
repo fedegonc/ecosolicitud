@@ -22,7 +22,7 @@
                 <th:block th:unless="${enviado}">
                 <p class="ayuda" th:text="#{opinion.respaldo.ayuda}">Respondelo acá</p>
                 <p class="caja banner alerta" role="alert" th:if="${param.respaldo != null}" th:text="#{opinion.respaldo.incompleto}">Incompleto</p>
-                <form th:action="@{/opinion/respaldo}" method="post" hx-indicator="this">
+                <form th:action="@{${rutas.OPINION_RESPALDO}}" method="post" hx-indicator="this">
                     <h3 th:text="${respaldo.titulo}">Cuestionario</h3>
                     <th:block th:each="p, it : ${respaldo.preguntas}">
                         <fieldset class="campo" th:if="${p.tipo.name() != 'TEXTO'}">
@@ -40,7 +40,7 @@
                         </fieldset>
                         <label class="campo" th:if="${p.tipo.name() == 'TEXTO'}">
                             <span th:text="${it.count} + '. ' + ${p.texto}">Pregunta</span>
-                            <textarea th:name="'p' + ${it.index}" rows="3" maxlength="1000"></textarea>
+                            <textarea th:name="'p' + ${it.index}" rows="3" th:maxlength="${limites.RESPUESTA_TEXTO}"></textarea>
                         </label>
                     </th:block>
                     <button type="submit" th:text="#{opinion.respaldo.enviar}">Enviar</button>

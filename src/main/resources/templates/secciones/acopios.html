@@ -36,7 +36,7 @@
                 </div>
                 <div class="fila">
                     <a class="caja"
-                       th:href="@{/nueva(ciudad=${o.ciudad},organizacionId=${o.id})}"
+                       th:href="@{${rutas.NUEVA}(ciudad=${o.ciudad},organizacionId=${o.id})}"
                        ><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg><span th:text="#{acopios.pedir}">Pedir retiro</span></a>
                 </div>
             </article>

@@ -1,5 +1,7 @@
 package com.ecosolicitud.solicitud.interno;
 
+import com.ecosolicitud.shared.Limites;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,7 +18,7 @@ public class Ciudadano {
     @Column(length = 64)
     private String id;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = Limites.NOMBRE)
     private String nombre;
 
     protected Ciudadano() {

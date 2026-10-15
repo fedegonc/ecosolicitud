@@ -21,13 +21,13 @@
 <body hx-boost="true" hx-indicator="#carga">
     <div id="carga" class="carga" aria-hidden="true"></div>
     <div id="estado-red" class="solo-lectores" role="status"
-         th:attr="data-cargando=#{app.cargando}"
+         th:attr="data-cargando=#{app.cargando},data-confirmar=#{accion.confirmar}"
          style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"></div>
     <a class="salto" href="#contenido" th:text="#{nav.saltar}">Saltar al contenido</a>
     <div class="app">
         <aside class="sidebar">
             <header>
-                <a th:href="@{/}">
+                <a th:href="@{${rutas.RAIZ}}">
                     <img th:src="@{/img/logo.svg}" alt="">
                     <span th:text="#{app.nombre}">EcoSolicitud</span>
                 </a>
@@ -46,7 +46,7 @@
                             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
                             <span th:text="#{${s.clave}}">Sección</span>
                             <span class="badge-live" th:if="${s.name() == 'AVISOS'}"
-                                  th:attr="hx-get=@{/avisos/contador}"
+                                  th:attr="hx-get=@{${rutas.AVISOS_CONTADOR}}"
                                   hx-trigger="every 30s" hx-swap="innerHTML"
                                   aria-live="polite">
                                 <span th:replace="~{secciones/badge :: badge}"></span>
@@ -59,7 +59,7 @@
                 <details class="demo-bloque">
                     <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
                 <p class="demo-nota" th:text="#{demo.centros}"></p>
-                <form th:action="@{/demo/rol}" method="post" class="rol-switch" hx-indicator="this">
+                <form th:action="@{${rutas.DEMO_ROL}}" method="post" class="rol-switch" hx-indicator="this">
                     <button type="submit" name="rol" value="CIUDADANO"
                             th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
                             th:attr="aria-pressed=${rolActual.name() == 'CIUDADANO'}"
@@ -70,7 +70,7 @@
                             th:text="#{rol.organizacion}">Organización</button>
                 </form>
                 <form th:if="${rolActual.name() == 'ORGANIZACION'}"
-                      th:action="@{/demo/organizacion}" method="post" class="org-switch" hx-indicator="this">
+                      th:action="@{${rutas.DEMO_ORGANIZACION}}" method="post" class="org-switch" hx-indicator="this">
                     <label for="org-select" th:text="#{demo.acopio}">Acopio</label>
                     <select id="org-select" name="id">
                         <option th:each="o : ${organizaciones}" th:value="${o.id}"
@@ -81,7 +81,7 @@
                     <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
                 </form>
                 <form th:if="${demoHabilitada and demoReinicio}"
-                      th:action="@{/demo/reiniciar}" method="post" class="reiniciar" hx-indicator="this">
+                      th:action="@{${rutas.DEMO_REINICIAR}}" method="post" class="reiniciar" hx-indicator="this">
                     <input type="hidden" name="volver" th:value="${rutaActual}">
                     <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
                 </form>
@@ -97,7 +97,7 @@
         </aside>
         <div class="menu-movil">
             <header>
-                <a th:href="@{/}">
+                <a th:href="@{${rutas.RAIZ}}">
                     <img th:src="@{/img/logo.svg}" alt="">
                     <span th:text="#{app.nombre}">EcoSolicitud</span>
                 </a>
@@ -125,41 +125,60 @@
         function estadoRed() {
             return document.getElementById('estado-red');
         }
-        document.body.addEventListener('htmx:beforeRequest', function () {
-            clearTimeout(avisoRed);
-            avisoRed = setTimeout(function () {
+        // el script corre de nuevo en cada navegación boosteada: los listeners
+        // globales se registran una vez y sobre document (document.body
+        // persiste y acumularía listeners, document no)
+        if (!window.__appInit) {
+            window.__appInit = true;
+            document.addEventListener('htmx:beforeRequest', function () {
+                clearTimeout(avisoRed);
+                avisoRed = setTimeout(function () {
+                    var el = estadoRed();
+                    if (el) { el.textContent = el.dataset.cargando; }
+                }, 600);
+            });
+            document.addEventListener('htmx:afterRequest', function () {
+                clearTimeout(avisoRed);
                 var el = estadoRed();
-                if (el) { el.textContent = el.dataset.cargando; }
-            }, 600);
-        });
-        document.body.addEventListener('htmx:afterRequest', function () {
-            clearTimeout(avisoRed);
-            var el = estadoRed();
-            if (el) { el.textContent = ''; }
-        });
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
-        }
-        // botón "Instalar": solo se muestra cuando el navegador confirma
-        // que el PWA es instalable (HTTPS/localhost + manifest + SW)
-        var pendienteInstalar = null;
-        var enlacesInstalar = document.querySelectorAll('.instalar-app');
-        window.addEventListener('beforeinstallprompt', function (e) {
-            e.preventDefault();
-            pendienteInstalar = e;
-            enlacesInstalar.forEach(function (el) { el.hidden = false; });
-        });
-        enlacesInstalar.forEach(function (el) {
-            el.addEventListener('click', function (ev) {
-                ev.preventDefault();
-                if (pendienteInstalar) {
-                    pendienteInstalar.prompt();
+                if (el) { el.textContent = ''; }
+            });
+            // todo botón "peligro" confirma antes de enviar; un hx-confirm propio gana
+            document.addEventListener('htmx:confirm', function (e) {
+                var boton = e.detail.elt.querySelector && e.detail.elt.querySelector('button.peligro');
+                var el = estadoRed();
+                if (!boton || !el || e.detail.elt.hasAttribute('hx-confirm')) { return; }
+                e.preventDefault();
+                if (confirm(el.dataset.confirmar.replace('{0}', boton.textContent.trim()))) {
+                    e.detail.issueRequest(true);
                 }
             });
-        });
-        window.addEventListener('appinstalled', function () {
-            pendienteInstalar = null;
-            enlacesInstalar.forEach(function (el) { el.hidden = true; });
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js');
+            }
+            // el evento es del navegador, no de la página: la promesa queda en
+            // window porque los enlaces .instalar-app se recrean en cada swap
+            window.addEventListener('beforeinstallprompt', function (e) {
+                e.preventDefault();
+                window.__pendienteInstalar = e;
+                document.querySelectorAll('.instalar-app')
+                        .forEach(function (el) { el.hidden = false; });
+            });
+            window.addEventListener('appinstalled', function () {
+                window.__pendienteInstalar = null;
+                document.querySelectorAll('.instalar-app')
+                        .forEach(function (el) { el.hidden = true; });
+            });
+        }
+        // botón "Instalar": solo se muestra cuando el navegador confirma
+        // que el PWA es instalable (HTTPS/localhost + manifest + SW);
+        // los enlaces son nodos nuevos tras cada swap, se enlazan por página
+        document.querySelectorAll('.instalar-app').forEach(function (el) {
+            el.addEventListener('click', function (ev) {
+                ev.preventDefault();
+                if (window.__pendienteInstalar) {
+                    window.__pendienteInstalar.prompt();
+                }
+            });
         });
     </script>
 </body>

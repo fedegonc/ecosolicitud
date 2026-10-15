@@ -31,7 +31,7 @@ class GuiaController {
         return "secciones/guia";
     }
 
-    @GetMapping(Rutas.GUIA + "/{id}")
+    @GetMapping(Rutas.GUIA_ARTICULO)
     String articulo(@PathVariable long id, Model modelo) {
         var articulo = guia.buscar(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

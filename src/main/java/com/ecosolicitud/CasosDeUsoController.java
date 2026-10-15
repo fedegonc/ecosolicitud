@@ -3,6 +3,7 @@ package com.ecosolicitud;
 import java.util.List;
 
 import com.ecosolicitud.shared.Rol;
+import com.ecosolicitud.shared.Rutas;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ class CasosDeUsoController {
     private static final List<Rol> ORGANIZACION = List.of(Rol.ORGANIZACION);
     private static final List<Rol> AMBOS = List.of(Rol.CIUDADANO, Rol.ORGANIZACION);
 
-    @GetMapping("/dev/casos-de-uso")
+    @GetMapping(Rutas.DEV_CASOS_DE_USO)
     Catalogo casosDeUso() {
         return new Catalogo(
                 List.of(new ActorInfo(Rol.CIUDADANO, "Ciudadano"),

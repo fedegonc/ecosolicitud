@@ -30,7 +30,7 @@ class AvisosController {
     }
 
     // solo el badge: el nav lo pide periódicamente sin navegar
-    @GetMapping(Rutas.AVISOS + "/contador")
+    @GetMapping(Rutas.AVISOS_CONTADOR)
     String contador() {
         return "secciones/badge :: badge";
     }

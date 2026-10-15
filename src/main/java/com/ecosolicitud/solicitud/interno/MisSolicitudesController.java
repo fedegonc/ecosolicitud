@@ -61,7 +61,7 @@ class MisSolicitudesController {
     }
 
     // con HX-Request devuelve solo el detalle expandible; si no, la página
-    @GetMapping(Rutas.MIS_SOLICITUDES + "/{id}")
+    @GetMapping(Rutas.MIS_SOLICITUD)
     String detalle(@PathVariable long id, Model modelo,
             @RequestHeader(name = "HX-Request", required = false) boolean htmx) {
         var s = solicitudDelActor(id);
@@ -72,7 +72,7 @@ class MisSolicitudesController {
         return htmx ? "secciones/ficha :: detalle" : "secciones/solicitud";
     }
 
-    @PostMapping(Rutas.MIS_SOLICITUDES + "/{id}/cancelar")
+    @PostMapping(Rutas.MIS_CANCELAR)
     String cancelar(@PathVariable long id, @RequestParam long version,
             RedirectAttributes redir) {
         return Respuestas.intentar(() -> servicio.cancelar(actor.actual(), id, version),

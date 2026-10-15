@@ -9,7 +9,7 @@
     <p th:text="#{estadisticas.intro}">Intro</p>
     <div id="listado">
     <nav class="fila">
-        <a class="caja" th:each="p : ${periodos}" th:href="@{/estadisticas(periodo=${p.parametro})}"
+        <a class="caja" th:each="p : ${periodos}" th:href="@{${rutas.ESTADISTICAS}(periodo=${p.parametro})}"
            th:classappend="${p == resumen.periodo} ? 'activa'" th:attr="aria-current=${p == resumen.periodo} ? 'page' : null"
            hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
            th:text="#{${'estadisticas.periodo.' + p.parametro}}">Período</a>

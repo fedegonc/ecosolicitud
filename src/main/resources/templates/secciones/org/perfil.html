@@ -10,7 +10,7 @@
     <p class="caja banner" role="status" th:if="${guardado}" th:text="#{perfil.guardado}">Cambios guardados</p>
     <p class="caja banner alerta" role="alert" th:if="${conflicto}" th:text="#{perfil.conflicto}">Conflicto</p>
     <div class="perfil-grid">
-    <form th:action="@{/org/perfil}" method="post" th:object="${form}" hx-indicator="this">
+    <form th:action="@{${rutas.ORG_PERFIL}}" method="post" th:object="${form}" hx-indicator="this">
         <div class="resumen-errores" role="alert" tabindex="-1" th:if="${#fields.hasErrors('*')}">
             <p th:text="#{perfil.resumen.titulo}">Revisá estos datos antes de guardar</p>
             <ul>
@@ -33,14 +33,14 @@
         </fieldset>
         <label class="campo" th:classappend="${#fields.hasErrors('horario')} ? 'invalido'">
             <span th:text="#{perfil.horario}">Horario</span>
-            <input type="text" th:field="*{horario}" th:aria-invalid="${#fields.hasErrors('horario')}"
+            <input type="text" th:field="*{horario}" th:maxlength="${limites.HORARIO}" th:aria-invalid="${#fields.hasErrors('horario')}"
                    aria-describedby="err-horario">
             <span class="error" id="err-horario" th:if="${#fields.hasErrors('horario')}" th:errors="*{horario}">Error</span>
         </label>
         <label class="campo" th:classappend="${#fields.hasErrors('telefono')} ? 'invalido'">
             <span th:text="#{perfil.telefono}">Teléfono</span>
             <input type="text" th:field="*{telefono}" inputmode="tel"
-                   autocomplete="tel" maxlength="30"
+                   autocomplete="tel" th:maxlength="${limites.TELEFONO}"
                    th:placeholder="#{perfil.telefono.ejemplo}"
                    th:aria-invalid="${#fields.hasErrors('telefono')}"
                    aria-describedby="ayuda-telefono err-telefono">
