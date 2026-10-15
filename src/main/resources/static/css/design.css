@@ -20,7 +20,7 @@ a.caja { color: inherit; text-decoration: none; }
 
 /* fila y rejilla: las dos ayudas de distribución */
 .fila { display: flex; align-items: center; flex-wrap: wrap; gap: var(--chico); margin-bottom: var(--chico); }
-.rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(var(--tarjeta-min), 100%), 1fr)); gap: var(--chico); margin-bottom: var(--grande); }
+.rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--tarjeta-min), 100%), 1fr)); gap: var(--chico); margin-bottom: var(--grande); }
 :is(.rejilla, .grilla, .fila, .kanban-col) > .tarjeta { margin-bottom: 0; }
 
 /* desplegable dentro de la fila de botones */
