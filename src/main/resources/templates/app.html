@@ -112,6 +112,8 @@
             </details>
         </div>
         <div class="pagina">
+            <p th:fragment="datosDemo" class="datos-demo" th:if="${demoHabilitada}"
+               th:text="#{app.datos.prueba}">Todos los datos son de prueba</p>
             <nav th:replace="~{secciones/migas :: migas}"></nav>
             <main class="contenido" id="contenido" layout:fragment="content"></main>
         </div>

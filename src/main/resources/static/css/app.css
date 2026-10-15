@@ -403,6 +403,14 @@ main a:active {
     min-width: 0;
 }
 
+/* letra chica del modo demo: encima de las migas, sin peso visual */
+.datos-demo {
+    margin: 0;
+    padding: var(--gap-xs) var(--pad) 0;
+    font-size: var(--t-xs);
+    color: var(--texto-suave);
+}
+
 main {
     padding: calc(2 * var(--chico));
 }
