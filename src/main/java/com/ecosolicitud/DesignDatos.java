@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.ecosolicitud.comunidad.ComunidadService;
+import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.shared.Rutas;
 
 // Contenido estático de /design por ciudad. Las cadenas de texto son claves
@@ -43,19 +44,19 @@ final class DesignDatos {
     private DesignDatos() {
     }
 
-    static Pagina para(String ciudad) {
+    static Pagina para(String ciudad, GuiaService guia) {
         return switch (ciudad) {
-            case "livramento" -> livramento();
-            case "tranqueras" -> tranqueras();
-            case "minas" -> minas();
-            case "vichadero" -> vichadero();
-            default -> rivera();
+            case "livramento" -> livramento(guia);
+            case "tranqueras" -> tranqueras(guia);
+            case "minas" -> minas(guia);
+            case "vichadero" -> vichadero(guia);
+            default -> rivera(guia);
         };
     }
 
-    static Pagina rivera() {
+    static Pagina rivera(GuiaService guia) {
         return new Pagina("rivera", "Rivera", "ds.titulo", "ds.subtitulo.rivera",
-                divulgacion(),
+                divulgacion(guia),
                 List.of(
                         new Herramienta("basurero", "ds.h.residuo", "/guia"),
                         new Herramienta("pin", "ds.h.lugar", "/acopios"),
@@ -67,9 +68,9 @@ final class DesignDatos {
                         new Actor("Intendencia"), new Actor("Campo Limpio")));
     }
 
-    static Pagina livramento() {
+    static Pagina livramento(GuiaService guia) {
         return new Pagina("livramento", "Livramento", "ds.titulo", "ds.subtitulo.livramento",
-                divulgacion(),
+                divulgacion(guia),
                 List.of(
                         new Herramienta("camion", "ds.h.retiro", "/nueva"),
                         new Herramienta("corazon", "ds.h.donar", "/nueva"),
@@ -79,30 +80,39 @@ final class DesignDatos {
                 List.of(new Actor("Novo Horizonte"), new Actor("Prefeitura")));
     }
 
-    static Pagina tranqueras() {
-        return secundaria("tranqueras", "Tranqueras");
+    static Pagina tranqueras(GuiaService guia) {
+        return secundaria("tranqueras", "Tranqueras", guia);
     }
 
-    static Pagina minas() {
-        return secundaria("minas", "Minas de Corrales");
+    static Pagina minas(GuiaService guia) {
+        return secundaria("minas", "Minas de Corrales", guia);
     }
 
-    static Pagina vichadero() {
-        return secundaria("vichadero", "Vichadero");
+    static Pagina vichadero(GuiaService guia) {
+        return secundaria("vichadero", "Vichadero", guia);
     }
 
-    private static Pagina secundaria(String ciudad, String nombre) {
+    private static Pagina secundaria(String ciudad, String nombre, GuiaService guia) {
         return new Pagina(ciudad, nombre, "ds.titulo", "ds.subtitulo.secundaria",
-                divulgacion(), List.of(new Herramienta("corazon", "ds.h.llevar", "/acopios")),
+                divulgacion(guia), List.of(new Herramienta("corazon", "ds.h.llevar", "/acopios")),
                 List.of(), List.of(new Actor("Intendencia")));
     }
 
-    private static List<Tarjeta> divulgacion() {
+    // cada tarjeta enlaza a su artículo de la guía; si no existe, a la guía general
+    private static List<Tarjeta> divulgacion(GuiaService guia) {
         return List.of(
-                new Tarjeta("ds.t1", "/img/comunidad/rivera-verde-800.webp", "/guia"),
-                new Tarjeta("ds.t2", "/img/comunidad/novo-horizonte-800.webp", "/guia"),
-                new Tarjeta("ds.t3", "/img/comunidad/punto-verde-800.webp", "/guia"),
-                new Tarjeta("ds.t4", "/img/comunidad/acopio-800.webp", "/guia"));
+                new Tarjeta("ds.t1", "/img/comunidad/rivera-verde-800.webp",
+                        articulo(guia, "Antes de tirar")),
+                new Tarjeta("ds.t2", "/img/comunidad/novo-horizonte-800.webp",
+                        articulo(guia, "Cómo separar en casa")),
+                new Tarjeta("ds.t3", "/img/comunidad/punto-verde-800.webp",
+                        articulo(guia, "Sacarlo de casa")),
+                new Tarjeta("ds.t4", "/img/comunidad/acopio-800.webp",
+                        articulo(guia, "Qué pasa después")));
+    }
+
+    private static String articulo(GuiaService guia, String titulo) {
+        return guia.buscarPorTitulo(titulo).map(a -> Rutas.GUIA + "/" + a.id()).orElse(Rutas.GUIA);
     }
 
     // el banner enlaza a su publicación cuando la hay; si no, a la bandeja de avisos

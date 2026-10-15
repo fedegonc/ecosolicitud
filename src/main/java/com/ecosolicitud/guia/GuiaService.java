@@ -32,6 +32,10 @@ public class GuiaService {
         return repositorio.findById(id).map(this::aInfo);
     }
 
+    public Optional<ArticuloInfo> buscarPorTitulo(String titulo) {
+        return repositorio.findByTitulo(titulo).map(this::aInfo);
+    }
+
     public boolean vacia() {
         return repositorio.count() == 0;
     }
