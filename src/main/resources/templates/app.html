@@ -67,7 +67,7 @@
                             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
                             <span th:text="#{${s.clave}}">Sección</span>
                             <span class="badge-live" th:if="${s.name() == 'AVISOS'}"
-                                  th:attr="hx-get=@{${rutas.AVISOS_CONTADOR}}"
+                                  th:attr="hx-get=@{${rutas.AVISOS_CONTADOR}},data-n=${avisosSinLeer}"
                                   hx-trigger="every 30s" hx-swap="innerHTML"
                                   aria-live="polite">
                                 <span th:replace="~{secciones/badge :: badge}"></span>
@@ -186,6 +186,26 @@
                         delete b.__textoEnvio;
                     }
                 });
+            });
+            // contador de avisos: si el número cambió al refrescarse,
+            // un pulso único lo delata (el badge está en sidebar y móvil)
+            function pulsoAvisos(el) {
+                if (!el.classList || !el.classList.contains('badge-live')) { return; }
+                var b = el.querySelector('.badge');
+                var n = b ? b.dataset.n : '0';
+                if (el.dataset.n !== undefined && el.dataset.n !== n && b) {
+                    b.classList.add('latido');
+                    b.addEventListener('animationend', function () {
+                        b.classList.remove('latido');
+                    }, { once: true });
+                }
+                el.dataset.n = n;
+            }
+            document.addEventListener('htmx:afterSwap', function (e) {
+                pulsoAvisos(e.detail.target);
+            });
+            document.addEventListener('htmx:oobAfterSwap', function (e) {
+                pulsoAvisos(e.detail.target);
             });
             // todo botón "peligro" confirma antes de enviar; un hx-confirm propio gana
             document.addEventListener('htmx:confirm', function (e) {

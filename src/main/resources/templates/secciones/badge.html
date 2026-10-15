@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<span th:fragment="badge" class="badge" th:if="${avisosSinLeer > 0}">
+<span th:fragment="badge" class="badge" th:if="${avisosSinLeer > 0}"
+      th:attr="data-n=${avisosSinLeer}">
     <span th:text="${avisosSinLeer}">2</span>
     <span class="solo-lectores" th:text="#{avisos.contador}">avisos sin leer</span>
 </span>

@@ -746,6 +746,15 @@ fieldset.campo legend {
     text-align: center;
 }
 
+/* un pulso cuando el contador cambia solo (llegó un aviso): 200 ms, una vez */
+@keyframes latido {
+    50% { transform: scale(1.15); }
+}
+
+.badge.latido {
+    animation: latido .2s ease-in-out;
+}
+
 .materiales {
     list-style: none;
     display: flex;
