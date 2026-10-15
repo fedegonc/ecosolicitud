@@ -24,6 +24,7 @@
 
 .rol-switch {
     display: flex;
+    flex-wrap: wrap;
     border: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
 }
 
