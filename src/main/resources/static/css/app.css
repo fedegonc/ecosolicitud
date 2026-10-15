@@ -1131,4 +1131,11 @@ fieldset.campo legend {
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
     }
+
+    /* los pseudos de la transición de vista no responden al selector *:
+       sin animación el cambio de página es instantáneo */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
 }
