@@ -8,6 +8,7 @@ import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.solicitud.ListadoService;
+import com.ecosolicitud.solicitud.Resultado;
 import com.ecosolicitud.solicitud.SolicitudService;
 
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.FragmentsRendering;
 
 @Controller
 class OrgSolicitudesController {
@@ -77,24 +79,42 @@ class OrgSolicitudesController {
     }
 
     @PostMapping(Rutas.ORG_ACEPTAR)
-    String aceptar(@PathVariable long id, @RequestParam long version,
-            RedirectAttributes redir) {
-        return Respuestas.intentar(() -> servicio.aceptar(actor.actual(), id, version),
-                "org.aceptada", id, Rutas.ORG_SOLICITUDES, redir);
+    Object aceptar(@PathVariable long id, @RequestParam long version,
+            @RequestHeader(name = "HX-Request", required = false) boolean htmx,
+            RedirectAttributes redir, Model modelo) {
+        return responder(Respuestas.intentar(() -> servicio.aceptar(actor.actual(), id, version)),
+                "org.aceptada", id, htmx, redir, modelo);
     }
 
     @PostMapping(Rutas.ORG_RECHAZAR)
-    String rechazar(@PathVariable long id, @RequestParam long version,
-            RedirectAttributes redir) {
-        return Respuestas.intentar(() -> servicio.rechazar(actor.actual(), id, version),
-                "org.rechazada", id, Rutas.ORG_SOLICITUDES, redir);
+    Object rechazar(@PathVariable long id, @RequestParam long version,
+            @RequestHeader(name = "HX-Request", required = false) boolean htmx,
+            RedirectAttributes redir, Model modelo) {
+        return responder(Respuestas.intentar(() -> servicio.rechazar(actor.actual(), id, version)),
+                "org.rechazada", id, htmx, redir, modelo);
     }
 
     @PostMapping(Rutas.ORG_COMPLETAR)
-    String completar(@PathVariable long id, @RequestParam long version,
-            RedirectAttributes redir) {
-        return Respuestas.intentar(() -> servicio.completar(actor.actual(), id, version),
-                "org.completada", id, Rutas.ORG_SOLICITUDES, redir);
+    Object completar(@PathVariable long id, @RequestParam long version,
+            @RequestHeader(name = "HX-Request", required = false) boolean htmx,
+            RedirectAttributes redir, Model modelo) {
+        return responder(Respuestas.intentar(() -> servicio.completar(actor.actual(), id, version)),
+                "org.completada", id, htmx, redir, modelo);
+    }
+
+    // htmx: la bandeja actualizada y el contador de avisos del menú llegan
+    // en la misma respuesta (la tarjeta cambia de columna a la vez); sin
+    // htmx el POST sigue siendo post-redirect-get con flash
+    private Object responder(Resultado resultado, String codigoOk, long id,
+            boolean htmx, RedirectAttributes redir, Model modelo) {
+        if (!htmx) {
+            return Respuestas.responder(resultado, codigoOk, id, Rutas.ORG_SOLICITUDES, redir);
+        }
+        Respuestas.avisar(resultado, codigoOk, id, modelo::addAttribute);
+        modelo.addAttribute("bandeja", listados.recibidas(actor.actual()));
+        return FragmentsRendering.with("secciones/org/solicitudes :: bandeja")
+                .fragment("secciones/badge :: contador-oob")
+                .build();
     }
 
     private static YearMonth parseMes(String mes) {

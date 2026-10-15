@@ -1,5 +1,6 @@
 package com.ecosolicitud.solicitud.interno;
 
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import com.ecosolicitud.solicitud.Resultado;
@@ -18,34 +19,44 @@ final class Respuestas {
     // La versión puede cambiar entre el findById y el flush dentro de la TX:
     // ahí el servicio no puede devolver CONFLICTO (la TX ya quedó rollback-only),
     // la excepción cruza el proxy transaccional y se responde acá.
+    static Resultado intentar(Supplier<Resultado> accion) {
+        try {
+            return accion.get();
+        } catch (OptimisticLockingFailureException | UnexpectedRollbackException e) {
+            return Resultado.CONFLICTO;
+        }
+    }
+
+    // POST clásico: post-redirect-get con el resultado en atributos flash
     static String intentar(Supplier<Resultado> accion, String codigoOk, long id,
             String destino, RedirectAttributes redir) {
-        Resultado resultado;
-        try {
-            resultado = accion.get();
-        } catch (OptimisticLockingFailureException | UnexpectedRollbackException e) {
-            resultado = Resultado.CONFLICTO;
-        }
-        return responder(resultado, codigoOk, id, destino, redir);
+        return responder(intentar(accion), codigoOk, id, destino, redir);
     }
 
     static String responder(Resultado resultado, String codigoOk, long id, String destino,
             RedirectAttributes redir) {
+        avisar(resultado, codigoOk, id, redir::addFlashAttribute);
+        return "redirect:" + destino;
+    }
+
+    // el aviso del resultado como atributos: flash para el redirect,
+    // de modelo cuando la respuesta son fragmentos para htmx
+    static void avisar(Resultado resultado, String codigoOk, long id,
+            BiConsumer<String, Object> poner) {
         switch (resultado) {
             case OK -> {
-                redir.addFlashAttribute("avisoCodigo", codigoOk);
-                redir.addFlashAttribute("avisoId", id);
+                poner.accept("avisoCodigo", codigoOk);
+                poner.accept("avisoId", id);
             }
             case INVALIDA, CONFLICTO -> {
-                redir.addFlashAttribute("alertaCodigo",
+                poner.accept("alertaCodigo",
                         resultado == Resultado.INVALIDA ? "accion.invalida" : "accion.conflicto");
-                redir.addFlashAttribute("alertaId", id);
+                poner.accept("alertaId", id);
             }
             case NO_ENCONTRADA ->
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             case SIN_PERMISO ->
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        return "redirect:" + destino;
     }
 }

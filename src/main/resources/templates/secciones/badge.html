@@ -5,5 +5,10 @@
     <span th:text="${avisosSinLeer}">2</span>
     <span class="solo-lectores" th:text="#{avisos.contador}">avisos sin leer</span>
 </span>
+<!-- respuesta htmx: actualiza el contador del menú (sidebar y móvil) sin
+     navegar ni recargar la página -->
+<span th:fragment="contador-oob" class="badge-live" hx-swap-oob="innerHTML:.badge-live">
+    <span th:replace="~{secciones/badge :: badge}"></span>
+</span>
 </body>
 </html>

@@ -9,7 +9,7 @@
     <p class="caja banner" th:text="#{org.bienvenida(${organizacion.nombre})}">Hola</p>
     <p th:text="#{org.bienvenida.detalle}">Panel</p>
     <p th:text="#{org.semana(${semana.recibidas}, ${semana.aceptadas}, ${semana.completadas}, ${semana.mediana()})}">Semana</p>
-    <div id="bandeja">
+    <div id="bandeja" th:fragment="bandeja">
         <p class="caja banner" role="status" th:if="${avisoCodigo}" th:text="#{${avisoCodigo}(${avisoId})}">Aviso</p>
         <p class="caja banner alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
         <div class="kanban">
