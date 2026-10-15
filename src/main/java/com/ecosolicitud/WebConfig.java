@@ -38,6 +38,7 @@ class WebConfig implements WebMvcConfigurer {
         var lang = new LocaleChangeInterceptor();
         lang.setParamName("lang");
         registry.addInterceptor(lang);
+        registry.addInterceptor(new IdiomaInterceptor(localeResolver()));
     }
 
 }
