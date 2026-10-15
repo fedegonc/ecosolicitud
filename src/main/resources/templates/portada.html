@@ -7,7 +7,7 @@
 <!-- una sola columna en todos los tamaños: el lugar, la respuesta, el buscador, las preguntas, el aviso -->
 <main layout:fragment="content" class="portada">
     <header id="portada-lugar" class="lugar">
-        <h1 th:text="${pagina.localidad.nombre}">Rivera</h1>
+        <h1 th:text="${zona != null} ? #{portada.lugar.zona(${pagina.localidad.nombre}, ${zona.numero})} : ${pagina.localidad.nombre}">Rivera · Zona 7</h1>
         <details class="menu">
             <summary th:text="#{portada.cambiar}">cambiar</summary>
             <nav class="lista" th:aria-label="#{ds.ciudad}">
@@ -18,10 +18,31 @@
         <p th:replace="~{app :: idiomas}"></p>
     </header>
 
-    <section id="portada-respuesta" class="respuesta" th:if="${pagina.respuesta != null}">
+    <!-- Rivera publica los días por zona; Livramento todavía no; las localidades secundarias no tienen dato -->
+    <section id="portada-respuesta" class="respuesta" th:if="${!pagina.zonas.empty or pagina.localidad.brasilena}">
         <h2 th:text="#{portada.cuando}">¿Cuándo pasa el camión?</h2>
-        <p th:text="#{${pagina.respuesta.clave}}">Muebles y voluminosos: una vez al mes por zona.</p>
-        <a th:href="@{${pagina.respuesta.enlace}}" th:text="#{portada.cuando.mas}">Cómo sacarlo a tiempo</a>
+        <th:block th:if="${zona != null}">
+            <p class="frase" th:text="${frase}">Hoy a la noche pasa el camión.</p>
+            <p th:text="${reciclables}">Reciclables: el lunes, a la mañana.</p>
+            <a class="boton" th:href="@{https://wa.me/(text=${frase + ' ' + reciclables})}" target="_blank" rel="noopener"
+               th:text="#{portada.whatsapp}">Mandármelo por WhatsApp</a>
+            <a th:href="@{${rutas.RAIZ}(ciudad=${pagina.localidad.slug},zona='')}" th:text="#{portada.zona.cambiar}">cambiar zona</a>
+        </th:block>
+        <th:block th:if="${zona == null and !pagina.zonas.empty}">
+            <p class="frase" th:text="#{portada.zona.pregunta}">¿En qué zona vivís?</p>
+            <ul class="zonas">
+                <li th:each="z : ${pagina.zonas}">
+                    <a class="boton" th:href="@{${rutas.RAIZ}(ciudad=${pagina.localidad.slug},zona=${z.numero})}"
+                       th:aria-label="#{portada.zona.boton(${z.numero})}" th:text="${z.numero}">1</a>
+                </li>
+            </ul>
+            <p th:text="#{portada.zona.iman}">Figura en el imán de la Intendencia · Higiene 4623 1900 int. 303</p>
+        </th:block>
+        <th:block th:if="${pagina.zonas.empty}">
+            <p th:text="#{portada.sinzonas}">La Prefeitura todavía no publica los días por barrio.</p>
+            <a href="https://santanadolivramento.rs.gov.br/" target="_blank" rel="noopener"
+               th:text="#{portada.sinzonas.enlace}">Sitio de la Prefeitura</a>
+        </th:block>
     </section>
 
     <!-- sin JavaScript es un formulario común a /acopios; con htmx muestra los primeros lugares al escribir -->

@@ -166,6 +166,33 @@ a.caja { color: inherit; text-decoration: none; }
     font-weight: 600;
     color: var(--texto);
 }
+.respuesta .frase {
+    font-size: var(--t-lg);
+}
+.respuesta .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--icono);
+    margin-right: var(--pad);
+    padding: 0 var(--pad);
+    background: var(--acento);
+    color: var(--acento-texto);
+    font-weight: 600;
+    text-decoration: none;
+}
+.zonas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--chico);
+    margin: 0 0 var(--chico);
+    padding: 0;
+    list-style: none;
+}
+.zonas .boton {
+    display: flex;
+    margin: 0;
+}
 .preguntas {
     display: flex;
     flex-direction: column;
