@@ -4,24 +4,61 @@
     <title th:text="#{app.nombre}">EcoSolicitud</title>
 </head>
 <body>
-<main layout:fragment="content" class="ds">
-    <div th:replace="~{componentes/ds :: encabezado(${pagina})}"></div>
-    <div th:replace="~{componentes/ds :: grupos(${pagina})}"></div>
-    <div th:replace="~{componentes/ds :: avisos(${pagina})}"></div>
-    <div th:replace="~{componentes/ds :: ecosistema(${pagina})}"></div>
-    <section id="ds-novedades" th:if="${!ultimas.isEmpty()}">
-        <div th:replace="~{componentes/ds :: cabecera(#{portada.ultimas}, '/comunidad')}"></div>
-        <ul class="novedades">
-            <li th:each="p : ${ultimas}">
-                <a th:href="@{${rutas.COMUNIDAD_PUBLICACION}(id=${p.id})}">
-                    <time th:datetime="${#temporals.formatISO(p.publicadaEn)}"
-                          th:text="${#temporals.format(p.publicadaEn, 'd MMM')}">12 oct</time>
-                    <strong th:text="${p.titulo}">Título</strong>
-                    <span th:if="${p.organizacion != null}" th:text="${p.organizacion}">Organización</span>
+<!-- una sola columna en todos los tamaños: el lugar, la respuesta, el buscador, las preguntas, el aviso -->
+<main layout:fragment="content" class="portada">
+    <header id="portada-lugar" class="lugar">
+        <h1 th:text="${pagina.localidad.nombre}">Rivera</h1>
+        <details class="menu">
+            <summary th:text="#{portada.cambiar}">cambiar</summary>
+            <nav class="lista" th:aria-label="#{ds.ciudad}">
+                <a class="caja" th:each="l : ${pagina.localidades}"
+                   th:href="@{${rutas.RAIZ}(ciudad=${l.slug})}" th:text="${l.nombre}">Rivera</a>
+            </nav>
+        </details>
+        <p th:replace="~{app :: idiomas}"></p>
+    </header>
+
+    <section id="portada-respuesta" class="respuesta" th:if="${pagina.respuesta != null}">
+        <h2 th:text="#{portada.cuando}">¿Cuándo pasa el camión?</h2>
+        <p th:text="#{${pagina.respuesta.clave}}">Muebles y voluminosos: una vez al mes por zona.</p>
+        <a th:href="@{${pagina.respuesta.enlace}}" th:text="#{portada.cuando.mas}">Cómo sacarlo a tiempo</a>
+    </section>
+
+    <!-- sin JavaScript es un formulario común a /acopios; con htmx muestra los primeros lugares al escribir -->
+    <form id="portada-buscar" class="buscar" role="search" th:action="@{${rutas.ACOPIOS}}" method="get">
+        <label class="campo">
+            <span th:text="#{portada.llevar}">¿Dónde llevo esto?</span>
+            <input type="search" name="material" autocomplete="off" th:placeholder="#{portada.llevar.ejemplo}"
+                   th:attr="hx-get=@{${rutas.ACOPIOS}}" hx-trigger="input changed delay:300ms, search"
+                   hx-target="#portada-lugares" hx-swap="outerHTML">
+        </label>
+        <ul th:fragment="lugares" id="portada-lugares" class="lugares" aria-live="polite">
+            <li th:each="o : ${lugares}">
+                <a th:href="@{${rutas.ACOPIOS}(material=${material})}">
+                    <strong th:text="${o.nombre}">Centro</strong>
+                    <span th:text="${o.horario}">Horario</span>
                 </a>
             </li>
+            <li th:if="${material != null and lugares.empty}" th:text="#{acopios.ninguno(${material})}">Ningún centro recibe eso.</li>
         </ul>
-    </section>
+    </form>
+
+    <nav id="portada-preguntas" class="preguntas" th:aria-label="#{portada.preguntas}">
+        <a th:each="p : ${pagina.preguntas}" th:href="@{${p.enlace}}">
+            <span th:text="#{${p.clave}}">¿Cómo lo separo?</span><span aria-hidden="true">→</span>
+        </a>
+    </nav>
+
+    <a id="portada-aviso" class="caja banner" th:if="${pagina.aviso != null}" th:href="@{${avisoEnlace}}">
+        <strong th:text="#{${pagina.aviso.clave + '.titulo'}}">Punto Verde 2</strong>
+        <span th:text="#{${pagina.aviso.clave + '.texto'}}">Polo de Desarrollo</span>
+    </a>
+
+    <nav id="portada-mas" class="mas" th:aria-label="#{portada.mas}">
+        <a th:href="@{${rutas.COMUNIDAD}(tipo='novedad')}" th:text="#{portada.novedades}">Novedades</a>
+        <a th:href="@{${rutas.COMUNIDAD}}" th:text="#{portada.quienes}">Quiénes reciclan</a>
+        <a th:href="@{${rutas.GUIA}}" th:text="#{seccion.guia}">Guía</a>
+    </nav>
 </main>
 </body>
 </html>

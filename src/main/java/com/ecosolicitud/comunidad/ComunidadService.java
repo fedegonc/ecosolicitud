@@ -38,16 +38,11 @@ public class ComunidadService {
                 .map(this::aInfo).toList();
     }
 
-    public List<PublicacionInfo> ultimas(int cantidad) {
-        return publicadas(FiltroComunidad.TODAS).stream()
-                .limit(cantidad).toList();
-    }
-
     public Optional<PublicacionInfo> buscar(long id) {
         return repositorio.findById(id).map(this::aInfo);
     }
 
-    // el banner de la portada enlaza a una publicación por su título
+    // el aviso de la portada enlaza a una publicación por su título
     public Optional<PublicacionInfo> buscarPorTitulo(String titulo) {
         return repositorio.findByTitulo(titulo).map(this::aInfo);
     }

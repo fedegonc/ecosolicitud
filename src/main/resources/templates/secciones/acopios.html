@@ -7,7 +7,9 @@
 <main layout:fragment="content">
     <h1 th:text="#{seccion.acopios}">Centros de acopio</h1>
     <p class="caja banner" th:if="${demoHabilitada}" th:text="#{acopios.demo}">Centros de ejemplo</p>
-    <section th:each="g : ${grupos}" th:with="foto=${#strings.toLowerCase(g.ciudad.name())}">
+    <p th:if="${material != null and #lists.isEmpty(grupos.?[!organizaciones.empty])}"
+       th:text="#{acopios.ninguno(${material})}">Ningún centro recibe eso.</p>
+    <section th:each="g : ${grupos}" th:unless="${g.organizaciones.empty}">
         <h2 th:text="#{${g.ciudad.clave}}">Ciudad</h2>
         <div class="rejilla">
             <article th:each="o : ${g.organizaciones}" class="tarjeta caja">

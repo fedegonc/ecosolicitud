@@ -16,8 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PortadaTest {
 
     private static final String[] SECCIONES = {
-            "id=\"ds-encabezado\"", "id=\"ds-ciudad\"", "id=\"ds-grupos\"",
-            "id=\"ds-banner\"", "id=\"ds-ecosistema\""};
+            "id=\"portada-lugar\"", "id=\"portada-respuesta\"", "id=\"portada-buscar\"",
+            "id=\"portada-preguntas\"",
+            "id=\"portada-aviso\"", "id=\"portada-mas\""};
 
     @Autowired
     private TestRestTemplate rest;
@@ -29,6 +30,20 @@ class PortadaTest {
         assertThat(r.getBody()).contains(SECCIONES);
     }
 
+    // Rivera informa (la Intendencia recolecta casa por casa); el retiro se pide en Livramento
+    @Test
+    void soloLivramentoOfrecePedirElRetiro() {
+        assertThat(preguntas("/?ciudad=livramento")).contains("href=\"" + Rutas.NUEVA + "\"");
+        assertThat(preguntas("/?ciudad=rivera")).doesNotContain("href=\"" + Rutas.NUEVA + "\"");
+    }
+
+    @Test
+    void sinDatosPublicadosNoHayRespuesta() {
+        assertThat(rest.getForEntity("/?ciudad=tranqueras", String.class).getBody())
+                .doesNotContain("id=\"portada-respuesta\"")
+                .contains("id=\"portada-preguntas\"");
+    }
+
     @Test
     void designCssSeCargaUnaVezDespuesDeAppCss() {
         var hoja = "/css/" + "design" + ".css";
@@ -37,5 +52,11 @@ class PortadaTest {
             assertThat(cuerpo).containsOnlyOnce(hoja);
             assertThat(cuerpo.indexOf("/css/app.css")).isLessThan(cuerpo.indexOf(hoja));
         }
+    }
+
+    private String preguntas(String url) {
+        var cuerpo = rest.getForEntity(url, String.class).getBody();
+        var inicio = cuerpo.indexOf("id=\"portada-preguntas\"");
+        return cuerpo.substring(inicio, cuerpo.indexOf("</nav>", inicio));
     }
 }

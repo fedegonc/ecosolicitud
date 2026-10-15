@@ -108,11 +108,9 @@ class ContratosTest {
                 assertThat(driver.getCurrentUrl()).endsWith(Rutas.ORG_SOLICITUDES));
         matriz(Rol.ORGANIZACION);
 
-        Allure.step("INV-RAIZ-01 / enlaza al inicio del rol por el menú lateral", () -> {
+        Allure.step("INV-RAIZ-01 / lleva a la organización a sus pedidos; al vecino, a la portada", () -> {
             driver.get(base + Rutas.RAIZ);
-            assertThat(driver.getCurrentUrl()).endsWith(Rutas.RAIZ);
-            driver.findElement(By.cssSelector(
-                    ".sidebar .secciones a[href$='" + Rutas.ORG_SOLICITUDES + "']"));
+            assertThat(driver.getCurrentUrl()).endsWith(Rutas.ORG_SOLICITUDES);
             driver.findElement(By.cssSelector(".sidebar .rol-switch button[value='CIUDADANO']"))
                     .click();
             driver.get(base + Rutas.RAIZ);

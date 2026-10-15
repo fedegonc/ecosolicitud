@@ -9,26 +9,34 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.ecosolicitud.comunidad.ComunidadService;
 import com.ecosolicitud.guia.GuiaService;
+import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.shared.Rutas;
+import com.ecosolicitud.shared.Seccion;
 
-// La puerta de entrada: qué es el servicio y el primer paso, con lo último de la comunidad.
+// La puerta de entrada del vecino: una respuesta arriba y las preguntas frecuentes.
+// La organización no tiene portada: entra directo a sus pedidos.
 @Controller
 class PortadaController {
 
     private final ComunidadService comunidad;
     private final GuiaService guia;
+    private final ActorSesion actor;
 
-    PortadaController(ComunidadService comunidad, GuiaService guia) {
+    PortadaController(ComunidadService comunidad, GuiaService guia, ActorSesion actor) {
         this.comunidad = comunidad;
         this.guia = guia;
+        this.actor = actor;
     }
 
     @GetMapping(Rutas.RAIZ)
     String portada(@RequestParam(required = false) String ciudad, Model modelo) {
+        if (actor.get() == Rol.ORGANIZACION) {
+            return "redirect:" + Seccion.inicioDe(Rol.ORGANIZACION);
+        }
         var pagina = DesignDatos.para(ciudad, guia);
         modelo.addAttribute("pagina", pagina);
         modelo.addAttribute("avisoEnlace", DesignDatos.enlaceAviso(pagina, comunidad));
-        modelo.addAttribute("ultimas", comunidad.ultimas(3));
         return "portada";
     }
 
