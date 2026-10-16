@@ -56,7 +56,7 @@
     </nav>
     <div class="franja">
         <span th:if="${pagina.localidad.brasilena}"><span th:text="#{ds.franja.livramento}">La Prefeitura todavía no publica los días por barrio</span>
-            <a href="https://santanadolivramento.rs.gov.br/" target="_blank" rel="noopener">santanadolivramento.rs.gov.br</a></span>
+            <a th:href="@{${rutas.NUEVA}}" th:text="#{ds.franja.solicitar}">Solicitar recolección</a></span>
         <form th:unless="${pagina.localidad.brasilena}" th:if="${zona == null}"
               method="get" th:action="@{${rutas.RAIZ}}">
             <input type="hidden" name="ciudad" th:value="${pagina.localidad.slug}">
@@ -98,6 +98,8 @@
             <a th:replace="~{componentes/ds :: actor(${a.nombre}, ${a.iniciales})}"></a>
         </th:block>
     </div>
+    <a class="enlace" th:if="${pagina.localidad.brasilena}"
+       href="https://santanadolivramento.rs.gov.br/" target="_blank" rel="noopener">santanadolivramento.rs.gov.br</a>
 </section>
 </body>
 </html>
