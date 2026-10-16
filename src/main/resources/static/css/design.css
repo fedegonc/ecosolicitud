@@ -32,6 +32,9 @@ a.caja { color: inherit; text-decoration: none; }
 /* tarjeta, herramienta y actor: cajas verticales con .imagen y .texto */
 :is(.tarjeta, .herramienta, .actor) { height: auto; padding: 0; min-width: 0; flex-direction: column; align-items: stretch; justify-content: flex-start; }
 .tarjeta { margin-bottom: calc(2 * var(--chico)); }
+/* el borde izquierdo dice el resultado: vivo si salió bien, peligro si no */
+.tarjeta:is(.est-en_curso, .est-completada) { border-left: 4px solid var(--vivo); }
+.tarjeta.est-rechazada { border-left: 4px solid var(--peligro); }
 .tarjeta > strong { font-size: calc(var(--icono) / 2); padding: calc(2 * var(--chico)) calc(2 * var(--chico)) 0; color: var(--acento); }
 :is(.imagen, .herramienta .icono) { display: flex; align-items: center; justify-content: center; }
 .imagen { height: 5.5rem; border-bottom: 1px solid var(--borde); background: var(--borde); overflow: hidden; }

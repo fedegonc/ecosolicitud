@@ -24,7 +24,8 @@
             <a th:href="@{${rutas.NUEVA}}" th:text="#{mis.nueva}">Nueva solicitud</a>
         </p>
         <div class="rejilla">
-        <article th:each="s : ${pagina.content}" class="tarjeta caja">
+        <article th:each="s : ${pagina.content}" class="tarjeta caja"
+                           th:classappend="'est-' + ${#strings.toLowerCase(s.estado.name())}">
             <div class="texto">
                 <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre}, @{${rutas.MIS_SOLICITUD}(id=${s.id})})}"></th:block>
             </div>

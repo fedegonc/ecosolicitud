@@ -18,7 +18,8 @@
             <h2 th:text="#{${g.clave}}">Grupo</h2>
             <p th:if="${g.solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
             <div class="rejilla">
-            <article th:each="s : ${g.solicitudes}" class="tarjeta caja">
+            <article th:each="s : ${g.solicitudes}" class="tarjeta caja"
+                            th:classappend="'est-' + ${#strings.toLowerCase(s.estado.name())}">
                 <div class="texto">
                     <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.nombreCiudadano}, @{${rutas.ORG_SOLICITUD}(id=${s.id})})}"></th:block>
                 </div>

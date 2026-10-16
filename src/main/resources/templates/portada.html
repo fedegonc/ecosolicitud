@@ -9,7 +9,8 @@
     <section th:if="${pedidos != null and !pedidos.isEmpty()}">
         <div th:replace="~{componentes/ds :: cabecera(#{portada.pedidos}, ${rutas.MIS_SOLICITUDES})}"></div>
         <div class="rejilla">
-            <article th:each="s : ${pedidos}" class="tarjeta caja">
+            <article th:each="s : ${pedidos}" class="tarjeta caja"
+                         th:classappend="'est-' + ${#strings.toLowerCase(s.estado.name())}">
                 <div class="texto">
                     <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre}, @{${rutas.MIS_SOLICITUD}(id=${s.id})})}"></th:block>
                 </div>
