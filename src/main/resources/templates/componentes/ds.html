@@ -44,11 +44,15 @@
     <nav id="ds-ciudad" class="fila" th:aria-label="#{ds.ciudad}"
          hx-target=".pagina" hx-select=".pagina"
          hx-swap="outerHTML transition:true" hx-push-url="true">
-        <a class="caja" th:each="l : ${pagina.localidades}"
-           th:href="@{${rutas.RAIZ}(ciudad=${l.slug})}"
-           th:attr="hx-get=@{${rutas.RAIZ}(ciudad=${l.slug})}"
-           th:classappend="${l == pagina.localidad} ? 'activa'"
-           th:text="${l.nombre}">Rivera</a>
+        <details class="menu">
+            <summary class="caja activa"><span th:text="${pagina.localidad.nombre}">Rivera</span><span aria-hidden="true">▾</span></summary>
+            <div class="lista">
+                <a class="caja" th:each="l : ${pagina.localidades}" th:unless="${l == pagina.localidad}"
+                   th:href="@{${rutas.RAIZ}(ciudad=${l.slug})}"
+                   th:attr="hx-get=@{${rutas.RAIZ}(ciudad=${l.slug})}"
+                   th:text="${l.nombre}">Otra</a>
+            </div>
+        </details>
     </nav>
     <p class="franja">
         <span th:if="${pagina.localidad.brasilena}"><span th:text="#{ds.franja.livramento}">La Prefeitura todavía no publica los días por barrio</span>

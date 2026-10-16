@@ -23,6 +23,27 @@ a.caja { color: inherit; text-decoration: none; }
 .rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--tarjeta-min), 100%), 1fr)); gap: calc(2 * var(--chico)); margin-bottom: 0; }
 :is(.rejilla, .grilla, .fila, .kanban-col) > .tarjeta { margin-bottom: 0; }
 
+/* desplegable dentro de la fila de botones */
+.menu { position: relative; }
+.menu > summary { list-style: none; white-space: nowrap; }
+.menu > summary::-webkit-details-marker { display: none; }
+.menu > summary > span[aria-hidden] { margin-left: 0.25rem; }
+.lista {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    margin-top: var(--chico);
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+}
+.lista .caja { height: auto; padding: var(--chico) calc(2 * var(--chico)); white-space: nowrap; justify-content: flex-start; border: 0; }
+.lista .caja + .caja { border-top: 1px solid var(--borde); }
+.lista .caja:hover { color: var(--acento); border-color: var(--borde); }
+
 /* cabecera de sección con enlace "ver todo" */
 .cabecera { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: calc(var(--chico) / 2) var(--chico); margin-bottom: var(--chico); }
 .cabecera h2 { font-size: calc(var(--icono) / 2); font-weight: 600; margin: 0; }
