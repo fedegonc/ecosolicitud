@@ -20,7 +20,7 @@ a.caja { color: inherit; text-decoration: none; }
 
 /* fila y rejilla: las dos ayudas de distribución */
 .fila { display: flex; align-items: center; flex-wrap: wrap; gap: var(--chico); margin-bottom: var(--chico); }
-.rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--tarjeta-min), 100%), 1fr)); gap: var(--chico); margin-bottom: var(--grande); }
+.rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--tarjeta-min), 100%), 1fr)); gap: calc(2 * var(--chico)); margin-bottom: 0; }
 :is(.rejilla, .grilla, .fila, .kanban-col) > .tarjeta { margin-bottom: 0; }
 
 /* desplegable dentro de la fila de botones */
@@ -53,17 +53,17 @@ a.caja { color: inherit; text-decoration: none; }
 /* tarjeta, herramienta y actor: cajas verticales con .imagen y .texto */
 :is(.tarjeta, .herramienta, .actor) { height: auto; padding: 0; min-width: 0; flex-direction: column; align-items: stretch; justify-content: flex-start; }
 .tarjeta { margin-bottom: calc(2 * var(--chico)); }
-.tarjeta > strong { font-size: calc(var(--icono) / 2); padding: var(--chico) var(--chico) 0; color: var(--acento); }
+.tarjeta > strong { font-size: calc(var(--icono) / 2); padding: calc(2 * var(--chico)) calc(2 * var(--chico)) 0; color: var(--acento); }
 :is(.imagen, .herramienta .icono) { display: flex; align-items: center; justify-content: center; }
 .imagen { height: 5.5rem; border-bottom: 1px solid var(--borde); background: var(--borde); overflow: hidden; }
 .imagen img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.texto { display: flex; flex-direction: column; gap: var(--chico); min-width: 0; padding: var(--chico); }
+.texto { display: flex; flex-direction: column; gap: var(--chico); min-width: 0; padding: calc(2 * var(--chico)); }
 :is(.herramienta, .actor) .texto { padding: 0; }
 .texto > * { margin: 0; }
 .texto > span { color: var(--texto-suave); font-size: calc(1.75 * var(--chico)); }
 
 /* herramienta: caja con icono, texto y flecha */
-.herramienta { align-items: flex-start; padding: calc(1.5 * var(--chico)); }
+.herramienta { align-items: flex-start; padding: calc(2 * var(--chico)); }
 .cabeza-tarjeta { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; width: 100%; }
 :is(.cabeza-tarjeta > span, .banner .flecha) { font-size: calc(var(--icono) / 2); color: var(--acento); }
 .herramienta .icono { width: var(--icono); height: var(--icono); margin: 0; color: var(--acento); }
@@ -117,7 +117,7 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .intro p { color: var(--texto-suave); margin: calc(var(--chico) / 2) 0 0; }
 .ds .grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(28rem, 100%), 1fr)); gap: var(--grande); }
 .ds .grupo { display: flex; flex-direction: column; }
-.ds .grilla { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: var(--chico); }
+.ds .grilla { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: calc(2 * var(--chico)); }
 .fila .caja { min-height: 2.75rem; }
 
 /* único corte de ancho: lo que solo existe en escritorio */
