@@ -9,6 +9,12 @@
     <p th:text="#{nueva.intro}">Pedí el retiro en cuatro pasos</p>
     <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>
     <form th:action="@{${rutas.NUEVA}}" method="post" th:object="${form}" hx-indicator="this">
+        <div class="resumen-errores" role="alert" tabindex="-1" th:if="${#fields.hasErrors('*')}">
+            <p th:text="#{nueva.resumen.titulo}">Revisá estos datos antes de enviar</p>
+            <ul>
+                <li th:each="e : ${#fields.errors('*')}" th:text="${e}">Error</li>
+            </ul>
+        </div>
         <label class="campo">
             <span th:text="#{nueva.ciudad}">Ciudad</span>
             <select th:field="*{ciudad}" required th:attr="hx-get=@{${rutas.NUEVA}}"
@@ -161,6 +167,7 @@
             <button type="submit" formmethod="get" class="secundaria"
                     th:if="${centro == null}" th:text="#{nueva.continuar}">Continuar</button>
         </noscript>
+        <script th:if="${#fields.hasErrors('*')}">document.querySelector('.resumen-errores').focus();</script>
     </form>
 </main>
 </body>
