@@ -117,7 +117,11 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .intro p { color: var(--texto-suave); margin: calc(var(--chico) / 2) 0 0; }
 /* la franja: la respuesta principal, un solo bloque oscuro por pantalla */
 .ds .franja { flex-basis: 100%; align-self: stretch; margin: 0; padding: var(--chico) calc(2 * var(--chico)); background: var(--acento); color: var(--acento-texto); }
-.ds .franja a { color: inherit; }
+.ds .franja a { color: inherit; font-size: calc(1.75 * var(--chico)); }
+.ds .franja form { display: flex; flex-wrap: wrap; align-items: center; gap: var(--chico); }
+.ds .franja select,
+.ds .franja button { font: inherit; }
+.ds .franja button { padding: calc(var(--chico) / 2) var(--chico); border: 0; background: var(--acento-texto); color: var(--acento); font-weight: 600; cursor: pointer; }
 
 .ds .grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(28rem, 100%), 1fr)); gap: var(--grande); }
 .ds .grupo { display: flex; flex-direction: column; }

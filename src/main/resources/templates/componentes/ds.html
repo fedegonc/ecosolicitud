@@ -54,11 +54,21 @@
             </div>
         </details>
     </nav>
-    <p class="franja">
+    <div class="franja">
         <span th:if="${pagina.localidad.brasilena}"><span th:text="#{ds.franja.livramento}">La Prefeitura todavía no publica los días por barrio</span>
             <a href="https://santanadolivramento.rs.gov.br/" target="_blank" rel="noopener">santanadolivramento.rs.gov.br</a></span>
-        <span th:unless="${pagina.localidad.brasilena}" th:text="#{ds.franja.sin.zona}">Elegí tu zona para saber cuándo pasa el camión</span>
-    </p>
+        <form th:unless="${pagina.localidad.brasilena}" th:if="${zona == null}"
+              method="get" th:action="@{${rutas.RAIZ}}">
+            <input type="hidden" name="ciudad" th:value="${pagina.localidad.slug}">
+            <span th:text="#{ds.franja.sin.zona}">Elegí tu zona para saber cuándo pasa el camión</span>
+            <select name="zona">
+                <option th:each="z : ${pagina.zonas}" th:value="${z.slug}" th:text="${z.nombre}">Zona</option>
+            </select>
+            <button type="submit" th:text="#{ds.franja.ver}">Ver</button>
+        </form>
+        <span th:if="${zona != null}"><span th:text="#{ds.franja.pasa(${zona.horario})}">Pasa</span>
+            <a th:href="@{${rutas.RAIZ}(ciudad=${pagina.localidad.slug})}" th:text="#{ds.franja.cambiar}">cambiar zona</a></span>
+    </div>
 </div>
 <section th:fragment="grupos(pagina)" id="ds-grupos" class="grupos">
     <div class="grupo">

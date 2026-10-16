@@ -36,6 +36,10 @@ final class DesignDatos {
         }
     }
 
+    // zona de recolección: nombre visible y el día/turno que muestra la franja
+    record Zona(String slug, String nombre, String horario) {
+    }
+
     record Pagina(Localidad localidad, String titulo, String subtitulo,
             List<Tarjeta> divulgacion, List<Herramienta> recoleccion,
             List<Aviso> avisos, List<Actor> actores) {
@@ -43,6 +47,11 @@ final class DesignDatos {
         // el selector de la portada recorre todas
         public List<Localidad> getLocalidades() {
             return Localidad.todas();
+        }
+
+        // el selector de zona de la franja recorre las de la localidad
+        public List<Zona> getZonas() {
+            return zonas(localidad);
         }
     }
 
@@ -89,6 +98,31 @@ final class DesignDatos {
         return new Pagina(localidad, "ds.titulo", "ds.subtitulo.secundaria",
                 divulgacion(guia), List.of(new Herramienta("corazon", "ds.h.llevar", Rutas.ACOPIOS)),
                 List.of(), List.of(new Actor("Intendencia")));
+    }
+
+    // zonas demo: cada localidad uruguaya publica día y turno de recolección
+    private static List<Zona> zonas(Localidad localidad) {
+        return switch (localidad) {
+            case RIVERA -> List.of(
+                    new Zona("centro", "Centro", "lunes a la mañana"),
+                    new Zona("norte", "Norte", "martes a la tarde"),
+                    new Zona("este", "Este", "miércoles a la mañana"),
+                    new Zona("oeste", "Oeste", "jueves a la tarde"),
+                    new Zona("sur", "Sur", "viernes a la mañana"));
+            case TRANQUERAS, MINAS, VICHADERO -> List.of(
+                    new Zona("centro", "Centro", "martes a la mañana"),
+                    new Zona("rural", "Rural", "jueves a la tarde"));
+            case LIVRAMENTO -> List.of();
+        };
+    }
+
+    // slug desconocido o ausente: la franja pide elegir zona
+    static Zona zonaElegida(Pagina pagina, String slug) {
+        if (slug == null) {
+            return null;
+        }
+        return pagina.getZonas().stream()
+                .filter(z -> z.slug().equalsIgnoreCase(slug)).findFirst().orElse(null);
     }
 
     // cada tarjeta enlaza a su artículo de la guía; si no existe, a la guía general

@@ -33,13 +33,15 @@ class PortadaController {
     }
 
     @GetMapping(Rutas.RAIZ)
-    String portada(@RequestParam(required = false) String ciudad, Model modelo) {
+    String portada(@RequestParam(required = false) String ciudad,
+            @RequestParam(required = false) String zona, Model modelo) {
         var pagina = DesignDatos.para(ciudad, guia);
         if (actor.actual().rol() == Rol.CIUDADANO) {
             modelo.addAttribute("pedidos",
                     listados.misSolicitudes(actor.actual().ciudadanoId(), Filtro.ABIERTAS, 1).getContent());
         }
         modelo.addAttribute("pagina", pagina);
+        modelo.addAttribute("zona", DesignDatos.zonaElegida(pagina, zona));
         modelo.addAttribute("avisoEnlace", DesignDatos.enlaceAviso(pagina, comunidad));
         modelo.addAttribute("ultimas", comunidad.ultimas(3));
         return "portada";
