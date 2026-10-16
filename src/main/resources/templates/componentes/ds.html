@@ -44,19 +44,11 @@
     <nav id="ds-ciudad" class="fila" th:aria-label="#{ds.ciudad}"
          hx-target=".pagina" hx-select=".pagina"
          hx-swap="outerHTML transition:true" hx-push-url="true">
-        <details class="menu">
-            <summary class="caja" th:classappend="${!pagina.localidad.brasilena} ? 'activa'"><span th:text="${pagina.localidades[0].nombre}">Rivera</span><span aria-hidden="true">▾</span></summary>
-            <div class="lista">
-                <a class="caja" th:each="l : ${pagina.localidades}" th:unless="${l.brasilena}"
-                   th:href="@{${rutas.RAIZ}(ciudad=${l.slug})}"
-                   th:attr="hx-get=@{${rutas.RAIZ}(ciudad=${l.slug})}"
-                   th:text="${l.nombre}">Rivera</a>
-            </div>
-        </details>
-        <a class="caja" th:each="l : ${pagina.localidades}" th:if="${l.brasilena}"
+        <a class="caja" th:each="l : ${pagina.localidades}"
            th:href="@{${rutas.RAIZ}(ciudad=${l.slug})}"
            th:attr="hx-get=@{${rutas.RAIZ}(ciudad=${l.slug})}"
-           th:classappend="${l == pagina.localidad} ? 'activa'" th:text="${l.nombre}">Livramento</a>
+           th:classappend="${l == pagina.localidad} ? 'activa'"
+           th:text="${l.nombre}">Rivera</a>
     </nav>
 </div>
 <section th:fragment="grupos(pagina)" id="ds-grupos" class="grupos">
