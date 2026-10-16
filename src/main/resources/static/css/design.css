@@ -94,6 +94,8 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(28rem, 100%), 1fr)); gap: var(--grande); }
 .ds .grupo { display: flex; flex-direction: column; }
 .ds .grilla { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: calc(2 * var(--chico)); }
+/* la fila icono+texto+flecha no entra en media celda de 360 px: una columna */
+#ds-recoleccion .grilla { grid-template-columns: 1fr; }
 .fila .caja { min-height: 2.75rem; }
 
 /* único corte de ancho: lo que solo existe en escritorio */
@@ -104,6 +106,7 @@ a.caja { color: inherit; text-decoration: none; }
     .ds h1 { font-size: calc(3.5 * var(--chico)); }
     .ds .grupos { gap: calc(var(--grande) + var(--chico)); }
     .ds .grupo:only-child .grilla { grid-template-columns: repeat(4, 1fr); }
+    #ds-recoleccion .grilla { grid-template-columns: 1fr 1fr; }
     .banner .descripcion { order: 0; flex-basis: auto; }
     .relleno { display: block; }
     .novedades time { flex-basis: auto; }
