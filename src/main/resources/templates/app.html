@@ -80,6 +80,7 @@
                 <details class="demo-bloque">
                     <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
                 <p class="demo-nota" th:text="#{demo.centros}"></p>
+                <p class="demo-nota" th:text="#{demo.vercomo}">Ver como:</p>
                 <form th:action="@{${rutas.DEMO_ROL}}" method="post" class="rol-switch" hx-indicator="this">
                     <button type="submit" name="rol" value="CIUDADANO"
                             th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
