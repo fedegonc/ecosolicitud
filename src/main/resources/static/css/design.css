@@ -91,6 +91,10 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .encabezado { display: flex; flex-direction: column; align-items: flex-start; gap: var(--chico); margin-bottom: var(--grande); }
 .ds .encabezado .fila { margin-bottom: 0; }
 .ds .intro p { color: var(--texto-suave); margin: calc(var(--chico) / 2) 0 0; }
+/* la franja: la respuesta principal, un solo bloque oscuro por pantalla */
+.ds .franja { flex-basis: 100%; align-self: stretch; margin: 0; padding: var(--chico) calc(2 * var(--chico)); background: var(--acento); color: var(--acento-texto); }
+.ds .franja a { color: inherit; }
+
 .ds .grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(28rem, 100%), 1fr)); gap: var(--grande); }
 .ds .grupo { display: flex; flex-direction: column; }
 .ds .grilla { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: calc(2 * var(--chico)); }

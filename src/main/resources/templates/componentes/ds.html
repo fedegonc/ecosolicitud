@@ -50,6 +50,11 @@
            th:classappend="${l == pagina.localidad} ? 'activa'"
            th:text="${l.nombre}">Rivera</a>
     </nav>
+    <p class="franja">
+        <span th:if="${pagina.localidad.brasilena}"><span th:text="#{ds.franja.livramento}">La Prefeitura todavía no publica los días por barrio</span>
+            <a href="https://santanadolivramento.rs.gov.br/" target="_blank" rel="noopener">santanadolivramento.rs.gov.br</a></span>
+        <span th:unless="${pagina.localidad.brasilena}" th:text="#{ds.franja.sin.zona}">Elegí tu zona para saber cuándo pasa el camión</span>
+    </p>
 </div>
 <section th:fragment="grupos(pagina)" id="ds-grupos" class="grupos">
     <div class="grupo">
