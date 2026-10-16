@@ -6,6 +6,16 @@
 <body>
 <main layout:fragment="content" class="ds">
     <div th:replace="~{componentes/ds :: encabezado(${pagina})}"></div>
+    <section th:if="${pedidos != null and !pedidos.isEmpty()}">
+        <div th:replace="~{componentes/ds :: cabecera(#{portada.pedidos}, ${rutas.MIS_SOLICITUDES})}"></div>
+        <div class="rejilla">
+            <article th:each="s : ${pedidos}" class="tarjeta caja">
+                <div class="texto">
+                    <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre}, @{${rutas.MIS_SOLICITUD}(id=${s.id})})}"></th:block>
+                </div>
+            </article>
+        </div>
+    </section>
     <div th:replace="~{componentes/ds :: grupos(${pagina})}"></div>
     <div th:replace="~{componentes/ds :: avisos(${pagina})}"></div>
     <div th:replace="~{componentes/ds :: ecosistema(${pagina})}"></div>
