@@ -222,6 +222,12 @@ dd {
     margin: 0;
 }
 
+/* el estado abre la ficha: la misma fila dl pero pesa como título */
+dl.estado {
+    color: var(--acento);
+    font-weight: 600;
+}
+
 /* botones: la etiqueta dentro del contenido es la acción principal */
 main button {
     padding: calc(1.5 * var(--chico)) calc(2 * var(--chico));
