@@ -58,22 +58,19 @@ a.caja { color: inherit; text-decoration: none; }
 .imagen { height: 5.5rem; border-bottom: 1px solid var(--borde); background: var(--borde); overflow: hidden; }
 .imagen img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .texto { display: flex; flex-direction: column; gap: var(--chico); min-width: 0; padding: calc(2 * var(--chico)); }
-:is(.herramienta, .actor) .texto { padding: 0; }
+:is(.herramienta, .actor) .texto { padding: 0; flex: 1; }
 .texto > * { margin: 0; }
 .texto > span { color: var(--texto-suave); font-size: calc(1.75 * var(--chico)); }
 
-/* herramienta: caja con icono, texto y flecha */
-.herramienta { align-items: flex-start; padding: calc(2 * var(--chico)); }
-.cabeza-tarjeta { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; width: 100%; }
-:is(.cabeza-tarjeta > span, .banner .flecha) { font-size: calc(var(--icono) / 2); color: var(--acento); }
+/* herramienta: una sola fila — icono, texto y flecha */
+.herramienta { flex-direction: row; align-items: center; gap: var(--chico); padding: calc(2 * var(--chico)); }
+:is(.herramienta, .banner) .flecha { font-size: calc(var(--icono) / 2); color: var(--acento); }
 .herramienta .icono { width: var(--icono); height: var(--icono); margin: 0; color: var(--acento); }
 .herramienta .icono svg { width: 100%; height: 100%; fill: currentColor; display: block; }
-.herramienta .texto strong { margin-top: var(--chico); }
 
 /* actor: caja con avatar e identidad */
 .actor { flex-direction: row; align-items: center; padding: var(--chico); gap: var(--chico); flex: 1 1 8rem; }
 .actor .imagen { width: var(--icono); height: var(--icono); flex: 0 0 var(--icono); border-bottom: 0; background: var(--acento); color: var(--acento-texto); font-weight: 700; }
-.actor .texto { flex: 1; }
 .actor strong { font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 
 /* banner: aviso en franja con borde de acento */

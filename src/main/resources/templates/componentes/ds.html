@@ -13,17 +13,15 @@
     </div>
 </a>
 <a th:fragment="herramienta(icono, clave, enlace)" th:href="@{${enlace}}" class="caja herramienta">
-    <div class="cabeza-tarjeta">
-        <div class="icono">
-            <svg th:unless="${icono == 'corazon'}" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${icono}"></use></svg>
-            <svg th:if="${icono == 'corazon'}" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21 3.5 12.5a5.7 5.7 0 0 1 8-8L12 5l.5-.5a5.7 5.7 0 0 1 8 8L12 21z"></path></svg>
-        </div>
-        <span aria-hidden="true">→</span>
+    <div class="icono">
+        <svg th:unless="${icono == 'corazon'}" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${icono}"></use></svg>
+        <svg th:if="${icono == 'corazon'}" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21 3.5 12.5a5.7 5.7 0 0 1 8-8L12 5l.5-.5a5.7 5.7 0 0 1 8 8L12 21z"></path></svg>
     </div>
     <div class="texto">
         <strong th:text="#{${clave + '.titulo'}}"></strong>
         <span th:text="#{${clave + '.texto'}}"></span>
     </div>
+    <span class="flecha" aria-hidden="true">→</span>
 </a>
 <a th:fragment="banner(clave, enlace, total)" th:href="@{${enlace}}" class="caja banner">
     <strong th:text="#{${clave + '.titulo'}}"></strong>
