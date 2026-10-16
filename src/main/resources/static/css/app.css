@@ -6,7 +6,7 @@
 :root {
     /* constantes: cada tema redefine solo los 8 colores */
     --fondo: #f4f0e5;
-    --superficie: #fbf9f4;
+    --superficie: #ffffff;
     --texto: #37342a;
     --texto-suave: #546d7a;
     --borde: #ddd5c3;
