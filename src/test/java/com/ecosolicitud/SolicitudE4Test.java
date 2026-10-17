@@ -289,8 +289,8 @@ class SolicitudE4Test {
             driver.get(base + Rutas.MIS_SOLICITUDES);
             var fichas = driver.findElements(By.cssSelector(".tarjeta"));
             assertThat(fichas).hasSize(2);
-            assertThat(fichas.get(0).getText()).contains("En curso");
-            assertThat(fichas.get(1).getText()).contains("Completada");
+            assertThat(fichas.get(0).getText()).contains("Retiro confirmado");
+            assertThat(fichas.get(1).getText()).contains("Retiro realizado");
             assertThat(driver.getPageSource()).doesNotContain("Ana Rodríguez", "João Almeida");
         });
 
@@ -298,11 +298,11 @@ class SolicitudE4Test {
             driver.get(base + Rutas.MIS_SOLICITUDES + "?filtro=abiertas");
             assertThat(driver.findElements(By.cssSelector(".tarjeta"))).hasSize(1);
             assertThat(driver.findElement(By.cssSelector(".tarjeta")).getText())
-                    .contains("En curso");
+                    .contains("Retiro confirmado");
             driver.get(base + Rutas.MIS_SOLICITUDES + "?filtro=cerradas");
             var cerrada = driver.findElements(By.cssSelector(".tarjeta"));
             assertThat(cerrada).hasSize(1);
-            assertThat(cerrada.get(0).getText()).contains("Completada");
+            assertThat(cerrada.get(0).getText()).contains("Retiro realizado");
             driver.get(base + Rutas.MIS_SOLICITUDES + "?filtro=inventado");
             assertThat(driver.findElements(By.cssSelector(".tarjeta"))).hasSize(2);
         });

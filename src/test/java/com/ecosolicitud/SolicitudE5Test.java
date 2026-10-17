@@ -217,7 +217,7 @@ class SolicitudE5Test {
             assertThat(secciones.get(1).findElements(By.cssSelector(".tarjeta"))).hasSize(1);
             var cerradas = secciones.get(2).findElements(By.cssSelector(".tarjeta"));
             assertThat(cerradas).hasSize(1);
-            assertThat(cerradas.get(0).getText()).contains("Completada");
+            assertThat(cerradas.get(0).getText()).contains("Retiro realizado");
             assertThat(driver.getPageSource()).doesNotContain("Carla Santos");
         });
 

@@ -57,7 +57,7 @@ class DatasetTest {
                         tuple(jardins, Ciudad.LIVRAMENTO, "Consultar", "+55 00 0000-0003",
                                 List.of("PLASTICO", "CARTON", "PAPEL", "VIDRIO", "METAL", "LATAS")));
         assertThat(servicio.todas()).allSatisfy(o -> {
-            assertThat(o.ubicacion()).isNull();
+            assertThat(o.ubicacion()).isNotNull();
             assertThat(o.materiales()).extracting(Material::getCodigo).doesNotContain("ELECTRONICOS");
         });
         assertThat(solicitudes.todas()).hasSize(6).allSatisfy(s -> {
