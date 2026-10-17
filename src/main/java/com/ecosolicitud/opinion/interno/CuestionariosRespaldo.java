@@ -15,13 +15,14 @@ import org.springframework.stereotype.Component;
 
 // Carga los cuatro cuestionarios al arrancar: un archivo mal escrito falla el inicio, no la encuesta.
 @Component
-class CuestionariosRespaldo {
+final class CuestionariosRespaldo {
 
     private static final List<String> IDIOMAS = List.of("es", "pt");
 
-    private final Map<String, Cuestionario> porClave = new HashMap<>();
+    private static final Map<String, Cuestionario> POR_CLAVE = cargar();
 
-    CuestionariosRespaldo() {
+    private static Map<String, Cuestionario> cargar() {
+        var porClave = new HashMap<String, Cuestionario>();
         for (Rol rol : Rol.values()) {
             for (String idioma : IDIOMAS) {
                 String clave = clave(rol, idioma);
@@ -34,10 +35,11 @@ class CuestionariosRespaldo {
                 }
             }
         }
+        return porClave;
     }
 
     Cuestionario para(Rol rol, Locale locale) {
-        return porClave.get(clave(rol, idioma(locale)));
+        return POR_CLAVE.get(clave(rol, idioma(locale)));
     }
 
     static String idioma(Locale locale) {

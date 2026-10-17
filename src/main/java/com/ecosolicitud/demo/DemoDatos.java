@@ -3,7 +3,6 @@ package com.ecosolicitud.demo;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Map;
 
 import com.ecosolicitud.comunidad.PublicacionSemilla;
 import com.ecosolicitud.comunidad.TipoPublicacion;

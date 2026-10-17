@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Los records de vista reciben colecciones inmutables (List.of/copyOf) de sus callers;
+     copiar de nuevo en cada record sería ruido sin un segundo caso real. -->
+<FindBugsFilter>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    </Match>
+    <!-- Estado.finales() ya devuelve un Set inmutable; SpotBugs no puede verificarlo. -->
+    <Match>
+        <Class name="com.ecosolicitud.solicitud.Estado"/>
+        <Bug pattern="MS_EXPOSE_REP"/>
+    </Match>
+</FindBugsFilter>
