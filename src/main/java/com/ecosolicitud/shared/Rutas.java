@@ -39,6 +39,7 @@ public final class Rutas {
     public static final String DEMO_REINICIAR = "/demo/reiniciar";
 
     public static final String DEV_CASOS_DE_USO = "/dev/casos-de-uso";
+    public static final String DEV_LAYOUT_SYSTEM = "/dev/layout-system";
 
     // para Java que arma enlaces (las plantillas usan @{${rutas.X}(id=...)})
     public static String expandir(String plantilla, Object id) {

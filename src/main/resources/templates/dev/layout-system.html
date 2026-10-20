@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title>Layout system</title>
+    <!-- solo esta página: cada caja delineada, un color por capa del layout.
+         outline y no border: delinea sin sumar píxeles ni mover nada -->
+    <style>
+        * { outline: 1px solid rgb(0 0 0 / .25); outline-offset: -1px; }
+        .app { outline: 3px solid #d00; }
+        :is(.sidebar, .menu-movil) { outline: 2px solid #06c; }
+        :is(.sidebar, .menu-movil) :is(header, nav, footer) { outline: 2px solid #39f; }
+        .pagina { outline: 3px solid #090; }
+        main { outline: 2px solid #80c; }
+        main > :is(section, div, nav, form, footer) { outline: 2px solid #e70; }
+        :is(.fila, .rejilla, .grilla, .kanban, .acciones) { outline: 2px dashed #c09; }
+        .caja { outline: 2px solid #0aa; }
+        :is(.texto, .imagen, .icono) { outline: 1px solid #a60; }
+    </style>
+</head>
+<body>
+<main layout:fragment="content" class="ds">
+
+    <div id="ds-saludo" class="saludo">
+        <div>
+            <p class="hola">Hola, Lorem</p>
+            <nav class="camino" aria-label="Lorem">
+                <ol><li><span aria-current="page">Inicio</span></li><li>Ipsum</li></ol>
+            </nav>
+        </div>
+        <nav aria-label="Lorem">
+            <details class="menu">
+                <summary class="caja activa"><span>Lorem</span><span aria-hidden="true">▾</span></summary>
+                <div class="lista">
+                    <a class="caja" href="#">Ipsum</a>
+                    <a class="caja" href="#">Dolor</a>
+                    <a class="caja" href="#">Amet</a>
+                </div>
+            </details>
+        </nav>
+    </div>
+
+    <header class="intro">
+        <h1>Lorem ipsum dolor</h1>
+        <p>Sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+    </header>
+
+    <nav class="acciones" aria-label="Lorem">
+        <a th:each="icono : ${ {'camion', 'basurero', 'pin', 'calendario', 'mas'} }" href="#" class="accion">
+            <span class="circulo"><svg aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${icono}"></use></svg></span>
+            <span>Lorem ipsum</span>
+        </a>
+    </nav>
+
+    <a href="#" class="caja banner ultimo est-en_curso">
+        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#camion'"></use></svg>
+        <strong>Lorem ipsum #12</strong>
+        <span>Dolor sit amet</span>
+        <span class="flecha" aria-hidden="true">→</span>
+    </a>
+
+    <section>
+        <div th:replace="~{componentes/ds :: cabecera('Lorem ipsum', ${rutas.DEV_LAYOUT_SYSTEM})}"></div>
+        <div class="grilla">
+            <a th:each="i : ${#numbers.sequence(1, 3)}" href="#" class="caja tarjeta">
+                <div class="imagen"><img th:src="@{/img/comunidad/acopio-800.webp}" alt=""></div>
+                <div class="texto">
+                    <strong th:text="'Lorem ipsum ' + ${i}">Lorem</strong>
+                    <span>Duis aute irure dolor.</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <div th:replace="~{componentes/ds :: cabecera('Nemo enim', null)}"></div>
+        <div class="fila">
+            <div th:each="ini : ${ {'LI', 'DO', 'SA', 'CE'} }" class="caja actor">
+                <div class="imagen"><span th:text="${ini}" aria-hidden="true">LI</span></div>
+                <div class="texto"><strong>Lorem Ipsum</strong></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- swap parcial htmx: el mismo patrón hx-target/hx-select de los listados -->
+    <section id="listado">
+        <div th:replace="~{componentes/ds :: cabecera('Listado htmx · bloque ' + ${bloque}, null)}"></div>
+        <p class="caja banner" role="status">Quis autem vel eum iure reprehenderit qui in ea voluptate.</p>
+        <p class="caja banner alerta" role="alert">At vero eos et accusamus et iusto odio dignissimos.</p>
+        <nav class="fila">
+            <a class="caja" th:each="b : ${ {'a', 'b', 'c'} }"
+               th:href="@{${rutas.DEV_LAYOUT_SYSTEM}(bloque=${b})}"
+               th:classappend="${b == bloque} ? 'activa'" th:attr="aria-current=${b == bloque} ? 'page' : null"
+               hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
+               th:text="'Filtro ' + ${b}">Filtro</a>
+        </nav>
+        <div class="rejilla">
+            <article th:each="i : ${#numbers.sequence(1, 3)}" class="tarjeta caja"
+                     th:classappend="${i == 3} ? 'est-rechazada' : (${i == 2} ? 'est-en_curso' : '')">
+                <div class="texto">
+                    <dl class="estado"><dt>Estado</dt><dd>Lorem</dd></dl>
+                    <h3><a href="#" th:text="'Ipsum #' + ${i} + ${bloque}">Ipsum</a></h3>
+                    <dl><dt>Dolor</dt><dd>Sit amet consectetur</dd></dl>
+                    <dl><dt>Tempor</dt><dd>Incididunt ut labore et dolore magna aliqua</dd></dl>
+                </div>
+                <div class="fila">
+                    <form method="post" action="#" onsubmit="return false">
+                        <button type="button"><span>Aceptar</span></button>
+                    </form>
+                    <form method="post" action="#" onsubmit="return false">
+                        <button type="button" class="peligro"><span>Rechazar</span></button>
+                    </form>
+                </div>
+            </article>
+        </div>
+        <nav class="fila paginacion" aria-label="Paginación">
+            <a class="caja" href="#">Anterior</a>
+            <p>Página 1 de 3</p>
+            <a class="caja" href="#">Siguiente</a>
+        </nav>
+    </section>
+
+    <section>
+        <div th:replace="~{componentes/ds :: cabecera('Kanban', null)}"></div>
+        <div class="kanban">
+            <section class="kanban-col" th:each="col : ${ {'Lorem', 'Ipsum', 'Dolor'} }" th:attr="aria-label=${col}">
+                <h2 th:text="${col}">Col</h2>
+                <div class="rejilla">
+                    <article class="tarjeta caja" th:each="i : ${#numbers.sequence(1, 2)}">
+                        <div class="texto"><strong>Lorem ipsum</strong><span>Sed quia non numquam eius modi.</span></div>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <section>
+        <div th:replace="~{componentes/ds :: cabecera('Timeline', null)}"></div>
+        <ol class="timeline">
+            <li th:each="i : ${#numbers.sequence(1, 3)}" th:classappend="${i == 1} ? 'nueva'">
+                <span class="aviso-id" th:text="'#' + ${i}">#1</span>
+                <span class="aviso-texto">Ut enim ad minima veniam, quis nostrum exercitationem.</span>
+                <span class="detalle"><span>12 oct</span><span>Lorem</span></span>
+            </li>
+        </ol>
+    </section>
+
+    <section>
+        <div th:replace="~{componentes/ds :: cabecera('Formulario', null)}"></div>
+        <form class="flujo" action="#" onsubmit="return false">
+            <label class="campo">
+                <span>Lorem ipsum</span>
+                <textarea rows="3">Neque porro quisquam est qui dolorem ipsum.</textarea>
+                <span class="ayuda">Quia dolor sit amet, consectetur, adipisci velit.</span>
+            </label>
+            <fieldset class="campo">
+                <legend>Dolor sit</legend>
+                <label class="opcion-material" th:each="m : ${ {'Papel', 'Vidrio', 'Plástico'} }">
+                    <input type="checkbox">
+                    <span class="etiqueta-material" th:text="${m}">Papel</span>
+                </label>
+            </fieldset>
+            <div class="fila">
+                <button type="button" class="secundaria">Volver</button>
+                <button type="button">Enviar</button>
+            </div>
+        </form>
+    </section>
+
+    <section>
+        <div th:replace="~{componentes/ds :: cabecera('Tabla', null)}"></div>
+        <div class="tabla-scroll">
+            <table>
+                <thead><tr><th>Lorem</th><th>Ipsum</th><th>Dolor</th><th>Sit</th><th>Amet</th></tr></thead>
+                <tbody>
+                <tr th:each="i : ${#numbers.sequence(1, 3)}">
+                    <th scope="row" th:text="'Fila ' + ${i}">Fila</th>
+                    <td>12</td><td>34</td><td>56</td><td>78 <small>%</small></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <article>
+        <h2>Artículo libre</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.
+            Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet.</p>
+        <blockquote>Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</blockquote>
+        <ol><li>Mauris massa</li><li>Vestibulum lacinia arcu</li><li>Eget nulla</li></ol>
+    </article>
+</main>
+</body>
+</html>
