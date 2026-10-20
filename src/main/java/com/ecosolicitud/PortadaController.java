@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.ecosolicitud.guia.GuiaService;
+import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.shared.Rutas;
@@ -20,11 +21,14 @@ class PortadaController {
 
     private final GuiaService guia;
     private final ListadoService listados;
+    private final OrganizacionService organizaciones;
     private final ActorSesion actor;
 
-    PortadaController(GuiaService guia, ListadoService listados, ActorSesion actor) {
+    PortadaController(GuiaService guia, ListadoService listados,
+            OrganizacionService organizaciones, ActorSesion actor) {
         this.guia = guia;
         this.listados = listados;
+        this.organizaciones = organizaciones;
         this.actor = actor;
     }
 
@@ -36,8 +40,16 @@ class PortadaController {
             listados.misSolicitudes(sesion.ciudadanoId(), Filtro.TODAS, 1).stream()
                     .findFirst().ifPresent(s -> modelo.addAttribute("ultimo", s));
         }
-        modelo.addAttribute("pagina", DesignDatos.para(ciudad, guia));
+        modelo.addAttribute("pagina", DesignDatos.para(localidad(ciudad), sesion.rol(), guia));
         return "portada";
+    }
+
+    // sin ?ciudad= el centro ve la suya; el vecino, la portada por defecto
+    private Localidad localidad(String ciudad) {
+        if (ciudad == null && actor.get() == Rol.ORGANIZACION) {
+            return Localidad.desde(organizaciones.actual(actor.actual()).ciudad().name());
+        }
+        return Localidad.desde(ciudad);
     }
 
     // /design era la maqueta: queda como redirección permanente a la portada

@@ -1,9 +1,11 @@
 package com.ecosolicitud.solicitud;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import com.ecosolicitud.shared.Fechas;
 import com.ecosolicitud.solicitud.interno.Solicitud;
 import com.ecosolicitud.solicitud.interno.SolicitudRepository;
 
@@ -34,6 +36,13 @@ public class MetricasService {
         return creadasDesde(desde).stream()
                 .collect(groupingBy(Solicitud::getOrganizacionId,
                         collectingAndThen(toList(), l -> SolicitudMetricas.desde(l, ahora))));
+    }
+
+    // series de los gráficos; desde == null agrupa por mes todo el historial
+    public SolicitudSeries series(Instant desde) {
+        var hoy = LocalDate.now(Fechas.ZONA);
+        return SolicitudSeries.desde(creadasDesde(desde),
+                desde == null ? null : desde.atZone(Fechas.ZONA).toLocalDate(), hoy);
     }
 
     private List<Solicitud> creadasDesde(Instant desde) {

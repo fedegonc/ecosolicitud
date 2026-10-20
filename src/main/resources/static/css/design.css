@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--borde);
+    border-radius: var(--radio);
     background: var(--superficie);
     color: var(--texto);
     height: var(--icono);
@@ -39,8 +40,10 @@ a.caja { color: inherit; text-decoration: none; }
     flex-direction: column;
     background: var(--superficie);
     border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    overflow: hidden;
 }
-.lista .caja { height: auto; padding: var(--chico) calc(2 * var(--chico)); white-space: nowrap; justify-content: flex-start; border: 0; }
+.lista .caja { border-radius: 0; height: auto; padding: var(--chico) calc(2 * var(--chico)); white-space: nowrap; justify-content: flex-start; border: 0; }
 .lista .caja + .caja { border-top: 1px solid var(--borde); }
 .lista .caja:hover { color: var(--acento); border-color: var(--borde); }
 
@@ -51,11 +54,16 @@ a.caja { color: inherit; text-decoration: none; }
 .cabecera a:hover { text-decoration: underline; }
 
 /* tarjeta y actor: cajas con .imagen y .texto */
-:is(.tarjeta, .actor) { height: auto; padding: 0; min-width: 0; flex-direction: column; align-items: stretch; justify-content: flex-start; }
-.tarjeta { margin-bottom: calc(2 * var(--chico)); }
+:is(.tarjeta, .actor) { overflow: hidden; height: auto; padding: 0; min-width: 0; flex-direction: column; align-items: stretch; justify-content: flex-start; }
+.tarjeta { margin-bottom: calc(2 * var(--chico)); box-shadow: var(--sombra-bloque); }
 /* el borde izquierdo dice el resultado: vivo si salió bien, peligro si no */
 .tarjeta:is(.est-en_curso, .est-completada) { border-left: 4px solid var(--vivo); }
 .tarjeta.est-rechazada { border-left: 4px solid var(--peligro); }
+/* título enlazado: toda la tarjeta es el enlace (el ::after la cubre entera) */
+.tarjeta:has(h3 > a) { position: relative; }
+.tarjeta h3 > a::after { content: ""; position: absolute; inset: 0; }
+.tarjeta:has(h3 > a:focus-visible) { outline: var(--foco); outline-offset: 2px; }
+.tarjeta h3 > a:focus-visible { outline: 0; }
 .tarjeta > strong { font-size: calc(var(--icono) / 2); padding: calc(2 * var(--chico)) calc(2 * var(--chico)) 0; color: var(--acento); }
 .imagen { display: flex; align-items: center; justify-content: center; height: 5.5rem; border-bottom: 1px solid var(--borde); background: var(--borde); overflow: hidden; }
 .imagen img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -66,7 +74,7 @@ a.caja { color: inherit; text-decoration: none; }
 
 /* actor: caja con avatar e identidad */
 .actor { flex-direction: row; align-items: center; padding: var(--chico); gap: var(--chico); flex: 1 1 8rem; }
-.actor .imagen { width: var(--icono); height: var(--icono); flex: 0 0 var(--icono); border-bottom: 0; background: var(--acento); color: var(--acento-texto); font-weight: 700; }
+.actor .imagen { border-radius: var(--radio); width: var(--icono); height: var(--icono); flex: 0 0 var(--icono); border-bottom: 0; background: var(--acento); color: var(--acento-texto); font-weight: 700; }
 .actor strong { font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 
 /* banner: aviso en franja con borde de acento */
@@ -135,3 +143,48 @@ a.caja { color: inherit; text-decoration: none; }
     .actor { flex: 0 0 calc((100% - 4 * var(--chico)) / 5); }
     .fila:has(> .actor:nth-child(4)) .actor { flex: 1; }
 }
+
+/* ============================================================
+   Panel de estadísticas: cabecera con hora, KPIs, gráficos y tabla
+   ============================================================ */
+#listado:has(.kpis) { display: flex; flex-direction: column; gap: var(--grande); }
+.panel h1 { margin: 0; }
+.panel-cabecera { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--chico); }
+.panel-cabecera .fila { margin: 0; }
+.actualizado { display: flex; align-items: center; gap: calc(var(--chico) / 2); margin: calc(var(--chico) / 2) 0 0; color: var(--texto-suave); font-size: calc(1.75 * var(--chico)); }
+.panel-intro, .panel-nota { margin: 0; color: var(--texto-suave); }
+
+/* KPI: etiqueta, número grande, de qué sale y qué significa */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr)); gap: calc(2 * var(--chico)); }
+.kpi { height: auto; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: calc(var(--chico) / 2); padding: calc(2 * var(--chico)); border-top: 4px solid var(--acento); box-shadow: var(--sombra-bloque); }
+.kpi-etiqueta { color: var(--texto-suave); font-size: calc(1.75 * var(--chico)); font-weight: 600; }
+.kpi-valor { font-size: 2rem; font-weight: 700; line-height: 1.1; color: var(--texto); }
+.kpi-fraccion { font-size: calc(1.75 * var(--chico)); color: var(--texto); }
+.kpi-detalle { margin: var(--chico) 0 0; font-size: calc(1.5 * var(--chico)); color: var(--texto-suave); }
+
+/* tarjeta de gráfico o tabla */
+.graficos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: calc(2 * var(--chico)); }
+.grafico { display: block; height: auto; padding: calc(2 * var(--chico)); box-shadow: var(--sombra-bloque); }
+.grafico-ancho { grid-column: 1 / -1; }
+.grafico h2 { margin: 0 0 calc(1.5 * var(--chico)); font-size: 1rem; font-weight: 600; }
+.grafico-vacio { margin: 0; color: var(--texto-suave); }
+
+/* barras horizontales: etiqueta | barra desde la base | valor en la punta */
+.barras { display: grid; gap: var(--chico); margin: 0; padding: 0; list-style: none; }
+.barras li { display: grid; grid-template-columns: minmax(5rem, 9rem) 1fr 2.5rem; align-items: center; gap: var(--chico); font-size: calc(1.75 * var(--chico)); }
+.barra-pista { height: 1rem; border-left: 1px solid var(--borde); }
+.barra { display: block; height: 100%; border-radius: 0 4px 4px 0; background: var(--acento); }
+.barra-valor { font-weight: 600; text-align: right; }
+
+/* columnas en el tiempo: base común, rótulos salteados, el resto en el tooltip */
+.columnas { display: flex; gap: 2px; height: 10rem; margin: 0; padding: 0; list-style: none; }
+.columnas li { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.columna-area { display: flex; flex: 1; align-items: flex-end; justify-content: center; border-bottom: 1px solid var(--borde); }
+.columna { display: block; width: 100%; max-width: 24px; border-radius: 4px 4px 0 0; background: var(--acento); }
+.columna-etiqueta { visibility: hidden; height: 1.4em; padding-top: 2px; overflow: visible; color: var(--texto-suave); font-size: 0.7rem; text-align: center; white-space: nowrap; }
+.columnas li.rotulada .columna-etiqueta { visibility: visible; }
+:is(.barras, .columnas) li:hover :is(.barra, .columna) { background: var(--vivo); }
+/* los rótulos de los extremos se alinean hacia adentro: no salen de la tarjeta */
+.columnas li:first-child .columna-etiqueta { text-align: left; }
+.columnas li:last-child .columna-etiqueta { direction: rtl; text-align: right; }
+.panel-nota { margin-top: var(--grande); }

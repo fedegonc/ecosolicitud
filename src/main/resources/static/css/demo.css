@@ -57,8 +57,22 @@
 
 .rol-switch button:hover,
 .org-switch button:hover,
-.reiniciar button:hover {
+.reiniciar button:hover,
+.guardar-datos:hover {
     background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+}
+
+/* guardar datos: mismo aspecto que "Borrar datos", con borde lleno */
+.guardar-datos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--chico);
+    padding: var(--chico);
+    border: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    color: inherit;
+    font-size: 0.85rem;
+    text-decoration: none;
 }
 
 .rol-switch button.activa {

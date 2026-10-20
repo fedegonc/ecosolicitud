@@ -94,6 +94,11 @@ public class ListadoService {
         return InformeMensual.desde(mes, delMes, servicio.aInfos(delMes));
     }
 
+    // copia de respaldo: todas las solicitudes de una organización, sin tope
+    public List<SolicitudInfo> todasDe(String organizacionId) {
+        return servicio.aInfos(repositorio.findByOrganizacionIdOrderByCreadaEnDesc(organizacionId));
+    }
+
     private String organizacionId(Actor actor) {
         return organizaciones.actual(actor).id();
     }

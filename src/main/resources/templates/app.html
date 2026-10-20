@@ -11,7 +11,7 @@
     <link rel="stylesheet" th:if="${demoHabilitada}" th:href="@{/css/demo.css}">
     <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
     <link rel="manifest" th:href="@{/manifest.json}">
-    <meta name="theme-color" content="#434a27">
+    <meta name="theme-color" content="#464e23">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" th:content="#{app.nombre}">
@@ -49,7 +49,7 @@
         <aside class="sidebar">
             <header>
                 <a th:href="@{${rutas.RAIZ}}">
-                    <img th:src="@{/img/logo.svg}" alt="">
+                    <span class="logo" aria-hidden="true"></span>
                     <span th:text="#{app.nombre}">EcoSolicitud</span>
                 </a>
                 <p th:fragment="idiomas">
@@ -116,6 +116,10 @@
                             <input type="hidden" name="volver" th:value="${rutaActual}">
                             <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
                         </form>
+                        <!-- copia en .txt de las solicitudes del centro activo; fuera de
+                             hx-boost para que el navegador descargue el archivo -->
+                        <a th:if="${rolActual.name() == 'ORGANIZACION'}" class="guardar-datos"
+                           th:href="@{${rutas.ORG_COPIA}}" download hx-boost="false"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{demo.guardar}">Guardar datos</span></a>
                         </details>
                         <figure class="qr" th:if="${qr != null}">
                             <span th:utext="${qr}"></span>
@@ -131,7 +135,7 @@
         <div class="menu-movil">
             <header>
                 <a th:href="@{${rutas.RAIZ}}">
-                    <img th:src="@{/img/logo.svg}" alt="">
+                    <span class="logo" aria-hidden="true"></span>
                     <span th:text="#{app.nombre}">EcoSolicitud</span>
                 </a>
                 <p th:replace="~{app :: idiomas}"></p>

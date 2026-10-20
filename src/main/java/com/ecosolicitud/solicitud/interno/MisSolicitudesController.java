@@ -60,16 +60,18 @@ class MisSolicitudesController {
         return "secciones/informe";
     }
 
-    // con HX-Request devuelve solo el detalle expandible; si no, la página
+    // el enlace "Detalles" (hx-get) recibe solo el detalle expandible; una
+    // navegación boosteada (hx-boost también manda HX-Request) recibe la página
     @GetMapping(Rutas.MIS_SOLICITUD)
     String detalle(@PathVariable long id, Model modelo,
-            @RequestHeader(name = "HX-Request", required = false) boolean htmx) {
+            @RequestHeader(name = "HX-Request", required = false) boolean htmx,
+            @RequestHeader(name = "HX-Boosted", required = false) boolean boosted) {
         var s = solicitudDelActor(id);
         modelo.addAttribute("s", s);
         modelo.addAttribute("titular", s.organizacionNombre());
         modelo.addAttribute("volver", Rutas.MIS_SOLICITUDES);
         modelo.addAttribute("migaFinal", Miga.actual("#" + s.id()));
-        return htmx ? "secciones/ficha :: detalle" : "secciones/solicitud";
+        return htmx && !boosted ? "secciones/ficha :: detalle" : "secciones/solicitud";
     }
 
     @PostMapping(Rutas.MIS_CANCELAR)

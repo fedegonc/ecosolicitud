@@ -5,15 +5,17 @@
 
 :root {
     /* constantes: cada tema redefine solo los 8 colores */
-    --fondo: #f4f0e5;
+    --fondo: #eef1f4;
+    /* fondo de página: degradado blanco → gris → celeste, fijo al scroll */
+    --fondo-pagina: linear-gradient(165deg, #ffffff 0%, var(--fondo) 45%, #dcebf5 100%);
     --superficie: #ffffff;
     --texto: #37342a;
-    --texto-suave: #546d7a;
+    --texto-suave: #4a606c;
     --borde: #ddd5c3;
-    --acento: #434a27;
+    --acento: #464e23;
     --acento-texto: #efe8d4;
     --peligro: #a85a28;
-    --vivo: #6e9e4f;
+    --vivo: #6ca845;
     --chico: 0.5rem;
     --grande: 1.5rem;
     --icono: 2.5rem;
@@ -48,8 +50,8 @@
     --linea-fina: 1px;
     --linea-media: 2px;
     --linea-gruesa: 3px;
-    --radio: 0;
-    --radio-pill: 0;
+    --radio: 4px;
+    --radio-pill: var(--radio);
     --icono-grande: 1.75rem;
     --icono-tam: 1.3rem;
     --medida: 42rem;
@@ -57,6 +59,8 @@
     --tarjeta-min: 17rem;
     --sidebar-w: 15rem;
     --sombra-panel: 0 10px 24px rgb(0 0 0 / 0.28);
+    /* sombra en bloque, sin desenfoque: 45° hacia abajo y a la izquierda */
+    --sombra-bloque: -3px 3px 0 color-mix(in srgb, var(--texto) 22%, transparent);
     --velo-foto: linear-gradient(transparent, rgb(0 0 0 / 0.65));
 }
 
@@ -84,7 +88,7 @@ body {
     margin: 0;
     font-size: var(--t-base);
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background-color: var(--fondo);
+    background: var(--fondo-pagina) fixed, var(--fondo);
     color: var(--texto);
     overflow-wrap: anywhere;
 }
@@ -232,7 +236,9 @@ dl.estado {
 /* botones: la etiqueta dentro del contenido es la acción principal */
 main button {
     padding: calc(1.5 * var(--chico)) calc(2 * var(--chico));
-    border: 0;
+    /* borde cortado, un tono más oscuro que el relleno */
+    border: 3px dashed color-mix(in srgb, var(--texto) 45%, var(--acento));
+    border-radius: var(--radio);
     background: var(--acento);
     color: var(--acento-texto);
     font: inherit;
@@ -242,12 +248,13 @@ main button {
 
 main button.secundaria {
     background: transparent;
-    border: 1px solid var(--borde);
+    border-color: var(--acento);
     color: var(--texto);
 }
 
 main button.peligro {
     background: var(--peligro);
+    border-color: color-mix(in srgb, var(--texto) 45%, var(--peligro));
 }
 
 /* artículo sin clase: prosa editorial (markdown del servidor en guía y comunidad) */
@@ -448,6 +455,7 @@ main a:active {
     background: var(--superficie);
 }
 .pie-pagina a {
+    border-radius: var(--radio);
     display: inline-flex;
     align-items: center;
     gap: var(--chico);
@@ -520,9 +528,20 @@ main {
     font-weight: 700;
 }
 
-:is(.sidebar, .menu-movil) header img {
+/* el símbolo: líneas en el acento sobre un disco de superficie (blanco);
+   la máscara deja que cada tema lo recoloree */
+:is(.sidebar, .menu-movil) header .logo {
+    display: grid;
     width: var(--icono);
     height: var(--icono);
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--superficie);
+}
+:is(.sidebar, .menu-movil) header .logo::before {
+    content: "";
+    background: var(--acento);
+    mask: url("../img/logo-simbolo.png") center / contain no-repeat;
 }
 
 :is(.sidebar, .menu-movil) header p {
@@ -556,6 +575,7 @@ main {
 }
 
 :is(.sidebar, .menu-movil) li a {
+    border-radius: var(--radio);
     display: flex;
     align-items: center;
     gap: calc(1.5 * var(--chico));
@@ -575,6 +595,7 @@ main {
 
 /* "Más": se despliega como una opción más del menú */
 :is(.sidebar, .menu-movil) .mas > summary {
+    border-radius: var(--radio);
     display: flex;
     align-items: center;
     gap: calc(1.5 * var(--chico));

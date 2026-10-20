@@ -1,17 +1,26 @@
 package com.ecosolicitud.solicitud.interno;
 
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.shared.Actor;
 import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Fechas;
 import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.solicitud.ListadoService;
 import com.ecosolicitud.solicitud.Resultado;
 import com.ecosolicitud.solicitud.SolicitudService;
 
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,17 +74,35 @@ class OrgSolicitudesController {
         return "secciones/informe";
     }
 
-    // con HX-Request devuelve solo el detalle expandible; si no, la página
+    // copia de respaldo en .txt: solo la organización de la sesión; sin una
+    // válida, 403 (nunca "la primera disponible", como hace actual())
+    @GetMapping(Rutas.ORG_COPIA)
+    ResponseEntity<String> copia() {
+        var org = Optional.of(actor.actual()).filter(Actor::esOrganizacion)
+                .map(Actor::organizacionId)
+                .flatMap(organizaciones::buscar)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+        var nombre = "ecosolicitud-" + LocalDate.now(Fechas.ZONA) + ".txt";
+        return ResponseEntity.ok()
+                .contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment().filename(nombre).build().toString())
+                .body(CopiaTexto.de(org, listados.todasDe(org.id())));
+    }
+
+    // el enlace "Detalles" (hx-get) recibe solo el detalle expandible; una
+    // navegación boosteada (hx-boost también manda HX-Request) recibe la página
     @GetMapping(Rutas.ORG_SOLICITUD)
     String detalle(@PathVariable long id, Model modelo,
-            @RequestHeader(name = "HX-Request", required = false) boolean htmx) {
+            @RequestHeader(name = "HX-Request", required = false) boolean htmx,
+            @RequestHeader(name = "HX-Boosted", required = false) boolean boosted) {
         var s = servicio.detalle(actor.actual(), id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelo.addAttribute("s", s);
         modelo.addAttribute("titular", s.nombreCiudadano());
         modelo.addAttribute("volver", Rutas.ORG_SOLICITUDES);
         modelo.addAttribute("migaFinal", Miga.actual("#" + s.id()));
-        return htmx ? "secciones/ficha :: detalle" : "secciones/solicitud";
+        return htmx && !boosted ? "secciones/ficha :: detalle" : "secciones/solicitud";
     }
 
     @PostMapping(Rutas.ORG_ACEPTAR)

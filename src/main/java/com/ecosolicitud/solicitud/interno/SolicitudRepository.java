@@ -32,6 +32,8 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
 
     List<Solicitud> findByCreadaEnGreaterThanEqual(Instant desde);
 
+    List<Solicitud> findByOrganizacionIdOrderByCreadaEnDesc(String organizacionId);
+
     long countByCiudadano_IdAndEstadoIn(String ciudadanoId, Collection<Estado> estados);
 
     long countByOrganizacionIdAndEstadoIn(String organizacionId, Collection<Estado> estados);

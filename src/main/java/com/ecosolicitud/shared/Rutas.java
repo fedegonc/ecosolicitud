@@ -32,6 +32,7 @@ public final class Rutas {
     public static final String ORG_COMPLETAR = ORG_SOLICITUD + "/completar";
     public static final String ORG_ARCHIVADAS = ORG_SOLICITUDES + "/archivadas";
     public static final String ORG_INFORME = ORG_SOLICITUDES + "/informe";
+    public static final String ORG_COPIA = ORG_SOLICITUDES + "/copia";
     public static final String ORG_PERFIL = "/org/perfil";
 
     public static final String DEMO_ROL = "/demo/rol";

@@ -1,18 +1,17 @@
 /* ============================================================
    Tema "frontera" — identidad territorial Rivera–Livramento:
-   verde monte como acento, arcilla para enlaces y alertas,
-   fondo arena. Redefine SOLO roles: ningún template ni
+   verde monte como acento, arcilla para enlaces y alertas;
+   el fondo es el de la casa. Redefine SOLO roles: ningún template ni
    componente cambia. Se activa con ecosolicitud.tema=frontera
    ============================================================ */
 
 :root {
-    --fondo: #f1ead8;
     --superficie: #ffffff;
     --texto: #2e2c21;
     --texto-suave: #5c6350;
     --borde: #d6ccaf;
-    --acento: #324428;
+    --acento: #314725;
     --acento-texto: #efe6cc;
     --peligro: #a04a24;
-    --vivo: #5e8f47;
+    --vivo: #5b983e;
 }

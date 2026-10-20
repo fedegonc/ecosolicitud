@@ -4,52 +4,97 @@
     <title th:text="#{seccion.estadisticas}">Estadísticas</title>
 </head>
 <body>
-<main layout:fragment="content" th:with="t=${resumen.total}">
-    <h1 th:text="#{estadisticas.titulo}">Estadísticas del servicio</h1>
-    <p th:text="#{estadisticas.intro}">Intro</p>
-    <div id="listado">
-    <nav class="fila">
-        <a class="caja" th:each="p : ${periodos}" th:href="@{${rutas.ESTADISTICAS}(periodo=${p.parametro})}"
-           th:classappend="${p == resumen.periodo} ? 'activa'" th:attr="aria-current=${p == resumen.periodo} ? 'page' : null"
-           hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
-           th:text="#{${'estadisticas.periodo.' + p.parametro}}">Período</a>
-    </nav>
-    <p th:text="#{estadisticas.recibidas(${t.recibidas})}">N recibidas</p>
-    <div class="rejilla">
-        <article class="tarjeta caja">
-            <strong th:text="${t.aceptacion()}">80%</strong>
-            <div class="texto">
-                <p><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg><span th:text="#{estadisticas.aceptacion}">Tasa de aceptación</span></p>
-                <span th:text="#{estadisticas.aceptacion.fraccion(${t.aceptadas}, ${t.respondidas})}">12 de 15</span>
-                <span th:text="#{estadisticas.aceptacion.detalle}">Detalle</span>
-            </div>
+<main layout:fragment="content" class="panel" th:with="t=${resumen.total}, s=${resumen.series}">
+    <!-- el panel entero se refresca solo cada minuto, con el período elegido -->
+    <div id="listado" hx-trigger="every 60s" hx-select="#listado" hx-swap="outerHTML"
+         th:attr="hx-get=@{${rutas.ESTADISTICAS}(periodo=${resumen.periodo.parametro})}">
+    <header class="panel-cabecera">
+        <div>
+            <h1 th:text="#{estadisticas.titulo}">Estadísticas del servicio</h1>
+            <p class="actualizado"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span
+                th:text="#{estadisticas.actualizado(${resumen.actualizado})}">Datos al 19/10/2026 23:05</span></p>
+        </div>
+        <nav class="fila" th:aria-label="#{estadisticas.periodo}">
+            <a class="caja" th:each="p : ${periodos}" th:href="@{${rutas.ESTADISTICAS}(periodo=${p.parametro})}"
+               th:classappend="${p == resumen.periodo} ? 'activa'" th:attr="aria-current=${p == resumen.periodo} ? 'page' : null"
+               hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
+               th:text="#{${'estadisticas.periodo.' + p.parametro}}">Período</a>
+        </nav>
+    </header>
+    <p class="panel-intro" th:text="#{estadisticas.intro}">Intro</p>
+
+    <!-- KPIs: el número, de qué sale y qué significa -->
+    <section class="kpis" th:aria-label="#{estadisticas.kpis}">
+        <article class="kpi caja">
+            <span class="kpi-etiqueta" th:text="#{estadisticas.kpi.recibidas}">Recibidas</span>
+            <strong class="kpi-valor" th:text="${t.recibidas}">24</strong>
+            <span class="kpi-fraccion" th:text="#{${'estadisticas.periodo.' + resumen.periodo.parametro}}">Últimos 30 días</span>
+            <p class="kpi-detalle" th:text="#{estadisticas.kpi.recibidas.detalle}">Detalle</p>
         </article>
-        <article class="tarjeta caja">
-            <strong th:text="${t.resolucion()}">90%</strong>
-            <div class="texto">
-                <p><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#grafico'"></use></svg><span th:text="#{estadisticas.resolucion}">Tasa de resolución</span></p>
-                <span th:text="#{estadisticas.resolucion.fraccion(${t.completadas}, ${t.aceptadasCerradas})}">9 de 10</span>
-                <span th:text="#{estadisticas.resolucion.detalle}">Detalle</span>
-            </div>
+        <article class="kpi caja">
+            <span class="kpi-etiqueta" th:text="#{estadisticas.aceptacion}">Tasa de aceptación</span>
+            <strong class="kpi-valor" th:text="${t.aceptacion()}">80%</strong>
+            <span class="kpi-fraccion" th:text="#{estadisticas.aceptacion.fraccion(${t.aceptadas}, ${t.respondidas})}">12 de 15</span>
+            <p class="kpi-detalle" th:text="#{estadisticas.aceptacion.detalle}">Detalle</p>
         </article>
-        <article class="tarjeta caja">
-            <strong th:text="${t.mediana()}">6 h</strong>
-            <div class="texto">
-                <p><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="#{estadisticas.respuesta}">Tiempo de respuesta</span></p>
-                <span th:text="#{estadisticas.respuesta.fraccion(${t.respondidas})}">sobre N</span>
-                <span th:text="#{estadisticas.respuesta.detalle}">Detalle</span>
-            </div>
+        <article class="kpi caja">
+            <span class="kpi-etiqueta" th:text="#{estadisticas.resolucion}">Tasa de resolución</span>
+            <strong class="kpi-valor" th:text="${t.resolucion()}">90%</strong>
+            <span class="kpi-fraccion" th:text="#{estadisticas.resolucion.fraccion(${t.completadas}, ${t.aceptadasCerradas})}">9 de 10</span>
+            <p class="kpi-detalle" th:text="#{estadisticas.resolucion.detalle}">Detalle</p>
         </article>
-        <article class="tarjeta caja">
-            <strong th:text="${t.pendientes}">3</strong>
-            <div class="texto">
-                <p><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#reloj'"></use></svg><span th:text="#{estadisticas.pendientes}">Pendientes</span></p>
-                <span th:text="${t.pendientes > 0} ? #{estadisticas.pendientes.espera(${t.espera()})} : #{estadisticas.pendientes.ninguna}">Espera</span>
-                <span th:text="#{estadisticas.pendientes.detalle}">Detalle</span>
-            </div>
+        <article class="kpi caja">
+            <span class="kpi-etiqueta" th:text="#{estadisticas.respuesta}">Tiempo de respuesta</span>
+            <strong class="kpi-valor" th:text="${t.mediana()}">6 h</strong>
+            <span class="kpi-fraccion" th:text="#{estadisticas.respuesta.fraccion(${t.respondidas})}">Sobre N</span>
+            <p class="kpi-detalle" th:text="#{estadisticas.respuesta.detalle}">Detalle</p>
         </article>
-    </div>
-    <section>
+        <article class="kpi caja">
+            <span class="kpi-etiqueta" th:text="#{estadisticas.pendientes}">Pendientes</span>
+            <strong class="kpi-valor" th:text="${t.pendientes}">3</strong>
+            <span class="kpi-fraccion" th:text="${t.pendientes > 0} ? #{estadisticas.pendientes.espera(${t.espera()})} : #{estadisticas.pendientes.ninguna}">Espera</span>
+            <p class="kpi-detalle" th:text="#{estadisticas.pendientes.detalle}">Detalle</p>
+        </article>
+    </section>
+
+    <!-- gráficos: una serie por tarjeta, un color, el valor en la punta y en el tooltip -->
+    <section class="graficos">
+        <article class="grafico caja">
+            <h2 th:text="#{estadisticas.grafico.estado}">Solicitudes por estado</h2>
+            <ol class="barras">
+                <li th:each="b : ${s.porEstado}" th:with="nombre=#{${b.clave}}"
+                    th:title="${nombre} + ': ' + ${b.valor}">
+                    <span class="barra-etiqueta" th:text="${nombre}">Pendiente</span>
+                    <span class="barra-pista"><span class="barra" th:style="'width:' + ${b.proporcion} + '%'"></span></span>
+                    <span class="barra-valor" th:text="${b.valor}">3</span>
+                </li>
+            </ol>
+        </article>
+        <article class="grafico caja">
+            <h2 th:text="#{estadisticas.grafico.material}">Materiales más pedidos</h2>
+            <p class="grafico-vacio" th:if="${s.porMaterial.isEmpty()}" th:text="#{estadisticas.grafico.vacio}">Sin datos</p>
+            <ol class="barras">
+                <li th:each="b : ${s.porMaterial}" th:title="${b.etiqueta} + ': ' + ${b.valor}">
+                    <span class="barra-etiqueta" th:text="${b.etiqueta}">Cartón</span>
+                    <span class="barra-pista"><span class="barra" th:style="'width:' + ${b.proporcion} + '%'"></span></span>
+                    <span class="barra-valor" th:text="${b.valor}">5</span>
+                </li>
+            </ol>
+        </article>
+        <article class="grafico grafico-ancho caja">
+            <h2 th:text="${resumen.periodo.parametro == 'todo'} ? #{estadisticas.grafico.mes} : #{estadisticas.grafico.dia}">Recibidas por día</h2>
+            <!-- rótulo en el primero, el último y cada quinto: el resto queda en el tooltip -->
+            <ol class="columnas">
+                <li th:each="b, i : ${s.enElTiempo}" th:title="${b.etiqueta} + ': ' + ${b.valor}"
+                    th:classappend="${i.first or i.last or i.index % 5 == 0} ? 'rotulada'">
+                    <span class="columna-area"><span class="columna" th:style="'height:' + ${b.proporcion} + '%'"></span></span>
+                    <span class="columna-etiqueta" th:text="${b.etiqueta}">1/10</span>
+                </li>
+            </ol>
+        </article>
+    </section>
+
+    <section class="grafico caja">
         <h2 th:text="#{estadisticas.centros}">Por centro de acopio</h2>
         <div class="tabla-scroll">
             <table>
@@ -80,7 +125,7 @@
         </div>
     </section>
     </div>
-    <p th:text="#{estadisticas.nota}">Nota</p>
+    <p class="panel-nota" th:text="#{estadisticas.nota}">Nota</p>
 </main>
 </body>
 </html>

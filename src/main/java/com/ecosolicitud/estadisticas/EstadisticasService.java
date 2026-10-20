@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecosolicitud.organizacion.OrganizacionService;
+import com.ecosolicitud.shared.Fechas;
 import com.ecosolicitud.solicitud.SolicitudMetricas;
 import com.ecosolicitud.solicitud.MetricasService;
 
@@ -31,6 +32,7 @@ public class EstadisticasService {
                 .map(o -> new EstadisticasInfo.Centro(o.nombre(), o.ciudad(),
                         porCentro.getOrDefault(o.id(), SolicitudMetricas.ninguna())))
                 .toList();
-        return new EstadisticasInfo(periodo, metricas.total(desde), centros);
+        return new EstadisticasInfo(periodo, Fechas.corta(Instant.now()), metricas.total(desde),
+                metricas.series(desde), centros);
     }
 }
