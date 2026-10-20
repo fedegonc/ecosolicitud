@@ -55,6 +55,21 @@ public enum Seccion {
         return Arrays.stream(values()).filter(s -> s.permite(rol)).toList();
     }
 
+    // las cuatro del menú; el resto va dentro de "Más"
+    public static List<Seccion> principales(Rol rol) {
+        var cuatro = rol == Rol.ORGANIZACION
+                ? EnumSet.of(ORG_SOLICITUDES, ORG_PERFIL, AVISOS, GUIA)
+                : EnumSet.of(NUEVA, MIS_SOLICITUDES, AVISOS, ACOPIOS);
+        return paraRol(rol).stream().filter(cuatro::contains).toList();
+    }
+
+    // la opinión no entra al menú: tiene su propio pie en cada página
+    public static List<Seccion> mas(Rol rol) {
+        var principales = principales(rol);
+        return paraRol(rol).stream()
+                .filter(s -> s != OPINION && !principales.contains(s)).toList();
+    }
+
     public static String inicioDe(Rol rol) {
         return rol == Rol.ORGANIZACION ? Rutas.ORG_SOLICITUDES : Rutas.MIS_SOLICITUDES;
     }

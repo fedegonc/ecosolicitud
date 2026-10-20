@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.shared.Seccion;
@@ -126,12 +127,12 @@ class ContratosTest {
             try {
                 otra.get(base + Rutas.MIS_SOLICITUDES);
                 assertThat(enlacesSidebar(otra)).isEqualTo(
-                        Seccion.paraRol(Rol.CIUDADANO).stream().map(Seccion::getRuta).toList());
+                        rutas(menu(Rol.CIUDADANO)));
             } finally {
                 otra.quit();
             }
             assertThat(enlacesSidebar()).isEqualTo(
-                    Seccion.paraRol(Rol.CIUDADANO).stream().map(Seccion::getRuta).toList());
+                    rutas(menu(Rol.CIUDADANO)));
         });
 
         Allure.step("INV-POST-01 POST sin token CSRF responde 403", () -> {
@@ -166,9 +167,9 @@ class ContratosTest {
     }
 
     private void matriz(Rol rol) {
-        Allure.step("INV-NAV-01 sidebar ≡ Seccion.paraRol(" + rol + ")", () ->
-                assertThat(enlacesSidebar()).isEqualTo(
-                        Seccion.paraRol(rol).stream().map(Seccion::getRuta).toList()));
+        var menu = menu(rol);
+        Allure.step("INV-NAV-01 sidebar ≡ principales + Más(" + rol + ")", () ->
+                assertThat(enlacesSidebar()).isEqualTo(rutas(menu)));
         for (Seccion s : Seccion.values()) {
             if (s.permite(rol)) {
                 Allure.step("GET " + s.getRuta() + " [" + rol + "] renderiza correcta", () -> {
@@ -176,7 +177,9 @@ class ContratosTest {
                     assertThat(driver.getCurrentUrl()).endsWith(s.getRuta());
                     assertThat(driver.findElement(By.tagName("h1")).getText())
                             .isEqualTo(TITULOS.get(s));
-                    for (String nav : new String[]{".sidebar", ".menu-movil"}) {
+                    var navs = menu.contains(s)
+                            ? new String[]{".sidebar", ".menu-movil"} : new String[]{".pie-pagina"};
+                    for (String nav : navs) {
                         var activos = driver.findElements(
                                 By.cssSelector(nav + " a[aria-current='page']"));
                         assertThat(activos).as(nav).hasSize(1);
@@ -197,12 +200,21 @@ class ContratosTest {
         }
     }
 
+    // la opinión no está en el menú: vive en el pie de cada página
+    private static List<Seccion> menu(Rol rol) {
+        return Stream.concat(Seccion.principales(rol).stream(), Seccion.mas(rol).stream()).toList();
+    }
+
+    private static List<String> rutas(List<Seccion> secciones) {
+        return secciones.stream().map(Seccion::getRuta).toList();
+    }
+
     private List<String> enlacesSidebar() {
         return enlacesSidebar(driver);
     }
 
     private List<String> enlacesSidebar(HtmlUnitDriver d) {
-        return d.findElements(By.cssSelector(".sidebar .secciones a")).stream()
+        return d.findElements(By.cssSelector(".sidebar .secciones li > a")).stream()
                 .map(a -> a.getAttribute("href").substring(base.length()))
                 .toList();
     }

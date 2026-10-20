@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.ecosolicitud.comunidad.ComunidadService;
 import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Rol;
@@ -15,35 +14,29 @@ import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.solicitud.Filtro;
 import com.ecosolicitud.solicitud.ListadoService;
 
-// La puerta de entrada: qué es el servicio y el primer paso, con lo último de la comunidad.
+// La puerta de entrada: saludo, qué se puede hacer, el último pedido y tres consejos.
 @Controller
 class PortadaController {
 
-    private final ComunidadService comunidad;
     private final GuiaService guia;
     private final ListadoService listados;
     private final ActorSesion actor;
 
-    PortadaController(ComunidadService comunidad, GuiaService guia,
-            ListadoService listados, ActorSesion actor) {
-        this.comunidad = comunidad;
+    PortadaController(GuiaService guia, ListadoService listados, ActorSesion actor) {
         this.guia = guia;
         this.listados = listados;
         this.actor = actor;
     }
 
     @GetMapping(Rutas.RAIZ)
-    String portada(@RequestParam(required = false) String ciudad,
-            @RequestParam(required = false) String zona, Model modelo) {
-        var pagina = DesignDatos.para(ciudad, guia);
-        if (actor.actual().rol() == Rol.CIUDADANO) {
-            modelo.addAttribute("pedidos",
-                    listados.misSolicitudes(actor.actual().ciudadanoId(), Filtro.ABIERTAS, 1).getContent());
+    String portada(@RequestParam(required = false) String ciudad, Model modelo) {
+        var sesion = actor.actual();
+        if (sesion.rol() == Rol.CIUDADANO) {
+            modelo.addAttribute("usuario", sesion.nombreCiudadano());
+            listados.misSolicitudes(sesion.ciudadanoId(), Filtro.TODAS, 1).stream()
+                    .findFirst().ifPresent(s -> modelo.addAttribute("ultimo", s));
         }
-        modelo.addAttribute("pagina", pagina);
-        modelo.addAttribute("zona", DesignDatos.zonaElegida(pagina, zona));
-        modelo.addAttribute("avisoEnlace", DesignDatos.enlaceAviso(pagina, comunidad));
-        modelo.addAttribute("ultimas", comunidad.ultimas(3));
+        modelo.addAttribute("pagina", DesignDatos.para(ciudad, guia));
         return "portada";
     }
 

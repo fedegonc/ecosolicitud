@@ -76,7 +76,20 @@ class NavegacionAdvice {
 
     @ModelAttribute("secciones")
     List<Seccion> secciones() {
-        return Seccion.paraRol(actor.get());
+        return Seccion.principales(actor.get());
+    }
+
+    @ModelAttribute("seccionesMas")
+    List<Seccion> seccionesMas() {
+        return Seccion.mas(actor.get());
+    }
+
+    // "Más" llega abierto si la página actual vive adentro
+    @ModelAttribute("masAbierto")
+    boolean masAbierto(HttpServletRequest request) {
+        var ruta = request.getRequestURI();
+        return Seccion.mas(actor.get()).stream()
+                .anyMatch(s -> ruta.equals(s.getRuta()) || ruta.startsWith(s.getRuta() + "/"));
     }
 
     @ModelAttribute("organizaciones")

@@ -4,14 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-// Localidades de la portada: el departamento de Rivera y Livramento, enfrente.
+// Alcance de la portada: dos jurisdicciones. Rivera es el departamento entero
+// (la Intendencia gestiona todas sus ciudades); Livramento, enfrente, tiene su
+// propia Prefeitura y su propio sistema.
 // El slug viaja en ?ciudad=; la brasileña fija el idioma en portugués
 // (IdiomaInterceptor). No es shared.Ciudad: esas son las ciudades con retiro.
 public enum Localidad {
     RIVERA("Rivera", false),
-    TRANQUERAS("Tranqueras", false),
-    MINAS("Minas de Corrales", false),
-    VICHADERO("Vichadero", false),
     LIVRAMENTO("Livramento", true);
 
     private final String nombre;

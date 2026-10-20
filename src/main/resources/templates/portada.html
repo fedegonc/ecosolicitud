@@ -5,33 +5,26 @@
 </head>
 <body>
 <main layout:fragment="content" class="ds">
-    <div th:replace="~{componentes/ds :: encabezado(${pagina})}"></div>
-    <section th:if="${pedidos != null and !pedidos.isEmpty()}">
-        <div th:replace="~{componentes/ds :: cabecera(#{portada.pedidos}, ${rutas.MIS_SOLICITUDES})}"></div>
-        <div class="rejilla">
-            <article th:each="s : ${pedidos}" class="tarjeta caja"
-                         th:classappend="'est-' + ${#strings.toLowerCase(s.estado.name())}">
-                <div class="texto">
-                    <th:block th:replace="~{secciones/ficha :: cuerpo(${s}, ${s.organizacionNombre}, @{${rutas.MIS_SOLICITUD}(id=${s.id})})}"></th:block>
-                </div>
-            </article>
+    <div th:replace="~{componentes/ds :: saludo(${pagina})}"></div>
+    <header id="ds-titulo" class="intro">
+        <h1 th:text="#{${pagina.titulo}(${pagina.localidad.nombre})}">Reciclar en Rivera</h1>
+        <p th:text="#{${pagina.subtitulo}(${pagina.localidad.nombre})}"></p>
+    </header>
+    <nav id="ds-acciones" class="acciones" th:aria-label="#{ds.acciones}">
+        <th:block th:each="a : ${pagina.acciones}">
+            <a th:replace="~{componentes/ds :: accion(${a.icono}, ${a.clave}, ${a.enlace})}"></a>
+        </th:block>
+    </nav>
+    <th:block th:if="${rolActual.name() == 'CIUDADANO'}">
+        <a th:replace="~{componentes/ds :: ultimo(${ultimo})}"></a>
+    </th:block>
+    <section id="ds-consejos">
+        <div th:replace="~{componentes/ds :: cabecera(#{ds.consejos}, ${rutas.GUIA})}"></div>
+        <div class="grilla">
+            <th:block th:each="t : ${pagina.consejos}">
+                <a th:replace="~{componentes/ds :: tarjeta(${t.clave}, ${t.imagen}, ${t.enlace})}"></a>
+            </th:block>
         </div>
-    </section>
-    <div th:replace="~{componentes/ds :: grupos(${pagina})}"></div>
-    <div th:replace="~{componentes/ds :: avisos(${pagina})}"></div>
-    <div th:replace="~{componentes/ds :: ecosistema(${pagina})}"></div>
-    <section id="ds-novedades" th:if="${!ultimas.isEmpty()}">
-        <div th:replace="~{componentes/ds :: cabecera(#{portada.ultimas}, '/comunidad')}"></div>
-        <ul class="novedades">
-            <li th:each="p : ${ultimas}">
-                <a th:href="@{${rutas.COMUNIDAD_PUBLICACION}(id=${p.id})}">
-                    <time th:datetime="${#temporals.formatISO(p.publicadaEn)}"
-                          th:text="${#temporals.format(p.publicadaEn, 'd MMM')}">12 oct</time>
-                    <strong th:text="${p.titulo}">Título</strong>
-                    <span th:if="${p.organizacion != null}" th:text="${p.organizacion}">Organización</span>
-                </a>
-            </li>
-        </ul>
     </section>
 </main>
 </body>

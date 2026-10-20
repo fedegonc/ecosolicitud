@@ -62,7 +62,7 @@
             <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
                 <ul>
                     <li th:each="s : ${secciones}">
-                        <a th:href="${s.ruta}"
+                        <a th:fragment="item" th:href="${s.ruta}"
                            th:attr="aria-current=${s.ruta == rutaActual} ? 'page' : null">
                             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
                             <span th:text="#{${s.clave}}">Sección</span>
@@ -75,47 +75,58 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
-            <footer th:fragment="pie">
-                <details class="demo-bloque">
-                    <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
-                <p class="demo-nota" th:text="#{demo.centros}"></p>
-                <p class="demo-nota" th:text="#{demo.vercomo}">Ver como:</p>
-                <form th:action="@{${rutas.DEMO_ROL}}" method="post" class="rol-switch" hx-indicator="this">
-                    <button type="submit" name="rol" value="CIUDADANO"
-                            th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
-                            th:attr="aria-pressed=${rolActual.name() == 'CIUDADANO'}"
-                            th:text="#{rol.ciudadano}">Ciudadano</button>
-                    <button type="submit" name="rol" value="ORGANIZACION"
-                            th:classappend="${rolActual.name() == 'ORGANIZACION'} ? 'activa'"
-                            th:attr="aria-pressed=${rolActual.name() == 'ORGANIZACION'}"
-                            th:text="#{rol.organizacion}">Organización</button>
-                </form>
-                <form th:if="${rolActual.name() == 'ORGANIZACION'}"
-                      th:action="@{${rutas.DEMO_ORGANIZACION}}" method="post" class="org-switch" hx-indicator="this">
-                    <label for="org-select" th:text="#{demo.acopio}">Acopio</label>
-                    <select id="org-select" name="id">
-                        <option th:each="o : ${organizaciones}" th:value="${o.id}"
-                                th:text="${o.nombre}"
-                                th:selected="${o.id == organizacionActiva.id}"></option>
-                    </select>
-                    <input type="hidden" name="volver" th:value="${rutaActual}">
-                    <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
-                </form>
-                <form th:if="${demoHabilitada and demoReinicio}"
-                      th:action="@{${rutas.DEMO_REINICIAR}}" method="post" class="reiniciar" hx-indicator="this">
-                    <input type="hidden" name="volver" th:value="${rutaActual}">
-                    <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
-                </form>
+                <!-- "Más": el resto de las secciones, la demo y el QR; abierto
+                     si la página actual vive adentro -->
+                <details class="mas" th:open="${masAbierto}">
+                    <summary>
+                        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
+                        <span th:text="#{nav.mas}">Más</span>
+                    </summary>
+                    <ul>
+                        <li th:each="s : ${seccionesMas}"><a th:replace="~{app :: item}"></a></li>
+                    </ul>
+                    <footer th:fragment="pie">
+                        <details class="demo-bloque">
+                            <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
+                        <p class="demo-nota" th:text="#{demo.centros}"></p>
+                        <p class="demo-nota" th:text="#{demo.vercomo}">Ver como:</p>
+                        <form th:action="@{${rutas.DEMO_ROL}}" method="post" class="rol-switch" hx-indicator="this">
+                            <button type="submit" name="rol" value="CIUDADANO"
+                                    th:classappend="${rolActual.name() == 'CIUDADANO'} ? 'activa'"
+                                    th:attr="aria-pressed=${rolActual.name() == 'CIUDADANO'}"
+                                    th:text="#{rol.ciudadano}">Ciudadano</button>
+                            <button type="submit" name="rol" value="ORGANIZACION"
+                                    th:classappend="${rolActual.name() == 'ORGANIZACION'} ? 'activa'"
+                                    th:attr="aria-pressed=${rolActual.name() == 'ORGANIZACION'}"
+                                    th:text="#{rol.organizacion}">Organización</button>
+                        </form>
+                        <form th:if="${rolActual.name() == 'ORGANIZACION'}"
+                              th:action="@{${rutas.DEMO_ORGANIZACION}}" method="post" class="org-switch" hx-indicator="this">
+                            <label for="org-select" th:text="#{demo.acopio}">Acopio</label>
+                            <select id="org-select" name="id">
+                                <option th:each="o : ${organizaciones}" th:value="${o.id}"
+                                        th:text="${o.nombre}"
+                                        th:selected="${o.id == organizacionActiva.id}"></option>
+                            </select>
+                            <input type="hidden" name="volver" th:value="${rutaActual}">
+                            <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
+                        </form>
+                        <form th:if="${demoHabilitada and demoReinicio}"
+                              th:action="@{${rutas.DEMO_REINICIAR}}" method="post" class="reiniciar" hx-indicator="this">
+                            <input type="hidden" name="volver" th:value="${rutaActual}">
+                            <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
+                        </form>
+                        </details>
+                        <figure class="qr" th:if="${qr != null}">
+                            <span th:utext="${qr}"></span>
+                            <figcaption th:text="#{nav.compartir}">Compartí EcoSolicitud</figcaption>
+                        </figure>
+                        <a class="instalar-app" href="#" hidden><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{instalar.boton}">Instalar</span></a>
+                        <a href="https://commons.wikimedia.org/wiki/User:Mx._Granger"
+                           rel="noopener" target="_blank" th:text="#{foto.credito}">Fotos</a>
+                    </footer>
                 </details>
-                <figure class="qr" th:if="${qr != null}">
-                    <span th:utext="${qr}"></span>
-                    <figcaption th:text="#{nav.compartir}">Compartí EcoSolicitud</figcaption>
-                </figure>
-                <a class="instalar-app" href="#" hidden><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{instalar.boton}">Instalar</span></a>
-                <a href="https://commons.wikimedia.org/wiki/User:Mx._Granger"
-                   rel="noopener" target="_blank" th:text="#{foto.credito}">Fotos</a>
-            </footer>
+            </nav>
         </aside>
         <div class="menu-movil">
             <header>
@@ -130,7 +141,6 @@
                     <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
                 </summary>
                 <nav th:replace="~{app :: secciones}"></nav>
-                <footer th:replace="~{app :: pie}"></footer>
             </details>
         </div>
         <div class="pagina">
@@ -138,6 +148,13 @@
                th:text="#{app.datos.prueba}">Todos los datos son de prueba</p>
             <nav th:replace="~{secciones/migas :: migas}"></nav>
             <main class="contenido" id="contenido" layout:fragment="content"></main>
+            <footer class="pie-pagina">
+                <a th:href="@{${rutas.OPINION}}"
+                   th:attr="aria-current=${rutaActual == rutas.OPINION} ? 'page' : null">
+                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#mensaje'"></use></svg>
+                    <span th:text="#{pie.opinion}">Responder cuestionario de usabilidad</span>
+                </a>
+            </footer>
         </div>
     </div>
     <script>

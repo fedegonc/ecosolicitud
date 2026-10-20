@@ -1,57 +1,26 @@
 package com.ecosolicitud;
 
-import java.util.Arrays;
 import java.util.List;
 
-import com.ecosolicitud.comunidad.ComunidadService;
 import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.shared.Rutas;
 
-// Contenido estático de /design por ciudad. Las cadenas de texto son claves
+// Contenido estático de la portada por ciudad. Las cadenas de texto son claves
 // de messages (el template las resuelve con #{...}); nombres propios sin traducir.
 final class DesignDatos {
 
     record Tarjeta(String clave, String imagen, String enlace) {
     }
 
-    record Herramienta(String icono, String clave, String enlace) {
-    }
-
-    // publicacion: título exacto de la publicación a la que enlaza el banner, null si enlaza a /avisos
-    record Aviso(String clave, String publicacion) {
-    }
-
-    record Actor(String nombre) {
-
-        // hasta 2 letras: primera de cada palabra ("Renacer del Norte" -> RN);
-        // una sola palabra toma sus dos primeras ("Intendencia" -> IN)
-        public String getIniciales() {
-            var palabras = Arrays.stream(nombre.split(" "))
-                    .filter(p -> !List.of("de", "del", "la", "y").contains(p.toLowerCase()))
-                    .toList();
-            if (palabras.size() > 1) {
-                return ("" + palabras.get(0).charAt(0) + palabras.get(1).charAt(0)).toUpperCase();
-            }
-            return nombre.substring(0, 2).toUpperCase();
-        }
-    }
-
-    // zona de recolección: nombre visible y el día/turno que muestra la franja
-    record Zona(String slug, String nombre, String horario) {
+    record Accion(String icono, String clave, String enlace) {
     }
 
     record Pagina(Localidad localidad, String titulo, String subtitulo,
-            List<Tarjeta> divulgacion, List<Herramienta> recoleccion,
-            List<Aviso> avisos, List<Actor> actores) {
+            List<Accion> acciones, List<Tarjeta> consejos) {
 
-        // el selector de la portada recorre todas
+        // el selector de ciudad recorre todas
         public List<Localidad> getLocalidades() {
             return Localidad.todas();
-        }
-
-        // el selector de zona de la franja recorre las de la localidad
-        public List<Zona> getZonas() {
-            return zonas(localidad);
         }
     }
 
@@ -60,94 +29,35 @@ final class DesignDatos {
 
     static Pagina para(String ciudad, GuiaService guia) {
         var localidad = Localidad.desde(ciudad);
-        return switch (localidad) {
-            case RIVERA -> rivera(guia);
-            case LIVRAMENTO -> livramento(guia);
-            case TRANQUERAS, MINAS, VICHADERO -> secundaria(localidad, guia);
+        var subtitulo = switch (localidad) {
+            case RIVERA -> "ds.subtitulo.rivera";
+            case LIVRAMENTO -> "ds.subtitulo.livramento";
         };
+        return new Pagina(localidad, "ds.titulo", subtitulo, acciones(guia), consejos(guia));
     }
 
-    static Pagina rivera(GuiaService guia) {
-        return new Pagina(Localidad.RIVERA, "ds.titulo", "ds.subtitulo.rivera",
-                divulgacion(guia),
-                List.of(
-                        new Herramienta("basurero", "ds.h.residuo", Rutas.GUIA),
-                        new Herramienta("pin", "ds.h.lugar", Rutas.ACOPIOS),
-                        new Herramienta("calendario", "ds.h.dia",
-                                articulo(guia, "Muebles y voluminosos")),
-                        new Herramienta("corazon", "ds.h.llevar", Rutas.ACOPIOS)),
-                List.of(new Aviso("ds.aviso.puntoverde",
-                        "Nuevo Punto Verde en el Polo de Desarrollo")),
-                List.of(new Actor("Renacer del Norte"), new Actor("Plan Vale"),
-                        new Actor("Intendencia"), new Actor("Campo Limpio")));
-    }
-
-    static Pagina livramento(GuiaService guia) {
-        return new Pagina(Localidad.LIVRAMENTO, "ds.titulo", "ds.subtitulo.livramento",
-                divulgacion(guia),
-                List.of(
-                        new Herramienta("camion", "ds.h.retiro", Rutas.NUEVA),
-                        new Herramienta("corazon", "ds.h.donar", Rutas.NUEVA),
-                        new Herramienta("pin", "ds.h.lugar", Rutas.ACOPIOS),
-                        new Herramienta("basurero", "ds.h.residuo", Rutas.GUIA)),
-                List.of(new Aviso("ds.aviso.retiro", null)),
-                List.of(new Actor("Novo Horizonte"), new Actor("Prefeitura")));
-    }
-
-    private static Pagina secundaria(Localidad localidad, GuiaService guia) {
-        return new Pagina(localidad, "ds.titulo", "ds.subtitulo.secundaria",
-                divulgacion(guia), List.of(new Herramienta("corazon", "ds.h.llevar", Rutas.ACOPIOS)),
-                List.of(), List.of(new Actor("Intendencia")));
-    }
-
-    // zonas demo: cada localidad uruguaya publica día y turno de recolección
-    private static List<Zona> zonas(Localidad localidad) {
-        return switch (localidad) {
-            case RIVERA -> List.of(
-                    new Zona("centro", "Centro", "lunes a la mañana"),
-                    new Zona("norte", "Norte", "martes a la tarde"),
-                    new Zona("este", "Este", "miércoles a la mañana"),
-                    new Zona("oeste", "Oeste", "jueves a la tarde"),
-                    new Zona("sur", "Sur", "viernes a la mañana"));
-            case TRANQUERAS, MINAS, VICHADERO -> List.of(
-                    new Zona("centro", "Centro", "martes a la mañana"),
-                    new Zona("rural", "Rural", "jueves a la tarde"));
-            case LIVRAMENTO -> List.of();
-        };
-    }
-
-    // slug desconocido o ausente: la franja pide elegir zona
-    static Zona zonaElegida(Pagina pagina, String slug) {
-        if (slug == null) {
-            return null;
-        }
-        return pagina.getZonas().stream()
-                .filter(z -> z.slug().equalsIgnoreCase(slug)).findFirst().orElse(null);
+    // lo que el vecino puede hacer: primero y al centro, igual en toda localidad
+    private static List<Accion> acciones(GuiaService guia) {
+        return List.of(
+                new Accion("camion", "ds.h.retiro", Rutas.NUEVA),
+                new Accion("basurero", "ds.h.residuo", Rutas.GUIA),
+                new Accion("pin", "ds.h.lugar", Rutas.ACOPIOS),
+                new Accion("calendario", "ds.h.dia", articulo(guia, "Muebles y voluminosos")),
+                new Accion("corazon", "ds.h.donar", Rutas.ACOPIOS));
     }
 
     // cada tarjeta enlaza a su artículo de la guía; si no existe, a la guía general
-    private static List<Tarjeta> divulgacion(GuiaService guia) {
+    private static List<Tarjeta> consejos(GuiaService guia) {
         return List.of(
                 new Tarjeta("ds.t1", "/img/comunidad/rivera-verde-800.webp",
                         articulo(guia, "Antes de tirar")),
                 new Tarjeta("ds.t2", "/img/comunidad/novo-horizonte-800.webp",
                         articulo(guia, "Cómo separar en casa")),
                 new Tarjeta("ds.t3", "/img/comunidad/punto-verde-800.webp",
-                        articulo(guia, "Sacarlo de casa")),
-                new Tarjeta("ds.t4", "/img/comunidad/acopio-800.webp",
-                        articulo(guia, "Qué pasa después")));
+                        articulo(guia, "Sacarlo de casa")));
     }
 
     private static String articulo(GuiaService guia, String titulo) {
         return guia.buscarPorTitulo(titulo).map(a -> Rutas.expandir(Rutas.GUIA_ARTICULO, a.id())).orElse(Rutas.GUIA);
-    }
-
-    // el banner enlaza a su publicación cuando la hay; si no, a la bandeja de avisos
-    static String enlaceAviso(Pagina pagina, ComunidadService comunidad) {
-        if (pagina.avisos().isEmpty() || pagina.avisos().get(0).publicacion() == null) {
-            return Rutas.AVISOS;
-        }
-        return comunidad.buscarPorTitulo(pagina.avisos().get(0).publicacion())
-                .map(p -> Rutas.expandir(Rutas.COMUNIDAD_PUBLICACION, p.id())).orElse(Rutas.AVISOS);
     }
 }

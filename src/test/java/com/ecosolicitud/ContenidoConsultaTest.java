@@ -8,8 +8,6 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -59,35 +57,6 @@ class ContenidoConsultaTest {
         var ficha = rest.getForEntity(Rutas.expandir(Rutas.COMUNIDAD_PUBLICACION, p.getId()), String.class);
         assertThat(ficha.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(ficha.getBody()).contains(p.getTitulo());
-    }
-
-    @Test
-    @DisplayName("La portada lista las tres últimas publicaciones de la comunidad, sin fotos")
-    void ultimasComunidad() {
-        var navegador = new HtmlUnitDriver();
-        try {
-            String base = rest.getRootUri();
-            for (String idioma : new String[]{"es", "pt"}) {
-                navegador.get(base + "/?lang=" + idioma);
-                var seccion = navegador.findElement(By.id("ds-novedades"));
-                var items = seccion.findElements(By.cssSelector(".novedades li"));
-                assertThat(items).hasSize(3);
-                for (var item : items) {
-                    assertThat(item.findElement(By.tagName("a")).getAttribute("href"))
-                            .startsWith(base + Rutas.COMUNIDAD + "/");
-                    assertThat(item.findElement(By.tagName("time"))
-                            .getAttribute("datetime")).isNotBlank();
-                    assertThat(item.findElement(By.tagName("strong")).getText()).isNotBlank();
-                    assertThat(item.findElement(By.cssSelector("a > span"))
-                            .getText()).isNotBlank();
-                }
-                assertThat(seccion.findElements(By.tagName("img"))).isEmpty();
-                assertThat(seccion.findElement(By.cssSelector(".cabecera a"))
-                        .getAttribute("href")).isEqualTo(base + Rutas.COMUNIDAD);
-            }
-        } finally {
-            navegador.quit();
-        }
     }
 
     @Test

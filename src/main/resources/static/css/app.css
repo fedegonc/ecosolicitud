@@ -433,6 +433,37 @@ main a:active {
 .pagina {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.pagina > main {
+    flex: 1;
+}
+/* pie: la invitación al cuestionario, a la vista en cada página */
+.pie-pagina {
+    display: flex;
+    justify-content: center;
+    padding: calc(2 * var(--chico));
+    border-top: 1px solid var(--borde);
+    background: var(--superficie);
+}
+.pie-pagina a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--chico);
+    min-height: var(--icono);
+    padding: 0 calc(2 * var(--chico));
+    background: var(--acento);
+    color: var(--acento-texto);
+    font-weight: 600;
+    text-decoration: none;
+}
+.pie-pagina a:hover {
+    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+}
+.pie-pagina a[aria-current="page"] {
+    outline: 2px solid var(--acento);
+    outline-offset: 2px;
 }
 
 /* letra chica del modo demo: encima de las migas, sin peso visual */
@@ -461,6 +492,7 @@ main {
     flex-direction: column;
     flex: 0 0 var(--sidebar-w);
     height: 100vh;
+    overflow-y: auto;
     padding: calc(2 * var(--chico));
 }
 
@@ -541,6 +573,24 @@ main {
     font-weight: 600;
 }
 
+/* "Más": se despliega como una opción más del menú */
+:is(.sidebar, .menu-movil) .mas > summary {
+    display: flex;
+    align-items: center;
+    gap: calc(1.5 * var(--chico));
+    padding: calc(1.5 * var(--chico));
+    list-style: none;
+    cursor: pointer;
+}
+:is(.sidebar, .menu-movil) .mas > summary::-webkit-details-marker {
+    display: none;
+}
+:is(.sidebar, .menu-movil) .mas > summary:hover {
+    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+}
+:is(.sidebar, .menu-movil) .mas[open] > summary {
+    font-weight: 600;
+}
 :is(.sidebar, .menu-movil) footer {
     display: grid;
     gap: var(--chico);
@@ -548,9 +598,6 @@ main {
     border-top: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
 }
 
-.sidebar footer {
-    margin-top: auto;
-}
 
 :is(.sidebar, .menu-movil) footer > a {
     font-size: 0.75rem;

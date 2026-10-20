@@ -16,8 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PortadaTest {
 
     private static final String[] SECCIONES = {
-            "id=\"ds-encabezado\"", "id=\"ds-ciudad\"", "id=\"ds-grupos\"",
-            "id=\"ds-banner\"", "id=\"ds-ecosistema\""};
+            "id=\"ds-saludo\"", "id=\"ds-titulo\"", "id=\"ds-acciones\"",
+            "id=\"ds-ultimo\"", "id=\"ds-consejos\""};
 
     @Autowired
     private TestRestTemplate rest;

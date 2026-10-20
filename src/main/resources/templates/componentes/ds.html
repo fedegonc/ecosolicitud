@@ -12,36 +12,27 @@
         <span th:text="#{${clave + '.texto'}}"></span>
     </div>
 </a>
-<a th:fragment="herramienta(icono, clave, enlace)" th:href="@{${enlace}}" class="caja herramienta">
-    <div class="icono">
+<a th:fragment="accion(icono, clave, enlace)" th:href="@{${enlace}}" class="accion">
+    <span class="circulo">
         <svg th:unless="${icono == 'corazon'}" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${icono}"></use></svg>
         <svg th:if="${icono == 'corazon'}" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21 3.5 12.5a5.7 5.7 0 0 1 8-8L12 5l.5-.5a5.7 5.7 0 0 1 8 8L12 21z"></path></svg>
-    </div>
-    <div class="texto">
-        <strong th:text="#{${clave + '.titulo'}}"></strong>
-        <span th:text="#{${clave + '.texto'}}"></span>
-    </div>
-    <span class="flecha" aria-hidden="true">→</span>
+    </span>
+    <span th:text="#{${clave + '.titulo'}}"></span>
 </a>
-<a th:fragment="banner(clave, enlace, total)" th:href="@{${enlace}}" class="caja banner">
-    <strong th:text="#{${clave + '.titulo'}}"></strong>
-    <span class="descripcion" th:text="#{${clave + '.texto'}}"></span>
-    <span class="relleno"></span>
-    <div class="indicadores" th:if="${total > 1}" aria-hidden="true">
-        <span th:each="i : ${#numbers.sequence(1, total)}"></span>
+<!-- saludo y camino a la izquierda, la ciudad a la derecha -->
+<div th:fragment="saludo(pagina)" id="ds-saludo" class="saludo">
+    <div>
+        <p class="hola" th:if="${usuario != null}" th:text="#{portada.hola(${usuario})}">Hola, Ana</p>
+        <p class="hola" th:if="${usuario == null and organizacionActiva != null}"
+           th:text="#{portada.hola(${organizacionActiva.nombre})}">Hola, Centro</p>
+        <nav class="camino" th:aria-label="#{miga.aria}">
+            <ol>
+                <li><span aria-current="page" th:text="#{miga.inicio}">Inicio</span></li>
+                <li th:text="${pagina.localidad.nombre}">Rivera</li>
+            </ol>
+        </nav>
     </div>
-    <span class="flecha" aria-hidden="true">→</span>
-</a>
-<a th:fragment="actor(nombre, iniciales)" th:href="@{${rutas.COMUNIDAD}}" class="caja actor">
-    <div class="imagen"><span th:text="${iniciales}" aria-hidden="true"></span></div>
-    <div class="texto"><strong th:text="${nombre}"></strong></div>
-</a>
-<div th:fragment="encabezado(pagina)" id="ds-encabezado" class="encabezado">
-    <header class="intro">
-        <h1 th:text="#{${pagina.titulo}(${pagina.localidad.nombre})}">Reciclar en Rivera</h1>
-        <p th:text="#{${pagina.subtitulo}(${pagina.localidad.nombre})}"></p>
-    </header>
-    <nav id="ds-ciudad" class="fila" th:aria-label="#{ds.ciudad}"
+    <nav id="ds-ciudad" th:aria-label="#{ds.ciudad}"
          hx-target=".pagina" hx-select=".pagina"
          hx-swap="outerHTML transition:true" hx-push-url="true">
         <details class="menu">
@@ -54,52 +45,21 @@
             </div>
         </details>
     </nav>
-    <div class="franja">
-        <span th:if="${pagina.localidad.brasilena}"><span th:text="#{ds.franja.livramento}">La Prefeitura todavía no publica los días por barrio</span>
-            <a th:href="@{${rutas.NUEVA}}" th:text="#{ds.franja.solicitar}">Solicitar recolección</a></span>
-        <form th:unless="${pagina.localidad.brasilena}" th:if="${zona == null}"
-              method="get" th:action="@{${rutas.RAIZ}}">
-            <input type="hidden" name="ciudad" th:value="${pagina.localidad.slug}">
-            <span th:text="#{ds.franja.sin.zona}">Elegí tu zona para saber cuándo pasa el camión</span>
-            <select name="zona">
-                <option th:each="z : ${pagina.zonas}" th:value="${z.slug}" th:text="${z.nombre}">Zona</option>
-            </select>
-            <button type="submit" th:text="#{ds.franja.ver}">Ver</button>
-        </form>
-        <span th:if="${zona != null}"><span th:text="#{ds.franja.pasa(${zona.horario})}">Pasa</span>
-            <a th:href="@{${rutas.RAIZ}(ciudad=${pagina.localidad.slug})}" th:text="#{ds.franja.cambiar}">cambiar zona</a></span>
-    </div>
 </div>
-<section th:fragment="grupos(pagina)" id="ds-grupos" class="grupos">
-    <div class="grupo">
-        <div th:replace="~{componentes/ds :: cabecera(#{ds.divulgacion}, '/guia')}"></div>
-        <div class="grilla">
-            <th:block th:each="t : ${pagina.divulgacion}">
-                <a th:replace="~{componentes/ds :: tarjeta(${t.clave}, ${t.imagen}, ${t.enlace})}"></a>
-            </th:block>
-        </div>
-    </div>
-    <div class="grupo" id="ds-recoleccion" th:if="${!pagina.recoleccion.empty}">
-        <div th:replace="~{componentes/ds :: cabecera(#{ds.recoleccion}, null)}"></div>
-        <div class="grilla">
-            <th:block th:each="h : ${pagina.recoleccion}">
-                <a th:replace="~{componentes/ds :: herramienta(${h.icono}, ${h.clave}, ${h.enlace})}"></a>
-            </th:block>
-        </div>
-    </div>
-</section>
-<section th:fragment="avisos(pagina)" id="ds-banner" th:if="${!pagina.avisos.empty}">
-    <a th:replace="~{componentes/ds :: banner(${pagina.avisos[0].clave}, ${avisoEnlace}, ${pagina.avisos.size()})}"></a>
-</section>
-<section th:fragment="ecosistema(pagina)" id="ds-ecosistema" class="ecosistema">
-    <div th:replace="~{componentes/ds :: cabecera(#{ds.ecosistema}, '/comunidad')}"></div>
-    <div class="fila">
-        <th:block th:each="a : ${pagina.actores}">
-            <a th:replace="~{componentes/ds :: actor(${a.nombre}, ${a.iniciales})}"></a>
-        </th:block>
-    </div>
-    <a class="enlace" th:if="${pagina.localidad.brasilena}"
-       href="https://santanadolivramento.rs.gov.br/" target="_blank" rel="noopener">santanadolivramento.rs.gov.br</a>
-</section>
+<!-- barra ancha: el estado del último pedido o la invitación a hacer el primero -->
+<th:block th:fragment="ultimo(s)">
+    <a th:if="${s != null}" id="ds-ultimo" class="caja banner ultimo"
+       th:classappend="'est-' + ${#strings.toLowerCase(s.estado.name())}"
+       th:href="@{${rutas.MIS_SOLICITUD}(id=${s.id})}" th:title="#{${s.estado.ayuda}}">
+        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.estado.icono}"></use></svg>
+        <strong th:text="#{portada.ultimo(${s.id})}">Tu último pedido #1</strong>
+        <span th:text="#{${s.estado.clave}}">Estado</span>
+        <span class="flecha" aria-hidden="true">→</span>
+    </a>
+    <a th:if="${s == null}" id="ds-ultimo" class="caja banner ultimo" th:href="@{${rutas.NUEVA}}">
+        <strong th:text="#{portada.sin.pedidos}">Todavía no pediste un retiro</strong>
+        <span class="flecha" aria-hidden="true">→</span>
+    </a>
+</th:block>
 </body>
 </html>
