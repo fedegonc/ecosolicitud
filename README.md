@@ -89,4 +89,5 @@ En producción `/h2-console`, `/actuator/**` y `/livereload.js` responden 404 po
 
 ## Documentación
 
+- [TCC de EcoSolicitud](https://docs.google.com/document/d/1cD1iauNxX3MaBIJjnrEx-lemQG8oAk_cGRV7eDIomB8/edit?usp=sharing) — documento académico del proyecto.
 - [testing/](testing/README.md) — procedimientos de prueba, resultados de carga y reglas de la suite.
