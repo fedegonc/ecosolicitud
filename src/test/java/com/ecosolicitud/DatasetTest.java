@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.ecosolicitud.demo.DemoService;
 import com.ecosolicitud.comunidad.ComunidadService;
+import com.ecosolicitud.guia.ArticuloInfo;
+import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.solicitud.Estado;
 import com.ecosolicitud.solicitud.SolicitudService;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
@@ -39,6 +41,28 @@ class DatasetTest {
 
     @Autowired
     private ComunidadService comunidad;
+
+    @Autowired
+    private GuiaService guia;
+
+    @Test
+    void guiaConservaLosArticulosYElOrdenDelDataset() {
+        demo.reiniciar();
+        assertThat(guia.articulos()).extracting(ArticuloInfo::titulo, ArticuloInfo::orden)
+                .containsExactly(
+                        tuple("Cómo separar en casa", 1),
+                        tuple("Vidrio", 2),
+                        tuple("Cartón y papel", 3),
+                        tuple("Electrónicos", 4),
+                        tuple("Plástico", 5),
+                        tuple("Metal y latas", 6),
+                        tuple("Escombros", 7),
+                        tuple("Orgánicos y restos de poda", 8),
+                        tuple("Muebles y voluminosos", 9));
+        assertThat(guia.articulos().subList(4, 6))
+                .extracting(ArticuloInfo::imagen, a -> a.material().getCodigo())
+                .containsExactly(tuple("plastico", "PLASTICO"), tuple("metal", "METAL"));
+    }
 
     @Test
     void datasetDeEjemploBinacional() {
