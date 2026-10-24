@@ -1,6 +1,6 @@
 # EcoSolicitud
 
-Aplicación web municipal para coordinar el retiro de materiales reciclables entre vecinos y centros de acopio. Diseñada para pilotos pequeños (~50 usuarios por instancia) en la frontera Rivera (UY) / Sant'Ana do Livramento (BR), con interfaz bilingüe español–portugués.
+Aplicación web municipal para coordinar el retiro de materiales reciclables entre vecinos y centros de acopio. Diseñada para pilotos pequeños (20 usuarios activos por instancia, medidos en `testing/CARGA.md`) en la frontera Rivera (UY) / Sant'Ana do Livramento (BR), con interfaz bilingüe español–portugués.
 
 [![Verify](https://github.com/fedegonc/ecosolicitud/actions/workflows/ci.yml/badge.svg)](https://github.com/fedegonc/ecosolicitud/actions/workflows/ci.yml)
 [![Demo](https://img.shields.io/badge/demo-ecosolicitud.onrender.com-2e7d32)](https://ecosolicitud.onrender.com)
