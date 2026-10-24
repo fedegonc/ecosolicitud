@@ -3,7 +3,7 @@
 <body>
 <div th:fragment="cabecera(titulo, enlace)" class="cabecera">
     <h2 th:text="${titulo}"></h2>
-    <a th:if="${enlace != null}" th:href="@{${enlace}}"><span th:text="#{ds.vertodo}">Ver todo</span> <span aria-hidden="true">→</span></a>
+    <a th:if="${enlace != null}" th:href="@{${enlace}}"><span th:text="#{ds.vertodo}">Ver todo</span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg></a>
 </div>
 <a th:fragment="tarjeta(clave, imagen, enlace)" th:href="@{${enlace}}" class="caja tarjeta">
     <div class="imagen"><img th:if="${imagen != null}" th:src="@{${imagen}}" th:alt="#{${clave + '.titulo'}}"></div>
@@ -51,11 +51,11 @@
         <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.estado.icono}"></use></svg>
         <strong th:text="#{portada.ultimo(${s.id})}">Tu último pedido #1</strong>
         <span th:text="#{${s.estado.clave}}">Estado</span>
-        <span class="flecha" aria-hidden="true">→</span>
+        <svg class="icono flecha" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
     </a>
     <a th:if="${s == null}" id="ds-ultimo" class="caja banner ultimo" th:href="@{${rutas.NUEVA}}">
         <strong th:text="#{portada.sin.pedidos}">Todavía no pediste un retiro</strong>
-        <span class="flecha" aria-hidden="true">→</span>
+        <svg class="icono flecha" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
     </a>
 </th:block>
 </body>

@@ -5,7 +5,6 @@
 </head>
 <body>
 <main layout:fragment="content">
-    <p><a th:href="@{${rutas.GUIA}}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{guia.volver}">Volver</span></a></p>
     <article>
         <img th:if="${articulo.imagen != null}"
              th:src="@{/img/guia/{s}-1600.webp(s=${articulo.imagen})}"

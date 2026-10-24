@@ -24,6 +24,8 @@ public final class Rutas {
     public static final String OPINION_RESPALDO = OPINION + "/respaldo";
     public static final String AVISOS = "/avisos";
     public static final String AVISOS_CONTADOR = AVISOS + "/contador";
+    public static final String AYUDA = "/ayuda";
+    public static final String CREDITOS = "/creditos";
 
     public static final String ORG_SOLICITUDES = "/org/solicitudes";
     public static final String ORG_SOLICITUD = ORG_SOLICITUDES + "/{id}";

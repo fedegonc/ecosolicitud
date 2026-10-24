@@ -9,6 +9,7 @@
     <header id="ds-titulo" class="intro">
         <h1 th:text="#{${pagina.titulo}(${pagina.localidad.nombre})}">Reciclar en Rivera</h1>
         <p th:text="#{${pagina.subtitulo}(${pagina.localidad.nombre})}"></p>
+        <p><a th:href="@{${rutas.AYUDA}}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#ayuda'"></use></svg><span th:text="#{ayuda.primera}">¿Primera vez? Mirá cómo se usa</span></a></p>
     </header>
     <nav id="ds-acciones" class="acciones" th:aria-label="#{ds.acciones}">
         <th:block th:each="a : ${pagina.acciones}">

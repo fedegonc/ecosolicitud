@@ -22,6 +22,7 @@
         <p th:if="${pagina.empty}">
             <span th:text="#{mis.vacia}">No tenés solicitudes.</span>
             <a th:href="@{${rutas.NUEVA}}" th:text="#{mis.nueva}">Nueva solicitud</a>
+            <a th:href="@{${rutas.AYUDA}}" th:text="#{ayuda.primera}">¿Primera vez? Mirá cómo se usa</a>
         </p>
         <div class="rejilla">
         <article th:each="s : ${pagina.content}" class="tarjeta caja"
@@ -41,13 +42,11 @@
         <nav class="fila paginacion" th:if="${pagina.totalPages > 1}" th:attr="aria-label=#{paginacion.titulo}">
             <a class="caja" th:if="${pagina.hasPrevious()}"
                th:href="@{${rutas.MIS_SOLICITUDES}(filtro=${#strings.toLowerCase(filtro.name())}, pagina=${pagina.number})}"
-               hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
-               th:text="#{paginacion.anterior}">Anterior</a>
+               hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{paginacion.anterior}">Anterior</span></a>
             <p th:text="#{paginacion.estado(${pagina.number + 1}, ${pagina.totalPages})}">Página 1 de 3</p>
             <a class="caja" th:if="${pagina.hasNext()}"
                th:href="@{${rutas.MIS_SOLICITUDES}(filtro=${#strings.toLowerCase(filtro.name())}, pagina=${pagina.number + 2})}"
-               hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
-               th:text="#{paginacion.siguiente}">Siguiente</a>
+               hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"><span th:text="#{paginacion.siguiente}">Siguiente</span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg></a>
         </nav>
     </div>
     <footer class="fila">

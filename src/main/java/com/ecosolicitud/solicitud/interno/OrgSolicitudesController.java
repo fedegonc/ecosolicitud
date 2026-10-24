@@ -67,7 +67,6 @@ class OrgSolicitudesController {
     @GetMapping(Rutas.ORG_INFORME)
     String informe(@RequestParam(required = false) String mes, Model modelo) {
         modelo.addAttribute("titular", organizaciones.actual(actor.actual()).nombre());
-        modelo.addAttribute("volver", Rutas.ORG_SOLICITUDES);
         modelo.addAttribute("rutaInforme", Rutas.ORG_INFORME);
         modelo.addAttribute("migaFinal", Miga.actualClave("panel.informe"));
         modelo.addAttribute("informe", listados.informe(actor.actual(), parseMes(mes)));
@@ -100,7 +99,6 @@ class OrgSolicitudesController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelo.addAttribute("s", s);
         modelo.addAttribute("titular", s.nombreCiudadano());
-        modelo.addAttribute("volver", Rutas.ORG_SOLICITUDES);
         modelo.addAttribute("migaFinal", Miga.actual("#" + s.id()));
         return htmx && !boosted ? "secciones/ficha :: detalle" : "secciones/solicitud";
     }

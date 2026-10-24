@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{creditos.titulo}">Créditos y licencias</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="#{creditos.titulo}">Créditos y licencias</h1>
+    <p th:text="#{creditos.intro}">Intro</p>
+    <section th:replace="~{:: grupo(#{creditos.fotos}, ${fotos})}"></section>
+    <section th:replace="~{:: grupo(#{creditos.recursos}, ${recursos})}"></section>
+    <p th:text="#{creditos.cambios}">Cambios</p>
+    <p th:text="#{creditos.propio}">Propio</p>
+</main>
+<section th:fragment="grupo(titulo, creditos)" class="creditos">
+    <h2 th:text="${titulo}">Fotos</h2>
+    <ul>
+        <li th:each="c : ${creditos}">
+            <a th:href="${c.url}" rel="noopener" target="_blank" th:text="${c.obra}">Obra</a>
+            — <span th:text="${c.autor}">Autor</span> ·
+            <a th:href="${c.licenciaUrl}" rel="noopener license" target="_blank" th:text="${c.licencia}">Licencia</a>
+            <span class="detalle" th:text="#{${c.uso}}">Uso</span>
+        </li>
+    </ul>
+</section>
+</body>
+</html>

@@ -8,7 +8,7 @@
     <h1 th:text="#{seccion.nueva}">Nueva solicitud</h1>
     <p th:text="#{nueva.intro}">Pedí el retiro en cuatro pasos</p>
     <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>
-    <form th:action="@{${rutas.NUEVA}}" method="post" th:object="${form}" hx-indicator="this">
+    <form th:action="@{${rutas.NUEVA}}" method="post" th:object="${form}" hx-indicator="this" class="form-nueva">
         <div class="resumen-errores" role="alert" tabindex="-1" th:if="${#fields.hasErrors('*')}">
             <p th:text="#{nueva.resumen.titulo}">Revisá estos datos antes de enviar</p>
             <ul>
@@ -34,7 +34,7 @@
                 <p class="centro-resumen">
                     <span>
                         <strong th:text="${centro.nombre}">Nombre</strong>
-                        <span th:text="${centro.horario}">Horario</span>
+                        <span class="centro-horario" th:text="${centro.horario}">Horario</span>
                     </span>
                     <a th:href="@{${rutas.NUEVA}(ciudad=${form.ciudad})}"
                        th:attr="hx-get=@{${rutas.NUEVA}}"
@@ -68,23 +68,27 @@
             <p class="caja banner alerta" role="alert" th:if="${form.ciudad != null and #lists.isEmpty(centros)}"
                th:text="#{nueva.sin.centros}">Sin centros</p>
 
-            <fieldset class="campo" th:if="${centro != null}">
+            <p class="caja banner aviso-datos" role="note" th:if="${centro != null}"
+               th:text="#{nueva.datos.prueba}">Usá datos de prueba</p>
+
+            <fieldset class="campo bloque-materiales" th:if="${centro != null}">
                 <legend th:text="#{nueva.materiales.del.centro(${centro.nombre})}">Materiales</legend>
-                <label th:each="m : ${materialesCentro}" class="opcion-material">
-                    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
-                    <input type="checkbox" name="materiales" th:value="${m.codigo}"
-                           th:checked="${form.materiales.contains(m)}">
-                    <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}"
-                          th:text="${#messages.msgOrNull('material.' + #strings.toLowerCase(m.codigo)) ?: m.nombre}">Material</span>
-                </label>
+                <div class="opciones-materiales">
+                    <label th:each="m : ${materialesCentro}" class="opcion-material">
+                        <input type="checkbox" name="materiales" th:value="${m.codigo}"
+                               th:checked="${form.materiales.contains(m)}">
+                        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${m.icono}"></use></svg>
+                        <span th:class="'etiqueta-material ' + 'mat-' + ${#strings.toLowerCase(m.codigo)}"
+                              th:text="${#messages.msgOrNull('material.' + #strings.toLowerCase(m.codigo)) ?: m.nombre}">Material</span>
+                    </label>
+                </div>
                 <span class="ayuda" th:text="#{nueva.materiales.ayuda}">Ayuda</span>
                 <p class="error" th:if="${#fields.hasErrors('materiales')}"
                    th:errors="*{materiales}">Error</p>
             </fieldset>
 
-            <fieldset class="campo" th:if="${centro != null}">
+            <fieldset class="campo bloque-contacto" th:if="${centro != null}">
                 <legend th:text="#{nueva.grupo.contacto}">Contacto</legend>
-                <p class="caja banner" role="note" th:text="#{nueva.datos.prueba}">Usá datos de prueba</p>
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#persona'"></use></svg><span th:text="#{nueva.nombre}">Nombre</span></span>
@@ -133,7 +137,7 @@
                            hx-include="closest form">
                     <span class="error" id="err-referencia" role="alert"><span th:errors="*{referencia}"></span></span>
                 </label>
-                <div class="campo">
+                <div class="campo bloque-mapa">
                     <span th:text="#{mapa.titulo}">Ubicación en el mapa</span>
                     <input type="hidden" th:field="*{latitud}">
                     <input type="hidden" th:field="*{longitud}">

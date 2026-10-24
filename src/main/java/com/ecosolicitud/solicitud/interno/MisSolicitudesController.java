@@ -53,7 +53,6 @@ class MisSolicitudesController {
     @GetMapping(Rutas.MIS_INFORME)
     String informe(@RequestParam(required = false) String mes, Model modelo) {
         modelo.addAttribute("titular", actor.actual().nombreCiudadano());
-        modelo.addAttribute("volver", Rutas.MIS_SOLICITUDES);
         modelo.addAttribute("rutaInforme", Rutas.MIS_INFORME);
         modelo.addAttribute("migaFinal", Miga.actualClave("panel.informe"));
         modelo.addAttribute("informe", listados.informe(actor.actual(), parseMes(mes)));
@@ -69,7 +68,6 @@ class MisSolicitudesController {
         var s = solicitudDelActor(id);
         modelo.addAttribute("s", s);
         modelo.addAttribute("titular", s.organizacionNombre());
-        modelo.addAttribute("volver", Rutas.MIS_SOLICITUDES);
         modelo.addAttribute("migaFinal", Miga.actual("#" + s.id()));
         return htmx && !boosted ? "secciones/ficha :: detalle" : "secciones/solicitud";
     }

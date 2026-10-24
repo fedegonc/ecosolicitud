@@ -81,7 +81,6 @@ Docker multi-stage (`Dockerfile`), perfil `prod`. Variables:
 | `DATABASE_URL` / `DATABASE_USER` / `DATABASE_PASSWORD` | Postgres (Supabase pooler, puerto 5432); sin ellas prod usa H2 en archivo |
 | `ecosolicitud.demo.habilitada` | `false` apaga el modo demo |
 | `ECOSOLICITUD_DEMO_REINICIAR` | `true` re-habilita el reinicio del dataset (apagado en prod) |
-| `ecosolicitud.tema` | nombre de un tema en `static/css/temas/` |
 | `MAIL_HOST` / `MAIL_USERNAME` / `MAIL_PASSWORD` | SMTP del respaldo del cuestionario |
 | `CUESTIONARIO_DESTINO` | casilla que recibe los respaldos |
 

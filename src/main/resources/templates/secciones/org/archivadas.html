@@ -6,7 +6,6 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{org.archivadas.titulo}">Solicitudes archivadas</h1>
-    <p><a th:href="@{${rutas.ORG_SOLICITUDES}}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{panel.volver}">Volver</span></a></p>
     <p th:if="${pagina.empty}" th:text="#{org.vacia}">Vacío</p>
     <div class="rejilla">
         <article th:each="s : ${pagina.content}" class="tarjeta caja"
@@ -18,12 +17,10 @@
     </div>
     <nav class="fila paginacion" th:if="${pagina.totalPages > 1}" th:attr="aria-label=#{paginacion.titulo}">
         <a class="caja" th:if="${pagina.hasPrevious()}"
-           th:href="@{${rutas.ORG_ARCHIVADAS}(pagina=${pagina.number})}"
-           th:text="#{paginacion.anterior}">Anterior</a>
+           th:href="@{${rutas.ORG_ARCHIVADAS}(pagina=${pagina.number})}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{paginacion.anterior}">Anterior</span></a>
         <p th:text="#{paginacion.estado(${pagina.number + 1}, ${pagina.totalPages})}">Página 1 de 3</p>
         <a class="caja" th:if="${pagina.hasNext()}"
-           th:href="@{${rutas.ORG_ARCHIVADAS}(pagina=${pagina.number + 2})}"
-           th:text="#{paginacion.siguiente}">Siguiente</a>
+           th:href="@{${rutas.ORG_ARCHIVADAS}(pagina=${pagina.number + 2})}"><span th:text="#{paginacion.siguiente}">Siguiente</span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg></a>
     </nav>
 </main>
 </body>

@@ -38,17 +38,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Feature("Obligaciones de prueba sobre el modelo finito")
 class ContratosTest {
 
-    private static final Map<Seccion, String> TITULOS = Map.of(
-            Seccion.NUEVA, "Pedir retiro",
-            Seccion.MIS_SOLICITUDES, "Mis solicitudes",
-            Seccion.ACOPIOS, "Centros de acopio",
-            Seccion.ORG_SOLICITUDES, "Solicitudes recibidas",
-            Seccion.ORG_PERFIL, "Perfil del acopio",
-            Seccion.GUIA, "Guía de reciclaje",
-            Seccion.COMUNIDAD, "Comunidad",
-            Seccion.ESTADISTICAS, "Estadísticas del servicio",
-            Seccion.OPINION, "Dejanos tu opinión",
-            Seccion.AVISOS, "Avisos");
+    private static final Map<Seccion, String> TITULOS = Map.ofEntries(
+            Map.entry(Seccion.NUEVA, "Pedir retiro"),
+            Map.entry(Seccion.MIS_SOLICITUDES, "Mis solicitudes"),
+            Map.entry(Seccion.ACOPIOS, "Centros de acopio"),
+            Map.entry(Seccion.ORG_SOLICITUDES, "Solicitudes recibidas"),
+            Map.entry(Seccion.ORG_PERFIL, "Perfil del acopio"),
+            Map.entry(Seccion.GUIA, "Guía de reciclaje"),
+            Map.entry(Seccion.COMUNIDAD, "Comunidad"),
+            Map.entry(Seccion.ESTADISTICAS, "Estadísticas del servicio"),
+            Map.entry(Seccion.AYUDA, "¿Cómo se usa?"),
+            Map.entry(Seccion.OPINION, "Dejanos tu opinión"),
+            Map.entry(Seccion.AVISOS, "Avisos"));
 
     @LocalServerPort
     private int port;

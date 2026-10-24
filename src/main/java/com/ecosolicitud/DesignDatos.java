@@ -50,7 +50,7 @@ final class DesignDatos {
         var propia = switch (localidad) {
             case RIVERA -> new Accion("calendario", "ds.accion.voluminosos",
                     articulo(guia, "Muebles y voluminosos"));
-            case LIVRAMENTO -> new Accion("hoja", "ds.accion.poda",
+            case LIVRAMENTO -> new Accion("planta", "ds.accion.poda",
                     articulo(guia, "Orgánicos y restos de poda"));
         };
         return List.of(
@@ -71,15 +71,14 @@ final class DesignDatos {
                 new Accion("libro", "ds.accion.guia", Rutas.GUIA));
     }
 
-    // cada tarjeta enlaza a su artículo de la guía; si no existe, a la guía general
+    // cada tarjeta lleva directo a una página concreta, nunca al índice de la guía
     private static List<Tarjeta> consejos(GuiaService guia) {
         return List.of(
-                new Tarjeta("ds.t1", "/img/comunidad/rivera-verde-800.webp",
-                        articulo(guia, "Antes de tirar")),
-                new Tarjeta("ds.t2", "/img/comunidad/novo-horizonte-800.webp",
+                new Tarjeta("ds.t1", "/img/guia/separar-800.webp",
                         articulo(guia, "Cómo separar en casa")),
-                new Tarjeta("ds.t3", "/img/comunidad/punto-verde-800.webp",
-                        articulo(guia, "Sacarlo de casa")));
+                new Tarjeta("ds.t2", "/img/guia/plastico-800.webp",
+                        articulo(guia, "Plástico")),
+                new Tarjeta("ds.t3", "/img/ciudad/rivera-800.webp", Rutas.ACOPIOS));
     }
 
     private static String articulo(GuiaService guia, String titulo) {

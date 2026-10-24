@@ -10,12 +10,9 @@
         <span th:text="${informe.mes}">2026-10</span></p>
     <nav class="fila solo-pantalla">
         <a class="caja" th:href="${rutaInforme} + '?mes=' + ${informe.mes.minusMonths(1)}"
-           hx-target="main" hx-select="main"
-           th:text="#{informe.anterior}">← Mes anterior</a>
+           hx-target="main" hx-select="main"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{informe.anterior}">Mes anterior</span></a>
         <a class="caja" th:href="${rutaInforme} + '?mes=' + ${informe.mes.plusMonths(1)}"
-           hx-target="main" hx-select="main"
-           th:text="#{informe.siguiente}">Mes siguiente →</a>
-        <a class="caja" th:href="${volver}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg><span th:text="#{panel.volver}">Volver</span></a>
+           hx-target="main" hx-select="main"><span th:text="#{informe.siguiente}">Mes siguiente</span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg></a>
     </nav>
     <p class="solo-pantalla"><button type="button" onclick="window.print()"
            th:text="#{informe.imprimir}">Imprimir</button></p>

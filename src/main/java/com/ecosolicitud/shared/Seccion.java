@@ -20,6 +20,7 @@ public enum Seccion {
             Rol.ORGANIZACION),
     ESTADISTICAS("seccion.estadisticas", Rutas.ESTADISTICAS, "grafico",
             Rol.CIUDADANO, Rol.ORGANIZACION),
+    AYUDA("seccion.ayuda", Rutas.AYUDA, "ayuda", Rol.CIUDADANO, Rol.ORGANIZACION),
     OPINION("opinion.enlace", Rutas.OPINION, "mensaje", Rol.CIUDADANO,
             Rol.ORGANIZACION);
 
