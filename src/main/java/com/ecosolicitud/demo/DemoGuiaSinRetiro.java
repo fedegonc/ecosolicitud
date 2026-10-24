@@ -50,7 +50,7 @@ final class DemoGuiaSinRetiro {
                         - [IDR — Residuos sólidos urbanos](https://www.rivera.gub.uy/medioambiente/estrategias/residuos/)
                         - [IMPO — Decreto 213/025, residuos de construcción](https://impo.com.uy/bases/decretos/213-2025/1)
                         - [Prefeitura de Livramento — Preguntas frecuentes](http://sdolivramento.com.br/faq)
-                        """, null, null, 5),
+                        """, null, null, 7),
                 new ArticuloSemilla("Orgánicos y restos de poda", """
                         Restos de comida y recortes de jardín son buena parte del residuo
                         domiciliario. Los acopios de esta demo no los retiran: van al
@@ -89,7 +89,7 @@ final class DemoGuiaSinRetiro {
                         - [IDR — Punto Verde, Cantera Municipal](https://www.rivera.gub.uy/portal/inicia-el-lunes-9-de-junio-el-proyecto-punto-verde/)
                         - [Prefeitura de Livramento — Central de Resíduos de Poda](http://www.sdolivramento.com.br/documento/view/167/prefeitura-municipal-central-de-recebimentos-residuos-de-poda-2023-2025)
                         - [US EPA — Composting at Home](https://www.epa.gov/recycle)
-                        """, null, null, 6),
+                        """, null, null, 8),
                 new ArticuloSemilla("Muebles y voluminosos", """
                         Una heladera vieja o un colchón no entran en el contenedor y tampoco
                         los retiran los acopios. Son **residuos extraordinarios**: tienen
@@ -121,6 +121,6 @@ final class DemoGuiaSinRetiro {
 
                         - [IDR — Residuos sólidos urbanos](https://www.rivera.gub.uy/medioambiente/estrategias/residuos/)
                         - [Prefeitura de Livramento — Preguntas frecuentes](http://sdolivramento.com.br/faq)
-                        """, null, null, 7));
+                        """, null, null, 9));
     }
 }
