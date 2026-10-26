@@ -4,10 +4,12 @@
     <title th:text="#{seccion.nueva}">Nueva solicitud</title>
 </head>
 <body>
-<main layout:fragment="content" hx-boost="false">
-    <h1 th:text="#{seccion.nueva}">Nueva solicitud</h1>
-    <p th:text="#{nueva.intro}">Pedí el retiro en cuatro pasos</p>
-    <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>
+<main layout:fragment="content" hx-boost="false" class="solicitud-nueva">
+    <header class="nueva-cabecera">
+        <h1 th:text="#{seccion.nueva}">Nueva solicitud</h1>
+        <p class="nueva-intro" th:text="#{nueva.intro}">Pedí el retiro en cuatro pasos</p>
+        <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>
+    </header>
     <form th:action="@{${rutas.NUEVA}}" method="post" th:object="${form}" hx-indicator="this" class="form-nueva">
         <div class="resumen-errores" role="alert" tabindex="-1" th:if="${#fields.hasErrors('*')}">
             <p th:text="#{nueva.resumen.titulo}">Revisá estos datos antes de enviar</p>
@@ -15,21 +17,21 @@
                 <li th:each="e : ${#fields.errors('*')}" th:text="${e}">Error</li>
             </ul>
         </div>
-        <label class="campo">
-            <span th:text="#{nueva.ciudad}">Ciudad</span>
-            <select th:field="*{ciudad}" required th:attr="hx-get=@{${rutas.NUEVA}}"
-                    hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
-                    hx-include="closest form" hx-params="not _csrf" hx-indicator="#flujo">
-                <option value="" th:text="#{nueva.ciudad.elegir}">Elegí una ciudad</option>
-                <option th:each="c : ${ciudades}" th:value="${c}" th:text="#{${c.clave}}">Ciudad</option>
-            </select>
-            <span class="ayuda" th:text="#{nueva.ciudad.ayuda}">Ayuda</span>
-            <span class="error" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}">Error</span>
-        </label>
+        <div id="flujo" class="flujo" aria-live="polite" hx-swap="outerHTML">
+            <label class="campo bloque-ciudad">
+                <span th:text="#{nueva.ciudad}">Ciudad</span>
+                <select th:field="*{ciudad}" required th:attr="hx-get=@{${rutas.NUEVA}}"
+                        hx-target="#flujo" hx-select="#flujo" hx-replace-url="true"
+                        hx-include="closest form" hx-params="not _csrf" hx-indicator="#flujo">
+                    <option value="" th:text="#{nueva.ciudad.elegir}">Elegí una ciudad</option>
+                    <option th:each="c : ${ciudades}" th:value="${c}" th:text="#{${c.clave}}">Ciudad</option>
+                </select>
+                <span class="ayuda" th:text="#{nueva.ciudad.ayuda}">Ayuda</span>
+                <span class="error" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}">Error</span>
+            </label>
 
-        <div id="flujo" class="flujo" aria-live="polite">
             <!-- ya elegido (desde el centro o por la lista): resumen, no otra elección -->
-            <div class="campo" th:if="${centro != null}">
+            <div class="campo bloque-centro" th:if="${centro != null}">
                 <span th:text="#{nueva.centro}">Centro de acopio</span>
                 <p class="centro-resumen">
                     <span>
@@ -48,7 +50,7 @@
                    th:errors="*{organizacionId}">Error</p>
             </div>
 
-            <fieldset class="campo" th:if="${centro == null and !#lists.isEmpty(centros)}">
+            <fieldset class="campo bloque-centro" th:if="${centro == null and !#lists.isEmpty(centros)}">
                 <legend th:text="#{nueva.centro}">Centro de acopio</legend>
                 <label th:each="o : ${centros}" class="opcion-centro">
                     <input type="radio" th:field="*{organizacionId}" th:value="${o.id}"
@@ -71,7 +73,8 @@
             <p class="caja banner aviso-datos" role="note" th:if="${centro != null}"
                th:text="#{nueva.datos.prueba}">Usá datos de prueba</p>
 
-            <fieldset class="campo bloque-materiales" th:if="${centro != null}">
+            <div class="bloque-datos" th:if="${centro != null}">
+            <fieldset class="campo bloque-materiales">
                 <legend th:text="#{nueva.materiales.del.centro(${centro.nombre})}">Materiales</legend>
                 <div class="opciones-materiales">
                     <label th:each="m : ${materialesCentro}" class="opcion-material">
@@ -87,7 +90,7 @@
                    th:errors="*{materiales}">Error</p>
             </fieldset>
 
-            <fieldset class="campo bloque-contacto" th:if="${centro != null}">
+            <fieldset class="campo bloque-contacto">
                 <legend th:text="#{nueva.grupo.contacto}">Contacto</legend>
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
@@ -113,9 +116,11 @@
                     <span class="error" id="err-contacto" role="alert"><span th:errors="*{contacto}"></span></span>
                 </label>
             </fieldset>
+            </div>
 
             <fieldset class="campo bloque-ubicacion" th:if="${centro != null}">
                 <legend th:text="#{nueva.grupo.ubicacion}">Ubicación</legend>
+                <div class="bloque-direccion">
                 <label class="campo"
                        hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
                     <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{nueva.direccion}">Dirección</span></span>
@@ -137,6 +142,17 @@
                            hx-include="closest form">
                     <span class="error" id="err-referencia" role="alert"><span th:errors="*{referencia}"></span></span>
                 </label>
+                <label class="campo"
+                       hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
+                    <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="#{nueva.nota}">Nota</span></span>
+                    <textarea th:field="*{nota}" rows="2" th:maxlength="${limites.NOTA}"
+                              aria-describedby="err-nota"
+                              th:attr="hx-post=@{${rutas.NUEVA_VALIDAR}(campo='nota')},aria-invalid=${#fields.hasErrors('nota')}"
+                              hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
+                              hx-include="closest form"></textarea>
+                    <span class="error" id="err-nota" role="alert"><span th:errors="*{nota}"></span></span>
+                </label>
+                </div>
                 <div class="campo bloque-mapa">
                     <span th:text="#{mapa.titulo}">Ubicación en el mapa</span>
                     <input type="hidden" th:field="*{latitud}">
@@ -153,16 +169,6 @@
                     <span class="error" th:if="${#fields.hasErrors('latitud')}"
                           th:errors="*{latitud}">Error</span>
                 </div>
-                <label class="campo"
-                       hx-on::after-swap="this.querySelector('input,textarea').setAttribute('aria-invalid', this.querySelector('.error').textContent.trim() !== '')">
-                    <span><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="#{nueva.nota}">Nota</span></span>
-                    <textarea th:field="*{nota}" rows="3" th:maxlength="${limites.NOTA}"
-                              aria-describedby="err-nota"
-                              th:attr="hx-post=@{${rutas.NUEVA_VALIDAR}(campo='nota')},aria-invalid=${#fields.hasErrors('nota')}"
-                              hx-trigger="blur" hx-target="next .error" hx-swap="innerHTML"
-                              hx-include="closest form"></textarea>
-                    <span class="error" id="err-nota" role="alert"><span th:errors="*{nota}"></span></span>
-                </label>
                 <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#enviar'"></use></svg><span th:text="#{nueva.enviar}">Enviar</span></button>
             </fieldset>
         </div>

@@ -966,17 +966,66 @@ fieldset.campo legend {
 
 .form-nueva .centro-horario {
     display: block;
-    margin-top: var(--chico);
+    margin-top: 0;
+    font-size: var(--t-sm);
 }
 
-.form-nueva .flujo {
-    display: grid;
-    gap: var(--grande);
+.solicitud-nueva .nueva-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--chico) var(--pad);
+    margin-bottom: var(--chico);
+}
+
+.nueva-cabecera > p:last-child {
+    flex-basis: 100%;
+    font-size: var(--t-sm);
+}
+
+.solicitud-nueva h1 {
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.nueva-cabecera .nueva-intro {
+    font-weight: 600;
+    color: var(--acento);
+}
+
+.solicitud-nueva > form.form-nueva {
+    max-width: 88rem;
+}
+
+.form-nueva .flujo,
+.form-nueva .bloque-datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--pad);
+    align-items: flex-start;
+}
+
+.form-nueva .flujo > *,
+.form-nueva .bloque-datos > * {
+    flex: 1 1 100%;
 }
 
 .form-nueva .flujo > .campo,
+.form-nueva .bloque-datos > .campo,
 .form-nueva .aviso-datos {
     margin: 0;
+}
+
+.form-nueva .centro-resumen {
+    margin: 0;
+    padding: var(--chico) var(--pad);
+    align-items: center;
+    min-height: 4rem;
+}
+
+.form-nueva .aviso-datos {
+    padding: var(--chico) var(--pad);
+    font-size: var(--t-sm);
 }
 
 .form-nueva fieldset.campo {
@@ -989,6 +1038,31 @@ fieldset.campo legend {
 .form-nueva fieldset.campo > legend {
     padding: 0 var(--chico);
     margin-bottom: var(--chico);
+}
+
+.form-nueva fieldset .campo {
+    margin-bottom: var(--chico);
+}
+
+.form-nueva fieldset .campo:last-child {
+    margin-bottom: 0;
+}
+
+.form-nueva .error:empty {
+    display: none;
+}
+
+.form-nueva .ayuda {
+    font-weight: 400;
+}
+
+.form-nueva .bloque-ubicacion > button {
+    width: 100%;
+    margin-top: var(--chico);
+}
+
+.form-nueva textarea {
+    resize: vertical;
 }
 
 .form-nueva .opciones-materiales {
@@ -1026,9 +1100,11 @@ fieldset.campo legend {
 }
 
 /* cascada: ubicación aparece cuando nombre y contacto están llenos */
-.flujo:has([name="nombre"]:placeholder-shown) .bloque-ubicacion,
-.flujo:has([name="contacto"]:placeholder-shown) .bloque-ubicacion {
-    display: none;
+@media (max-width: 63.999rem) {
+    .flujo:has([name="nombre"]:placeholder-shown) .bloque-ubicacion,
+    .flujo:has([name="contacto"]:placeholder-shown) .bloque-ubicacion {
+        display: none;
+    }
 }
 /* ============================================================
    Componente: Avisos (timeline para ciudadano, kanban para org)
@@ -1413,47 +1489,104 @@ fieldset.campo legend {
    el mapa a la izquierda de los datos de ubicación; en celular sigue
    siendo una sola columna que se abre hacia abajo */
 @media (min-width: 64rem) {
-    main > form.form-nueva {
-        max-width: 64rem;
+    main.solicitud-nueva {
+        padding: var(--pad) var(--pad) var(--chico);
     }
 
-    .form-nueva .flujo {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: var(--grande);
-        align-items: start;
+    .form-nueva .flujo,
+    .form-nueva .bloque-datos {
+        gap: var(--chico) var(--pad);
     }
 
-    .form-nueva .flujo > * {
-        grid-column: 1 / -1;
+    .form-nueva fieldset.campo {
+        padding: var(--chico) var(--pad) var(--pad);
     }
 
-    .form-nueva .flujo > .bloque-materiales {
-        grid-column: 1;
+    .form-nueva fieldset.campo > legend {
+        margin-bottom: 0;
     }
 
-    .form-nueva .flujo > .bloque-contacto {
-        grid-column: 2;
+    .form-nueva .campo > span {
+        margin-bottom: calc(var(--chico) / 2);
     }
 
-    .bloque-ubicacion {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: var(--grande);
-        align-items: start;
+    .form-nueva .campo > .ayuda {
+        margin-bottom: 0;
+        margin-top: calc(var(--chico) / 2);
     }
 
-    .bloque-ubicacion > * {
-        grid-column: 2;
+    .form-nueva .campo :is(input[type="text"], input[type="tel"], select, textarea) {
+        padding: calc(.75 * var(--chico)) var(--chico);
     }
 
-    .bloque-ubicacion > .bloque-mapa {
-        grid-column: 1;
-        grid-row: 1 / span 4;
+    .form-nueva button[type="submit"] {
+        padding: var(--chico) var(--pad);
     }
 
-    .bloque-ubicacion .mapa-editable {
-        height: 22rem;
+    .pagina:has(> .solicitud-nueva) .pie-pagina {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--chico) var(--pad);
+        padding: var(--chico);
+        font-size: var(--t-sm);
+    }
+
+    .form-nueva .flujo > .bloque-ciudad {
+        flex: 1 1 14rem;
+    }
+
+    .form-nueva .flujo > .bloque-centro {
+        flex: 3 1 26rem;
+    }
+
+    .form-nueva .flujo > .bloque-datos {
+        flex: 1 1 18rem;
+    }
+
+    .form-nueva .flujo > .bloque-ubicacion {
+        flex: 1.65 1 28rem;
+    }
+
+    .form-nueva .bloque-contacto {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--chico) var(--pad);
+    }
+
+    .form-nueva .bloque-contacto > .campo {
+        flex: 1 1 10rem;
+        margin: 0;
+    }
+
+    .form-nueva .bloque-ubicacion {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--chico) var(--pad);
+    }
+
+    .form-nueva .bloque-ubicacion > .bloque-direccion,
+    .form-nueva .bloque-ubicacion > .bloque-mapa {
+        flex: 1 1 14rem;
+        margin: 0;
+    }
+
+    .form-nueva .bloque-ubicacion > .bloque-mapa {
+        order: -1;
+    }
+
+    .form-nueva .mapa-editable {
+        height: clamp(8rem, 19vh, 11rem);
+    }
+
+    .form-nueva .mapa-acciones {
+        gap: var(--chico);
+        margin-top: var(--chico);
+        font-size: var(--t-sm);
+    }
+
+    .form-nueva .mapa-acciones button {
+        padding: var(--chico);
     }
 }
 
