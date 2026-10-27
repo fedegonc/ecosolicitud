@@ -65,9 +65,7 @@
                             <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.icono}"></use></svg>
                             <span th:text="#{${s.clave}}">Sección</span>
                             <span class="badge-live" th:if="${s.name() == 'AVISOS'}"
-                                  th:attr="hx-get=@{${rutas.AVISOS_CONTADOR}},data-n=${avisosSinLeer}"
-                                  hx-trigger="every 30s" hx-swap="innerHTML"
-                                  aria-live="polite">
+                                  th:attr="data-n=${avisosSinLeer}" aria-live="polite">
                                 <span th:replace="~{secciones/badge :: badge}"></span>
                             </span>
                         </a>
@@ -270,5 +268,9 @@
             });
         });
     </script>
+    <!-- un solo pedido por página para el contador de avisos (sidebar y
+         móvil se actualizan juntos por oob), y solo con la pestaña visible -->
+    <span hidden th:attr="hx-get=@{${rutas.AVISOS_CONTADOR}}"
+          hx-trigger="every 60s [document.visibilityState === 'visible']" hx-swap="none"></span>
 </body>
 </html>

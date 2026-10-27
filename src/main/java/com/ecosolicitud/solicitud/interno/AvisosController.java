@@ -29,9 +29,10 @@ class AvisosController {
         return "secciones/avisos";
     }
 
-    // solo el badge: el nav lo pide periódicamente sin navegar
+    // solo el badge, fuera de banda: un único pedido periódico actualiza el
+    // de la barra lateral y el del menú móvil
     @GetMapping(Rutas.AVISOS_CONTADOR)
     String contador() {
-        return "secciones/badge :: badge";
+        return "secciones/badge :: contador-oob";
     }
 }
