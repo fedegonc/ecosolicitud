@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
@@ -33,6 +34,10 @@ class NavegacionAdvice {
     // constantes de Rutas y Limites para las plantillas: ${rutas.NUEVA}, ${limites.NOTA}
     private static final Map<String, Object> RUTAS = constantes(Rutas.class);
     private static final Map<String, Object> LIMITES = constantes(Limites.class);
+    // el QR solo depende de la raíz del despliegue: se genera una vez por raíz.
+    // La raíz sale del Host del pedido, así que el caché tiene tope
+    private static final int QR_MAXIMOS = 8;
+    private final Map<String, String> qrs = new ConcurrentHashMap<>();
 
     private final ActorSesion actor;
     private final OrganizacionService organizaciones;
@@ -124,8 +129,16 @@ class NavegacionAdvice {
     // el QR del pie del menú apunta a la raíz del despliegue
     @ModelAttribute("qr")
     String qr() {
-        return CodigoQr.svg(
-                ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
+        var raiz = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        var guardado = qrs.get(raiz);
+        if (guardado != null) {
+            return guardado;
+        }
+        var svg = CodigoQr.svg(raiz);
+        if (qrs.size() < QR_MAXIMOS) {
+            qrs.putIfAbsent(raiz, svg);
+        }
+        return svg;
     }
 
     @ModelAttribute("demoHabilitada")
