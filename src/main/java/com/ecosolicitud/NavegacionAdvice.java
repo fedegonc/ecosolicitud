@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
@@ -25,9 +26,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.thymeleaf.context.LazyContextVariable;
 
 import static java.util.stream.Collectors.toUnmodifiableMap;
 
+// Corre en todos los pedidos, también en los fragmentos htmx (el contador de
+// avisos cada 60 s). Lo que consulta la base o arma el layout es perezoso:
+// Thymeleaf lo calcula solo si la plantilla lo usa.
 @ControllerAdvice
 class NavegacionAdvice {
 
@@ -95,21 +100,26 @@ class NavegacionAdvice {
     }
 
     @ModelAttribute("organizaciones")
-    List<OrganizacionInfo> organizaciones() {
-        return actor.get() == Rol.ORGANIZACION ? organizaciones.todas() : List.of();
+    LazyContextVariable<List<OrganizacionInfo>> organizaciones() {
+        return perezosa(() -> actor.get() == Rol.ORGANIZACION ? organizaciones.todas() : List.of());
     }
 
     @ModelAttribute("organizacionActiva")
-    OrganizacionInfo organizacionActiva() {
-        return actor.get() == Rol.ORGANIZACION ? organizaciones.actual(actor.actual()) : null;
+    LazyContextVariable<OrganizacionInfo> organizacionActiva() {
+        return perezosa(() -> actor.get() == Rol.ORGANIZACION
+                ? organizaciones.actual(actor.actual()) : null);
     }
 
     // dos niveles como máximo: Inicio › Sección, o Sección › Página en las
     // subrutas (la sección queda enlazada y el controller agrega la miga
     // final, atributo "migaFinal"). La miga reemplaza a los enlaces "Volver".
     @ModelAttribute("migas")
-    List<Miga> migas(HttpServletRequest request) {
+    LazyContextVariable<List<Miga>> migas(HttpServletRequest request) {
         var ruta = request.getRequestURI();
+        return perezosa(() -> migasDe(ruta));
+    }
+
+    private static List<Miga> migasDe(String ruta) {
         try {
             var s = Seccion.desdeRuta(ruta);
             return s.getRuta().equals(ruta)
@@ -122,13 +132,17 @@ class NavegacionAdvice {
     }
 
     @ModelAttribute("avisosSinLeer")
-    long avisosSinLeer() {
-        return avisos.avisosSinLeer(actor.actual());
+    LazyContextVariable<Long> avisosSinLeer() {
+        return perezosa(() -> avisos.avisosSinLeer(actor.actual()));
     }
 
     // el QR del pie del menú apunta a la raíz del despliegue
     @ModelAttribute("qr")
-    String qr() {
+    LazyContextVariable<String> qr() {
+        return perezosa(this::qrDeLaRaiz);
+    }
+
+    private String qrDeLaRaiz() {
         var raiz = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         var guardado = qrs.get(raiz);
         if (guardado != null) {
@@ -149,6 +163,15 @@ class NavegacionAdvice {
     @ModelAttribute("demoReinicio")
     boolean demoReinicio() {
         return demoReinicio;
+    }
+
+    private static <T> LazyContextVariable<T> perezosa(Supplier<T> valor) {
+        return new LazyContextVariable<>() {
+            @Override
+            protected T loadValue() {
+                return valor.get();
+            }
+        };
     }
 
     private static Map<String, Object> constantes(Class<?> clase) {
