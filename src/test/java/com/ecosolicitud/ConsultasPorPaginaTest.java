@@ -52,7 +52,7 @@ class ConsultasPorPaginaTest {
             Rutas.OPINION, 1);
 
     private static final Map<String, Long> ORGANIZACION = presupuesto(
-            Rutas.ORG_SOLICITUDES, 18,
+            Rutas.ORG_SOLICITUDES, 16,
             Rutas.ORG_PERFIL, 12,
             Rutas.AVISOS, 14);
 

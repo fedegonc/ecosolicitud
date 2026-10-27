@@ -1,8 +1,10 @@
 package com.ecosolicitud.organizacion;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Service
 public class OrganizacionService {
@@ -33,6 +34,7 @@ public class OrganizacionService {
     // separado); al escribir se olvidan para que el resto del pedido relea
     private static final String MEMO = "organizacion:";
     private static final String MEMO_TODAS = MEMO + "todas";
+    private static final String MEMO_NOMBRE = MEMO + "nombre:";
 
     private final OrganizacionRepository repositorio;
     private final CatalogoMateriales catalogo;
@@ -87,9 +89,29 @@ public class OrganizacionService {
                 .map(OrganizacionService::aInfo).toList();
     }
 
+    // cada lista de solicitudes pide los nombres de sus centros (la bandeja,
+    // tres veces el mismo): en un pedido solo se consultan los que faltan
     public Map<String, String> nombres(Collection<String> ids) {
-        return repositorio.findAllById(ids).stream()
-                .collect(toMap(Organizacion::getId, Organizacion::getNombre));
+        var almacen = AlmacenDelPedido.actual();
+        var nombres = new HashMap<String, String>();
+        var faltan = new ArrayList<String>();
+        for (var id : ids) {
+            var guardado = almacen == null ? null : (String) almacen.leer(MEMO_NOMBRE + id);
+            if (guardado != null) {
+                nombres.put(id, guardado);
+            } else {
+                faltan.add(id);
+            }
+        }
+        if (!faltan.isEmpty()) {
+            repositorio.findAllById(faltan).forEach(o -> {
+                nombres.put(o.getId(), o.getNombre());
+                if (almacen != null) {
+                    almacen.guardar(MEMO_NOMBRE + o.getId(), o.getNombre());
+                }
+            });
+        }
+        return nombres;
     }
 
     public boolean vacia() {
