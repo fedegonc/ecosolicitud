@@ -48,7 +48,7 @@ class ConsultasPorPaginaTest {
             Rutas.AVISOS, 11,
             Rutas.GUIA, 3,
             Rutas.COMUNIDAD, 3,
-            Rutas.ESTADISTICAS, 8,
+            Rutas.ESTADISTICAS, 6,
             Rutas.OPINION, 1);
 
     private static final Map<String, Long> ORGANIZACION = presupuesto(
@@ -77,6 +77,14 @@ class ConsultasPorPaginaTest {
     @DisplayName("Ciudadano: ninguna página supera su presupuesto de consultas")
     void ciudadano() {
         medir("ciudadano", new Sesion(), CIUDADANO);
+    }
+
+    @Test
+    @DisplayName("Estadísticas: la segunda visita del día sale de la caché")
+    void estadisticasDelDia() {
+        var sesion = new Sesion();
+        sesion.get(Rutas.ESTADISTICAS);
+        medir("caché", sesion, presupuesto(Rutas.ESTADISTICAS, 1));
     }
 
     @Test

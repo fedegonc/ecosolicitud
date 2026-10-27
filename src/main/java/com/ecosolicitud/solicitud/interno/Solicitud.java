@@ -37,7 +37,9 @@ import org.hibernate.annotations.BatchSize;
 @Entity
 @Table(name = "solicitudes", indexes = {
         @Index(name = "ix_sol_ciudadano", columnList = "ciudadano_id, creada_en"),
-        @Index(name = "ix_sol_org", columnList = "organizacion_id, estado")})
+        @Index(name = "ix_sol_org", columnList = "organizacion_id, estado"),
+        // estadísticas: solicitudes creadas desde una fecha, de todos los centros
+        @Index(name = "ix_sol_creada", columnList = "creada_en")})
 @Getter
 public class Solicitud {
 

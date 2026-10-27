@@ -3,7 +3,6 @@ package com.ecosolicitud.solicitud;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import com.ecosolicitud.shared.Fechas;
 import com.ecosolicitud.solicitud.interno.Solicitud;
@@ -27,22 +26,18 @@ public class MetricasService {
         this.repositorio = repositorio;
     }
 
-    public SolicitudMetricas total(Instant desde) {
-        return SolicitudMetricas.desde(creadasDesde(desde), Instant.now());
-    }
-
-    public Map<String, SolicitudMetricas> porCentro(Instant desde) {
+    // total, por centro y series sobre una sola carga (las estadísticas
+    // necesitan las tres; pedirlas por separado cargaba las filas tres veces)
+    public MetricasDelPeriodo delPeriodo(Instant desde) {
         var ahora = Instant.now();
-        return creadasDesde(desde).stream()
+        var creadas = creadasDesde(desde);
+        var porCentro = creadas.stream()
                 .collect(groupingBy(Solicitud::getOrganizacionId,
                         collectingAndThen(toList(), l -> SolicitudMetricas.desde(l, ahora))));
-    }
-
-    // series de los gráficos; desde == null agrupa por mes todo el historial
-    public SolicitudSeries series(Instant desde) {
-        var hoy = LocalDate.now(Fechas.ZONA);
-        return SolicitudSeries.desde(creadasDesde(desde),
-                desde == null ? null : desde.atZone(Fechas.ZONA).toLocalDate(), hoy);
+        var series = SolicitudSeries.desde(creadas,
+                desde == null ? null : desde.atZone(Fechas.ZONA).toLocalDate(),
+                LocalDate.now(Fechas.ZONA));
+        return new MetricasDelPeriodo(SolicitudMetricas.desde(creadas, ahora), porCentro, series);
     }
 
     private List<Solicitud> creadasDesde(Instant desde) {
