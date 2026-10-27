@@ -19,5 +19,7 @@ RUN DATABASE_URL=jdbc:h2:mem:cds DATABASE_USER=sa DATABASE_PASSWORD=sa \
     -Dspring.context.exit=onRefresh -jar app.jar
 EXPOSE 8080
 # Render free: 0,1 CPU y 512 MB. Sin opciones la JVM usa 1/4 de la RAM para el
-# heap y gasta CPU compilando con C2; solo C1 + SerialGC arranca y responde mejor
-ENTRYPOINT ["java", "-XX:SharedArchiveFile=app.jsa", "-XX:MaxRAMPercentage=70", "-XX:TieredStopAtLevel=1", "-XX:+UseSerialGC", "-jar", "app.jar"]
+# heap (60 % deja ~200 MB para metaspace, hilos y code cache: con 70 % el
+# total rozaba los 512 MB bajo carga) y gasta CPU compilando con C2; solo C1
+# + SerialGC arranca y responde mejor
+ENTRYPOINT ["java", "-XX:SharedArchiveFile=app.jsa", "-XX:MaxRAMPercentage=60", "-XX:TieredStopAtLevel=1", "-XX:+UseSerialGC", "-jar", "app.jar"]
