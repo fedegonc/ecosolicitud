@@ -10,9 +10,11 @@ import java.util.Optional;
 import com.ecosolicitud.organizacion.interno.Organizacion;
 import com.ecosolicitud.organizacion.interno.OrganizacionRepository;
 import com.ecosolicitud.shared.Actor;
+import com.ecosolicitud.shared.AlmacenDelPedido;
 import com.ecosolicitud.shared.CatalogoMateriales;
 import com.ecosolicitud.shared.Ciudad;
 import com.ecosolicitud.shared.Material;
+import com.ecosolicitud.shared.Memo;
 import com.ecosolicitud.shared.Ubicacion;
 
 import org.springframework.data.domain.Sort;
@@ -26,6 +28,12 @@ import static java.util.stream.Collectors.toMap;
 @Service
 public class OrganizacionService {
 
+    // en un mismo pedido la lista y la organización activa se consultan una
+    // vez (el controller, los listados, el menú y los avisos las piden por
+    // separado); al escribir se olvidan para que el resto del pedido relea
+    private static final String MEMO = "organizacion:";
+    private static final String MEMO_TODAS = MEMO + "todas";
+
     private final OrganizacionRepository repositorio;
     private final CatalogoMateriales catalogo;
 
@@ -36,8 +44,9 @@ public class OrganizacionService {
     }
 
     public List<OrganizacionInfo> todas() {
-        return repositorio.findAll(Sort.by("nombre")).stream()
-                .map(OrganizacionService::aInfo).toList();
+        return Memo.obtener(AlmacenDelPedido.actual(), MEMO_TODAS,
+                () -> repositorio.findAll(Sort.by("nombre")).stream()
+                        .map(OrganizacionService::aInfo).toList());
     }
 
     public List<AcopiosCiudad> porCiudad() {
@@ -50,8 +59,10 @@ public class OrganizacionService {
 
     public OrganizacionInfo actual(Actor actor) {
         String id = actor.organizacionId();
-        var encontrada = id != null ? buscar(id) : Optional.<OrganizacionInfo>empty();
-        return encontrada.orElseGet(this::primera);
+        return Memo.obtener(AlmacenDelPedido.actual(), MEMO + "actual:" + id, () -> {
+            var encontrada = id != null ? buscar(id) : Optional.<OrganizacionInfo>empty();
+            return encontrada.orElseGet(this::primera);
+        });
     }
 
     public Optional<OrganizacionInfo> buscar(String id) {
@@ -94,6 +105,7 @@ public class OrganizacionService {
         }
         org.actualizar(catalogo.seleccionActiva(materiales), horario, telefono, ubicacion);
         repositorio.save(org);
+        AlmacenDelPedido.olvidarTodo(MEMO);
         return true;
     }
 
@@ -101,6 +113,7 @@ public class OrganizacionService {
     public void reemplazarTodas(List<OrganizacionInfo> dataset) {
         repositorio.deleteAll();
         dataset.forEach(this::guardarNueva);
+        AlmacenDelPedido.olvidarTodo(MEMO);
     }
 
     private void guardarNueva(OrganizacionInfo info) {
