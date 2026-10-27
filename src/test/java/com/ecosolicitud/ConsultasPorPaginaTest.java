@@ -46,9 +46,9 @@ class ConsultasPorPaginaTest {
             Rutas.NUEVA + "?ciudad=RIVERA&organizacionId=frontera-limpia", 3,
             Rutas.ACOPIOS, 3,
             Rutas.AVISOS, 11,
-            Rutas.GUIA, 7,
+            Rutas.GUIA, 3,
             Rutas.COMUNIDAD, 3,
-            Rutas.ESTADISTICAS, 12,
+            Rutas.ESTADISTICAS, 8,
             Rutas.OPINION, 1);
 
     private static final Map<String, Long> ORGANIZACION = presupuesto(
