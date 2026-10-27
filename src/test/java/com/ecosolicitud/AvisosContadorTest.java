@@ -29,9 +29,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// El contador de avisos lo pide un único elemento por página (cada 60 s, solo
-// con la pestaña visible) y la respuesta fuera de banda actualiza los dos
-// badges: barra lateral y menú móvil. Sin JavaScript: el Rhino de HtmlUnit no
+// El contador de avisos no se consulta periódicamente: viene en cada página y
+// un único elemento lo pide al volver a la pestaña; la respuesta fuera de
+// banda actualiza los dos badges: barra lateral y menú móvil. Sin JavaScript: el Rhino de HtmlUnit no
 // interpreta htmx 2; que htmx efectivamente pida y reemplace se verificó con
 // Chromium (Playwright). Acá se fija la estructura de la que depende.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -71,13 +71,13 @@ class AvisosContadorTest {
     }
 
     @Test
-    @DisplayName("Un solo pedido periódico y respuesta fuera de banda para los dos badges")
+    @DisplayName("Sin consultas periódicas: un pedido al volver a la pestaña actualiza los dos badges")
     void unPedidoActualizaLosDosBadges() {
         driver.get("http://localhost:" + port + Rutas.MIS_SOLICITUDES);
         var pollers = driver.findElements(By.cssSelector("[hx-get='" + Rutas.AVISOS_CONTADOR + "']"));
         assertThat(pollers).hasSize(1);
         assertThat(pollers.getFirst().getDomAttribute("hx-trigger"))
-                .isEqualTo("every 60s [document.visibilityState === 'visible']");
+                .isEqualTo("visibilitychange[document.visibilityState === 'visible'] from:document");
         assertThat(badges()).hasSize(2);
 
         var ciudadano = new Actor(Rol.CIUDADANO, CIUDADANO_DEMO, "Martina López", null);

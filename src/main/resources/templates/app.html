@@ -268,9 +268,11 @@
             });
         });
     </script>
-    <!-- un solo pedido por página para el contador de avisos (sidebar y
-         móvil se actualizan juntos por oob), y solo con la pestaña visible -->
+    <!-- contador de avisos sin consultas periódicas: viene en cada página y en
+         la respuesta de cada acción (oob); además se pide una vez al volver a
+         la pestaña. Sidebar y móvil se actualizan juntos por oob -->
     <span hidden th:attr="hx-get=@{${rutas.AVISOS_CONTADOR}}"
-          hx-trigger="every 60s [document.visibilityState === 'visible']" hx-swap="none"></span>
+          hx-trigger="visibilitychange[document.visibilityState === 'visible'] from:document"
+          hx-swap="none"></span>
 </body>
 </html>
