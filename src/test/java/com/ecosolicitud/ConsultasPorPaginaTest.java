@@ -2,7 +2,6 @@ package com.ecosolicitud;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import com.ecosolicitud.demo.DemoService;
 import com.ecosolicitud.shared.Rutas;
@@ -40,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConsultasPorPaginaTest {
 
     private static final Map<String, Long> CIUDADANO = presupuesto(
-            Rutas.RAIZ, 10,
+            Rutas.RAIZ, 12,
             Rutas.MIS_SOLICITUDES, 8,
             Rutas.NUEVA, 1,
             Rutas.NUEVA + "?ciudad=RIVERA&organizacionId=frontera-limpia", 3,
@@ -52,7 +51,7 @@ class ConsultasPorPaginaTest {
             Rutas.OPINION, 1);
 
     private static final Map<String, Long> ORGANIZACION = presupuesto(
-            Rutas.ORG_SOLICITUDES, 16,
+            Rutas.ORG_SOLICITUDES, 18,
             Rutas.ORG_PERFIL, 12,
             Rutas.AVISOS, 14);
 
@@ -122,11 +121,9 @@ class ConsultasPorPaginaTest {
         private final String csrf;
 
         Sesion() {
-            var pagina = rest.getForEntity(Rutas.ACOPIOS, String.class);
-            cookie = pagina.getHeaders().getFirst(HttpHeaders.SET_COOKIE);
-            var m = Pattern.compile("name=\"_csrf\"\\s+value=\"([^\"]+)\"").matcher(pagina.getBody());
-            assertThat(m.find()).isTrue();
-            csrf = m.group(1);
+            var acceso = AccesoDemoTest.entrar(rest);
+            cookie = acceso.cookie();
+            csrf = acceso.csrf();
         }
 
         HttpStatus get(String ruta) {

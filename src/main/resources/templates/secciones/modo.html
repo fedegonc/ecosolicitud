@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{modo.titulo}">Acceso a demostracion</title>
+</head>
+<body>
+<main layout:fragment="content" class="solicitud-nueva">
+    <header class="nueva-cabecera">
+        <h1 th:text="#{modo.titulo}">Acceso a demostración</h1>
+    </header>
+    <section class="tarjeta caja modo-panel">
+        <p th:text="#{modo.alcance}">Solo cambia esta sesion; no cambia la base ni el perfil del servidor.</p>
+        <th:block th:if="${demoHabilitada}">
+            <p class="banner" role="status" th:text="#{modo.activo}">Demostracion activa en esta sesion.</p>
+            <p><a th:href="@{${rutas.RAIZ}}" th:text="#{modo.volver}">Ir a la aplicacion</a></p>
+            <form th:action="@{${rutas.MODO_SALIR}}" method="post" hx-boost="false" class="form-nueva">
+                <button type="submit" th:text="#{modo.salir}">Salir de demo</button>
+            </form>
+        </th:block>
+        <form th:unless="${demoHabilitada}" th:action="@{${rutas.MODO_DEV}}" method="post" hx-boost="false" class="form-nueva">
+            <p class="banner alerta" role="alert" th:if="${param.error != null}"
+               th:text="#{modo.error}">Usuario o clave incorrectos.</p>
+            <label class="campo">
+                <span th:text="#{modo.usuario}">Usuario</span>
+                <input type="text" name="username" autocomplete="username" maxlength="100" required>
+            </label>
+            <label class="campo">
+                <span th:text="#{modo.clave}">Clave</span>
+                <input type="password" name="password" autocomplete="current-password" maxlength="72" required>
+            </label>
+            <button type="submit" th:text="#{modo.entrar}">Activar demo</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

@@ -52,6 +52,24 @@ public enum Seccion {
         return roles.contains(rol);
     }
 
+    // datos personales o acciones de cuenta: solo con sesión activa
+    private static final Set<Seccion> PRIVADAS = EnumSet.of(
+            ORG_SOLICITUDES, ORG_PERFIL, NUEVA, MIS_SOLICITUDES, AVISOS);
+
+    public boolean publica() {
+        return !PRIVADAS.contains(this);
+    }
+
+    public static List<Seccion> principales(Rol rol, boolean autenticado) {
+        var r = principales(rol);
+        return autenticado ? r : r.stream().filter(Seccion::publica).toList();
+    }
+
+    public static List<Seccion> mas(Rol rol, boolean autenticado) {
+        var r = mas(rol);
+        return autenticado ? r : r.stream().filter(Seccion::publica).toList();
+    }
+
     public static List<Seccion> paraRol(Rol rol) {
         return Arrays.stream(values()).filter(s -> s.permite(rol)).toList();
     }

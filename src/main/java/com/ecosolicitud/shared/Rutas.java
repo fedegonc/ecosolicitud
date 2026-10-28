@@ -40,6 +40,13 @@ public final class Rutas {
     public static final String DEMO_ROL = "/demo/rol";
     public static final String DEMO_ORGANIZACION = "/demo/organizacion";
     public static final String DEMO_REINICIAR = "/demo/reiniciar";
+    public static final String MODO_DEV = "/modo/dev";
+    public static final String MODO_SALIR = MODO_DEV + "/salir";
+
+    public static final String CUENTA_REGISTRAR = "/cuenta/registrar";
+    public static final String CUENTA_ENTRAR = "/cuenta/entrar";
+    public static final String CUENTA_SALIR = "/cuenta/salir";
+    public static final String CUENTA_CONDICIONES = "/cuenta/condiciones";
 
     public static final String DEV_CASOS_DE_USO = "/dev/casos-de-uso";
     public static final String DEV_LAYOUT_SYSTEM = "/dev/layout-system";

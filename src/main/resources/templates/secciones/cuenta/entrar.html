@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{cuenta.entrar.titulo}">Ingresar</title>
+</head>
+<body>
+<main layout:fragment="content" class="solicitud-nueva">
+    <header class="nueva-cabecera">
+        <h1 th:text="#{cuenta.entrar.titulo}">Ingresar</h1>
+    </header>
+    <section class="tarjeta caja">
+        <form th:action="@{${rutas.CUENTA_ENTRAR}}" method="post" hx-boost="false" class="form-nueva">
+            <p class="banner alerta" role="alert" th:if="${param.error != null}"
+               th:text="#{cuenta.entrar.error}">Usuario o contraseña incorrectos.</p>
+            <label class="campo">
+                <span th:text="#{cuenta.entrar.usuario}">Nombre de usuario</span>
+                <input type="text" name="username" autocomplete="username" required>
+            </label>
+            <label class="campo">
+                <span th:text="#{cuenta.clave}">Contraseña</span>
+                <input type="password" name="password" autocomplete="current-password" maxlength="72" required>
+            </label>
+            <button type="submit" th:text="#{cuenta.entrar.boton}">Ingresar</button>
+            <p class="campo-pie"><a th:href="@{${rutas.CUENTA_REGISTRAR}}" th:text="#{cuenta.entrar.registro}">Crear cuenta</a></p>
+        </form>
+    </section>
+</main>
+</body>
+</html>

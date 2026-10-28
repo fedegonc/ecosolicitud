@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html th:lang="${#locale.language}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+    <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title layout:title-pattern="$CONTENT_TITLE · $LAYOUT_TITLE">EcoSolicitud</title>
@@ -28,6 +29,7 @@
                 {"not": {"href_matches": "*ciudad=*"}},
                 {"not": {"href_matches": "/avisos*"}},
                 {"not": {"href_matches": "/demo*"}},
+                {"not": {"href_matches": "/modo/*"}},
                 {"not": {"href_matches": "*logout*"}},
                 {"not": {"href_matches": "*cerrar*"}}
             ]},
@@ -58,6 +60,18 @@
                 </p>
             </header>
             <nav th:fragment="secciones" class="secciones" th:aria-label="#{nav.secciones}">
+                <div class="sesion-bloque">
+                    <th:block th:if="${cuentaNombre == null and !demoHabilitada}">
+                        <a class="sesion-boton" th:href="@{${rutas.CUENTA_ENTRAR}}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#persona'"></use></svg><span th:text="#{cuenta.entrar.boton}">Ingresar</span></a>
+                        <a class="sesion-boton" th:href="@{${rutas.CUENTA_REGISTRAR}}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg><span th:text="#{cuenta.registrar.boton}">Crear cuenta</span></a>
+                    </th:block>
+                    <form th:if="${cuentaNombre != null}"
+                          th:action="@{${rutas.CUENTA_SALIR}}" method="post"
+                          hx-boost="false" class="salir-cuenta">
+                        <span class="cuenta-nombre"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#persona'"></use></svg><span th:text="${cuentaNombre}">usuario</span></span>
+                        <button type="submit" class="sesion-boton"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-zq'"></use></svg><span th:text="#{cuenta.salir}">Salir</span></button>
+                    </form>
+                </div>
                 <ul>
                     <li th:each="s : ${secciones}">
                         <a th:fragment="item" th:href="${s.ruta}"
@@ -70,19 +84,10 @@
                             </span>
                         </a>
                     </li>
+                    <li th:each="s : ${seccionesMas}"><a th:replace="~{app :: item}"></a></li>
                 </ul>
-                <!-- "Más": el resto de las secciones, la demo y el QR; abierto
-                     si la página actual vive adentro -->
-                <details class="mas" th:open="${masAbierto}">
-                    <summary>
-                        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#menu'"></use></svg>
-                        <span th:text="#{nav.mas}">Más</span>
-                    </summary>
-                    <ul>
-                        <li th:each="s : ${seccionesMas}"><a th:replace="~{app :: item}"></a></li>
-                    </ul>
-                    <footer th:fragment="pie">
-                        <details class="demo-bloque">
+                <footer th:fragment="pie">
+                        <details class="demo-bloque" th:if="${demoHabilitada}">
                             <summary class="demo" th:text="#{demo.etiqueta}">Modo demostración</summary>
                         <p class="demo-nota" th:text="#{demo.centros}"></p>
                         <p class="demo-nota" th:text="#{demo.vercomo}">Ver como:</p>
@@ -107,10 +112,8 @@
                             <input type="hidden" name="volver" th:value="${rutaActual}">
                             <button type="submit" th:text="#{demo.cambiar}">Cambiar</button>
                         </form>
-                        <form th:if="${demoHabilitada and demoReinicio}"
-                              th:action="@{${rutas.DEMO_REINICIAR}}" method="post" class="reiniciar" hx-indicator="this">
-                            <input type="hidden" name="volver" th:value="${rutaActual}">
-                            <button type="submit"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#basurero'"></use></svg><span th:text="#{demo.reiniciar}">Borrar</span></button>
+                        <form th:action="@{${rutas.MODO_SALIR}}" method="post" hx-boost="false" class="salir-demo">
+                            <button type="submit" th:text="#{modo.salir}">Salir de demo</button>
                         </form>
                         <!-- copia en .txt de las solicitudes del centro activo; fuera de
                              hx-boost para que el navegador descargue el archivo -->
@@ -123,12 +126,11 @@
                         </figure>
                         <a class="instalar-app" href="#" hidden><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{instalar.boton}">Instalar</span></a>
                         <a th:href="@{${rutas.CREDITOS}}" th:text="#{creditos.titulo}">Créditos y licencias</a>
-                        <a href="https://www.overleaf.com/project/6adf76e7c160c51f7bdd9dbf/share#0680d5788f70348f41e76ac1861188251b763a194f9e8a19"
+                        <a th:if="${demoHabilitada}" href="https://www.overleaf.com/project/6adf76e7c160c51f7bdd9dbf/share#0680d5788f70348f41e76ac1861188251b763a194f9e8a19"
                            rel="noopener" target="_blank" hx-boost="false" th:text="#{nav.overleaf}">TCC en Overleaf</a>
-                        <a href="https://docs.google.com/presentation/d/1bYmGIuzlMirkWTx3RW-vLrtHKVv5a8RWkd-l__vKzhw/edit?usp=sharing"
+                        <a th:if="${demoHabilitada}" href="https://docs.google.com/presentation/d/1bYmGIuzlMirkWTx3RW-vLrtHKVv5a8RWkd-l__vKzhw/edit?usp=sharing"
                            rel="noopener" target="_blank" hx-boost="false" th:text="#{nav.presentacion}">Presentación del proyecto</a>
-                    </footer>
-                </details>
+                </footer>
             </nav>
         </aside>
         <div class="menu-movil">
@@ -152,12 +154,12 @@
             <nav th:replace="~{secciones/migas :: migas}"></nav>
             <main class="contenido" id="contenido" layout:fragment="content"></main>
             <footer class="pie-pagina">
-                <p th:text="#{pie.opinion.invitacion}">Tu opinión nos importa y nos ayuda a mejorar.</p>
+                <th:block th:if="${cuentaNombre != null or demoHabilitada}"><p th:text="#{pie.opinion.invitacion}">Tu opinión nos importa y nos ayuda a mejorar.</p>
                 <a th:href="@{${rutas.OPINION}}"
                    th:attr="aria-current=${rutaActual == rutas.OPINION} ? 'page' : null">
                     <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#mensaje'"></use></svg>
                     <span th:text="#{pie.opinion}">Responder cuestionario de usabilidad</span>
-                </a>
+                </a></th:block>
             </footer>
         </div>
     </div>

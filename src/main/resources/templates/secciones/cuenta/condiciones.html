@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{cuenta.condiciones.titulo}">Condiciones de uso</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="#{cuenta.condiciones.titulo}">Condiciones de uso</h1>
+    <section class="tarjeta caja">
+        <p th:text="#{cuenta.condiciones.texto}">Texto</p>
+        <p><a th:href="@{${rutas.CUENTA_REGISTRAR}}" th:text="#{cuenta.registrar.boton}">Volver al registro</a></p>
+    </section>
+</main>
+</body>
+</html>

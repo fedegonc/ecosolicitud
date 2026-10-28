@@ -4,7 +4,6 @@ import com.ecosolicitud.shared.Rutas;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import com.ecosolicitud.shared.Rol;
@@ -64,6 +63,7 @@ class ContratosTest {
     void setUp() {
         driver = new HtmlUnitDriver();
         base = "http://localhost:" + port;
+        AccesoDemoTest.entrar(driver, base);
     }
 
     @AfterEach
@@ -126,6 +126,7 @@ class ContratosTest {
         Allure.step("INV-SES-01 dos sesiones mantienen roles independientes", () -> {
             var otra = new HtmlUnitDriver();
             try {
+                AccesoDemoTest.entrar(otra, base);
                 otra.get(base + Rutas.MIS_SOLICITUDES);
                 assertThat(enlacesSidebar(otra)).isEqualTo(
                         rutas(menu(Rol.CIUDADANO)));
@@ -147,16 +148,13 @@ class ContratosTest {
         });
 
         Allure.step("INV-POST-02 POST con rol inválido responde 400", () -> {
-            var pagina = rest.getForEntity(Rutas.MIS_SOLICITUDES, String.class);
-            var matcher = Pattern.compile("name=\"_csrf\"\\s+value=\"([^\"]+)\"")
-                    .matcher(pagina.getBody());
-            assertThat(matcher.find()).isTrue();
+            var acceso = AccesoDemoTest.entrar(rest);
             var body = new LinkedMultiValueMap<String, String>();
             body.add("rol", "REY_MAGO");
-            body.add("_csrf", matcher.group(1));
+            body.add("_csrf", acceso.csrf());
             var headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            headers.add(HttpHeaders.COOKIE, pagina.getHeaders().getFirst(HttpHeaders.SET_COOKIE));
+            headers.add(HttpHeaders.COOKIE, acceso.cookie());
             var respuesta = rest.postForEntity(Rutas.DEMO_ROL,
                     new HttpEntity<>(body, headers), String.class);
             assertThat(respuesta.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);

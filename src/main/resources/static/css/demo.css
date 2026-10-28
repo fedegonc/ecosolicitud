@@ -1,5 +1,5 @@
 /* Modo demostración: cambio de rol, de organización y reinicio.
-   app.html lo carga solo con ecosolicitud.demo.habilitada=true. */
+   app.html lo carga solo en una sesion administradora de demo. */
 
 .demo-bloque {
     display: grid;
@@ -30,6 +30,7 @@
 
 .rol-switch button,
 .org-switch button,
+.salir-demo button,
 .reiniciar button {
     padding: var(--chico);
     border: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
@@ -47,6 +48,7 @@
 }
 
 .org-switch button,
+.salir-demo button,
 .reiniciar button {
     width: 100%;
 }

@@ -3,7 +3,6 @@ package com.ecosolicitud;
 import com.ecosolicitud.shared.Rutas;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 import com.ecosolicitud.demo.DemoService;
 import com.ecosolicitud.solicitud.Estado;
@@ -60,6 +59,7 @@ class SolicitudE5Test {
         demo.reiniciar();
         driver = new HtmlUnitDriver();
         base = "http://localhost:" + port;
+        AccesoDemoTest.entrar(driver, base);
     }
 
     @AfterEach
@@ -283,12 +283,9 @@ class SolicitudE5Test {
         private final String csrf;
 
         Sesion() {
-            var pagina = rest.getForEntity(Rutas.MIS_SOLICITUDES, String.class);
-            cookie = pagina.getHeaders().getFirst(HttpHeaders.SET_COOKIE);
-            var m = Pattern.compile("name=\"_csrf\"\\s+value=\"([^\"]+)\"")
-                    .matcher(pagina.getBody());
-            assertThat(m.find()).isTrue();
-            csrf = m.group(1);
+            var acceso = AccesoDemoTest.entrar(rest);
+            cookie = acceso.cookie();
+            csrf = acceso.csrf();
         }
 
         ResponseEntity<String> post(String ruta,

@@ -20,6 +20,13 @@ public class ActorSesion {
         return new Actor(rol, ciudadanoId, nombreCiudadano, organizacionId);
     }
 
+    public void autenticar(String ciudadanoId, String nombre, Rol rol, String organizacionId) {
+        this.ciudadanoId = ciudadanoId;
+        this.nombreCiudadano = nombre;
+        this.rol = rol;
+        this.organizacionId = organizacionId;
+    }
+
     public void cambiar(Rol rol) {
         this.rol = rol;
     }

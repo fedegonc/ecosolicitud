@@ -15,6 +15,8 @@ import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.solicitud.Filtro;
 import com.ecosolicitud.solicitud.ListadoService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 // La puerta de entrada: saludo, qué se puede hacer, el último pedido y tres consejos.
 @Controller
 class PortadaController {
@@ -33,14 +35,23 @@ class PortadaController {
     }
 
     @GetMapping(Rutas.RAIZ)
-    String portada(@RequestParam(required = false) String ciudad, Model modelo) {
+    String portada(@RequestParam(required = false) String ciudad,
+            HttpServletRequest request, Model modelo) {
         var sesion = actor.actual();
-        if (sesion.rol() == Rol.CIUDADANO) {
+        var autenticado = request.isUserInRole("CIUDADANO")
+                || request.isUserInRole("ORGANIZACION")
+                || request.isUserInRole("DEMO");
+        if (autenticado && sesion.rol() == Rol.CIUDADANO) {
             modelo.addAttribute("usuario", sesion.nombreCiudadano());
             listados.misSolicitudes(sesion.ciudadanoId(), Filtro.TODAS, 1).stream()
                     .findFirst().ifPresent(s -> modelo.addAttribute("ultimo", s));
         }
-        modelo.addAttribute("pagina", DesignDatos.para(localidad(ciudad), sesion.rol(), guia));
+        var local = localidad(ciudad);
+        modelo.addAttribute("pagina", DesignDatos.para(local, sesion.rol(), guia));
+        modelo.addAttribute("centros", organizaciones.todas().stream()
+                .filter(o -> o.ciudad() != null
+                        && o.ciudad().name().equals(local.name()))
+                .toList());
         return "portada";
     }
 

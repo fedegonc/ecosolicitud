@@ -617,25 +617,6 @@ main {
     font-weight: 600;
 }
 
-/* "Más": se despliega como una opción más del menú */
-:is(.sidebar, .menu-movil) .mas > summary {
-    border-radius: var(--radio);
-    display: flex;
-    align-items: center;
-    gap: calc(1.5 * var(--chico));
-    padding: calc(1.5 * var(--chico));
-    list-style: none;
-    cursor: pointer;
-}
-:is(.sidebar, .menu-movil) .mas > summary::-webkit-details-marker {
-    display: none;
-}
-:is(.sidebar, .menu-movil) .mas > summary:hover {
-    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
-}
-:is(.sidebar, .menu-movil) .mas[open] > summary {
-    font-weight: 600;
-}
 :is(.sidebar, .menu-movil) footer {
     display: grid;
     gap: var(--chico);
@@ -730,6 +711,7 @@ main > .tarjeta {
 }
 
 .campo input[type="text"],
+.campo input[type="password"],
 .campo input[type="tel"],
 .campo select,
 .campo textarea {
@@ -1644,4 +1626,68 @@ fieldset.campo legend {
     ::view-transition-new(root) {
         animation: none;
     }
+}
+
+/* bloque de sesión: va primero en el menú; enlace y botón comparten
+   exactamente la apariencia de ítem de sección */
+.sesion-bloque {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    padding-block: var(--chico);
+    border-bottom: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    margin-bottom: var(--chico);
+}
+
+.sesion-boton {
+    display: flex;
+    align-items: center;
+    gap: var(--chico);
+    min-height: var(--toque-min);
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    background: none;
+    color: inherit;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sesion-boton .icono {
+    flex: 0 0 auto;
+}
+
+.sesion-boton:hover {
+    text-decoration: underline;
+}
+
+.salir-cuenta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+}
+
+.salir-cuenta .cuenta-nombre {
+    display: flex;
+    align-items: center;
+    gap: var(--chico);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* fila de casilla: la casilla y su texto van en línea, no apilados */
+.campo-check {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-m);
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.campo-pie {
+    margin: var(--gap-l) 0 0;
 }

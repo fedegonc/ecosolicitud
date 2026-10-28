@@ -2,7 +2,6 @@ package com.ecosolicitud;
 
 import com.ecosolicitud.shared.Rutas;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import com.ecosolicitud.demo.DemoService;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
@@ -58,6 +57,7 @@ class OrganizacionE3Test {
         demo.reiniciar();
         driver = new HtmlUnitDriver();
         base = "http://localhost:" + port;
+        AccesoDemoTest.entrar(driver, base);
     }
 
     @AfterEach
@@ -166,13 +166,15 @@ class OrganizacionE3Test {
             demo.reiniciar();
         });
 
-        Allure.step("Reiniciar restaura el dataset y vuelve a la misma página", () -> {
+        Allure.step("El reinicio queda fuera de la web; los tests pueden restaurar su dataset", () -> {
             servicio.actualizarPerfil("acopio-verde", List.of(mat("VIDRIO")),
                     "Alterado", "+598 92 999 888", null,
                     servicio.buscar("acopio-verde").orElseThrow().version());
             driver.get(base + Rutas.ORG_SOLICITUDES);
-            driver.findElement(By.cssSelector(".sidebar .reiniciar button")).click();
-            assertThat(driver.getCurrentUrl()).endsWith(Rutas.ORG_SOLICITUDES);
+            assertThat(driver.findElements(By.cssSelector(".reiniciar"))).isEmpty();
+            assertThat(postConCsrf(Rutas.DEMO_REINICIAR, "volver", Rutas.ORG_SOLICITUDES)
+                    .getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+            demo.reiniciar();
             assertThat(servicio.buscar("acopio-verde").orElseThrow().horario())
                     .isEqualTo("Lunes a viernes, 8–17 h");
             assertThat(servicio.todas()).hasSize(3);
@@ -206,16 +208,13 @@ class OrganizacionE3Test {
 
     private org.springframework.http.ResponseEntity<String> postConCsrf(String ruta,
             String campo, String valor) {
-        var pagina = rest.getForEntity(Rutas.MIS_SOLICITUDES, String.class);
-        var matcher = Pattern.compile("name=\"_csrf\"\\s+value=\"([^\"]+)\"")
-                .matcher(pagina.getBody());
-        assertThat(matcher.find()).isTrue();
+        var acceso = AccesoDemoTest.entrar(rest);
         var body = new LinkedMultiValueMap<String, String>();
         body.add(campo, valor);
-        body.add("_csrf", matcher.group(1));
+        body.add("_csrf", acceso.csrf());
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add(HttpHeaders.COOKIE, pagina.getHeaders().getFirst(HttpHeaders.SET_COOKIE));
+        headers.add(HttpHeaders.COOKIE, acceso.cookie());
         return rest.postForEntity(ruta, new HttpEntity<>(body, headers), String.class);
     }
 }

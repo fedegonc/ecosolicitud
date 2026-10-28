@@ -148,7 +148,7 @@ public class SolicitudService {
     }
 
     private boolean esAutor(Actor actor, Solicitud s) {
-        return actor.esCiudadano() && s.getCiudadano().getId().equals(actor.ciudadanoId());
+        return Propiedad.esAutor(actor, s.getCiudadano().getId());
     }
 
     // una sola consulta de nombres para toda la lista; también la usa ListadoService

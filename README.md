@@ -57,7 +57,10 @@ mvn spring-boot:run
 # http://localhost:8080/
 ```
 
-Los datos demo se siembran al primer arranque (H2 en `data/`, ignorado por Git). El bloque "Modo demo" del menú permite cambiar de rol, de centro activo y reiniciar el dataset.
+Los datos demo se siembran al primer arranque (H2 en `data/`, ignorado por Git).
+Los controles de demostración están ocultos por defecto. Con credenciales
+configuradas, `/modo/dev` permite activarlos solo en la sesión administradora.
+El reinicio del dataset no está disponible desde la web.
 
 ## Pruebas y calidad
 
@@ -78,13 +81,39 @@ Docker multi-stage (`Dockerfile`), perfil `prod`. Variables:
 | Variable | Propósito |
 |---|---|
 | `SPRING_PROFILES_ACTIVE` | `prod` en producción |
-| `DATABASE_URL` / `DATABASE_USER` / `DATABASE_PASSWORD` | Postgres (Supabase pooler, puerto 5432); sin ellas prod usa H2 en archivo |
-| `ecosolicitud.demo.habilitada` | `false` apaga el modo demo |
-| `ECOSOLICITUD_DEMO_REINICIAR` | `true` re-habilita el reinicio del dataset (apagado en prod) |
+| `DATABASE_URL` / `DATABASE_USER` / `DATABASE_PASSWORD` | Postgres (Supabase pooler, puerto 5432); obligatorias en prod |
+| `MODO_ADMIN_USER` | Usuario del panel privado `/modo/dev`; sin valor no hay acceso |
+| `MODO_ADMIN_PASSWORD` o `MODO_ADMIN_PASSWORD_HASH` | Contraseña del panel (la versión hash se cifra con `testing/hash-modo.sh`) |
+| `ECOSOLICITUD_DEMO_HABILITADA` | `false` bloquea globalmente el acceso demo, incluso con credenciales |
 | `MAIL_HOST` / `MAIL_USERNAME` / `MAIL_PASSWORD` | SMTP del respaldo del cuestionario |
 | `CUESTIONARIO_DESTINO` | casilla que recibe los respaldos |
 
 En producción `/h2-console`, `/actuator/**` y `/livereload.js` responden 404 por diseño.
+
+### Panel privado de demostración
+
+1. Configurar `MODO_ADMIN_USER` y `MODO_ADMIN_PASSWORD` en Render y redeployar.
+   Alternativa más segura: `MODO_ADMIN_PASSWORD_HASH` con el hash de
+   `bash testing/hash-modo.sh` (no muestra la clave en pantalla ni historial).
+   Nunca guardar la contraseña ni su hash en Git.
+3. Abrir `/modo/dev` e ingresar el usuario y la contraseña original.
+   Aparecen los selectores de rol/centro, la advertencia de datos de prueba y
+   los enlaces a Overleaf/presentación, solo para esa sesión.
+4. Usar "Salir de demo" para invalidar la sesión, incluida la identidad simulada.
+
+No cambia `SPRING_PROFILES_ACTIVE`, no cambia la conexión a la base, no borra
+datos y no habilita el reinicio web. Al expirar la sesión o reiniciar la instancia
+se pierde el acceso demo. Las acciones del administrador sí usan la base actual:
+**no es un sandbox**. La siembra automática inicial conserva su comportamiento.
+
+Spring Security valida CSRF y rota el ID de sesión al ingresar. El panel limita
+a cinco POST de ingreso por minuto y dirección remota; no confía por su cuenta en
+`X-Forwarded-For`. Es un límite local a la instancia: detrás de un proxy, varios
+clientes pueden compartirlo. La navegación normal no consume intentos.
+
+Este panel no implementa todavía registro/login ciudadano: los visitantes siguen
+usando la identidad ciudadana provisional existente. Ocultar los controles no
+convierte los datos de demo en información privada por usuario.
 
 ## Documentación
 

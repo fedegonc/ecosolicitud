@@ -48,17 +48,14 @@ class NavegacionAdvice {
     private final OrganizacionService organizaciones;
     private final AvisoService avisos;
     private final boolean demoHabilitada;
-    private final boolean demoReinicio;
 
     NavegacionAdvice(ActorSesion actor, OrganizacionService organizaciones,
             AvisoService avisos,
-            @Value("${ecosolicitud.demo.habilitada:true}") boolean demoHabilitada,
-            @Value("${ecosolicitud.demo.reiniciar:true}") boolean demoReinicio) {
+            @Value("${ecosolicitud.demo.habilitada:true}") boolean demoHabilitada) {
         this.actor = actor;
         this.organizaciones = organizaciones;
         this.avisos = avisos;
         this.demoHabilitada = demoHabilitada;
-        this.demoReinicio = demoReinicio;
     }
 
     @ModelAttribute("rutaActual")
@@ -82,21 +79,21 @@ class NavegacionAdvice {
     }
 
     @ModelAttribute("secciones")
-    List<Seccion> secciones() {
-        return Seccion.principales(actor.get());
+    List<Seccion> secciones(HttpServletRequest request) {
+        return Seccion.principales(actor.get(), autenticado(request));
     }
 
     @ModelAttribute("seccionesMas")
-    List<Seccion> seccionesMas() {
-        return Seccion.mas(actor.get());
+    List<Seccion> seccionesMas(HttpServletRequest request) {
+        return Seccion.mas(actor.get(), autenticado(request));
     }
 
     // "Más" llega abierto si la página actual vive adentro
-    @ModelAttribute("masAbierto")
-    boolean masAbierto(HttpServletRequest request) {
-        var ruta = request.getRequestURI();
-        return Seccion.mas(actor.get()).stream()
-                .anyMatch(s -> ruta.equals(s.getRuta()) || ruta.startsWith(s.getRuta() + "/"));
+
+    // cuenta real o sesión demo-admin: ambas ya pasaron por un login
+    private static boolean autenticado(HttpServletRequest r) {
+        return r.isUserInRole("CIUDADANO") || r.isUserInRole("ORGANIZACION")
+                || r.isUserInRole("DEMO");
     }
 
     @ModelAttribute("organizaciones")
@@ -126,8 +123,15 @@ class NavegacionAdvice {
                     ? List.of(Miga.inicio(), Miga.actualClave(s.getClave()))
                     : List.of(Miga.seccion(s));
         } catch (ResponseStatusException e) {
-            return List.of(ruta.equals("/") ? Miga.actualClave("miga.inicio")
-                    : Miga.inicio());
+            var clave = Map.of(
+                    Rutas.CUENTA_ENTRAR, "cuenta.entrar.titulo",
+                    Rutas.CUENTA_REGISTRAR, "cuenta.registrar.titulo",
+                    Rutas.CUENTA_CONDICIONES, "cuenta.condiciones.titulo",
+                    Rutas.MODO_DEV, "modo.titulo").get(ruta);
+            return clave != null
+                    ? List.of(Miga.inicio(), Miga.actualClave(clave))
+                    : List.of(ruta.equals("/") ? Miga.actualClave("miga.inicio")
+                            : Miga.inicio());
         }
     }
 
@@ -156,13 +160,15 @@ class NavegacionAdvice {
     }
 
     @ModelAttribute("demoHabilitada")
-    boolean demoHabilitada() {
-        return demoHabilitada;
+    boolean demoHabilitada(HttpServletRequest request) {
+        return demoHabilitada && request.isUserInRole("DEMO");
     }
 
-    @ModelAttribute("demoReinicio")
-    boolean demoReinicio() {
-        return demoReinicio;
+    // nombre de la cuenta real autenticada (la demo usa ROLE_DEMO, no cuenta)
+    @ModelAttribute("cuentaNombre")
+    String cuentaNombre(HttpServletRequest request) {
+        return request.isUserInRole("CIUDADANO") || request.isUserInRole("ORGANIZACION")
+                ? actor.actual().nombreCiudadano() : null;
     }
 
     private static <T> LazyContextVariable<T> perezosa(Supplier<T> valor) {

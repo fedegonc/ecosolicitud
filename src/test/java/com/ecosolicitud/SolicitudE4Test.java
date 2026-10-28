@@ -33,6 +33,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -76,6 +77,7 @@ class SolicitudE4Test {
         demo.reiniciar();
         driver = new HtmlUnitDriver();
         base = "http://localhost:" + port;
+        AccesoDemoTest.entrar(driver, base);
     }
 
     @AfterEach
@@ -169,9 +171,14 @@ class SolicitudE4Test {
         });
 
         Allure.step("Parámetros inexistentes responden 400", () -> {
-            assertThat(rest.getForEntity("/nueva?ciudad=NARNIA", String.class).getStatusCode())
+            var h = new HttpHeaders();
+            h.add(HttpHeaders.COOKIE, AccesoDemoTest.entrar(rest).cookie());
+            var get = (java.util.function.Function<String, org.springframework.http.ResponseEntity<String>>)
+                    ruta -> rest.exchange(ruta, HttpMethod.GET,
+                            new HttpEntity<>(h), String.class);
+            assertThat(get.apply("/nueva?ciudad=NARNIA").getStatusCode())
                     .isEqualTo(HttpStatus.BAD_REQUEST);
-            assertThat(rest.getForEntity("/nueva?materiales=NARNIA", String.class).getStatusCode())
+            assertThat(get.apply("/nueva?materiales=NARNIA").getStatusCode())
                     .isEqualTo(HttpStatus.BAD_REQUEST);
         });
     }
@@ -390,16 +397,13 @@ class SolicitudE4Test {
 
     private org.springframework.http.ResponseEntity<String> postConCsrf(String ruta,
             java.util.function.Consumer<MultiValueMap<String, String>> completa) {
-        var pagina = rest.getForEntity(Rutas.MIS_SOLICITUDES, String.class);
-        var matcher = Pattern.compile("name=\"_csrf\"\\s+value=\"([^\"]+)\"")
-                .matcher(pagina.getBody());
-        assertThat(matcher.find()).isTrue();
+        var acceso = AccesoDemoTest.entrar(rest);
         var body = new LinkedMultiValueMap<String, String>();
         completa.accept(body);
-        body.add("_csrf", matcher.group(1));
+        body.add("_csrf", acceso.csrf());
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add(HttpHeaders.COOKIE, pagina.getHeaders().getFirst(HttpHeaders.SET_COOKIE));
+        headers.add(HttpHeaders.COOKIE, acceso.cookie());
         return rest.postForEntity(ruta, new HttpEntity<>(body, headers), String.class);
     }
 }

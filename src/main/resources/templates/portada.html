@@ -27,6 +27,17 @@
             </th:block>
         </div>
     </section>
+    <section id="ds-centros">
+        <div th:replace="~{componentes/ds :: cabecera(#{seccion.acopios}, ${rutas.ACOPIOS})}"></div>
+        <ul class="grilla">
+            <li class="tarjeta caja" th:each="c : ${centros}">
+                <a th:href="@{${rutas.ACOPIOS}}">
+                    <strong th:text="${c.nombre}">Centro</strong>
+                    <span class="tarjeta-detalle" th:text="${c.horario}">Horario</span>
+                </a>
+            </li>
+        </ul>
+    </section>
 </main>
 </body>
 </html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{cuenta.registrar.titulo}">Crear cuenta</title>
+</head>
+<body>
+<main layout:fragment="content" class="solicitud-nueva">
+    <header class="nueva-cabecera">
+        <h1 th:text="#{cuenta.registrar.titulo}">Crear cuenta</h1>
+    </header>
+    <section class="tarjeta caja">
+        <th:block th:if="${registrada}">
+            <p class="banner" role="status" th:text="#{cuenta.registrar.exito}">Cuenta creada.</p>
+            <p><a th:href="@{${rutas.RAIZ}}" th:text="#{cuenta.registrar.continuar}">Continuar</a></p>
+        </th:block>
+        <form th:unless="${registrada}" th:action="@{${rutas.CUENTA_REGISTRAR}}" method="post" hx-boost="false" class="form-nueva">
+            <label class="campo" th:classappend="${errores.containsKey('nombre')} ? 'invalido'">
+                <span th:text="#{cuenta.nombre}">Nombre de usuario</span>
+                <input type="text" name="nombre" maxlength="120" minlength="5" required
+                       autocomplete="username" pattern="\S+">
+                <span class="ayuda" th:text="#{cuenta.nombre.ayuda}">Mínimo 5 caracteres, sin espacios.</span>
+                <span class="error" th:if="${errores.containsKey('nombre')}" th:text="${errores.get('nombre')}">Error</span>
+            </label>
+            <label class="campo" th:classappend="${errores.containsKey('pais')} ? 'invalido'">
+                <span th:text="#{cuenta.pais}">País</span>
+                <select name="pais" required>
+                    <option value="UY">Uruguay</option>
+                    <option value="BR">Brasil</option>
+                </select>
+            </label>
+            <label class="campo" th:classappend="${errores.containsKey('telefono')} ? 'invalido'">
+                <span th:text="#{cuenta.telefono}">Celular</span>
+                <input type="tel" name="telefono" autocomplete="tel" required>
+                <span class="error" th:if="${errores.containsKey('telefono')}" th:text="${errores.get('telefono')}">Error</span>
+            </label>
+            <label class="campo" th:classappend="${errores.containsKey('clave')} ? 'invalido'">
+                <span th:text="#{cuenta.clave}">Contraseña</span>
+                <input type="password" name="clave" minlength="5" maxlength="72"
+                       autocomplete="new-password" required>
+                <span class="error" th:if="${errores.containsKey('clave')}" th:text="${errores.get('clave')}">Error</span>
+            </label>
+            <div class="campo" th:classappend="${errores.containsKey('condiciones')} ? 'invalido'">
+                <label class="campo-check">
+                    <input type="checkbox" name="condiciones" required>
+                    <span th:utext="#{cuenta.condiciones}">Acepto las condiciones de uso</span>
+                </label>
+                <span class="error" th:if="${errores.containsKey('condiciones')}" th:text="${errores.get('condiciones')}">Error</span>
+            </div>
+            <button type="submit" th:text="#{cuenta.registrar.boton}">Crear cuenta</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

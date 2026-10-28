@@ -1,7 +1,6 @@
 package com.ecosolicitud;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 import com.ecosolicitud.demo.DemoService;
 import com.ecosolicitud.organizacion.OrganizacionService;
@@ -89,11 +88,9 @@ class CopiaDatosTest {
         private final String csrf;
 
         Sesion() {
-            var pagina = rest.getForEntity(Rutas.MIS_SOLICITUDES, String.class);
-            var m = Pattern.compile("name=\"_csrf\"\\s+value=\"([^\"]+)\"").matcher(pagina.getBody());
-            assertThat(m.find()).isTrue();
-            csrf = m.group(1);
-            cookie = pagina.getHeaders().getFirst(HttpHeaders.SET_COOKIE).split(";")[0];
+            var acceso = AccesoDemoTest.entrar(rest);
+            cookie = acceso.cookie();
+            csrf = acceso.csrf();
         }
 
         void post(String ruta, String campo, String valor) {

@@ -63,6 +63,7 @@ class AvisosContadorTest {
     void setUp() {
         demo.reiniciar();
         driver = new HtmlUnitDriver();
+        AccesoDemoTest.entrar(driver, "http://localhost:" + port);
     }
 
     @AfterEach
