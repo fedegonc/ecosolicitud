@@ -164,6 +164,14 @@
         </div>
     </div>
     <script>
+        // doble-clic: deshabilita el botón que envió un POST (los pasos GET del
+        // flujo, como cambiar de ciudad, siguen habilitados)
+        document.addEventListener('submit', function (e) {
+            var b = e.submitter;
+            if (b && b.formMethod !== 'get') {
+                b.disabled = true;
+            }
+        });
         // anuncia a lectores de pantalla solo peticiones lentas (>600ms):
         // una navegación instantánea no necesita aviso
         var avisoRed;

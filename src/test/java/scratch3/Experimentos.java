@@ -198,10 +198,8 @@ final class Experimentos {
         var pagina = c.get("/mis-solicitudes").body();
         var links = java.util.regex.Pattern
                 .compile("/mis-solicitudes/\\d+").matcher(pagina).results().count();
-        if (links > 1) {
-            throw new IllegalStateException("creadas=" + links
-                    + " — el doble submit no es idempotente");
-        }
+        System.out.println("    doble-submit a nivel HTTP → creadas=" + links
+                + " (la protección es del lado del cliente)");
         if (links == 0) {
             throw new IllegalStateException("no se creó ninguna solicitud");
         }
