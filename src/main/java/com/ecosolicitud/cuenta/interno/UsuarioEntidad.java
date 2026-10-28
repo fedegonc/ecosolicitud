@@ -42,4 +42,8 @@ public class UsuarioEntidad {
         this.organizacionId = organizacionId;
         this.nombre = nombre;
     }
+
+    public void renovarClaveHash(String claveHash) {
+        this.claveHash = claveHash;
+    }
 }

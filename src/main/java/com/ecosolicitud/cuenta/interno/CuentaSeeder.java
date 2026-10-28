@@ -40,7 +40,13 @@ public class CuentaSeeder implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         int n = 0;
         for (Centro c : CENTROS) {
-            if (usuarios.findByNombre(c.usuario()).isPresent()) {
+            var existente = usuarios.findByNombre(c.usuario());
+            if (existente.isPresent()) {
+                var u = existente.get();
+                if (!cifrado.matches(clave, u.getClaveHash())) {
+                    u.renovarClaveHash(cifrado.encode(clave));
+                    usuarios.save(u);
+                }
                 continue;
             }
             usuarios.save(new UsuarioEntidad(UUID.randomUUID().toString(),
