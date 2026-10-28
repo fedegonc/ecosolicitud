@@ -102,8 +102,6 @@ public class Solicitud {
         sol.nota = nota;
         sol.estado = Estado.PENDIENTE;
         sol.creadaEn = Instant.now();
-        sol.respondidaEn = null;
-        sol.finalizadaEn = null;
         return sol;
     }
 
