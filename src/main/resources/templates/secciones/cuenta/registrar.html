@@ -9,11 +9,7 @@
         <h1 th:text="#{cuenta.registrar.titulo}">Crear cuenta</h1>
     </header>
     <section class="tarjeta caja">
-        <th:block th:if="${registrada}">
-            <p class="banner" role="status" th:text="#{cuenta.registrar.exito}">Cuenta creada.</p>
-            <p><a th:href="@{${rutas.RAIZ}}" th:text="#{cuenta.registrar.continuar}">Continuar</a></p>
-        </th:block>
-        <form th:unless="${registrada}" th:action="@{${rutas.CUENTA_REGISTRAR}}" method="post" hx-boost="false" class="form-nueva">
+        <form th:action="@{${rutas.CUENTA_REGISTRAR}}" method="post" hx-boost="false" class="form-nueva">
             <label class="campo" th:classappend="${errores.containsKey('nombre')} ? 'invalido'">
                 <span th:text="#{cuenta.nombre}">Nombre de usuario</span>
                 <input type="text" name="nombre" maxlength="120" minlength="5" required
