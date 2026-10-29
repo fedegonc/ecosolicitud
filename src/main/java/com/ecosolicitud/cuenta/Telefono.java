@@ -41,6 +41,25 @@ public final class Telefono {
         return completo;
     }
 
+    // cómo se muestra en campos de la interfaz (inverso de normalizar):
+    // "59899111222" → "+598 99 111 222", "5551991234567" → "+55 51 99123-4567"
+    public static String presentar(String normalizado) {
+        if (normalizado == null) {
+            return null;
+        }
+        if (CELULAR_UY.matcher(normalizado).matches()) {
+            var n = normalizado.substring(3);
+            return "+598 " + n.substring(0, 2) + " " + n.substring(2, 5)
+                    + " " + n.substring(5);
+        }
+        if (CELULAR_BR.matcher(normalizado).matches()) {
+            var n = normalizado.substring(2);
+            return "+55 " + n.substring(0, 2) + " " + n.substring(2, 7)
+                    + "-" + n.substring(7);
+        }
+        return "+" + normalizado;
+    }
+
     private static int largoCompleto(Pais pais) {
         return pais == Pais.UY ? 11 : 13;
     }

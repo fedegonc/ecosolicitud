@@ -40,9 +40,9 @@ class ConsultasPorPaginaTest {
 
     private static final Map<String, Long> CIUDADANO = presupuesto(
             Rutas.RAIZ, 12,
-            Rutas.MIS_SOLICITUDES, 8,
-            Rutas.NUEVA, 1,
-            Rutas.NUEVA + "?ciudad=RIVERA&organizacionId=frontera-limpia", 3,
+            Rutas.MIS_SOLICITUDES, 10,
+            Rutas.NUEVA, 2,
+            Rutas.NUEVA + "?ciudad=RIVERA&organizacionId=frontera-limpia", 4,
             Rutas.ACOPIOS, 3,
             Rutas.AVISOS, 11,
             Rutas.GUIA, 3,

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ecosolicitud.shared.Rutas;
+import com.ecosolicitud.cuenta.Cuentas;
 import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.ActorSesion;
@@ -39,19 +40,27 @@ class NuevaController {
     private final OrganizacionService organizaciones;
     private final ActorSesion actor;
     private final Validator validador;
+    private final Cuentas cuentas;
 
     NuevaController(SolicitudService solicitudes, OrganizacionService organizaciones,
-            ActorSesion actor, Validator validador) {
+            ActorSesion actor, Validator validador, Cuentas cuentas) {
         this.solicitudes = solicitudes;
         this.organizaciones = organizaciones;
         this.actor = actor;
         this.validador = validador;
+        this.cuentas = cuentas;
     }
 
     @GetMapping(Rutas.NUEVA)
     String nueva(@ModelAttribute("form") NuevaForm form, Model modelo) {
         if (form.getNombre() == null || form.getNombre().isBlank()) {
             form.setNombre(actor.actual().nombreCiudadano());
+        }
+        // el celular de la cuenta como contacto inicial (editable): la
+        // evaluación señaló "crear solicitud" como la tarea más difícil
+        if (form.getContacto() == null && actor.actual().esCiudadano()) {
+            cuentas.telefonoDe(actor.actual().ciudadanoId())
+                    .ifPresent(form::setContacto);
         }
         var centros = centrosDe(form);
         var centro = centroElegido(centros, form);

@@ -74,6 +74,13 @@ public class Cuentas {
         return telefono;
     }
 
+    // el celular de la cuenta, listo para precargar un campo de contacto
+    public Optional<String> telefonoDe(String usuarioId) {
+        return usuarioId == null ? Optional.empty()
+                : usuarios.findById(usuarioId)
+                        .map(u -> Telefono.presentar(u.getTelefono()));
+    }
+
     public Optional<Usuario> buscar(String numero, Pais pais) {
         try {
             return usuarios.findByTelefono(Telefono.normalizar(numero, pais))
