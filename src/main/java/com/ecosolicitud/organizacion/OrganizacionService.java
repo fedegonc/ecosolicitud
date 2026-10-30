@@ -1,6 +1,5 @@
 package com.ecosolicitud.organizacion;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -34,10 +33,13 @@ public class OrganizacionService {
     // separado); al escribir se olvidan para que el resto del pedido relea
     private static final String MEMO = "organizacion:";
     private static final String MEMO_TODAS = MEMO + "todas";
-    private static final String MEMO_NOMBRE = MEMO + "nombre:";
 
     private final OrganizacionRepository repositorio;
     private final CatalogoMateriales catalogo;
+
+    // lista de centros entre requests: solo cambia al guardar un perfil o
+    // en el reseed de la demo; toda consulta de centros sale de ella
+    private volatile List<OrganizacionInfo> cacheTodas;
 
     public OrganizacionService(OrganizacionRepository repositorio,
             CatalogoMateriales catalogo) {
@@ -45,10 +47,19 @@ public class OrganizacionService {
         this.catalogo = catalogo;
     }
 
+    private List<OrganizacionInfo> cargarTodas() {
+        var c = cacheTodas;
+        if (c == null) {
+            c = repositorio.findAll(Sort.by("nombre")).stream()
+                    .map(OrganizacionService::aInfo).toList();
+            cacheTodas = c;
+        }
+        return c;
+    }
+
     public List<OrganizacionInfo> todas() {
         return Memo.obtener(AlmacenDelPedido.actual(), MEMO_TODAS,
-                () -> repositorio.findAll(Sort.by("nombre")).stream()
-                        .map(OrganizacionService::aInfo).toList());
+                this::cargarTodas);
     }
 
     public List<AcopiosCiudad> porCiudad() {
@@ -68,48 +79,36 @@ public class OrganizacionService {
     }
 
     public Optional<OrganizacionInfo> buscar(String id) {
-        return repositorio.findById(id).map(OrganizacionService::aInfo);
+        return cargarTodas().stream().filter(o -> o.id().equals(id)).findFirst();
     }
 
     public List<OrganizacionInfo> compatibles(Ciudad ciudad,
             Collection<Material> materiales) {
-        return repositorio.findByCiudadOrderByNombre(ciudad).stream()
-                .map(OrganizacionService::aInfo)
-                .filter(o -> o.recibeTodos(materiales)).toList();
+        return cargarTodas().stream()
+                .filter(o -> o.ciudad() == ciudad && o.recibeTodos(materiales))
+                .toList();
     }
 
     public List<OrganizacionInfo> queReciben(Material material) {
-        return repositorio.findAll(Sort.by("nombre")).stream()
-                .filter(o -> o.getMateriales().contains(material))
-                .map(OrganizacionService::aInfo).toList();
+        return cargarTodas().stream()
+                .filter(o -> o.materiales().contains(material)).toList();
     }
 
     public List<OrganizacionInfo> enCiudad(Ciudad ciudad) {
-        return repositorio.findByCiudadOrderByNombre(ciudad).stream()
-                .map(OrganizacionService::aInfo).toList();
+        return cargarTodas().stream().filter(o -> o.ciudad() == ciudad).toList();
     }
 
-    // cada lista de solicitudes pide los nombres de sus centros (la bandeja,
-    // tres veces el mismo): en un pedido solo se consultan los que faltan
+    // cada lista de solicitudes pide los nombres de sus centros: salen de la
+    // lista cacheada, sin consulta propia
     public Map<String, String> nombres(Collection<String> ids) {
-        var almacen = AlmacenDelPedido.actual();
+        var porId = new HashMap<String, String>();
+        cargarTodas().forEach(o -> porId.put(o.id(), o.nombre()));
         var nombres = new HashMap<String, String>();
-        var faltan = new ArrayList<String>();
         for (var id : ids) {
-            var guardado = almacen == null ? null : (String) almacen.leer(MEMO_NOMBRE + id);
-            if (guardado != null) {
-                nombres.put(id, guardado);
-            } else {
-                faltan.add(id);
+            var n = porId.get(id);
+            if (n != null) {
+                nombres.put(id, n);
             }
-        }
-        if (!faltan.isEmpty()) {
-            repositorio.findAllById(faltan).forEach(o -> {
-                nombres.put(o.getId(), o.getNombre());
-                if (almacen != null) {
-                    almacen.guardar(MEMO_NOMBRE + o.getId(), o.getNombre());
-                }
-            });
         }
         return nombres;
     }
@@ -127,6 +126,7 @@ public class OrganizacionService {
         }
         org.actualizar(catalogo.seleccionActiva(materiales), horario, telefono, ubicacion);
         repositorio.save(org);
+        cacheTodas = null;
         AlmacenDelPedido.olvidarTodo(MEMO);
         return true;
     }
@@ -135,6 +135,7 @@ public class OrganizacionService {
     public void reemplazarTodas(List<OrganizacionInfo> dataset) {
         repositorio.deleteAll();
         dataset.forEach(this::guardarNueva);
+        cacheTodas = null;
         AlmacenDelPedido.olvidarTodo(MEMO);
     }
 

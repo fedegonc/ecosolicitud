@@ -39,21 +39,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConsultasPorPaginaTest {
 
     private static final Map<String, Long> CIUDADANO = presupuesto(
-            Rutas.RAIZ, 10,
-            Rutas.MIS_SOLICITUDES, 10,
+            Rutas.RAIZ, 4,
+            Rutas.MIS_SOLICITUDES, 8,
             Rutas.NUEVA, 2,
-            Rutas.NUEVA + "?ciudad=RIVERA&organizacionId=frontera-limpia", 4,
-            Rutas.ACOPIOS, 3,
+            Rutas.NUEVA + "?ciudad=RIVERA&organizacionId=frontera-limpia", 2,
+            Rutas.ACOPIOS, 1,
             Rutas.AVISOS, 11,
-            Rutas.GUIA, 3,
+            Rutas.GUIA, 1,
             Rutas.COMUNIDAD, 3,
-            Rutas.ESTADISTICAS, 6,
+            Rutas.ESTADISTICAS, 4,
             Rutas.OPINION, 1);
 
     private static final Map<String, Long> ORGANIZACION = presupuesto(
-            Rutas.ORG_SOLICITUDES, 18,
-            Rutas.ORG_PERFIL, 12,
-            Rutas.AVISOS, 14);
+            Rutas.ORG_SOLICITUDES, 13,
+            Rutas.ORG_PERFIL, 2,
+            Rutas.AVISOS, 11);
 
     @Autowired
     private TestRestTemplate rest;

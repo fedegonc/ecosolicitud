@@ -24,12 +24,21 @@ public class CatalogoMateriales {
 
     private final MaterialRepository repositorio;
 
+    // el catálogo es semilla fija: solo cambia en semillarFaltantes
+    private volatile List<Material> activosCache;
+    private volatile java.util.Map<String, Material> porCodigo;
+
     public CatalogoMateriales(MaterialRepository repositorio) {
         this.repositorio = repositorio;
     }
 
     public List<Material> activos() {
-        return repositorio.findByActivoTrueOrderById();
+        var c = activosCache;
+        if (c == null) {
+            c = List.copyOf(repositorio.findByActivoTrueOrderById());
+            activosCache = c;
+        }
+        return c;
     }
 
     public List<Material> todos() {
@@ -37,8 +46,18 @@ public class CatalogoMateriales {
     }
 
     public Material resolver(String codigo) {
-        return repositorio.findByCodigo(codigo).orElseThrow(() ->
-                new IllegalArgumentException("Material desconocido: " + codigo));
+        var mapa = porCodigo;
+        if (mapa == null) {
+            var nuevo = new java.util.HashMap<String, Material>();
+            repositorio.findAll().forEach(m -> nuevo.put(m.getCodigo(), m));
+            porCodigo = nuevo;
+            mapa = nuevo;
+        }
+        var m = mapa.get(codigo);
+        if (m == null) {
+            throw new IllegalArgumentException("Material desconocido: " + codigo);
+        }
+        return m;
     }
 
     // El formulario trae entidades detached (o semillas de tests): las
@@ -56,5 +75,7 @@ public class CatalogoMateriales {
     public void semillarFaltantes() {
         SEMILLA.stream().filter(m -> repositorio.findByCodigo(m.getCodigo()).isEmpty())
                 .forEach(m -> repositorio.save(new Material(m.getCodigo(), m.getNombre(), m.getIcono())));
+        activosCache = null;
+        porCodigo = null;
     }
 }

@@ -21,41 +21,56 @@ public class GuiaService {
     private final ArticuloRepository repositorio;
     private final Markdown markdown;
 
+    // los artículos son contenido semilla: solo cambian en reemplazarTodos;
+    // el cache evita también re-renderizar el markdown en cada pedido
+    private volatile List<ArticuloInfo> cache;
+
     public GuiaService(ArticuloRepository repositorio, Markdown markdown) {
         this.repositorio = repositorio;
         this.markdown = markdown;
     }
 
+    private List<ArticuloInfo> cargarTodos() {
+        var c = cache;
+        if (c == null) {
+            c = repositorio.findAllByOrderByOrdenAsc().stream()
+                    .map(this::aInfo).toList();
+            cache = c;
+        }
+        return c;
+    }
+
     public List<ArticuloInfo> articulos() {
-        return repositorio.findAllByOrderByOrdenAsc().stream()
-                .map(this::aInfo).toList();
+        return cargarTodos();
     }
 
     public Optional<ArticuloInfo> buscar(long id) {
-        return repositorio.findById(id).map(this::aInfo);
+        return cargarTodos().stream().filter(a -> a.id() == id).findFirst();
     }
 
     public Optional<ArticuloInfo> buscarPorTitulo(String titulo) {
-        return repositorio.findByTitulo(titulo).map(this::aInfo);
+        return cargarTodos().stream().filter(a -> a.titulo().equals(titulo))
+                .findFirst();
     }
 
     // la portada enlaza varios artículos por título: un solo IN en vez de
     // una consulta por cada tarjeta
     public Map<String, Long> idsDe(Collection<String> titulos) {
         var mapa = new HashMap<String, Long>();
-        repositorio.findByTituloIn(titulos)
-                .forEach(a -> mapa.put(a.getTitulo(), a.getId()));
+        cargarTodos().stream().filter(a -> titulos.contains(a.titulo()))
+                .forEach(a -> mapa.put(a.titulo(), a.id()));
         return mapa;
     }
 
     public boolean vacia() {
-        return repositorio.count() == 0;
+        return cargarTodos().isEmpty();
     }
 
     @Transactional
     public void reemplazarTodos(List<ArticuloSemilla> dataset) {
         repositorio.deleteAll();
         dataset.forEach(a -> repositorio.save(Articulo.nuevo(a)));
+        cache = null;
     }
 
     private ArticuloInfo aInfo(Articulo a) {
