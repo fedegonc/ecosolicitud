@@ -79,7 +79,9 @@ public class OrganizacionService {
     }
 
     public Optional<OrganizacionInfo> buscar(String id) {
-        return cargarTodas().stream().filter(o -> o.id().equals(id)).findFirst();
+        // fallback al repo: una caché vieja nunca debe inventar un 404
+        return cargarTodas().stream().filter(o -> o.id().equals(id)).findFirst()
+                .or(() -> repositorio.findById(id).map(OrganizacionService::aInfo));
     }
 
     public List<OrganizacionInfo> compatibles(Ciudad ciudad,

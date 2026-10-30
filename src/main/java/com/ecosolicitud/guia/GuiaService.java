@@ -45,7 +45,9 @@ public class GuiaService {
     }
 
     public Optional<ArticuloInfo> buscar(long id) {
-        return cargarTodos().stream().filter(a -> a.id() == id).findFirst();
+        // fallback al repo: una caché vieja nunca debe inventar un 404
+        return cargarTodos().stream().filter(a -> a.id() == id).findFirst()
+                .or(() -> repositorio.findById(id).map(this::aInfo));
     }
 
     public Optional<ArticuloInfo> buscarPorTitulo(String titulo) {
