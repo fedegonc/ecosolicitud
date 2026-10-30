@@ -39,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConsultasPorPaginaTest {
 
     private static final Map<String, Long> CIUDADANO = presupuesto(
-            Rutas.RAIZ, 12,
+            Rutas.RAIZ, 10,
             Rutas.MIS_SOLICITUDES, 10,
             Rutas.NUEVA, 2,
             Rutas.NUEVA + "?ciudad=RIVERA&organizacionId=frontera-limpia", 4,

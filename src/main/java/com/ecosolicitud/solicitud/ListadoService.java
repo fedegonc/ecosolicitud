@@ -3,6 +3,7 @@ package com.ecosolicitud.solicitud;
 import java.time.Instant;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -39,6 +40,12 @@ public class ListadoService {
         this.repositorio = repositorio;
         this.servicio = servicio;
         this.organizaciones = organizaciones;
+    }
+
+    // la portada muestra solo la última: una consulta, sin count ni página
+    public Optional<SolicitudInfo> ultimaDelCiudadano(String ciudadanoId) {
+        return repositorio.findTop1ByCiudadano_IdOrderByCreadaEnDesc(ciudadanoId)
+                .map(s -> servicio.aInfos(List.of(s)).get(0));
     }
 
     public Page<SolicitudInfo> misSolicitudes(String ciudadanoId, Filtro filtro,

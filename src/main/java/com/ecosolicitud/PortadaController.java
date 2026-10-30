@@ -12,7 +12,6 @@ import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.shared.Rutas;
-import com.ecosolicitud.solicitud.Filtro;
 import com.ecosolicitud.solicitud.ListadoService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,8 +42,8 @@ class PortadaController {
                 || request.isUserInRole("DEMO");
         if (autenticado && sesion.rol() == Rol.CIUDADANO) {
             modelo.addAttribute("usuario", sesion.nombreCiudadano());
-            listados.misSolicitudes(sesion.ciudadanoId(), Filtro.TODAS, 1).stream()
-                    .findFirst().ifPresent(s -> modelo.addAttribute("ultimo", s));
+            listados.ultimaDelCiudadano(sesion.ciudadanoId())
+                    .ifPresent(s -> modelo.addAttribute("ultimo", s));
         }
         var local = localidad(ciudad);
         modelo.addAttribute("pagina", DesignDatos.para(local, sesion.rol(), guia));

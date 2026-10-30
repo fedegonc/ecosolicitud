@@ -1,5 +1,6 @@
 package com.ecosolicitud.guia.interno;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,4 +11,6 @@ public interface ArticuloRepository extends JpaRepository<Articulo, Long> {
     List<Articulo> findAllByOrderByOrdenAsc();
 
     Optional<Articulo> findByTitulo(String titulo);
+
+    List<Articulo> findByTituloIn(Collection<String> titulos);
 }

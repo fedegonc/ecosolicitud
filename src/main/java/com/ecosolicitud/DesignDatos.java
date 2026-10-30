@@ -1,6 +1,7 @@
 package com.ecosolicitud;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ecosolicitud.guia.GuiaService;
 import com.ecosolicitud.shared.Rol;
@@ -29,11 +30,13 @@ final class DesignDatos {
     }
 
     static Pagina para(Localidad localidad, Rol rol, GuiaService guia) {
+        var ids = guia.idsDe(List.of("Muebles y voluminosos",
+                "Orgánicos y restos de poda", "Cómo separar en casa", "Plástico"));
         return rol == Rol.ORGANIZACION
                 ? new Pagina(localidad, "ds.titulo.org", "ds.subtitulo.org",
-                        accionesOrganizacion(), consejos(guia))
+                        accionesOrganizacion(), consejos(ids))
                 : new Pagina(localidad, "ds.titulo", subtituloVecino(localidad),
-                        accionesVecino(localidad, guia), consejos(guia));
+                        accionesVecino(localidad, ids), consejos(ids));
     }
 
     private static String subtituloVecino(Localidad localidad) {
@@ -46,12 +49,13 @@ final class DesignDatos {
     // el vecino: pedir, saber qué hacer y adónde llevarlo; la cuarta depende de
     // quién gestiona la ciudad (Intendencia: voluminosos por calendario;
     // Prefeitura: central de poda)
-    private static List<Accion> accionesVecino(Localidad localidad, GuiaService guia) {
+    private static List<Accion> accionesVecino(Localidad localidad,
+            Map<String, Long> ids) {
         var propia = switch (localidad) {
             case RIVERA -> new Accion("calendario", "ds.accion.voluminosos",
-                    articulo(guia, "Muebles y voluminosos"));
+                    articulo(ids, "Muebles y voluminosos"));
             case LIVRAMENTO -> new Accion("planta", "ds.accion.poda",
-                    articulo(guia, "Orgánicos y restos de poda"));
+                    articulo(ids, "Orgánicos y restos de poda"));
         };
         return List.of(
                 new Accion("camion", "ds.accion.retiro", Rutas.NUEVA),
@@ -72,16 +76,17 @@ final class DesignDatos {
     }
 
     // cada tarjeta lleva directo a una página concreta, nunca al índice de la guía
-    private static List<Tarjeta> consejos(GuiaService guia) {
+    private static List<Tarjeta> consejos(Map<String, Long> ids) {
         return List.of(
                 new Tarjeta("ds.t1", "/img/guia/separar-800.webp",
-                        articulo(guia, "Cómo separar en casa")),
+                        articulo(ids, "Cómo separar en casa")),
                 new Tarjeta("ds.t2", "/img/guia/plastico-800.webp",
-                        articulo(guia, "Plástico")),
+                        articulo(ids, "Plástico")),
                 new Tarjeta("ds.t3", "/img/ciudad/rivera-800.webp", Rutas.ACOPIOS));
     }
 
-    private static String articulo(GuiaService guia, String titulo) {
-        return guia.buscarPorTitulo(titulo).map(a -> Rutas.expandir(Rutas.GUIA_ARTICULO, a.id())).orElse(Rutas.GUIA);
+    private static String articulo(Map<String, Long> ids, String titulo) {
+        var id = ids.get(titulo);
+        return id == null ? Rutas.GUIA : Rutas.expandir(Rutas.GUIA_ARTICULO, id);
     }
 }

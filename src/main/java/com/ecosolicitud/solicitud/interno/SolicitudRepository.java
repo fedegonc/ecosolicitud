@@ -3,6 +3,7 @@ package com.ecosolicitud.solicitud.interno;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import com.ecosolicitud.solicitud.Estado;
 
@@ -29,6 +30,8 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
 
     List<Solicitud> findByOrganizacionIdAndCreadaEnGreaterThanEqualAndCreadaEnLessThanOrderByCreadaEnDesc(
             String organizacionId, Instant desde, Instant hasta);
+
+    Optional<Solicitud> findTop1ByCiudadano_IdOrderByCreadaEnDesc(String ciudadanoId);
 
     List<Solicitud> findByCreadaEnGreaterThanEqual(Instant desde);
 

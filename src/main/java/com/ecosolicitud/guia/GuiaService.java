@@ -1,6 +1,9 @@
 package com.ecosolicitud.guia;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.ecosolicitud.guia.interno.Articulo;
@@ -34,6 +37,15 @@ public class GuiaService {
 
     public Optional<ArticuloInfo> buscarPorTitulo(String titulo) {
         return repositorio.findByTitulo(titulo).map(this::aInfo);
+    }
+
+    // la portada enlaza varios artículos por título: un solo IN en vez de
+    // una consulta por cada tarjeta
+    public Map<String, Long> idsDe(Collection<String> titulos) {
+        var mapa = new HashMap<String, Long>();
+        repositorio.findByTituloIn(titulos)
+                .forEach(a -> mapa.put(a.getTitulo(), a.getId()));
+        return mapa;
     }
 
     public boolean vacia() {
