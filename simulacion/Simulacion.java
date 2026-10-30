@@ -3776,6 +3776,11 @@ public class Simulacion {
                 "1",                  // Aceptar #7 → pasa a En curso
                 // ahora en curso: #7 [4]Completar
                 "4",                  // Completar #7 → cierra
+                // pendientes queda vacía: [7] Informe [8] Archivadas [9] Copia
+                "7",                  // Informe del mes
+                "0",
+                "9",                  // Copia .txt de respaldo
+                "0",
                 "0",                  // vuelve al inicio
                 // inicio org: [3] Avisos (con ● nuevas)
                 "3",                  // bandeja de avisos (las marca leídas)
@@ -3783,6 +3788,21 @@ public class Simulacion {
                 // [6] Estadísticas
                 "6",
                 "0",
+                // [2] Datos de mi centro: [8]Horario [9]Teléfono [11]Guardar
+                "2",
+                "9", "abc",           // teléfono inválido
+                "11",                 // guardar → error de validación
+                "9", "+598 99 123 456",
+                "11",                 // guardar → Perfil guardado
+                "0",
+                // [7] Opinión: 17 preguntas + [18] Enviar
+                "7",
+                "18",                 // enviar sin responder → aviso de validación
+                "1",                  // responder #1 (opción: localidad)
+                "1",                  // Rivera
+                "2",                  // responder #2 (escala)
+                "4",                  // valor 4
+                "18",                 // enviar → gracias
                 // [8] Cerrar sesión → portada anónima
                 "8",
                 "0");                 // Salir
