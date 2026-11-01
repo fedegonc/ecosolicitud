@@ -19,7 +19,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
@@ -28,7 +27,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.LinkedMultiValueMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -82,10 +80,11 @@ class LoginTest {
 
         sesion.post("/cuenta/salir", b -> {
         });
-        // sin sesión ya no puede crear: el anónimo no hereda el ciudadano demo
+        // sin sesión ya no puede crear: el anónimo no hereda el ciudadano demo;
+        // termina en la pantalla de ingreso y no se guarda nada
         sesion.refrescar(Rutas.RAIZ);
-        assertThatThrownBy(() -> sesion.post(Rutas.NUEVA, b -> {
-        })).isInstanceOf(HttpClientErrorException.Forbidden.class);
+        assertThat(sesion.post(Rutas.NUEVA, b -> {
+        }).getBody()).contains("name=\"password\"");
         assertThat(listados.misSolicitudes(usuarioId, Filtro.TODAS, 1)).hasSize(1);
     }
 
@@ -99,9 +98,10 @@ class LoginTest {
             b.add("password", "incorrecta");
         });
         assertThat(login.getBody()).contains("incorrectos");
-        // sin sesión, la creación queda bloqueada (el leak del ciudadano demo)
-        assertThatThrownBy(() -> sesion.post(Rutas.NUEVA, b -> {
-        })).isInstanceOf(HttpClientErrorException.Forbidden.class);
+        // sin sesión, la creación queda bloqueada (el leak del ciudadano demo):
+        // termina en la pantalla de ingreso
+        assertThat(sesion.post(Rutas.NUEVA, b -> {
+        }).getBody()).contains("name=\"password\"");
         assertThat(listados.misSolicitudes(usuarioId, Filtro.TODAS, 1)
                 .getContent()).hasSize(antes);
     }

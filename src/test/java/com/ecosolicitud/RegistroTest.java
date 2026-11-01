@@ -104,6 +104,47 @@ class RegistroTest {
         assertThat(usuarios.findByNombre("valido99")).isEmpty();
     }
 
+    @Test
+    void conErroresMuestraTodosJuntosYConservaLoEscrito() {
+        var sesion = new Sesion();
+        var r = sesion.post(Rutas.CUENTA_REGISTRAR, b -> {
+            b.add("nombre", "María José");
+            b.add("pais", "BR");
+            b.add("telefono", "123");
+            b.add("clave", "1234");
+        });
+        assertThat(r.getBody()).contains(
+                "Usá solo letras sin tilde",
+                "Ingresá un celular de Uruguay o Brasil",
+                "La contraseña tiene que tener al menos 5 caracteres",
+                "Tenés que aceptar las condiciones de uso");
+        // lo escrito vuelve (menos la contraseña) y el país queda elegido
+        assertThat(r.getBody()).contains("value=\"María José\"", "value=\"123\"")
+                .containsPattern("value=\"BR\"\\s+selected")
+                .doesNotContain("value=\"1234\"");
+    }
+
+    @Test
+    void lasPaginasPrivadasLlevanAIngresarEnVezDeUn403() {
+        var cliente = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();
+        var directo = new RestTemplate(new JdkClientHttpRequestFactory(cliente));
+        directo.setErrorHandler(new org.springframework.web.client.DefaultResponseErrorHandler() {
+            @Override
+            public boolean hasError(org.springframework.http.client.ClientHttpResponse res) {
+                return false;
+            }
+        });
+        for (var ruta : new String[]{Rutas.NUEVA, Rutas.MIS_SOLICITUDES, Rutas.AVISOS,
+                Rutas.OPINION}) {
+            var r = directo.getForEntity(rest.getRootUri() + ruta, String.class);
+            assertThat(r.getStatusCode()).as(ruta).isEqualTo(HttpStatus.FOUND);
+            assertThat(r.getHeaders().getLocation()).as(ruta).hasPath(Rutas.CUENTA_ENTRAR);
+        }
+        // lo del centro sigue cerrado sin pasar por el login de vecinos
+        var org = directo.getForEntity(rest.getRootUri() + Rutas.ORG_SOLICITUDES, String.class);
+        assertThat(org.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
     private class Sesion {
         private String csrf;
         private final RestTemplate propio;

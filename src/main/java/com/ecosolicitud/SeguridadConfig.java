@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -35,7 +36,7 @@ class SeguridadConfig {
     @org.springframework.core.annotation.Order(1)
     SecurityFilterChain seguridadCuentas(HttpSecurity http,
             AuthenticationSuccessHandler ingreso, MessageSource mensajes, LocaleResolver idiomas,
-            @Value("${ecosolicitud.cuenta.intentos:5}") int intentosCuenta)
+            @Value("${ecosolicitud.cuenta.intentos:20}") int intentosCuenta)
             throws Exception {
         return http.securityMatcher("/cuenta/**")
                 .authorizeHttpRequests(auth -> auth
@@ -86,7 +87,11 @@ class SeguridadConfig {
                                         new AntPathRequestMatcher(Rutas.AVISOS),
                                         new AntPathRequestMatcher(Rutas.OPINION + "/**"),
                                         new AntPathRequestMatcher(Rutas.OPINION)))
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN)))
+                        // el resto, 403. Como default y no con authenticationEntryPoint(),
+                        // que reemplaza los defaults y dejaba también a los privados en 403
+                        .defaultAuthenticationEntryPointFor(
+                                new HttpStatusEntryPoint(HttpStatus.FORBIDDEN),
+                                AnyRequestMatcher.INSTANCE))
                 .formLogin(login -> login.loginPage(Rutas.MODO_DEV)
                         .loginProcessingUrl(Rutas.MODO_DEV)
                         .defaultSuccessUrl(Rutas.RAIZ, true)

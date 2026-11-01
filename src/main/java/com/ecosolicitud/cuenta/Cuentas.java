@@ -1,6 +1,8 @@
 package com.ecosolicitud.cuenta;
 
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,33 +47,40 @@ public class Cuentas {
         return usuario;
     }
 
-    // Valida sin persistir: el formulario junta todos los errores antes de crear
+    // Valida sin persistir y corta en el primer error (para el alta)
     public String validarDatos(String nombre, String numero, Pais pais, String clave) {
-        if (nombre == null || nombre.strip().length() < NOMBRE_MINIMO) {
-            throw new CuentaException("nombre", "cuenta.error.nombre.corto");
+        var errores = errores(nombre, numero, pais, clave);
+        if (!errores.isEmpty()) {
+            var primero = errores.entrySet().iterator().next();
+            throw new CuentaException(primero.getKey(), primero.getValue());
         }
-        var usuario = nombre.strip().toLowerCase();
-        if (!NOMBRE_FORMATO.matcher(usuario).matches()) {
-            throw new CuentaException("nombre",
-                    "cuenta.error.nombre.formato");
+        return Telefono.normalizar(numero, pais);
+    }
+
+    // campo → clave de messages, todos a la vez: el formulario los muestra
+    // juntos en vez de hacer corregir de a uno por envío
+    public Map<String, String> errores(String nombre, String numero, Pais pais, String clave) {
+        Map<String, String> errores = new LinkedHashMap<>();
+        var usuario = nombre == null ? "" : nombre.strip().toLowerCase();
+        if (usuario.length() < NOMBRE_MINIMO) {
+            errores.put("nombre", "cuenta.error.nombre.corto");
+        } else if (!NOMBRE_FORMATO.matcher(usuario).matches()) {
+            errores.put("nombre", "cuenta.error.nombre.formato");
+        } else if (usuarios.findByNombre(usuario).isPresent()) {
+            errores.put("nombre", "cuenta.error.nombre.usado");
         }
-        String telefono;
         try {
-            telefono = Telefono.normalizar(numero, pais);
+            if (usuarios.findByTelefono(Telefono.normalizar(numero, pais)).isPresent()) {
+                errores.put("telefono", "cuenta.error.telefono.usado");
+            }
         } catch (IllegalArgumentException e) {
-            throw new CuentaException("telefono", "cuenta.error.telefono");
+            errores.put("telefono", "cuenta.error.telefono");
         }
         if (clave == null || clave.length() < CLAVE_MINIMA
                 || clave.getBytes(StandardCharsets.UTF_8).length > CLAVE_MAXIMA_BYTES) {
-            throw new CuentaException("clave", "cuenta.error.clave");
+            errores.put("clave", "cuenta.error.clave");
         }
-        if (usuarios.findByNombre(usuario).isPresent()) {
-            throw new CuentaException("nombre", "cuenta.error.nombre.usado");
-        }
-        if (usuarios.findByTelefono(telefono).isPresent()) {
-            throw new CuentaException("telefono", "cuenta.error.telefono.usado");
-        }
-        return telefono;
+        return errores;
     }
 
     // el celular de la cuenta, listo para precargar un campo de contacto

@@ -13,20 +13,22 @@
             <label class="campo" th:classappend="${errores.containsKey('nombre')} ? 'invalido'">
                 <span th:text="#{cuenta.nombre}">Nombre de usuario</span>
                 <input type="text" name="nombre" maxlength="120" minlength="5" required
-                       autocomplete="username" pattern="\S+">
+                       autocomplete="username" autocapitalize="none" spellcheck="false"
+                       th:value="${valores['nombre']}">
                 <span class="ayuda" th:text="#{cuenta.nombre.ayuda}">Mínimo 5 caracteres, sin espacios.</span>
                 <span class="error" th:if="${errores.containsKey('nombre')}" th:text="#{${errores.get('nombre')}}">Error</span>
             </label>
             <label class="campo" th:classappend="${errores.containsKey('pais')} ? 'invalido'">
                 <span th:text="#{cuenta.pais}">País</span>
                 <select name="pais" required>
-                    <option value="UY">Uruguay</option>
-                    <option value="BR">Brasil</option>
+                    <option value="UY" th:selected="${valores['pais'] == 'UY'}">Uruguay</option>
+                    <option value="BR" th:selected="${valores['pais'] == 'BR'}">Brasil</option>
                 </select>
             </label>
             <label class="campo" th:classappend="${errores.containsKey('telefono')} ? 'invalido'">
                 <span th:text="#{cuenta.telefono}">Celular</span>
-                <input type="tel" name="telefono" autocomplete="tel" required>
+                <input type="tel" name="telefono" autocomplete="tel" inputmode="tel" required
+                       th:value="${valores['telefono']}">
                 <span class="error" th:if="${errores.containsKey('telefono')}" th:text="#{${errores.get('telefono')}}">Error</span>
             </label>
             <label class="campo" th:classappend="${errores.containsKey('clave')} ? 'invalido'">
@@ -37,7 +39,8 @@
             </label>
             <div class="campo" th:classappend="${errores.containsKey('condiciones')} ? 'invalido'">
                 <label class="campo-check">
-                    <input type="checkbox" name="condiciones" required>
+                    <input type="checkbox" name="condiciones" required
+                           th:checked="${valores['condiciones'] == true}">
                     <span th:utext="#{cuenta.condiciones}">Acepto las condiciones de uso</span>
                 </label>
                 <span class="error" th:if="${errores.containsKey('condiciones')}" th:text="#{${errores.get('condiciones')}}">Error</span>

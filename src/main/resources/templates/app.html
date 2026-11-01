@@ -278,6 +278,6 @@
          la pestaña. Sidebar y móvil se actualizan juntos por oob -->
     <span hidden th:attr="hx-get=@{${rutas.AVISOS_CONTADOR}}"
           hx-trigger="visibilitychange[document.visibilityState === 'visible'] from:document"
-          hx-swap="none"></span>
+          hx-swap="none" hx-disabled-elt="unset"></span>
 </body>
 </html>

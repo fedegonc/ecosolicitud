@@ -17,7 +17,13 @@
                 <li th:each="e : ${#fields.errors('*')}" th:text="${e}">Error</li>
             </ul>
         </div>
-        <div id="flujo" class="flujo" aria-live="polite" hx-swap="outerHTML">
+        <!-- "unset": la validación por campo (blur) no hereda el indicador del
+             form ni el hx-disabled-elt del body. Heredados, marcan el form con
+             .htmx-request (botón sin pointer-events) y deshabilitan "Enviar"
+             justo cuando el toque que dispara el blur llega al botón: se perdía.
+             Ciudad y centro declaran su propio hx-indicator="#flujo". -->
+        <div id="flujo" class="flujo" aria-live="polite" hx-swap="outerHTML"
+             hx-disabled-elt="unset" hx-indicator="unset">
             <label class="campo bloque-ciudad">
                 <span th:text="#{nueva.ciudad}">Ciudad</span>
                 <select th:field="*{ciudad}" required th:attr="hx-get=@{${rutas.NUEVA}}"

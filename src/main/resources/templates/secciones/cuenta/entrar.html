@@ -14,7 +14,8 @@
                th:text="#{cuenta.entrar.error}">Usuario o contraseña incorrectos.</p>
             <label class="campo">
                 <span th:text="#{cuenta.entrar.usuario}">Nombre de usuario</span>
-                <input type="text" name="username" autocomplete="username" required>
+                <input type="text" name="username" autocomplete="username" required
+                       autocapitalize="none" spellcheck="false">
             </label>
             <label class="campo">
                 <span th:text="#{cuenta.clave}">Contraseña</span>

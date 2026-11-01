@@ -3,7 +3,6 @@ package com.ecosolicitud.cuenta.interno;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.ecosolicitud.cuenta.CuentaException;
 import com.ecosolicitud.cuenta.Cuentas;
 import com.ecosolicitud.cuenta.Pais;
 import com.ecosolicitud.shared.ActorSesion;
@@ -49,6 +48,7 @@ class CuentaController {
     @GetMapping(Rutas.CUENTA_REGISTRAR)
     String registrar(Model modelo) {
         modelo.addAttribute("errores", Map.of());
+        modelo.addAttribute("valores", Map.of());
         return "secciones/cuenta/registrar";
     }
 
@@ -70,11 +70,7 @@ class CuentaController {
             errores.put("pais", "cuenta.error.pais");
         }
         if (p != null) {
-            try {
-                cuentas.validarDatos(nombre, telefono, p, clave);
-            } catch (CuentaException e) {
-                errores.put(e.campo(), e.getMessage());
-            }
+            errores.putAll(cuentas.errores(nombre, telefono, p, clave));
         }
         if (errores.isEmpty()) {
             var usuario = cuentas.registrarCiudadano(nombre.strip(), telefono, p, clave);
@@ -85,7 +81,14 @@ class CuentaController {
             redir.addFlashAttribute("avisoId", principal.getNombre());
             return "redirect:" + Seccion.inicioDe(principal.getRol());
         }
+        // lo escrito vuelve al formulario: corregir un campo no obliga a
+        // reescribir los demás (la contraseña no se devuelve nunca)
         modelo.addAttribute("errores", errores);
+        modelo.addAttribute("valores", Map.of(
+                "nombre", nombre == null ? "" : nombre,
+                "pais", pais == null ? "" : pais,
+                "telefono", telefono == null ? "" : telefono,
+                "condiciones", condiciones != null));
         return "secciones/cuenta/registrar";
     }
 
