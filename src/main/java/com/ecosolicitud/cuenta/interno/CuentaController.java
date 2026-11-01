@@ -73,15 +73,19 @@ class CuentaController {
         if (p != null) {
             errores.putAll(cuentas.errores(nombre, telefono, p, clave));
         }
+        // reintento del mismo registro (red lenta): la cuenta ya existe y es
+        // suya; entra en vez de mostrar "ese nombre ya está en uso"
+        if (errores.containsKey("nombre") && errores.containsKey("telefono")
+                && errores.values().stream().allMatch(e -> e.endsWith(".usado"))
+                && cuentas.esLaMismaCuenta(nombre, telefono, p, clave)) {
+            var principal = new UsuarioPrincipal(
+                    usuarios.findByNombre(nombre.strip().toLowerCase()).orElseThrow());
+            return entrarCon(principal, request, redir);
+        }
         if (errores.isEmpty()) {
             var usuario = cuentas.registrarCiudadano(nombre.strip(), telefono, p, clave);
-            var principal = new UsuarioPrincipal(
-                    usuarios.findByTelefono(usuario.telefono()).orElseThrow());
-            ingresar(request, principal);
-            redir.addFlashAttribute("avisoCodigo", "cuenta.bienvenida");
-            redir.addFlashAttribute("avisoId", principal.getNombre());
-            return "redirect:" + Volver.tomar(request)
-                    .orElse(Seccion.inicioDe(principal.getRol()));
+            return entrarCon(new UsuarioPrincipal(
+                    usuarios.findByTelefono(usuario.telefono()).orElseThrow()), request, redir);
         }
         // lo escrito vuelve al formulario: corregir un campo no obliga a
         // reescribir los demás (la contraseña no se devuelve nunca)
@@ -92,6 +96,15 @@ class CuentaController {
                 "telefono", telefono == null ? "" : telefono,
                 "condiciones", condiciones != null));
         return "secciones/cuenta/registrar";
+    }
+
+    private String entrarCon(UsuarioPrincipal principal, HttpServletRequest request,
+            RedirectAttributes redir) {
+        ingresar(request, principal);
+        redir.addFlashAttribute("avisoCodigo", "cuenta.bienvenida");
+        redir.addFlashAttribute("avisoId", principal.getNombre());
+        return "redirect:" + Volver.tomar(request)
+                .orElse(Seccion.inicioDe(principal.getRol()));
     }
 
     // registro = entrada inmediata: sesión autenticada y el mismo actor que

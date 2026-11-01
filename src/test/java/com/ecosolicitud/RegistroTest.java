@@ -227,6 +227,25 @@ class RegistroTest {
         assertThat(listados.misSolicitudes(id, Filtro.TODAS, 1)).isEmpty();
     }
 
+    @Test
+    void elMismoRegistroRepetidoEntraEnVezDeDarError() {
+        java.util.function.BiFunction<String, String, String> registrar = (tel, clave) ->
+                new Sesion().post(Rutas.CUENTA_REGISTRAR, b -> {
+                    b.add("nombre", "Vecino.Repite");
+                    b.add("pais", "UY");
+                    b.add("telefono", tel);
+                    b.add("clave", clave);
+                    b.add("condiciones", "on");
+                }).getBody();
+        assertThat(registrar.apply("099 321 321", "reciclo2026")).contains("Cuenta creada");
+        // la respuesta se perdió y vuelve a enviar lo mismo: entra
+        assertThat(registrar.apply("099321321", "reciclo2026"))
+                .contains("Cuenta creada", "Mis solicitudes").doesNotContain("en uso");
+        // otra clave u otro celular: no es la misma persona, sigue el error
+        assertThat(registrar.apply("099 321 321", "otra-clave")).contains("en uso");
+        assertThat(registrar.apply("099 999 321", "reciclo2026")).contains("en uso");
+    }
+
     private class Sesion {
         private String csrf;
         private final RestTemplate propio;

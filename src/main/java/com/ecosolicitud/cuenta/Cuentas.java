@@ -83,6 +83,25 @@ public class Cuentas {
         return errores;
     }
 
+    // el registro repetido por la misma persona (la respuesta del primero se
+    // perdió): nombre, celular y contraseña de un mismo vecino. Pedir los tres
+    // evita que el registro sirva para probar claves sin el límite del login
+    public boolean esLaMismaCuenta(String nombre, String numero, Pais pais, String clave) {
+        if (nombre == null || clave == null || pais == null) {
+            return false;
+        }
+        String telefono;
+        try {
+            telefono = Telefono.normalizar(numero, pais);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return usuarios.findByNombre(nombre.strip().toLowerCase())
+                .filter(u -> u.getRol() == Rol.CIUDADANO && telefono.equals(u.getTelefono()))
+                .map(u -> cifrado.matches(clave, u.getClaveHash()))
+                .orElse(false);
+    }
+
     // el celular de la cuenta, listo para precargar un campo de contacto
     public Optional<String> telefonoDe(String usuarioId) {
         return usuarioId == null ? Optional.empty()
