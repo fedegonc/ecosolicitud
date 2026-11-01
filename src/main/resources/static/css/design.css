@@ -10,7 +10,7 @@
     border-radius: var(--radio);
     background: var(--superficie);
     color: var(--texto);
-    height: var(--icono);
+    min-height: var(--toque-min);
     padding: 0 var(--chico);
     transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .12s ease;
 }
@@ -130,12 +130,11 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .grilla .imagen { height: 4rem; }
 .ds .grilla .texto { padding: var(--chico); gap: calc(var(--chico) / 2); }
 .ds .grilla strong { font-size: calc(1.75 * var(--chico)); }
-.fila .caja { min-height: 2.75rem; }
+.fila .caja { min-height: var(--toque-min); }
 
 /* único corte de ancho: lo que solo existe en escritorio */
 @media (min-width: 45rem) {
     .ds { --grande: 1.5rem; }
-    .fila .caja { min-height: 0; }
     .ds h1 { font-size: calc(3.5 * var(--chico)); }
     .accion { font-size: 1rem; }
     .accion .circulo { width: calc(2 * var(--icono)); height: calc(2 * var(--icono)); }

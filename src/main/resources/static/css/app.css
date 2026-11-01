@@ -59,7 +59,7 @@
     --gap-l: calc(1.5 * var(--chico));
     --pad: calc(2 * var(--chico));
     --pad-grande: calc(var(--grande) + var(--chico));
-    --toque-min: var(--icono);
+    --toque-min: 2.75rem;
     --linea-fina: 1px;
     --linea-media: 2px;
     --linea-gruesa: 3px;
@@ -488,9 +488,9 @@ main a:active {
 .pie-pagina a:hover {
     background: var(--nav-activo);
 }
+/* página actual: anillo con box-shadow, así el outline queda libre para el foco */
 .pie-pagina a[aria-current="page"] {
-    outline: 2px solid var(--acento);
-    outline-offset: 2px;
+    box-shadow: 0 0 0 var(--linea-media) var(--superficie), 0 0 0 calc(2 * var(--linea-media)) var(--acento);
 }
 
 /* letra chica del modo demo: encima de las migas, sin peso visual */
@@ -1602,7 +1602,7 @@ fieldset.campo legend {
     .campo input[type="tel"],
     .campo select,
     .campo textarea {
-        min-height: 2.75rem;
+        min-height: var(--toque-min);
     }
 
     .opcion-material {

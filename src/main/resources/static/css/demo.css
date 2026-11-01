@@ -93,6 +93,6 @@
     .rol-switch button,
     .org-switch button,
     .reiniciar button {
-        min-height: var(--icono);
+        min-height: var(--toque-min);
     }
 }
