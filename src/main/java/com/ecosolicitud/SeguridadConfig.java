@@ -77,6 +77,7 @@ class SeguridadConfig {
                                                 || a.getAuthority().equals("ROLE_ORGANIZACION"))))
                         .anyRequest().permitAll())
                 .exceptionHandling(errores -> errores
+                        .accessDeniedHandler(new FormularioVencido())
                         // los privados del ciudadano redirigen a entrar; el resto queda 403
                         .defaultAuthenticationEntryPointFor(aIngresar(),
                                 new OrRequestMatcher(

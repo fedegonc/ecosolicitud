@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 import com.ecosolicitud.cuenta.interno.UsuariosRepository;
 import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.shared.Rutas;
+import com.ecosolicitud.solicitud.Filtro;
+import com.ecosolicitud.solicitud.ListadoService;
 
 import java.net.CookieManager;
 import java.net.http.HttpClient;
@@ -33,6 +35,9 @@ class RegistroTest {
 
     @Autowired
     private UsuariosRepository usuarios;
+
+    @Autowired
+    private ListadoService listados;
 
     @Test
     void registrarCreaLaCuentaIniciaSesionYLlevaAlPanel() {
@@ -159,6 +164,67 @@ class RegistroTest {
         });
         assertThat(r.getBody()).contains("name=\"ciudad\"")
                 .containsPattern("value=\"RIVERA\"\\s+selected");
+    }
+
+    @Test
+    void elMismoEnvioDosVecesNoDuplicaLaSolicitud() {
+        var sesion = new Sesion();
+        sesion.post(Rutas.CUENTA_REGISTRAR, b -> {
+            b.add("nombre", "vecino.reintento");
+            b.add("pais", "UY");
+            b.add("telefono", "099 666 777");
+            b.add("clave", "reciclo2026");
+            b.add("condiciones", "on");
+        });
+        var id = usuarios.findByNombre("vecino.reintento").orElseThrow().getId();
+        sesion.refrescar(Rutas.NUEVA);
+        java.util.function.Function<String, String> enviar = direccion -> sesion.post(Rutas.NUEVA, b -> {
+            b.add("ciudad", "RIVERA");
+            b.add("organizacionId", "frontera-limpia");
+            b.add("materiales", "PLASTICO");
+            b.add("nombre", "Vecino Reintento");
+            b.add("contacto", "099666777");
+            b.add("direccion", direccion);
+        }).getBody();
+        var primera = enviar.apply("Uruguay 200");
+        var segunda = enviar.apply("  uruguay 200 ");
+        var numero = Pattern.compile("Solicitud #(\\d+) enviada");
+        var m1 = numero.matcher(primera);
+        var m2 = numero.matcher(segunda);
+        assertThat(m1.find()).isTrue();
+        assertThat(m2.find()).isTrue();
+        // el reintento confirma la misma solicitud, sin crear otra
+        assertThat(m2.group(1)).isEqualTo(m1.group(1));
+        assertThat(listados.misSolicitudes(id, Filtro.TODAS, 1)).hasSize(1);
+        // otra dirección es otra solicitud
+        enviar.apply("Sarandí 300");
+        assertThat(listados.misSolicitudes(id, Filtro.TODAS, 1)).hasSize(2);
+    }
+
+    @Test
+    void conElFormularioVencidoVuelveANuevaConLosDatos() {
+        var sesion = new Sesion();
+        sesion.post(Rutas.CUENTA_REGISTRAR, b -> {
+            b.add("nombre", "vecino.vencido");
+            b.add("pais", "UY");
+            b.add("telefono", "099 888 111");
+            b.add("clave", "reciclo2026");
+            b.add("condiciones", "on");
+        });
+        sesion.refrescar(Rutas.NUEVA);
+        // token viejo (sesión vencida o servidor reiniciado): va primero y gana
+        var r = sesion.post(Rutas.NUEVA, b -> {
+            b.add("_csrf", "token-de-otra-sesion");
+            b.add("ciudad", "RIVERA");
+            b.add("organizacionId", "frontera-limpia");
+            b.add("materiales", "PLASTICO");
+            b.add("direccion", "Calle Vencida 2");
+        });
+        assertThat(r.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(r.getBody()).contains("estuvo abierta mucho tiempo",
+                "value=\"Calle Vencida 2\"").doesNotContain("jsessionid");
+        var id = usuarios.findByNombre("vecino.vencido").orElseThrow().getId();
+        assertThat(listados.misSolicitudes(id, Filtro.TODAS, 1)).isEmpty();
     }
 
     private class Sesion {

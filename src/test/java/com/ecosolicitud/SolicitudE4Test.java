@@ -278,14 +278,18 @@ class SolicitudE4Test {
             assertThat(servicio.todas()).hasSize(antes);
         });
 
-        Allure.step("POST /nueva sin CSRF responde 403", () -> {
+        Allure.step("POST /nueva sin CSRF no guarda: vuelve al formulario (o a Ingresar)", () -> {
+            int antes = servicio.todas().size();
             var body = new LinkedMultiValueMap<String, String>();
             body.add("ciudad", "RIVERA");
             var headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             var respuesta = rest.postForEntity(Rutas.NUEVA,
                     new HttpEntity<>(body, headers), String.class);
-            assertThat(respuesta.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+            // FormularioVencido: redirect a /nueva con los datos y, sin sesión,
+            // de ahí a Ingresar (el cliente sigue los redirects)
+            assertThat(respuesta.getBody()).contains("name=\"password\"");
+            assertThat(servicio.todas()).hasSize(antes);
         });
     }
 

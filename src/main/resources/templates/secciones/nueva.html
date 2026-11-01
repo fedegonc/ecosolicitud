@@ -11,6 +11,8 @@
         <p th:text="#{nueva.intro.detalle}">Ciudad, centro, materiales y tus datos.</p>
     </header>
     <form th:action="@{${rutas.NUEVA}}" method="post" th:object="${form}" hx-indicator="this" class="form-nueva">
+        <p class="caja banner" role="status" th:if="${param.vencida != null}"
+           th:text="#{nueva.vencida}">La página estuvo abierta mucho tiempo</p>
         <div class="resumen-errores" role="alert" tabindex="-1" th:if="${#fields.hasErrors('*')}">
             <p th:text="#{nueva.resumen.titulo}">Revisá estos datos antes de enviar</p>
             <ul>

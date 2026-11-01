@@ -1,9 +1,11 @@
 package com.ecosolicitud.solicitud;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -11,6 +13,7 @@ import com.ecosolicitud.organizacion.OrganizacionInfo;
 import com.ecosolicitud.organizacion.OrganizacionService;
 import com.ecosolicitud.shared.Actor;
 import com.ecosolicitud.shared.CatalogoMateriales;
+import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.solicitud.interno.Ciudadano;
 import com.ecosolicitud.solicitud.interno.CiudadanoRepository;
 import com.ecosolicitud.solicitud.interno.Solicitud;
@@ -24,6 +27,8 @@ import static java.util.stream.Collectors.toSet;
 
 @Service
 public class SolicitudService {
+
+    static final Duration VENTANA_REINTENTO = Duration.ofMinutes(2);
 
     private final SolicitudRepository repositorio;
     private final CiudadanoRepository ciudadanos;
@@ -50,14 +55,43 @@ public class SolicitudService {
             return Optional.empty();
         }
         var materiales = catalogo.seleccionActiva(datos.materiales());
+        String nombreOrg = organizaciones.buscar(datos.organizacionId())
+                .map(OrganizacionInfo::nombre).orElse(datos.organizacionId());
+        // el mismo envío otra vez (red lenta, atrás y reenviar): la que ya
+        // existe, sin duplicar la solicitud ni el aviso al centro
+        var repetida = reintento(actor.ciudadanoId(), datos, materiales);
+        if (repetida.isPresent()) {
+            return Optional.of(SolicitudInfo.desde(repetida.get(),
+                    Map.of(datos.organizacionId(), nombreOrg)));
+        }
         var s = Solicitud.nueva(datos.direccion(), datos.referencia(), datos.ubicacion(),
                 materiales, datos.organizacionId(), datos.nota(), datos.contacto(),
                 ciudadano(actor.ciudadanoId(), datos.nombre()));
         repositorio.save(s);
         avisos.nueva(s);
-        String nombreOrg = organizaciones.buscar(datos.organizacionId())
-                .map(OrganizacionInfo::nombre).orElse(datos.organizacionId());
         return Optional.of(SolicitudInfo.desde(s, Map.of(datos.organizacionId(), nombreOrg)));
+    }
+
+    // pendiente del mismo vecino, al mismo centro, misma dirección y materiales,
+    // creada hace menos de VENTANA_REINTENTO
+    private Optional<Solicitud> reintento(String ciudadanoId, SolicitudCreacion datos,
+            List<Material> materiales) {
+        if (ciudadanoId == null) {
+            return Optional.empty();
+        }
+        var codigos = codigos(materiales);
+        var direccion = datos.direccion().strip();
+        return repositorio.findByCiudadano_IdAndCreadaEnGreaterThanEqualOrderByCreadaEnDesc(
+                        ciudadanoId, Instant.now().minus(VENTANA_REINTENTO)).stream()
+                .filter(s -> s.getEstado() == Estado.PENDIENTE
+                        && s.getOrganizacionId().equals(datos.organizacionId())
+                        && s.getDireccion().strip().equalsIgnoreCase(direccion)
+                        && codigos(s.getMateriales()).equals(codigos))
+                .findFirst();
+    }
+
+    private static Set<String> codigos(List<Material> materiales) {
+        return materiales.stream().map(Material::getCodigo).collect(toSet());
     }
 
     @Transactional
