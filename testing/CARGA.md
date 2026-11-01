@@ -146,6 +146,17 @@ Cada ejecución necesita JTL y directorio de reporte nuevos. JMeter puede termin
 
 La duración depende de las respuestas; los recorridos no equivalen a minutos. No llamar al plan de cinco recorridos una prueba de resistencia prolongada.
 
+### Correlación con recursos de plataforma
+
+Para graficar carga (req/s e hilos), efecto (latencia mediana) y consumo (CPU/memoria % del límite de Render) sobre un eje de tiempo compartido:
+
+```bash
+python3 scratch/recursos_render.py <dir-campaña>            # baja métricas de la ventana (lee .resumen.json)
+scratch/.venv/bin/python scratch/graficar_recursos_mpl.py <dir-campaña>  # campana.png + un PNG por corrida
+```
+
+`recursos_render.py` usa la clave de Render del MCP (`~/.config/devin/render_api_key`) y escribe `recursos-<stamp>.json` junto a los JTL. La resolución mínima de la plataforma es 1 minuto: corridas más cortas pueden quedar con un solo punto de métricas. Retención: ~30 días. `graficar_recursos_mpl.py` requiere matplotlib (instalado en `scratch/.venv` con uv); `graficar_recursos.py` es la alternativa sin dependencias que produce SVG/HTML.
+
 ## 5. Objetivos propuestos y criterios de parada
 
 Estos son objetivos del piloto, no garantías de Render ni límites ya medidos:

@@ -9,6 +9,7 @@ Este directorio concentra procedimientos, reglas de aceptación, resultados y pe
 | [Carga](CARGA.md) | JMeter, resultados locales y en Render, interpretación de capacidad, escalones y criterios de parada |
 | [E2E](E2E.md) | Flujos de los dos actores, pruebas HTTP/HtmlUnit y comprobaciones manuales en navegador |
 | [Reglas y regresiones](REGLAS.md) | Validaciones, estados, permisos, arquitectura, perfiles, redundancias y riesgos pendientes |
+| [Resultados consolidados](RESULTADOS.md) | Síntesis de hallazgos por área con números, método y límites de cada medición |
 | [Resultados agregados del 2026-10-04](resultados/2026-10-04.json) | Primera ejecución local y remota, sin cookies ni credenciales |
 | [Repetición con escalones](resultados/2026-10-04-escalones.json) | Nivel 10 detenido por latencia; 15/20 bloqueados; recursos y recuperación |
 
