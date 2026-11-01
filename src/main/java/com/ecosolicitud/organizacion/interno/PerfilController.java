@@ -44,7 +44,7 @@ class PerfilController {
         boolean ubicacionInvalida = form.getLatitud() == null != (form.getLongitud() == null)
                 || form.getLatitud() != null && form.getUbicacion() == null;
         if (ubicacionInvalida) {
-            errores.rejectValue("latitud", "perfil.error.mapa");
+            errores.rejectValue("latitud", "mapa.error.incompleta");
             return formulario(modelo);
         }
         var org = servicio.actual(actor.actual());

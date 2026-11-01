@@ -20,7 +20,7 @@ class ModoIntentosFiltroTest {
         var reloj = mock(Clock.class);
         var inicio = Instant.parse("2026-10-27T12:00:00Z");
         when(reloj.instant()).thenReturn(inicio);
-        var filtro = new ModoIntentosFiltro(reloj, 5);
+        var filtro = new ModoIntentosFiltro(reloj, 5, r -> "");
         for (int i = 0; i < 5; i++) {
             assertThat(enviar(filtro, "127.0.0.1", "cliente-" + i).getStatus()).isEqualTo(200);
         }
@@ -34,7 +34,7 @@ class ModoIntentosFiltroTest {
 
     @Test
     void laMemoriaEstaAcotadaSinExpulsarBloqueosActivos() throws Exception {
-        var filtro = new ModoIntentosFiltro(Clock.systemUTC(), 5);
+        var filtro = new ModoIntentosFiltro(Clock.systemUTC(), 5, r -> "");
         for (int i = 0; i < 1024; i++) {
             assertThat(enviar(filtro, "cliente-" + i, "").getStatus()).isEqualTo(200);
         }
@@ -43,7 +43,7 @@ class ModoIntentosFiltroTest {
 
     @Test
     void noLimitaLaNavegacion() throws Exception {
-        var filtro = new ModoIntentosFiltro(Clock.systemUTC(), 5);
+        var filtro = new ModoIntentosFiltro(Clock.systemUTC(), 5, r -> "");
         var request = new MockHttpServletRequest("GET", "/modo/dev");
         var response = new MockHttpServletResponse();
         var chain = mock(FilterChain.class);

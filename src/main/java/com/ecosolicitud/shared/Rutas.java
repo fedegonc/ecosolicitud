@@ -32,9 +32,7 @@ public final class Rutas {
     public static final String ORG_ACEPTAR = ORG_SOLICITUD + "/aceptar";
     public static final String ORG_RECHAZAR = ORG_SOLICITUD + "/rechazar";
     public static final String ORG_COMPLETAR = ORG_SOLICITUD + "/completar";
-    public static final String ORG_ARCHIVADAS = ORG_SOLICITUDES + "/archivadas";
     public static final String ORG_INFORME = ORG_SOLICITUDES + "/informe";
-    public static final String ORG_COPIA = ORG_SOLICITUDES + "/copia";
     public static final String ORG_PERFIL = "/org/perfil";
 
     public static final String DEMO_ROL = "/demo/rol";
@@ -48,7 +46,6 @@ public final class Rutas {
     public static final String CUENTA_SALIR = "/cuenta/salir";
     public static final String CUENTA_CONDICIONES = "/cuenta/condiciones";
 
-    public static final String DEV_CASOS_DE_USO = "/dev/casos-de-uso";
     public static final String DEV_LAYOUT_SYSTEM = "/dev/layout-system";
 
     // para Java que arma enlaces (las plantillas usan @{${rutas.X}(id=...)})

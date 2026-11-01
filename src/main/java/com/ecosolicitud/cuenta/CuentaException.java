@@ -1,6 +1,7 @@
 package com.ecosolicitud.cuenta;
 
-// campo: el input del formulario que se marca con el error
+// campo: el input del formulario que se marca con el error;
+// mensaje: la clave de messages que lo explica
 public class CuentaException extends RuntimeException {
 
     private final String campo;

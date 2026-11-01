@@ -48,16 +48,16 @@
             <span class="error" id="err-telefono" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}">Error</span>
         </label>
         <div class="campo">
-            <span th:text="#{mapa.titulo.perfil}">Ubicación del acopio</span>
+            <span th:text="#{mapa.titulo}">Ubicación del acopio</span>
             <input type="hidden" th:field="*{latitud}">
             <input type="hidden" th:field="*{longitud}">
-            <div class="mapa-editable" data-mapa-editable role="application" th:aria-label="#{mapa.titulo.perfil}"
+            <div class="mapa-editable" data-mapa-editable role="application" th:aria-label="#{mapa.titulo}"
                  th:attr="data-leaflet-js=@{/js/leaflet/leaflet.js},data-leaflet-css=@{/js/leaflet/leaflet.css}"></div>
             <p class="mapa-acciones">
                 <button type="button" class="secundaria" data-mapa-geolocalizar><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{mapa.boton}">Usar mi ubicación</span></button>
                 <button type="button" class="enlace" data-mapa-quitar th:hidden="${form.ubicacion == null}" th:text="#{mapa.quitar}">Quitar ubicación</button>
             </p>
-            <span class="ayuda" th:text="#{mapa.ayuda.perfil}">Ayuda</span>
+            <span class="ayuda" th:text="#{mapa.ayuda}">Ayuda</span>
             <script th:src="@{/js/mapa.js}"></script>
             <span class="error" data-mapa-error hidden th:text="#{mapa.error}">Error</span>
             <span class="error" th:if="${#fields.hasErrors('latitud')}"
@@ -90,7 +90,7 @@
                 </ul>
                 <th:block th:if="${organizacionActiva.ubicacion != null}">
                     <iframe class="mapa-centro" th:src="${organizacionActiva.ubicacion.mapaEmbebido()}"
-                            th:title="#{acopios.mapa(${organizacionActiva.nombre})}" loading="lazy"></iframe>
+                            th:title="#{mapa.de(${organizacionActiva.nombre})}" loading="lazy"></iframe>
                     <a th:href="${organizacionActiva.ubicacion.enlaceMapa()}" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg><span th:text="#{acopios.mapa.ver}">Ver en el mapa</span></a>
                 </th:block>
             </div>

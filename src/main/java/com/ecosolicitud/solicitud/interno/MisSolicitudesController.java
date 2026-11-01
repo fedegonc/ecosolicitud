@@ -46,7 +46,6 @@ class MisSolicitudesController {
                 actor.actual().ciudadanoId(), activo, pagina));
         modelo.addAttribute("usuario", actor.actual().nombreCiudadano());
         modelo.addAttribute("semana", listados.semana(actor.actual()));
-        modelo.addAttribute("archivadas", listados.totalArchivadas(actor.actual()));
         return "secciones/mis-solicitudes";
     }
 

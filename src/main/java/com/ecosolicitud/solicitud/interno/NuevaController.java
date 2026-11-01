@@ -90,7 +90,7 @@ class NuevaController {
         boolean fueraDeRango = form.getLatitud() != null && form.getLongitud() != null
                 && form.getUbicacion() == null;
         if (parIncompleto || fueraDeRango) {
-            errores.rejectValue("latitud", "nueva.error.mapa");
+            errores.rejectValue("latitud", "mapa.error.incompleta");
         }
         if (!errores.hasErrors()) {
             var datos = new SolicitudCreacion(form.getCiudad(), form.getDireccion(),

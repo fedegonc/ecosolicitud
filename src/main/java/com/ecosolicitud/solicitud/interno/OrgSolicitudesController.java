@@ -1,26 +1,17 @@
 package com.ecosolicitud.solicitud.interno;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
-import java.util.Optional;
 
 import com.ecosolicitud.organizacion.OrganizacionService;
-import com.ecosolicitud.shared.Actor;
 import com.ecosolicitud.shared.ActorSesion;
-import com.ecosolicitud.shared.Fechas;
 import com.ecosolicitud.shared.Miga;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.solicitud.ListadoService;
 import com.ecosolicitud.solicitud.Resultado;
 import com.ecosolicitud.solicitud.SolicitudService;
 
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,15 +44,7 @@ class OrgSolicitudesController {
         modelo.addAttribute("organizacion", organizaciones.actual(actor.actual()));
         modelo.addAttribute("bandeja", listados.recibidas(actor.actual()));
         modelo.addAttribute("semana", listados.semana(actor.actual()));
-        modelo.addAttribute("archivadas", listados.totalArchivadas(actor.actual()));
         return "secciones/org/solicitudes";
-    }
-
-    @GetMapping(Rutas.ORG_ARCHIVADAS)
-    String archivadas(@RequestParam(defaultValue = "1") int pagina, Model modelo) {
-        modelo.addAttribute("pagina", listados.archivadas(actor.actual(), pagina));
-        modelo.addAttribute("migaFinal", Miga.actualClave("org.archivadas.titulo"));
-        return "secciones/org/archivadas";
     }
 
     @GetMapping(Rutas.ORG_INFORME)
@@ -71,22 +54,6 @@ class OrgSolicitudesController {
         modelo.addAttribute("migaFinal", Miga.actualClave("panel.informe"));
         modelo.addAttribute("informe", listados.informe(actor.actual(), parseMes(mes)));
         return "secciones/informe";
-    }
-
-    // copia de respaldo en .txt: solo la organización de la sesión; sin una
-    // válida, 403 (nunca "la primera disponible", como hace actual())
-    @GetMapping(Rutas.ORG_COPIA)
-    ResponseEntity<String> copia() {
-        var org = Optional.of(actor.actual()).filter(Actor::esOrganizacion)
-                .map(Actor::organizacionId)
-                .flatMap(organizaciones::buscar)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
-        var nombre = "ecosolicitud-" + LocalDate.now(Fechas.ZONA) + ".txt";
-        return ResponseEntity.ok()
-                .contentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8))
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.attachment().filename(nombre).build().toString())
-                .body(CopiaTexto.de(org, listados.todasDe(org.id())));
     }
 
     // el enlace "Detalles" (hx-get) recibe solo el detalle expandible; una

@@ -199,7 +199,7 @@ class SolicitudE5Test {
     @Test
     @DisplayName("Bandeja de la organización agrupada y botones por estado")
     void bandeja() {
-        Allure.step("Solo las de la organización activa, en 3 grupos", () -> {
+        Allure.step("Solo las de la organización activa, en Abiertas y Cerradas", () -> {
             driver.get(base + Rutas.MIS_SOLICITUDES);
             driver.findElement(By.cssSelector(
                     ".sidebar .rol-switch button[value='ORGANIZACION']")).click();
@@ -209,31 +209,33 @@ class SolicitudE5Test {
             driver.get(base + Rutas.ORG_SOLICITUDES);
             assertThat(driver.findElements(By.cssSelector("h2")).stream()
                     .map(e -> e.getText()).toList())
-                    .containsExactly("Pendientes", "En curso", "Cerradas");
+                    .containsExactly("Abiertas", "Cerradas");
             var secciones = driver.findElements(By.cssSelector("main section"));
-            var pendientes = secciones.get(0).findElements(By.cssSelector(".tarjeta"));
+            assertThat(secciones.get(0).findElements(By.cssSelector(".tarjeta"))).hasSize(2);
+            var pendientes = secciones.get(0).findElements(By.cssSelector(".tarjeta.est-pendiente"));
             assertThat(pendientes).hasSize(1);
-            assertThat(pendientes.get(0).getText()).contains("Ana Rodríguez");
-            assertThat(secciones.get(1).findElements(By.cssSelector(".tarjeta"))).hasSize(1);
-            var cerradas = secciones.get(2).findElements(By.cssSelector(".tarjeta"));
+            assertThat(pendientes.get(0).getText()).contains("Ana Rodríguez", "Pendiente");
+            assertThat(secciones.get(0).findElements(By.cssSelector(".tarjeta.est-en_curso")))
+                    .hasSize(1);
+            var cerradas = secciones.get(1).findElements(By.cssSelector(".tarjeta"));
             assertThat(cerradas).hasSize(1);
-            assertThat(cerradas.get(0).getText()).contains("Retiro realizado");
+            assertThat(cerradas.get(0).getText()).contains("Completada");
             assertThat(driver.getPageSource()).doesNotContain("Carla Santos");
         });
 
         Allure.step("Los botones corresponden al estado de cada solicitud", () -> {
             var secciones = driver.findElements(By.cssSelector("main section"));
-            var pendiente = secciones.get(0).findElement(By.cssSelector(".tarjeta"));
+            var pendiente = secciones.get(0).findElement(By.cssSelector(".tarjeta.est-pendiente"));
             assertThat(pendiente.findElements(By.cssSelector("form[action$='/aceptar']")))
                     .hasSize(1);
             assertThat(pendiente.findElements(By.cssSelector("form[action$='/rechazar']")))
                     .hasSize(1);
-            var enCurso = secciones.get(1).findElement(By.cssSelector(".tarjeta"));
+            var enCurso = secciones.get(0).findElement(By.cssSelector(".tarjeta.est-en_curso"));
             assertThat(enCurso.findElements(By.cssSelector("form[action$='/completar']")))
                     .hasSize(1);
             assertThat(enCurso.findElements(By.cssSelector("form[action$='/rechazar']")))
                     .hasSize(1);
-            var cerrada = secciones.get(2).findElement(By.cssSelector(".tarjeta"));
+            var cerrada = secciones.get(1).findElement(By.cssSelector(".tarjeta"));
             assertThat(cerrada.findElements(By.cssSelector("form"))).isEmpty();
         });
     }

@@ -136,7 +136,7 @@ class SolicitudE4Test {
             assertThat(driver.findElements(By.cssSelector(".opcion-centro"))).hasSize(2);
         });
 
-        Allure.step("Pedir retiro desde /acopios fija el centro sin repetir la lista (RF-09)", () -> {
+        Allure.step("Nueva solicitud desde /acopios fija el centro sin repetir la lista (RF-09)", () -> {
             driver.get(base + Rutas.ACOPIOS);
             driver.findElement(By.cssSelector(
                     ".tarjeta a[href*='organizacionId=acopio-verde']")).click();
@@ -167,7 +167,7 @@ class SolicitudE4Test {
                     organizaciones.buscar("coleta-solidaria").orElseThrow()));
             driver.get(base + "/nueva?ciudad=RIVERA");
             assertThat(driver.findElement(By.cssSelector(".alerta")).getText())
-                    .contains("No hay centros de acopio");
+                    .contains("No hay centros en esa ciudad");
         });
 
         Allure.step("Parámetros inexistentes responden 400", () -> {
@@ -274,7 +274,7 @@ class SolicitudE4Test {
                 body.add("contacto", "T");
                 body.add("direccion", "Calle 1");
             });
-            assertThat(respuesta.getBody()).contains("Elegí un centro de acopio de la ciudad");
+            assertThat(respuesta.getBody()).contains("Elegí un centro de la ciudad");
             assertThat(servicio.todas()).hasSize(antes);
         });
 
@@ -296,8 +296,8 @@ class SolicitudE4Test {
             driver.get(base + Rutas.MIS_SOLICITUDES);
             var fichas = driver.findElements(By.cssSelector(".tarjeta"));
             assertThat(fichas).hasSize(2);
-            assertThat(fichas.get(0).getText()).contains("Retiro confirmado");
-            assertThat(fichas.get(1).getText()).contains("Retiro realizado");
+            assertThat(fichas.get(0).getText()).contains("Aceptada");
+            assertThat(fichas.get(1).getText()).contains("Completada");
             assertThat(driver.getPageSource()).doesNotContain("Ana Rodríguez", "João Almeida");
         });
 
@@ -305,11 +305,11 @@ class SolicitudE4Test {
             driver.get(base + Rutas.MIS_SOLICITUDES + "?filtro=abiertas");
             assertThat(driver.findElements(By.cssSelector(".tarjeta"))).hasSize(1);
             assertThat(driver.findElement(By.cssSelector(".tarjeta")).getText())
-                    .contains("Retiro confirmado");
+                    .contains("Aceptada");
             driver.get(base + Rutas.MIS_SOLICITUDES + "?filtro=cerradas");
             var cerrada = driver.findElements(By.cssSelector(".tarjeta"));
             assertThat(cerrada).hasSize(1);
-            assertThat(cerrada.get(0).getText()).contains("Retiro realizado");
+            assertThat(cerrada.get(0).getText()).contains("Completada");
             driver.get(base + Rutas.MIS_SOLICITUDES + "?filtro=inventado");
             assertThat(driver.findElements(By.cssSelector(".tarjeta"))).hasSize(2);
         });

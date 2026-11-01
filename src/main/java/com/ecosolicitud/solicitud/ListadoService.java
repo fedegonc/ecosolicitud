@@ -58,25 +58,9 @@ public class ListadoService {
     public BandejaSolicitudes recibidas(Actor actor) {
         var org = organizacionId(actor);
         return new BandejaSolicitudes(List.of(
-                grupo(org, "org.grupo.pendientes", Set.of(Estado.PENDIENTE), TOPE_GRUPO),
-                grupo(org, "org.grupo.en-curso", Set.of(Estado.EN_CURSO), TOPE_GRUPO),
+                grupo(org, "org.grupo.abiertas", Set.of(Estado.PENDIENTE, Estado.EN_CURSO),
+                        TOPE_GRUPO),
                 grupo(org, "org.grupo.cerradas", Estado.finales(), TOPE_CERRADAS)));
-    }
-
-    public Page<SolicitudInfo> archivadas(Actor actor, int pagina) {
-        return pagina(pagina, p -> actor.esOrganizacion()
-                ? repositorio.findByOrganizacionIdAndEstadoInOrderByCreadaEnDesc(
-                        organizacionId(actor), Estado.finales(), p)
-                : repositorio.findByCiudadano_IdAndEstadoInOrderByCreadaEnDesc(
-                        actor.ciudadanoId(), Estado.finales(), p));
-    }
-
-    public long totalArchivadas(Actor actor) {
-        return actor.esOrganizacion()
-                ? repositorio.countByOrganizacionIdAndEstadoIn(
-                        organizacionId(actor), Estado.finales())
-                : repositorio.countByCiudadano_IdAndEstadoIn(
-                        actor.ciudadanoId(), Estado.finales());
     }
 
     public SolicitudMetricas semana(Actor actor) {
@@ -99,11 +83,6 @@ public class ListadoService {
                 : repositorio.findByCiudadano_IdAndCreadaEnGreaterThanEqualAndCreadaEnLessThanOrderByCreadaEnDesc(
                         actor.ciudadanoId(), desde, hasta);
         return InformeMensual.desde(mes, delMes, servicio.aInfos(delMes));
-    }
-
-    // copia de respaldo: todas las solicitudes de una organización, sin tope
-    public List<SolicitudInfo> todasDe(String organizacionId) {
-        return servicio.aInfos(repositorio.findByOrganizacionIdOrderByCreadaEnDesc(organizacionId));
     }
 
     private String organizacionId(Actor actor) {

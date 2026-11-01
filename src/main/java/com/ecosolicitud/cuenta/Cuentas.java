@@ -48,28 +48,28 @@ public class Cuentas {
     // Valida sin persistir: el formulario junta todos los errores antes de crear
     public String validarDatos(String nombre, String numero, Pais pais, String clave) {
         if (nombre == null || nombre.strip().length() < NOMBRE_MINIMO) {
-            throw new CuentaException("nombre", "El nombre de usuario necesita al menos 5 caracteres");
+            throw new CuentaException("nombre", "cuenta.error.nombre.corto");
         }
         var usuario = nombre.strip().toLowerCase();
         if (!NOMBRE_FORMATO.matcher(usuario).matches()) {
             throw new CuentaException("nombre",
-                    "El nombre de usuario no admite espacios ni símbolos");
+                    "cuenta.error.nombre.formato");
         }
         String telefono;
         try {
             telefono = Telefono.normalizar(numero, pais);
         } catch (IllegalArgumentException e) {
-            throw new CuentaException("telefono", "Ingresá un celular de Uruguay o Brasil");
+            throw new CuentaException("telefono", "cuenta.error.telefono");
         }
         if (clave == null || clave.length() < CLAVE_MINIMA
                 || clave.getBytes(StandardCharsets.UTF_8).length > CLAVE_MAXIMA_BYTES) {
-            throw new CuentaException("clave", "La contraseña necesita al menos 5 caracteres");
+            throw new CuentaException("clave", "cuenta.error.clave");
         }
         if (usuarios.findByNombre(usuario).isPresent()) {
-            throw new CuentaException("nombre", "Ese nombre de usuario ya está en uso");
+            throw new CuentaException("nombre", "cuenta.error.nombre.usado");
         }
         if (usuarios.findByTelefono(telefono).isPresent()) {
-            throw new CuentaException("telefono", "Ese celular ya tiene una cuenta");
+            throw new CuentaException("telefono", "cuenta.error.telefono.usado");
         }
         return telefono;
     }

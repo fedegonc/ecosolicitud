@@ -57,16 +57,17 @@ class CuentaController {
             @RequestParam String telefono, @RequestParam String clave,
             @RequestParam(required = false) String condiciones,
             HttpServletRequest request, RedirectAttributes redir, Model modelo) {
+        // campo → clave de messages; la plantilla la traduce
         Map<String, String> errores = new LinkedHashMap<>();
         if (condiciones == null) {
-            errores.put("condiciones", "Tenés que aceptar las condiciones de uso");
+            errores.put("condiciones", "cuenta.error.condiciones");
         }
         Pais p;
         try {
             p = Pais.valueOf(pais == null ? "" : pais);
         } catch (IllegalArgumentException e) {
             p = null;
-            errores.put("pais", "Elegí Uruguay o Brasil");
+            errores.put("pais", "cuenta.error.pais");
         }
         if (p != null) {
             try {

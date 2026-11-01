@@ -72,7 +72,7 @@ class ContenidoConsultaTest {
         var r = rest.getForEntity(Rutas.ESTADISTICAS, String.class);
         assertThat(r.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(r.getBody()).contains("Estadísticas del servicio")
-                .contains("Por centro de acopio", "Centro de ejemplo – Paso del Enano",
+                .contains("Por centro", "Centro de ejemplo – Paso del Enano",
                         "Centro de exemplo – Jardins", "periodo=todo")
                 .doesNotContain("??");
         assertThat(rest.getForEntity(Rutas.ESTADISTICAS + "?periodo=invalido", String.class)

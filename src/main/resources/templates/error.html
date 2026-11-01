@@ -9,7 +9,7 @@
         <img th:src="@{/img/ciudad/frontera-800.webp}" width="800" height="600"
              th:alt="#{foto.frontera}">
         <h1 th:text="#{error.titulo}">Algo salió mal</h1>
-        <p th:text="#{error.detalle(${status})}">Error</p>
+        <p th:text="#{error.detalle}">Error</p>
         <p><a th:href="@{${rutas.RAIZ}}" th:text="#{error.volver}">Volver</a></p>
     </article>
 </main>

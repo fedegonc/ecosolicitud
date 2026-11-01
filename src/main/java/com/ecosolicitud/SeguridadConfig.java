@@ -19,6 +19,11 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.time.Clock;
+import java.util.function.Function;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.context.MessageSource;
+import org.springframework.web.servlet.LocaleResolver;
 
 import com.ecosolicitud.shared.Rutas;
 
@@ -29,7 +34,7 @@ class SeguridadConfig {
     @Bean
     @org.springframework.core.annotation.Order(1)
     SecurityFilterChain seguridadCuentas(HttpSecurity http,
-            AuthenticationSuccessHandler ingreso,
+            AuthenticationSuccessHandler ingreso, MessageSource mensajes, LocaleResolver idiomas,
             @Value("${ecosolicitud.cuenta.intentos:5}") int intentosCuenta)
             throws Exception {
         return http.securityMatcher("/cuenta/**")
@@ -47,13 +52,13 @@ class SeguridadConfig {
                 .requestCache(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new ModoIntentosFiltro(Clock.systemUTC(),
-                        intentosCuenta),
+                        intentosCuenta, avisoIntentos(mensajes, idiomas)),
                         UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
-    SecurityFilterChain seguridad(HttpSecurity http,
+    SecurityFilterChain seguridad(HttpSecurity http, MessageSource mensajes, LocaleResolver idiomas,
             @Value("${ecosolicitud.demo.habilitada:true}") boolean demoHabilitada,
             @Value("${ecosolicitud.modo.intentos:5}") int intentos) throws Exception {
         return http
@@ -91,9 +96,15 @@ class SeguridadConfig {
                         .invalidateHttpSession(true).deleteCookies("JSESSIONID"))
                 .requestCache(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new ModoIntentosFiltro(Clock.systemUTC(), intentos),
+                .addFilterBefore(new ModoIntentosFiltro(Clock.systemUTC(), intentos,
+                        avisoIntentos(mensajes, idiomas)),
                         UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    private static Function<HttpServletRequest, String> avisoIntentos(MessageSource mensajes,
+            LocaleResolver idiomas) {
+        return r -> mensajes.getMessage("modo.intentos", null, idiomas.resolveLocale(r));
     }
 
     @Bean

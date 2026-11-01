@@ -45,10 +45,8 @@ public class AvisoService {
     public List<ColumnaAvisos> kanbanPara(Actor actor) {
         var lista = avisosPara(actor);
         return List.of(
-                new ColumnaAvisos("org.grupo.pendientes",
-                        lista.stream().filter(a -> a.estado() == Estado.PENDIENTE).toList()),
-                new ColumnaAvisos("org.grupo.en-curso",
-                        lista.stream().filter(a -> a.estado() == Estado.EN_CURSO).toList()),
+                new ColumnaAvisos("org.grupo.abiertas",
+                        lista.stream().filter(a -> !a.estado().esFinal()).toList()),
                 new ColumnaAvisos("org.grupo.cerradas",
                         lista.stream().filter(a -> a.estado().esFinal()).toList()));
     }

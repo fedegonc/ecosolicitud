@@ -38,11 +38,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ContratosTest {
 
     private static final Map<Seccion, String> TITULOS = Map.ofEntries(
-            Map.entry(Seccion.NUEVA, "Pedir retiro"),
+            Map.entry(Seccion.NUEVA, "Nueva solicitud"),
             Map.entry(Seccion.MIS_SOLICITUDES, "Mis solicitudes"),
-            Map.entry(Seccion.ACOPIOS, "Centros de acopio"),
+            Map.entry(Seccion.ACOPIOS, "Centros"),
             Map.entry(Seccion.ORG_SOLICITUDES, "Solicitudes recibidas"),
-            Map.entry(Seccion.ORG_PERFIL, "Perfil del acopio"),
+            Map.entry(Seccion.ORG_PERFIL, "Perfil del centro"),
             Map.entry(Seccion.GUIA, "Guía de reciclaje"),
             Map.entry(Seccion.COMUNIDAD, "Comunidad"),
             Map.entry(Seccion.ESTADISTICAS, "Estadísticas del servicio"),

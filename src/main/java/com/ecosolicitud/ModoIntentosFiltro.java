@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.ecosolicitud.shared.Rutas;
 
@@ -28,9 +29,12 @@ final class ModoIntentosFiltro extends OncePerRequestFilter {
     private final Map<String, Intento> intentos = new HashMap<>();
     private final Clock reloj;
     private final int maximo;
+    // el texto sale de messages en el idioma de la sesión, no de este archivo
+    private final Function<HttpServletRequest, String> aviso;
 
-    ModoIntentosFiltro(Clock reloj, int maximo) {
+    ModoIntentosFiltro(Clock reloj, int maximo, Function<HttpServletRequest, String> aviso) {
         this.reloj = reloj;
+        this.aviso = aviso;
         if (maximo < 1) {
             throw new IllegalArgumentException("El limite de intentos debe ser positivo");
         }
@@ -51,7 +55,7 @@ final class ModoIntentosFiltro extends OncePerRequestFilter {
             response.setStatus(429);
             response.setHeader("Retry-After", "60");
             response.setContentType("text/plain;charset=UTF-8");
-            response.getWriter().write("Demasiados intentos. Espera un minuto e intenta de nuevo.");
+            response.getWriter().write(aviso.apply(request));
             return;
         }
         chain.doFilter(request, response);

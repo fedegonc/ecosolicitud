@@ -115,10 +115,6 @@
                         <form th:action="@{${rutas.MODO_SALIR}}" method="post" hx-boost="false" class="salir-demo">
                             <button type="submit" th:text="#{modo.salir}">Salir de demo</button>
                         </form>
-                        <!-- copia en .txt de las solicitudes del centro activo; fuera de
-                             hx-boost para que el navegador descargue el archivo -->
-                        <a th:if="${rolActual.name() == 'ORGANIZACION'}" class="guardar-datos"
-                           th:href="@{${rutas.ORG_COPIA}}" download hx-boost="false"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#descargar'"></use></svg><span th:text="#{demo.guardar}">Guardar datos</span></a>
                         </details>
                         <figure class="qr" th:if="${qr != null}">
                             <span th:utext="${qr}"></span>

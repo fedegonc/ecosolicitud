@@ -26,8 +26,8 @@ class DemoController {
     @PostMapping(Rutas.DEMO_ROL)
     String cambiarRol(@RequestParam Rol rol) {
         actor.cambiar(rol);
-        // al entrar como organización la sesión queda con una explícita: lo que
-        // se ve en pantalla es lo que exporta la copia
+        // al entrar como organización la sesión queda con una explícita: el
+        // selector y la bandeja muestran la misma
         if (rol == Rol.ORGANIZACION) {
             actor.elegirOrganizacion(organizaciones.actual(actor.actual()).id());
         }
