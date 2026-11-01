@@ -38,7 +38,7 @@ class SeguridadConfig {
     @org.springframework.core.annotation.Order(1)
     SecurityFilterChain seguridadCuentas(HttpSecurity http,
             AuthenticationSuccessHandler ingreso, MessageSource mensajes, LocaleResolver idiomas,
-            @Value("${ecosolicitud.cuenta.intentos:20}") int intentosCuenta)
+            @Value("${ecosolicitud.cuenta.intentos:60}") int intentosCuenta)
             throws Exception {
         return http.securityMatcher("/cuenta/**")
                 .authorizeHttpRequests(auth -> auth
@@ -109,10 +109,19 @@ class SeguridadConfig {
                 .build();
     }
 
-    // a Ingresar, recordando la página pedida para volver después de entrar
+    // a Ingresar, recordando la página pedida para volver después de entrar.
+    // Un fragmento htmx (sesión vencida o servidor reiniciado con la página
+    // abierta) no se redirige con 302: htmx lo seguiría y pegaría Ingresar
+    // dentro del fragmento o vaciaría #flujo. Con HX-Redirect navega la página.
     private static AuthenticationEntryPoint aIngresar() {
         var ingresar = new LoginUrlAuthenticationEntryPoint(Rutas.CUENTA_ENTRAR);
         return (request, response, error) -> {
+            if (Volver.esFragmento(request)) {
+                Volver.guardarPagina(request);
+                response.setHeader("HX-Redirect", request.getContextPath() + Rutas.CUENTA_ENTRAR);
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                return;
+            }
             Volver.guardar(request);
             ingresar.commence(request, response, error);
         };

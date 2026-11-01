@@ -291,6 +291,17 @@ class SolicitudE4Test {
             assertThat(respuesta.getBody()).contains("name=\"password\"");
             assertThat(servicio.todas()).hasSize(antes);
         });
+
+        Allure.step("Fragmento htmx sin sesión: HX-Redirect a Ingresar, no la página pegada", () -> {
+            var headers = new HttpHeaders();
+            headers.add("HX-Request", "true");
+            headers.add("HX-Current-URL", "http://localhost/nueva?ciudad=RIVERA");
+            var respuesta = rest.exchange(Rutas.NUEVA + "?ciudad=RIVERA", HttpMethod.GET,
+                    new HttpEntity<>(headers), String.class);
+            assertThat(respuesta.getStatusCode().value()).isEqualTo(401);
+            assertThat(respuesta.getHeaders().getFirst("HX-Redirect")).isEqualTo(Rutas.CUENTA_ENTRAR);
+            assertThat(respuesta.getBody()).isNull();
+        });
     }
 
     @Test

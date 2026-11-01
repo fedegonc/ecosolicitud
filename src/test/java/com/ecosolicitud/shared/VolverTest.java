@@ -38,4 +38,18 @@ class VolverTest {
         Volver.guardar(post);
         assertThat(Volver.tomar(post)).isEmpty();
     }
+
+    @Test
+    void unFragmentoRecuerdaLaPaginaDesdeDondeSePidioSinElHost() {
+        var fragmento = new MockHttpServletRequest("GET", "/nueva");
+        fragmento.addHeader("HX-Request", "true");
+        fragmento.addHeader("HX-Current-URL", "https://otra.web/nueva?ciudad=RIVERA");
+        Volver.guardarPagina(fragmento);
+        assertThat(Volver.tomar(fragmento)).contains("/nueva?ciudad=RIVERA");
+
+        var invalida = new MockHttpServletRequest("GET", "/nueva");
+        invalida.addHeader("HX-Current-URL", "no es una url ::");
+        Volver.guardarPagina(invalida);
+        assertThat(Volver.tomar(invalida)).isEmpty();
+    }
 }

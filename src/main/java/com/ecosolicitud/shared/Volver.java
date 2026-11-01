@@ -1,5 +1,6 @@
 package com.ecosolicitud.shared;
 
+import java.net.URI;
 import java.util.Optional;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,30 @@ public final class Volver {
         }
     }
 
+    // un fragmento htmx pedido sin sesión: se recuerda la página desde donde
+    // se pidió (HX-Current-URL). Solo su ruta, nunca el host que traiga.
+    public static void guardarPagina(HttpServletRequest request) {
+        var actual = request.getHeader("HX-Current-URL");
+        if (actual == null) {
+            return;
+        }
+        try {
+            var uri = URI.create(actual);
+            var ruta = uri.getRawPath() == null ? "" : uri.getRawPath();
+            if (ruta.startsWith(request.getContextPath())) {
+                ruta = ruta.substring(request.getContextPath().length());
+            }
+            if (uri.getRawQuery() != null) {
+                ruta += "?" + uri.getRawQuery();
+            }
+            if (interna(ruta)) {
+                request.getSession().setAttribute(CLAVE, ruta);
+            }
+        } catch (IllegalArgumentException e) {
+            // cabecera inválida: no se recuerda nada
+        }
+    }
+
     // la ruta guardada, una sola vez
     public static Optional<String> tomar(HttpServletRequest request) {
         HttpSession sesion = request.getSession(false);
@@ -36,7 +61,7 @@ public final class Volver {
     }
 
     // un pedido htmx que no es navegación (boost) trae un pedazo de página
-    private static boolean esFragmento(HttpServletRequest request) {
+    public static boolean esFragmento(HttpServletRequest request) {
         return request.getHeader("HX-Request") != null
                 && request.getHeader("HX-Boosted") == null;
     }
