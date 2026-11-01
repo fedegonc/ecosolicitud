@@ -8,6 +8,7 @@ import com.ecosolicitud.cuenta.Pais;
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.shared.Seccion;
+import com.ecosolicitud.shared.Volver;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.ObjectProvider;
@@ -79,7 +80,8 @@ class CuentaController {
             ingresar(request, principal);
             redir.addFlashAttribute("avisoCodigo", "cuenta.bienvenida");
             redir.addFlashAttribute("avisoId", principal.getNombre());
-            return "redirect:" + Seccion.inicioDe(principal.getRol());
+            return "redirect:" + Volver.tomar(request)
+                    .orElse(Seccion.inicioDe(principal.getRol()));
         }
         // lo escrito vuelve al formulario: corregir un campo no obliga a
         // reescribir los demás (la contraseña no se devuelve nunca)

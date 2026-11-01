@@ -117,6 +117,10 @@ a.caja { color: inherit; text-decoration: none; }
 .accion .circulo svg { width: 55%; height: 55%; fill: currentColor; }
 .accion:hover .circulo { transform: scale(1.06); }
 .accion:active .circulo { transform: scale(.97); }
+/* en celular cada acción mide ~60 px: corte con guion silábico (lang es/pt)
+   en vez de "solicitu/d", y texto un punto más chico */
+.accion { overflow-wrap: normal; hyphens: auto; }
+@media (max-width: 44.99rem) { .accion { font-size: calc(1.6 * var(--chico)); } }
 
 /* barra del último pedido: ancha, con el color de su estado */
 .ultimo { margin: 0; flex-wrap: nowrap; }
@@ -130,6 +134,11 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .grilla .imagen { height: 4rem; }
 .ds .grilla .texto { padding: var(--chico); gap: calc(var(--chico) / 2); }
 .ds .grilla strong { font-size: calc(1.75 * var(--chico)); }
+/* centros: lista sin sangría de ul, dos por fila, la tarjeta entera es el
+   enlace pero el texto no se subraya entero */
+.ds ul.grilla { list-style: none; margin: 0; padding: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ds ul.grilla a { display: flex; flex-direction: column; gap: calc(var(--chico) / 2); height: 100%; box-sizing: border-box; padding: calc(1.5 * var(--chico)); min-height: var(--toque-min); color: var(--texto); text-decoration: none; }
+.ds ul.grilla .tarjeta-detalle { color: var(--texto-suave); font-size: .85rem; }
 .fila .caja { min-height: var(--toque-min); }
 
 /* único corte de ancho: lo que solo existe en escritorio */

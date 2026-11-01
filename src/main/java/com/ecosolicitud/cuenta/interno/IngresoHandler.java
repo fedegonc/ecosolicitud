@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.ecosolicitud.shared.ActorSesion;
 import com.ecosolicitud.shared.Seccion;
+import com.ecosolicitud.shared.Volver;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +30,10 @@ public class IngresoHandler implements AuthenticationSuccessHandler {
             actor.getObject().autenticar(u.getCiudadanoId(), u.getNombre(),
                     u.getRol(), u.getOrganizacionId());
             destino = Seccion.inicioDe(u.getRol());
+            // el vecino vuelve a la página que había pedido (QR, enlace compartido)
+            if (u.getRol() == com.ecosolicitud.shared.Rol.CIUDADANO) {
+                destino = Volver.tomar(request).orElse(destino);
+            }
         }
         response.sendRedirect(request.getContextPath() + destino);
     }

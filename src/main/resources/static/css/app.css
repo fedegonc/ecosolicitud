@@ -235,6 +235,24 @@ dd {
     margin: 0;
 }
 
+/* un solo par ícono+valor: el texto largo se parte al lado del ícono, no
+   debajo (en la ficha el ícono quedaba solo en su renglón). Varios pares
+   (materiales) siguen fluyendo con wrap */
+dl:not(:has(dt ~ dt)) {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+}
+
+dl:not(:has(dt ~ dt)) > dt {
+    flex-shrink: 0;
+    line-height: 1.4;
+}
+
+dl:not(:has(dt ~ dt)) > dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 /* el estado abre la ficha: la misma fila dl pero pesa como título */
 dl.estado {
     color: var(--acento);
@@ -260,9 +278,12 @@ main button.secundaria {
     color: var(--texto);
 }
 
+/* peligro: contorno, no relleno; pesa menos que la acción principal para
+   que el pulgar no caiga en Rechazar/Cancelar por ser lo más visible */
 main button.peligro {
-    background: var(--peligro);
-    border-color: color-mix(in srgb, var(--texto) 45%, var(--peligro));
+    background: var(--superficie);
+    border-color: var(--peligro);
+    color: var(--peligro);
 }
 
 /* artículo sin clase: prosa editorial (markdown del servidor en guía y comunidad) */

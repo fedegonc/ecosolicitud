@@ -145,6 +145,22 @@ class RegistroTest {
         assertThat(org.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 
+    @Test
+    void desdeUnEnlaceAnuevaVuelveANuevaDespuesDeRegistrarse() {
+        // QR → /nueva sin sesión → Ingresar → Crear cuenta → de vuelta en /nueva
+        var sesion = new Sesion();
+        sesion.refrescar(Rutas.NUEVA + "?ciudad=RIVERA");
+        var r = sesion.post(Rutas.CUENTA_REGISTRAR, b -> {
+            b.add("nombre", "vecina.qr");
+            b.add("pais", "UY");
+            b.add("telefono", "099 444 555");
+            b.add("clave", "reciclo2026");
+            b.add("condiciones", "on");
+        });
+        assertThat(r.getBody()).contains("name=\"ciudad\"")
+                .containsPattern("value=\"RIVERA\"\\s+selected");
+    }
+
     private class Sesion {
         private String csrf;
         private final RestTemplate propio;

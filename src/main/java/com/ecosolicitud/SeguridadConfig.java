@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -27,6 +28,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 
 import com.ecosolicitud.shared.Rutas;
+import com.ecosolicitud.shared.Volver;
 
 @Configuration
 @EnableWebSecurity
@@ -76,8 +78,7 @@ class SeguridadConfig {
                         .anyRequest().permitAll())
                 .exceptionHandling(errores -> errores
                         // los privados del ciudadano redirigen a entrar; el resto queda 403
-                        .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint(Rutas.CUENTA_ENTRAR),
+                        .defaultAuthenticationEntryPointFor(aIngresar(),
                                 new OrRequestMatcher(
                                         new AntPathRequestMatcher(Rutas.NUEVA + "/**"),
                                         new AntPathRequestMatcher(Rutas.NUEVA),
@@ -105,6 +106,15 @@ class SeguridadConfig {
                         avisoIntentos(mensajes, idiomas)),
                         UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    // a Ingresar, recordando la página pedida para volver después de entrar
+    private static AuthenticationEntryPoint aIngresar() {
+        var ingresar = new LoginUrlAuthenticationEntryPoint(Rutas.CUENTA_ENTRAR);
+        return (request, response, error) -> {
+            Volver.guardar(request);
+            ingresar.commence(request, response, error);
+        };
     }
 
     private static Function<HttpServletRequest, String> avisoIntentos(MessageSource mensajes,
