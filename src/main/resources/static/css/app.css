@@ -220,11 +220,6 @@ main p {
     margin: 0 0 var(--chico);
 }
 
-main > form,
-main > .tarjeta {
-    max-width: 34rem;
-}
-
 /* filas de datos: etiqueta o icono en dt, valor en dd */
 dl {
     display: flex;
@@ -491,7 +486,7 @@ main a:active {
     text-decoration: none;
 }
 .pie-pagina a:hover {
-    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    background: var(--nav-activo);
 }
 .pie-pagina a[aria-current="page"] {
     outline: 2px solid var(--acento);
@@ -607,7 +602,7 @@ main {
 }
 
 :is(.sidebar, .menu-movil) li a:hover {
-    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    background: var(--nav-activo);
     text-decoration: none;
 }
 
@@ -621,7 +616,7 @@ main {
     display: grid;
     gap: var(--chico);
     padding: var(--chico);
-    border-top: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    border-top: 1px solid var(--nav-activo);
 }
 
 
@@ -781,6 +776,7 @@ fieldset.campo legend {
 
 /* el campo con error se marca en el borde, no solo con el texto chico */
 .campo.invalido input[type="text"],
+.campo.invalido input[type="password"],
 .campo.invalido input[type="tel"],
 .campo.invalido select,
 .campo.invalido textarea {
@@ -1602,6 +1598,7 @@ fieldset.campo legend {
 @media (pointer: coarse) {
     main button,
     .campo input[type="text"],
+    .campo input[type="password"],
     .campo input[type="tel"],
     .campo select,
     .campo textarea {
@@ -1635,7 +1632,7 @@ fieldset.campo legend {
     flex-direction: column;
     gap: var(--gap-xs);
     padding-block: var(--chico);
-    border-bottom: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    border-bottom: 1px solid var(--nav-activo);
     margin-bottom: var(--chico);
 }
 

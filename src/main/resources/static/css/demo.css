@@ -25,7 +25,7 @@
 .rol-switch {
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    border: 1px solid var(--nav-activo);
 }
 
 .rol-switch button,
@@ -33,7 +33,7 @@
 .salir-demo button,
 .reiniciar button {
     padding: var(--chico);
-    border: 1px solid color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    border: 1px solid var(--nav-activo);
     background: transparent;
     color: inherit;
     font: inherit;
@@ -60,7 +60,7 @@
 .rol-switch button:hover,
 .org-switch button:hover,
 .reiniciar button:hover {
-    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    background: var(--nav-activo);
 }
 
 .rol-switch button.activa {
@@ -84,7 +84,7 @@
 .org-switch select {
     padding: var(--chico);
     border: 0;
-    background: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    background: var(--nav-activo);
     color: inherit;
     font: inherit;
 }
