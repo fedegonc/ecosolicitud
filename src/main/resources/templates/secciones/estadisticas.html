@@ -5,9 +5,7 @@
 </head>
 <body>
 <main layout:fragment="content" class="panel" th:with="t=${resumen.total}, s=${resumen.series}">
-    <!-- el panel entero se refresca solo cada minuto, con el período elegido -->
-    <div id="listado" hx-trigger="every 60s" hx-select="#listado" hx-swap="outerHTML"
-         th:attr="hx-get=@{${rutas.ESTADISTICAS}(periodo=${resumen.periodo.parametro})}">
+    <div id="listado">
     <header class="panel-cabecera">
         <div>
             <h1 th:text="#{estadisticas.titulo}">Estadísticas del servicio</h1>
