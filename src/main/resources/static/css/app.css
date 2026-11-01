@@ -535,7 +535,7 @@ main {
 :is(.sidebar, .menu-movil) header {
     display: flex;
     flex-direction: column;
-    gap: var(--chico);
+    gap: calc(1.5 * var(--chico));
 }
 
 :is(.sidebar, .menu-movil) header > a {
@@ -604,6 +604,17 @@ main {
 :is(.sidebar, .menu-movil) li a:hover {
     background: var(--nav-activo);
     text-decoration: none;
+}
+
+/* las acciones de sesión llevan la misma caja y letra que los items del menú */
+:is(.sidebar, .menu-movil) .sesion-boton {
+    display: flex;
+    align-items: center;
+    gap: calc(1.5 * var(--chico));
+    padding: calc(1.5 * var(--chico));
+    border-radius: var(--radio);
+    font-size: inherit;
+    width: 100%;
 }
 
 :is(.sidebar, .menu-movil) li a[aria-current="page"] {
