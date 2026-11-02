@@ -14,6 +14,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 // Limita antes de BCrypt, también al cambiar de sesión. No confía en un
@@ -23,6 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 // sí por entrar bien.
 final class ModoIntentosFiltro extends OncePerRequestFilter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ModoIntentosFiltro.class);
     private static final int DIRECCIONES = 1024;
     private static final Duration VENTANA = Duration.ofMinutes(1);
 
@@ -89,5 +92,10 @@ final class ModoIntentosFiltro extends OncePerRequestFilter {
             return;
         }
         intentos.put(direccion, new Intento(intento.vence(), intento.cantidad() + 1));
+        // una sola línea por dirección y ventana, sin la IP: queda la evidencia
+        // de un ataque sin registrar datos de nadie
+        if (intento.cantidad() + 1 == maximo) {
+            LOG.warn("ingreso bloqueado 1 min: {} fallos seguidos desde una misma dirección", maximo);
+        }
     }
 }

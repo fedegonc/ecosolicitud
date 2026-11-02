@@ -5,6 +5,9 @@ import java.time.Instant;
 
 import jakarta.servlet.FilterChain;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -30,6 +33,17 @@ class ModoIntentosFiltroTest {
         assertThat(enviar(filtro, "127.0.0.2", "otro").getStatus()).isEqualTo(302);
         when(reloj.instant()).thenReturn(inicio.plusSeconds(60));
         assertThat(enviar(filtro, "127.0.0.1", "otro").getStatus()).isEqualTo(302);
+    }
+
+    @Test
+    @ExtendWith(OutputCaptureExtension.class)
+    void unBloqueoDejaUnaSolaLineaSinLaDireccion(CapturedOutput salida) throws Exception {
+        var filtro = new ModoIntentosFiltro(Clock.systemUTC(), 3, r -> "");
+        for (int i = 0; i < 6; i++) {
+            enviar(filtro, "203.0.113.7", "");
+        }
+        assertThat(salida.getOut().split("ingreso bloqueado", -1)).hasSize(2);
+        assertThat(salida.getOut()).doesNotContain("203.0.113.7");
     }
 
     @Test
