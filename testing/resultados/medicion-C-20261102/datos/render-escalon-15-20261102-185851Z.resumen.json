@@ -1,0 +1,33 @@
+{
+  "inicio_utc": "2026-11-02T18:58:51.123113+00:00",
+  "fin_utc": "2026-11-02T19:07:54.608263+00:00",
+  "usuarios": 15,
+  "iteraciones": 30,
+  "jmx": "scratch/carga-10-usuarios-demo.jmx",
+  "rampa": 15,
+  "pausa": 500,
+  "calentamiento": false,
+  "muestras": 3600,
+  "esperadas": 3600,
+  "errores": 0,
+  "parada": null,
+  "objetivo_navegacion_cumplido": false,
+  "ejecucion_completa_sin_errores": true,
+  "estadisticas": {
+    "transaction": "Total",
+    "sampleCount": 3660,
+    "errorCount": 0,
+    "errorPct": 0.0,
+    "meanResTime": 1641.314207650268,
+    "medianResTime": 1602.0,
+    "minResTime": 268.0,
+    "maxResTime": 11006.0,
+    "pct1ResTime": 2331.9,
+    "pct2ResTime": 2587.95,
+    "pct3ResTime": 3103.7799999999997,
+    "throughput": 6.819210797456397,
+    "receivedKBytesPerSec": 281.6349870841399,
+    "sentKBytesPerSec": 1.315556155781703
+  },
+  "reporte": "/home/federico/ecosolicitud/scratch/resultados-carga/medicion-C-20261102/render-escalon-15-20261102-185851Z-reporte"
+}

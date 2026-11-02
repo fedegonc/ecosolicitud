@@ -41,7 +41,7 @@ class TiemposFiltroTest {
     @ExtendWith(OutputCaptureExtension.class)
     void registraLasMedidasYCualquierErrorPeroNoElRestoNiLaQuery(CapturedOutput salida)
             throws Exception {
-        var filtro = new TiemposFiltro();
+        var filtro = new TiemposFiltro(new Metricas());
         var medida = new MockHttpServletRequest("GET", "/mis-solicitudes/77");
         medida.setQueryString("telefono=099123456");
         filtro.doFilter(medida, new MockHttpServletResponse(), mock(FilterChain.class));
