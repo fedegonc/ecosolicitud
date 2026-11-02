@@ -26,6 +26,16 @@
              Ciudad y centro declaran su propio hx-indicator="#flujo". -->
         <div id="flujo" class="flujo" aria-live="polite" hx-swap="outerHTML"
              hx-disabled-elt="unset" hx-indicator="unset">
+            <ol class="pasos" th:aria-label="#{nueva.pasos}">
+                <li th:classappend="${centro != null} ? 'paso-hecho' : 'paso-activo'">
+                    <span class="paso-num" aria-hidden="true">1</span>
+                    <span th:text="#{nueva.paso1}">Ciudad y centro</span></li>
+                <li th:classappend="${centro != null} ? 'paso-activo' : ''">
+                    <span class="paso-num" aria-hidden="true">2</span>
+                    <span th:text="#{nueva.paso2}">Materiales</span></li>
+                <li><span class="paso-num" aria-hidden="true">3</span>
+                    <span th:text="#{nueva.paso3}">Tus datos</span></li>
+            </ol>
             <label class="campo bloque-ciudad">
                 <span th:text="#{nueva.ciudad}">Ciudad</span>
                 <select th:field="*{ciudad}" required th:attr="hx-get=@{${rutas.NUEVA}}"
