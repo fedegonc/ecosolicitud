@@ -29,12 +29,14 @@
                 <span th:text="#{cuenta.telefono}">Celular</span>
                 <input type="tel" name="telefono" autocomplete="tel" inputmode="tel" required
                        th:value="${valores['telefono']}">
+                <span class="ayuda" th:text="#{cuenta.telefono.ayuda}">Celular de Uruguay o Brasil.</span>
                 <span class="error" th:if="${errores.containsKey('telefono')}" th:text="#{${errores.get('telefono')}}">Error</span>
             </label>
             <label class="campo" th:classappend="${errores.containsKey('clave')} ? 'invalido'">
                 <span th:text="#{cuenta.clave}">Contraseña</span>
                 <input type="password" name="clave" minlength="5" maxlength="72"
                        autocomplete="new-password" required>
+                <span class="ayuda" th:text="#{cuenta.clave.ayuda}">Mínimo 5 caracteres.</span>
                 <span class="error" th:if="${errores.containsKey('clave')}" th:text="#{${errores.get('clave')}}">Error</span>
             </label>
             <div class="campo" th:classappend="${errores.containsKey('condiciones')} ? 'invalido'">

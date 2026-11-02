@@ -18,6 +18,7 @@ a.caja { color: inherit; text-decoration: none; }
 .caja:not(.activa):hover { border-color: var(--acento); cursor: pointer; }
 .caja:active { transform: scale(.97); }
 .caja.activa { border: 2px solid var(--acento); background: var(--acento); color: var(--acento-texto); font-weight: 600; }
+#ds-ciudad > summary.caja.activa { background: none; border-color: transparent; box-shadow: none; color: var(--color-accion); padding: var(--chico); }
 
 /* fila y rejilla: las dos ayudas de distribución */
 .fila { display: flex; align-items: center; flex-wrap: wrap; gap: var(--chico); margin-bottom: var(--chico); }
@@ -113,8 +114,7 @@ a.caja { color: inherit; text-decoration: none; }
 /* acciones: cinco círculos con su texto corto, primero y al centro */
 .acciones { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--chico); }
 .accion { display: flex; flex-direction: column; align-items: center; gap: var(--chico); text-align: center; color: var(--texto); text-decoration: none; font-size: calc(1.75 * var(--chico)); font-weight: 600; }
-.accion .circulo { display: flex; align-items: center; justify-content: center; width: calc(1.5 * var(--icono)); height: calc(1.5 * var(--icono)); border-radius: 50%; background: var(--color-accion-suave); color: var(--color-accion); transition: transform .12s ease; }
-.accion:first-child .circulo { background: var(--color-accion); color: var(--acento-texto); }
+.accion .circulo { display: flex; align-items: center; justify-content: center; width: calc(1.5 * var(--icono)); height: calc(1.5 * var(--icono)); border-radius: 50%; background: var(--color-accion); color: var(--acento-texto); transition: transform .12s ease; }
 .accion .circulo svg { width: 55%; height: 55%; fill: currentColor; }
 .accion:hover .circulo { transform: scale(1.06); }
 .accion:active .circulo { transform: scale(.97); }

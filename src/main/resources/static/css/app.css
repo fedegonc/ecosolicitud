@@ -9,8 +9,8 @@
     /* Claves 1-2: un solo color de acción; lo demás en grises y blanco.
        Las variables de este bloque son las canónicas; las de abajo
        remapean los nombres que ya usan las plantillas. */
-    --color-accion: #0d4a44;          /* verde de marca; texto blanco encima da AA */
-    --color-accion-suave: #dcebe2;    /* relleno de círculos de íconos */
+    --color-accion: #3f4a30;          /* verde de marca; texto blanco encima da AA */
+    --color-accion-suave: #e5ead6;    /* relleno de círculos de íconos */
     --color-realce: #d97c2e;        /* naranja de apoyo: avisos, énfasis puntual */
     --color-realce-suave: #f7ead3;
     --color-atencion: #d8c94f;        /* amarillo: estados de espera/atención */
@@ -518,7 +518,7 @@ main a:active {
     text-decoration: none;
 }
 .pie-pagina a:hover {
-    background: var(--nav-activo);
+    background: var(--color-accion-suave);
 }
 /* página actual: anillo con box-shadow, así el outline queda libre para el foco */
 .pie-pagina a[aria-current="page"] {
@@ -605,6 +605,9 @@ main {
 
 :is(.sidebar, .menu-movil) header p a {
     opacity: 0.7;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
 }
 
 :is(.sidebar, .menu-movil) header p a.activa {
@@ -755,11 +758,23 @@ main > .tarjeta {
 .campo textarea {
     width: 100%;
     padding: var(--gap-m) var(--gap-l);
-    border: var(--linea-fina) solid var(--texto-suave);
+    min-height: 3rem;
+    border: var(--linea-fina) solid var(--borde);
     border-radius: var(--radio);
     background: var(--superficie);
     color: var(--texto);
     font: inherit;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.campo input[type="text"]:focus,
+.campo input[type="password"]:focus,
+.campo input[type="tel"]:focus,
+.campo select:focus,
+.campo textarea:focus {
+    outline: none;
+    border-color: var(--color-accion);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accion) 22%, transparent);
 }
 
 fieldset.campo {
@@ -1685,7 +1700,9 @@ fieldset.campo legend {
     gap: var(--chico);
     min-height: var(--toque-min);
     font: inherit;
-    font-weight: 600;
+    font-weight: 400;
+    font-size: var(--t-sm);
+    opacity: .8;
     text-align: left;
     background: none;
     color: inherit;
@@ -1783,4 +1800,63 @@ fieldset.campo legend {
 }
 
 /* banner de portada: punto de atención con el naranja de realce */
-#ds-ultimo.ultimo { background: var(--color-realce-suave); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-realce) 40%, transparent); }
+#ds-ultimo.ultimo { background: none; box-shadow: none; border: 0; padding: 0; font-size: var(--t-sm); font-weight: 400; color: var(--color-realce); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+/* tarjetas de centro en portada: ícono suave + chips de materiales */
+.circulo-suave {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.75rem; height: 2.75rem; border-radius: 50%; flex: none;
+    background: var(--color-accion-suave); color: var(--color-accion);
+}
+.circulo-suave .icono { width: 55%; height: 55%; }
+.fila-acento { display: flex; align-items: center; gap: var(--pad); }
+.fila-texto { display: flex; flex-direction: column; gap: 0.15rem; flex: 1; min-width: 0; }
+.tarjeta-chips { display: flex; flex-wrap: wrap; gap: var(--chico); margin-top: var(--pad); }
+.tarjeta-chips .etiqueta-material { font-size: var(--t-xs); }
+
+/* mini mapa dentro de la tarjeta de centro (decorativo: el clic lo toma la tarjeta) */
+.mapa-mini { display: block; width: 100%; height: 8rem; border: 0; border-radius: var(--radio); margin-top: var(--pad); pointer-events: none; }
+
+/* etiquetas de material en la tarjeta: gris con puntito de color */
+.tarjeta-chips .etiqueta-material { background: #eef0f1; border: 0; color: var(--texto-secundario); }
+.tarjeta-chips .etiqueta-material::before { content: ""; display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; margin-right: .3rem; background: var(--borde); }
+.tarjeta-chips .mat-carton::before { background: var(--material-carton-borde); }
+.tarjeta-chips .mat-papel::before { background: var(--material-papel-borde); }
+.tarjeta-chips .mat-plastico::before { background: var(--material-plastico-borde); }
+.tarjeta-chips .mat-vidrio::before { background: var(--material-vidrio-borde); }
+.tarjeta-chips .mat-metal::before { background: var(--material-metal-borde); }
+.tarjeta-chips .mat-latas::before { background: var(--material-metal-borde); }
+.tarjeta-chips .mat-electronicos::before { background: var(--material-electronicos-borde); }
+
+/* formularios en tarjeta (ingreso, registro): un solo botón ancho completo */
+.tarjeta .form-nueva button[type="submit"] { width: 100%; min-height: 3rem; }
+
+/* tarjetas que contienen un formulario (ingreso, registro): aire de verdad */
+main > .tarjeta.caja:has(> form) {
+    display: block;
+    padding: var(--pad-grande);
+}
+.tarjeta > form .campo { margin-bottom: var(--gap-l); }
+.tarjeta > form .campo:last-of-type { margin-bottom: var(--gap-xl, var(--pad-grande)); }
+.tarjeta > form .campo-pie { margin-top: var(--gap-l); text-align: center; }
+
+/* QR compartible: en escritorio sin share nativo, el clic lo agranda */
+.qr { cursor: pointer; }
+.qr.grande svg { max-width: 11rem; }
+
+/* tarjetas de solo texto (condiciones): mismo aire que las de formulario */
+main > .tarjeta.caja:has(> p) { display: block; padding: var(--pad-grande); }
+main > .tarjeta.caja > p { line-height: 1.6; margin: 0 0 var(--gap-l); }
+main > .tarjeta.caja > p:last-child { margin-bottom: 0; }
+
+/* "Así funciona": tira estática de 3 pasos en portada */
+.pasos-como { margin: var(--grande) 0; }
+.pasos-como h2 { font-size: var(--t-lg); margin: 0 0 var(--gap-l); }
+.pasos-como ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--chico); }
+.pasos-como li { display: flex; align-items: flex-start; gap: var(--pad); padding: var(--pad); background: var(--tarjeta); border-radius: var(--radio); box-shadow: var(--sombra-bloque); }
+.pasos-como .icono { flex: none; width: 1.5rem; height: 1.5rem; color: var(--color-accion); margin-top: .15rem; }
+.pasos-como .paso-detalle { display: block; font-size: var(--t-sm); color: var(--texto-secundario); margin-top: .15rem; }
+@media (max-width: 44.99rem) {
+    .pasos-como ol { grid-template-columns: 1fr; }
+    .pasos-como li { padding: var(--pad); }
+}

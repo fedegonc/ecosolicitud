@@ -115,7 +115,10 @@
                             <button type="submit" th:text="#{modo.salir}">Salir de demo</button>
                         </form>
                         </details>
-                        <figure class="qr" th:if="${qr != null}">
+                        <figure class="qr" th:if="${qr != null}" role="button" tabindex="0"
+                                th:aria-label="#{nav.compartir}"
+                                onclick="navigator.share ? navigator.share({title:'EcoSolicitud',url:location.origin}).catch(()=>{}) : this.classList.toggle('grande')"
+                                onkeydown="if(event.key==='Enter')this.click()">
                             <span th:utext="${qr}"></span>
                             <figcaption th:text="#{nav.compartir}">Compartí EcoSolicitud</figcaption>
                         </figure>

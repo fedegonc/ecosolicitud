@@ -19,6 +19,20 @@
     <th:block th:if="${rolActual.name() == 'CIUDADANO'}">
         <a th:replace="~{componentes/ds :: ultimo(${ultimo})}"></a>
     </th:block>
+    <section id="ds-pasos" class="pasos-como">
+        <h2 th:text="#{portada.pasos.titulo}">Así funciona</h2>
+        <ol>
+            <li><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#lapiz'"></use></svg>
+                <span><strong th:text="#{portada.paso1}">Pedís el retiro</strong>
+                <span class="paso-detalle" th:text="#{portada.paso1.detalle}">Desde el celular, sin llamadas.</span></span></li>
+            <li><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#tilde'"></use></svg>
+                <span><strong th:text="#{portada.paso2}">El centro confirma</strong>
+                <span class="paso-detalle" th:text="#{portada.paso2.detalle}">Te avisa cuando lo acepta.</span></span></li>
+            <li><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#camion'"></use></svg>
+                <span><strong th:text="#{portada.paso3}">Pasan a buscarlo</strong>
+                <span class="paso-detalle" th:text="#{portada.paso3.detalle}">Lo dejás listo en tu puerta.</span></span></li>
+        </ol>
+    </section>
     <section id="ds-consejos">
         <div th:replace="~{componentes/ds :: cabecera(#{ds.consejos}, ${rutas.GUIA})}"></div>
         <div class="grilla">
@@ -32,8 +46,22 @@
         <ul class="grilla">
             <li class="tarjeta caja" th:each="c : ${centros}">
                 <a th:href="@{${rutas.ACOPIOS}}">
-                    <strong th:text="${c.nombre}">Centro</strong>
-                    <span class="tarjeta-detalle" th:text="${c.horario}">Horario</span>
+                    <span class="fila-acento">
+                        <span class="circulo-suave" aria-hidden="true"><svg class="icono"><use th:href="@{/img/iconos.svg} + '#pin'"></use></svg></span>
+                        <span class="fila-texto">
+                            <strong th:text="${c.nombre}">Centro</strong>
+                            <span class="tarjeta-detalle" th:text="${c.horario}">Horario</span>
+                        </span>
+                        <svg class="icono flecha" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
+                    </span>
+                    <span class="tarjeta-chips" th:if="${!#lists.isEmpty(c.materiales)}">
+                        <span th:each="m : ${c.materiales}"
+                              th:class="'etiqueta-material mat-' + ${#strings.toLowerCase(m.codigo)}"
+                              th:text="${#messages.msgOrNull('material.' + #strings.toLowerCase(m.codigo)) ?: m.nombre}">Material</span>
+                    </span>
+                    <iframe class="mapa-mini" th:if="${c.ubicacion != null}"
+                            th:src="${c.ubicacion.mapaEmbebido()}"
+                            th:title="#{mapa.de(${c.nombre})}" loading="lazy"></iframe>
                 </a>
             </li>
         </ul>

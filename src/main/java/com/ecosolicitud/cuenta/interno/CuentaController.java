@@ -12,6 +12,7 @@ import com.ecosolicitud.shared.Volver;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -43,11 +44,22 @@ class CuentaController {
 
     @GetMapping(Rutas.CUENTA_ENTRAR)
     String entrar() {
+        // sesión viva → no tiene sentido mostrar el ingreso de nuevo
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()
+                && !(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/";
+        }
         return "secciones/cuenta/entrar";
     }
 
     @GetMapping(Rutas.CUENTA_REGISTRAR)
     String registrar(Model modelo) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated()
+                && !(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/";
+        }
         modelo.addAttribute("errores", Map.of());
         modelo.addAttribute("valores", Map.of());
         return "secciones/cuenta/registrar";
