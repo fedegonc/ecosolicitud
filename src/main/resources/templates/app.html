@@ -162,12 +162,27 @@
         </div>
     </div>
     <script>
-        // doble-clic: deshabilita el botón que envió un POST (los pasos GET del
-        // flujo, como cambiar de ciudad, siguen habilitados)
+        // doble-clic: marca el botón mientras la petición está en vuelo;
+        // nunca se deshabilita: si la petición no sale (error, confirm
+        // cancelado), el botón sigue vivo y el clic funciona
         document.addEventListener('submit', function (e) {
+            var form = e.target;
             var b = e.submitter;
-            if (b && b.formMethod !== 'get') {
-                b.disabled = true;
+            if (b && b.formMethod !== 'get') { form.__porEnviar = b; }
+            if (form.__enviando) { e.preventDefault(); }
+        });
+        document.addEventListener('htmx:beforeRequest', function (e) {
+            var form = e.detail.elt;
+            if (form.tagName === 'FORM') {
+                form.__enviando = true;
+                (form.__porEnviar || form).classList.add('enviando');
+            }
+        });
+        document.addEventListener('htmx:afterRequest', function (e) {
+            var form = e.detail.elt;
+            if (form.tagName === 'FORM') {
+                form.__enviando = false;
+                (form.__porEnviar || form).classList.remove('enviando');
             }
         });
         // anuncia a lectores de pantalla solo peticiones lentas (>600ms):

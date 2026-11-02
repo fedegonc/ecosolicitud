@@ -1860,3 +1860,6 @@ main > .tarjeta.caja > p:last-child { margin-bottom: 0; }
     .pasos-como ol { grid-template-columns: 1fr; }
     .pasos-como li { padding: var(--pad); }
 }
+
+/* botón con petición en vuelo: atenuado, nunca disabled */
+button.enviando, .enviando button { opacity: .55; }
