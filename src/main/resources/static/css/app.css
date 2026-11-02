@@ -1720,3 +1720,6 @@ fieldset.campo legend {
 .campo-pie {
     margin: var(--gap-l) 0 0;
 }
+
+/* respaldo de opinión: etiquetas de los extremos de la escala 1-5 */
+.escala-extremo { font-size: var(--t-xs); color: var(--texto-secundario); max-width: 6rem; }
