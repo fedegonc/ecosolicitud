@@ -8,5 +8,6 @@ AGENTS.md
 .seed
 .allure/
 scratch/
-docs/
+docs/*
+!docs/diagramas/
 .idea/
