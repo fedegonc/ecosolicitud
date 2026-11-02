@@ -37,13 +37,14 @@ public record SolicitudSeries(List<Barra> porEstado, List<Barra> porMaterial,
     static SolicitudSeries desde(List<Solicitud> solicitudes, LocalDate desde, LocalDate hasta) {
         var estados = solicitudes.stream().collect(groupingBy(Solicitud::getEstado, counting()));
         var materiales = solicitudes.stream().flatMap(s -> s.getMateriales().stream())
-                .collect(groupingBy(Material::getNombre, counting()));
+                .collect(groupingBy(m -> m, counting()));
         return new SolicitudSeries(
                 barras(Arrays.stream(Estado.values())
                         .map(e -> new Fila(e.getClave(), null, estados.getOrDefault(e, 0L))).toList()),
                 barras(materiales.entrySet().stream()
-                        .sorted(Map.Entry.<String, Long>comparingByValue(Comparator.reverseOrder()))
-                        .map(e -> new Fila(null, e.getKey(), e.getValue())).toList()),
+                        .sorted(Map.Entry.<Material, Long>comparingByValue(Comparator.reverseOrder()))
+                        .map(e -> new Fila(e.getKey().getCodigo(), e.getKey().getNombre(),
+                                e.getValue())).toList()),
                 barras(tiempo(solicitudes, desde, hasta)));
     }
 

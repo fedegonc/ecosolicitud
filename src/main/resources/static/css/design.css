@@ -197,3 +197,44 @@ a.caja { color: inherit; text-decoration: none; }
 .columnas li:first-child .columna-etiqueta { text-align: left; }
 .columnas li:last-child .columna-etiqueta { direction: rtl; text-align: right; }
 .panel-nota { margin-top: var(--grande); }
+
+/* estadísticas: KPIs compactos con color por rol */
+.kpis .kpi { padding: var(--pad); gap: calc(var(--chico) / 2); }
+.kpis .kpi-valor { font-size: 1.6rem; }
+.kpis .kpi:nth-child(2) { border-top-color: var(--color-exito); }
+.kpis .kpi:nth-child(3) { border-top-color: var(--color-exito); }
+.kpis .kpi:nth-child(4) { border-top-color: var(--color-atencion); }
+.kpis .kpi:nth-child(5) { border-top-color: var(--color-realce); }
+
+/* barras por estado: el color cuenta el resultado */
+.estado-pendiente .barra { background: var(--color-realce); }
+.estado-aceptada .barra { background: var(--color-accion); }
+.estado-completada .barra { background: var(--color-exito); }
+.estado-rechazada .barra { background: var(--peligro); }
+.estado-cancelada .barra { background: var(--texto-secundario); }
+
+/* barras por material: el mismo color del chip */
+.mat-carton .barra { background: var(--material-carton-borde); }
+.mat-papel .barra { background: var(--material-papel-borde); }
+.mat-plastico .barra { background: var(--material-plastico-borde); }
+.mat-vidrio .barra { background: var(--material-vidrio-borde); }
+.mat-metal .barra { background: var(--material-metal-borde); }
+.mat-latas .barra { background: var(--material-metal-borde); }
+.mat-electronicos .barra { background: var(--material-electronicos-borde); }
+
+/* nota de lectura bajo el título del gráfico */
+.grafico-nota { margin: 0 0 var(--pad); font-size: var(--t-sm); color: var(--texto-secundario); }
+
+/* columnas del día: la última (hoy) en naranja */
+.columnas li:last-child .columna { background: var(--color-realce); }
+
+/* comunidad: pastillas de tipo y acento de tarjeta */
+.pub-novedad { border-top: 3px solid var(--color-realce); }
+.pub-historia { border-top: 3px solid var(--color-accion); }
+.tipo-novedad { background: var(--color-realce-suave); color: var(--texto); }
+.tipo-historia { background: var(--color-accion-suave); color: var(--color-accion); }
+
+/* recicladores: avatar teñido por ciudad */
+.iniciales.ciudad-rivera { background: var(--color-accion); }
+.iniciales.ciudad-livramento { background: var(--color-realce); color: var(--texto); }
+.reciclador .icono { color: var(--color-accion); }

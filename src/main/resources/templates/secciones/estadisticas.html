@@ -59,8 +59,10 @@
     <section class="graficos">
         <article class="grafico caja">
             <h2 th:text="#{estadisticas.grafico.estado}">Solicitudes por estado</h2>
+            <p class="grafico-nota" th:text="#{estadisticas.grafico.estado.nota}">Nota</p>
             <ol class="barras">
                 <li th:each="b : ${s.porEstado}" th:with="nombre=#{${b.clave}}"
+                    th:classappend="'estado-' + ${#strings.toLowerCase(#strings.replace(b.clave, 'estado.', ''))}"
                     th:title="${nombre} + ': ' + ${b.valor}">
                     <span class="barra-etiqueta" th:text="${nombre}">Pendiente</span>
                     <span class="barra-pista"><span class="barra" th:style="'width:' + ${b.proporcion} + '%'"></span></span>
@@ -70,9 +72,12 @@
         </article>
         <article class="grafico caja">
             <h2 th:text="#{estadisticas.grafico.material}">Materiales más pedidos</h2>
+            <p class="grafico-nota" th:text="#{estadisticas.grafico.material.nota}">Nota</p>
             <p class="grafico-vacio" th:if="${s.porMaterial.isEmpty()}" th:text="#{estadisticas.grafico.vacio}">Sin datos</p>
             <ol class="barras">
-                <li th:each="b : ${s.porMaterial}" th:title="${b.etiqueta} + ': ' + ${b.valor}">
+                <li th:each="b : ${s.porMaterial}"
+                    th:classappend="'mat-' + ${#strings.toLowerCase(b.clave)}"
+                    th:title="${b.etiqueta} + ': ' + ${b.valor}">
                     <span class="barra-etiqueta" th:text="${b.etiqueta}">Cartón</span>
                     <span class="barra-pista"><span class="barra" th:style="'width:' + ${b.proporcion} + '%'"></span></span>
                     <span class="barra-valor" th:text="${b.valor}">5</span>
@@ -81,6 +86,7 @@
         </article>
         <article class="grafico grafico-ancho caja">
             <h2 th:text="${resumen.periodo.parametro == 'todo'} ? #{estadisticas.grafico.mes} : #{estadisticas.grafico.dia}">Recibidas por día</h2>
+            <p class="grafico-nota" th:text="#{estadisticas.grafico.dia.nota}">Nota</p>
             <!-- rótulo en el primero, el último y cada quinto: el resto queda en el tooltip -->
             <ol class="columnas">
                 <li th:each="b, i : ${s.enElTiempo}" th:title="${b.etiqueta} + ': ' + ${b.valor}"

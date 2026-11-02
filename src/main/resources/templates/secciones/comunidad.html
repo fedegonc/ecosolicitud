@@ -15,7 +15,8 @@
         </nav>
         <p th:if="${publicaciones.isEmpty()}" th:text="#{comunidad.vacia}">Vacía</p>
         <div class="rejilla">
-        <article th:each="p : ${publicaciones}" class="tarjeta caja">
+        <article th:each="p : ${publicaciones}" class="tarjeta caja"
+                 th:classappend="'pub-' + ${#strings.toLowerCase(#strings.replace(p.tipo.clave, 'comunidad.tipo.', ''))}">
             <div class="imagen" th:if="${p.imagen != null}">
                 <img th:src="@{/img/comunidad/{s}-800.webp(s=${p.imagen})}"
                      th:attr="srcset=@{/img/comunidad/{s}-800.webp(s=${p.imagen})} + ' 800w, ' + @{/img/comunidad/{s}-1600.webp(s=${p.imagen})} + ' 1600w'"
@@ -27,7 +28,8 @@
                        th:text="${p.titulo}">Título</a></h3>
                 <span th:text="${p.resumen}">Resumen</span>
                 <span>
-                    <span class="etiqueta" th:text="#{${p.tipo.clave}}">Tipo</span>
+                    <span class="etiqueta" th:classappend="'tipo-' + ${#strings.toLowerCase(#strings.replace(p.tipo.clave, 'comunidad.tipo.', ''))}"
+                          th:text="#{${p.tipo.clave}}">Tipo</span>
                     <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#calendario'"></use></svg><span th:text="${p.fecha}">Fecha</span>
                 </span>
             </div>
@@ -45,6 +47,7 @@
             <li th:each="r : ${recicladores}" class="reciclador"
                 th:with="partes=${#strings.arraySplit(r.nombre, ' ')}">
                 <span class="iniciales" aria-hidden="true"
+                      th:classappend="${r.ciudad != null} ? 'ciudad-' + ${#strings.toLowerCase(r.ciudad.name())}"
                       th:text="${#strings.substring(partes[0], 0, 1) + #strings.substring(partes[partes.length - 1], 0, 1)}">AC</span>
                 <span class="texto">
                     <strong th:text="${r.nombre}">Nombre</strong>
