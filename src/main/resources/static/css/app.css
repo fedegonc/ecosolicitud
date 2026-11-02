@@ -540,7 +540,7 @@ main {
 .sidebar,
 .menu-movil {
     --foco: 3px solid var(--acento-texto);
-    background: #3f4a30;
+    background: var(--nav-fondo);
     color: var(--acento-texto);
 }
 
@@ -654,7 +654,7 @@ main {
 
 :is(.sidebar, .menu-movil) li a[aria-current="page"] {
     background: var(--acento-texto);
-    color: #3f4a30;
+    color: var(--nav-fondo);
     font-weight: 600;
 }
 
@@ -1818,7 +1818,7 @@ fieldset.campo legend {
 .mapa-mini { display: block; width: 100%; height: 8rem; border: 0; border-radius: var(--radio); margin-top: var(--pad); pointer-events: none; }
 
 /* etiquetas de material en la tarjeta: gris con puntito de color */
-.tarjeta-chips .etiqueta-material { background: #eef0f1; border: 0; color: var(--texto-secundario); }
+.tarjeta-chips .etiqueta-material { background: var(--fondo); border: 0; color: var(--texto-secundario); }
 .tarjeta-chips .etiqueta-material::before { content: ""; display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; margin-right: .3rem; background: var(--borde); }
 .tarjeta-chips .mat-carton::before { background: var(--material-carton-borde); }
 .tarjeta-chips .mat-papel::before { background: var(--material-papel-borde); }
