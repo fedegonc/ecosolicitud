@@ -1727,3 +1727,51 @@ fieldset.campo legend {
 .campo-pie {
     margin: var(--gap-l) 0 0;
 }
+
+/* clave 3: indicador de pasos del formulario /nueva */
+.pasos {
+    list-style: none;
+    display: flex;
+    gap: var(--chico);
+    padding: 0;
+    margin: 0 0 var(--grande);
+    counter-reset: paso;
+}
+.pasos li {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--chico);
+    color: var(--texto-secundario);
+    font-size: var(--t-sm);
+    border-bottom: var(--linea-gruesa) solid var(--borde);
+    padding-bottom: var(--chico);
+}
+.pasos .paso-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--borde);
+    color: var(--texto-secundario);
+    font-weight: 700;
+}
+.pasos li.paso-activo {
+    color: var(--texto);
+    font-weight: 700;
+    border-bottom-color: var(--color-accion);
+}
+.pasos li.paso-activo .paso-num {
+    background: var(--color-accion);
+    color: var(--acento-texto);
+}
+.pasos li.paso-hecho {
+    color: var(--color-accion);
+    border-bottom-color: var(--color-accion);
+}
+.pasos li.paso-hecho .paso-num {
+    background: var(--color-accion-suave);
+    color: var(--color-accion);
+}
