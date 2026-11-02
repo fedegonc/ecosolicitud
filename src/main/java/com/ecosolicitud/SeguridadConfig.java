@@ -38,7 +38,7 @@ class SeguridadConfig {
     @org.springframework.core.annotation.Order(1)
     SecurityFilterChain seguridadCuentas(HttpSecurity http,
             AuthenticationSuccessHandler ingreso, MessageSource mensajes, LocaleResolver idiomas,
-            @Value("${ecosolicitud.cuenta.intentos:60}") int intentosCuenta)
+            @Value("${ecosolicitud.cuenta.intentos:20}") int intentosCuenta)
             throws Exception {
         return http.securityMatcher("/cuenta/**")
                 .authorizeHttpRequests(auth -> auth

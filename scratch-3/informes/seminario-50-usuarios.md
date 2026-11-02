@@ -24,9 +24,11 @@ Con `version` en los formularios, ambas acciones fueron rechazadas y la
 solicitud quedó PENDIENTE — sin corrupción. El optimistic locking funciona.
 
 ### 🟡 Baja — rate limit de login = riesgo demo
-5 intentos/min por IP. En el aula, si los 50 salen por la misma IP pública,
-solo los primeros 5 logins/min pasan. **Fix demo:** env
-`ECOSOLICITUD_CUENTA_INTENTOS` (p.ej. 500) o `server.forward-headers-strategy`
+20 intentos/min por IP (valor por defecto). En el aula, si los 50 salen por la
+misma IP pública, solo los primeros 20 logins/min pasan. **Fix demo:** env
+`ECOSOLICITUD_CUENTA_INTENTOS` — para la prueba con 20 personas se subió a 60
+solo ese día; luego se quita y rige el valor por defecto — o
+`server.forward-headers-strategy`
 (ya aplicado en prod).
 
 ## Cobertura del sim
