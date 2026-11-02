@@ -1,20 +1,24 @@
 # Respaldo del formulario de Google. Si cambia el formulario, editar este archivo.
 # Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
 # 'opcion: pregunta | opción 1 | opción 2'.
-titulo: Questionário de Usabilidade – Cidadão
-opcion: Qual é a sua localidade? | Rivera | Sant’Ana do Livramento
-escala: Foi claro como começar a usar o sistema?
-escala: Foi fácil escolher um ponto de coleta e consultar seus horários?
-escala: Foi fácil selecionar os materiais que desejava reciclar?
-escala: Conseguiu criar uma solicitação de coleta?
-escala: Conseguiu visualizar claramente o estado de suas solicitações?
-escala: As informações sobre suas solicitações (data, status, materiais) lhe pareceram completas?
-escala: Conseguiu cancelar uma solicitação pendente sem dificuldades?
-escala: Entendeu claramente quais ações poderia realizar dentro do sistema?
-escala: As informações apresentadas foram claras e compreensíveis?
-escala: O design geral lhe pareceu agradável e bem organizado?
-escala: Os tempos de resposta foram adequados para suas atividades?
-escala: O sistema funcionou de forma estável, sem erros ou interrupções frequentes?
-escala: Foi útil poder usar o sistema no seu idioma?
-escala: Você está satisfeito com sua experiência geral de uso do sistema?
-texto: O que você melhoraria ou acrescentaria no sistema?
+titulo: Questionário de Usabilidade - Cidadão
+opcion: Qual é a sua cidade? | Rivera | Sant'Ana do Livramento
+escala: Ficou claro como começar a usar o sistema.
+escala: Encontrei um centro de coleta sem dificuldade.
+escala: Consegui ver os horários do centro.
+escala: Escolhi os materiais sem dificuldade.
+escala: Consegui criar uma solicitação sem ajuda.
+escala: Entendi em que status estava cada solicitação.
+escala: Consegui cancelar uma solicitação pendente sem dificuldade.
+escala: Cada solicitação mostrava os dados de que eu precisava.
+escala: As informações das telas são fáceis de entender.
+escala: O design me pareceu agradável.
+escala: As telas carregaram rápido.
+escala: O sistema funcionou sem erros.
+escala: Consegui usar todo o sistema no meu idioma.
+escala: O sistema me ajudaria a entregar meus recicláveis.
+escala: Com o sistema, entregar meus recicláveis seria mais fácil do que hoje.
+escala: Eu usaria o sistema se estivesse disponível de forma permanente.
+escala: No geral, fiquei satisfeito com o sistema.
+escala: Eu recomendaria o sistema a outras pessoas.
+texto: O que você mudaria ou acrescentaria?

@@ -2,20 +2,24 @@
 # Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
 # 'opcion: pregunta | opción 1 | opción 2'.
 titulo: Cuestionario de Usabilidad - Centro de acopio
-opcion: ¿Cuál es tu localidad? | Rivera | Sant’Ana do Livramento
-escala: ¿Le resultó claro cómo elegir el perfil Organización y su centro de acopio?
-escala: ¿Pudo ver las solicitudes recibidas por su centro?
-escala: ¿La organización de las solicitudes por columnas (pendientes, en curso, cerradas) le resultó clara?
-escala: ¿Pudo ver los detalles completos de cada solicitud (materiales, dirección y ubicación)?
-escala: ¿La información de contacto de los usuarios fue accesible cuando la necesitó?
-escala: ¿Le resultó fácil cambiar el estado de una solicitud (aceptar, completar, rechazar)?
-escala: ¿Pudo gestionar múltiples solicitudes de forma eficiente?
-escala: ¿El resumen semanal y el informe mensual le resultaron útiles?
-escala: ¿Pudo actualizar la información de su organización correctamente?
-escala: ¿La información presentada le resultó clara y comprensible?
-escala: ¿El diseño general le pareció agradable y bien organizado?
-escala: ¿Los tiempos de respuesta fueron adecuados para sus actividades?
-escala: ¿El sistema respondió de forma estable, sin errores o interrupciones frecuentes?
-escala: ¿Le resultó útil poder usar el sistema en su idioma?
-escala: ¿Está satisfecho con su experiencia general de uso del sistema?
-texto: ¿Qué mejoraría o agregaría al sistema?
+opcion: ¿Dónde está tu centro? | Rivera | Sant'Ana do Livramento
+escala: Pude entrar como organización sin ayuda.
+escala: Vi las solicitudes que recibió mi centro.
+escala: Cada solicitud mostraba los datos que necesitaba.
+escala: Las columnas (pendientes, aceptadas, cerradas) me resultaron claras.
+escala: Pude contactar a quien hizo la solicitud cuando lo necesité.
+escala: Cambiar el estado de una solicitud me resultó fácil.
+escala: Pude atender varias solicitudes sin perder tiempo.
+escala: Pude actualizar los datos de mi centro.
+escala: La información de las pantallas se entiende.
+escala: El diseño me resultó agradable.
+escala: Las pantallas cargaron rápido.
+escala: El sistema funcionó sin errores.
+escala: El resumen semanal y el informe mensual me sirvieron.
+escala: Pude usar todo el sistema en mi idioma.
+escala: El sistema me serviría para el trabajo diario del centro.
+escala: Con el sistema, coordinar los retiros sería más fácil que hoy.
+escala: Usaría el sistema si estuviera disponible de forma permanente.
+escala: En general, quedé conforme con el sistema.
+escala: Recomendaría el sistema a otros centros de acopio.
+texto: ¿Qué cambiarías o agregarías?

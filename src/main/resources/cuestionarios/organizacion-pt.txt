@@ -1,21 +1,25 @@
 # Respaldo del formulario de Google. Si cambia el formulario, editar este archivo.
 # Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
 # 'opcion: pregunta | opción 1 | opción 2'.
-titulo: Questionário de Usabilidade – Organização
-opcion: Qual é a sua localidade? | Rivera | Sant’Ana do Livramento
-escala: Foi claro como escolher o perfil Organização e seu ponto de coleta?
-escala: Você conseguiu ver as solicitações recebidas pelo seu ponto de coleta?
-escala: A organização das solicitações em colunas (pendentes, em andamento, fechadas) foi clara?
-escala: Você conseguiu ver todos os detalhes de cada solicitação (materiais, endereço e localização)?
-escala: As informações de contato dos usuários estavam acessíveis quando você precisou?
-escala: Foi fácil alterar o status de uma solicitação (aceitar, concluir, rejeitar)?
-escala: Você conseguiu gerenciar várias solicitações de forma eficiente?
-escala: O resumo semanal e o relatório mensal foram úteis?
-escala: Você conseguiu atualizar as informações da sua organização corretamente?
-escala: As informações apresentadas foram claras e compreensíveis?
-escala: O design geral lhe pareceu agradável e bem organizado?
-escala: Os tempos de resposta foram adequados para suas atividades?
-escala: O sistema funcionou de forma estável, sem erros ou interrupções frequentes?
-escala: Foi útil poder usar o sistema no seu idioma?
-escala: Você está satisfeito com sua experiência geral de uso do sistema?
-texto: O que você melhoraria ou acrescentaria no sistema?
+titulo: Questionário de Usabilidade - Centro de coleta
+opcion: Onde fica o seu centro? | Rivera | Sant'Ana do Livramento
+escala: Consegui entrar como organização sem ajuda.
+escala: Vi as solicitações que meu centro recebeu.
+escala: Cada solicitação mostrava os dados de que eu precisava.
+escala: As colunas (pendentes, aceitas, encerradas) ficaram claras.
+escala: Consegui contatar quem fez a solicitação quando precisei.
+escala: Mudar o status de uma solicitação foi fácil.
+escala: Consegui atender várias solicitações sem perder tempo.
+escala: Consegui atualizar os dados do meu centro.
+escala: As informações das telas são fáceis de entender.
+escala: O design me pareceu agradável.
+escala: As telas carregaram rápido.
+escala: O sistema funcionou sem erros.
+escala: O resumo semanal e o relatório mensal me ajudaram.
+escala: Consegui usar todo o sistema no meu idioma.
+escala: O sistema me ajudaria no trabalho diário do centro.
+escala: Com o sistema, coordenar as coletas seria mais fácil do que hoje.
+escala: Eu usaria o sistema se estivesse disponível de forma permanente.
+escala: No geral, fiquei satisfeito com o sistema.
+escala: Eu recomendaria o sistema a outros centros de coleta.
+texto: O que você mudaria ou acrescentaria?

@@ -28,9 +28,11 @@
                         <fieldset class="campo" th:if="${p.tipo.name() != 'TEXTO'}">
                             <legend th:text="${it.count} + '. ' + ${p.texto}">Pregunta</legend>
                             <div class="escala" th:if="${p.tipo.name() == 'ESCALA'}">
+                                <span class="escala-extremo" th:text="#{opinion.escala.min}">Muy en desacuerdo</span>
                                 <label th:each="n : ${#numbers.sequence(1, 5)}">
                                     <input type="radio" th:name="'p' + ${it.index}" th:value="${n}"><span th:text="${n}">1</span>
                                 </label>
+                                <span class="escala-extremo" th:text="#{opinion.escala.max}">Muy de acuerdo</span>
                             </div>
                             <div class="escala" th:if="${p.tipo.name() == 'OPCION'}">
                                 <label th:each="o : ${p.opciones}">

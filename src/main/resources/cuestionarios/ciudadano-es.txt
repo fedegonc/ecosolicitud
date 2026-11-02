@@ -2,19 +2,23 @@
 # Formato: 'escala: pregunta' (1 a 5), 'texto: pregunta' (abierta),
 # 'opcion: pregunta | opción 1 | opción 2'.
 titulo: Cuestionario de Usabilidad - Ciudadano
-opcion: ¿Cuál es tu localidad? | Rivera | Sant'Ana do Livramento.
-escala: ¿Le resultó claro cómo empezar a usar el sistema?
-escala: ¿Le resultó fácil elegir un centro de acopio y consultar sus horarios?
-escala: ¿Le resultó fácil seleccionar los materiales que deseaba reciclar?
-escala: ¿Pudo crear una solicitud de recolección?
-escala: ¿Pudo visualizar el estado de sus solicitudes de forma clara?
-escala: ¿La información sobre sus solicitudes (fecha, estado, materiales) le pareció completa?
-escala: ¿Pudo cancelar una solicitud pendiente sin dificultades?
-escala: ¿Entendió claramente qué acciones podía realizar dentro del sistema?
-escala: ¿La información presentada le resultó clara y comprensible?
-escala: ¿El diseño general le pareció agradable y bien organizado?
-escala: ¿Los tiempos de respuesta fueron adecuados para sus actividades?
-escala: ¿El sistema respondió de forma estable, sin errores o interrupciones frecuentes?
-escala: ¿Le resultó útil poder usar el sistema en su idioma?
-escala: ¿Está satisfecho con su experiencia general de uso del sistema?
-texto: ¿Qué mejoraría o agregaría al sistema?
+opcion: ¿Cuál es tu localidad? | Rivera | Sant'Ana do Livramento
+escala: Me resultó claro cómo empezar a usar el sistema.
+escala: Encontré un centro de acopio sin dificultad.
+escala: Pude ver los horarios del centro.
+escala: Elegí los materiales sin dificultad.
+escala: Pude crear una solicitud sin ayuda.
+escala: Entendí en qué estado estaba cada solicitud.
+escala: Pude cancelar una solicitud pendiente sin dificultad.
+escala: Cada solicitud mostraba los datos que necesitaba.
+escala: La información de las pantallas se entiende.
+escala: El diseño me resultó agradable.
+escala: Las pantallas cargaron rápido.
+escala: El sistema funcionó sin errores.
+escala: Pude usar todo el sistema en mi idioma.
+escala: El sistema me serviría para entregar mis reciclables.
+escala: Con el sistema, entregar mis reciclables sería más fácil que hoy.
+escala: Usaría el sistema si estuviera disponible de forma permanente.
+escala: En general, quedé conforme con el sistema.
+escala: Recomendaría el sistema a otras personas.
+texto: ¿Qué cambiarías o agregarías?
