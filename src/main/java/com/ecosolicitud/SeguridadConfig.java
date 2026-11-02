@@ -116,6 +116,13 @@ class SeguridadConfig {
     private static AuthenticationEntryPoint aIngresar() {
         var ingresar = new LoginUrlAuthenticationEntryPoint(Rutas.CUENTA_ENTRAR);
         return (request, response, error) -> {
+            // el contador de avisos se pide solo al volver a la pestaña: es
+            // cortesía, no acción del usuario; un 403 silencioso y la próxima
+            // navegación real es la que pide ingreso
+            if (request.getRequestURI().startsWith(Rutas.AVISOS_CONTADOR)) {
+                response.sendError(HttpStatus.FORBIDDEN.value());
+                return;
+            }
             if (Volver.esFragmento(request)) {
                 Volver.guardarPagina(request);
                 response.setHeader("HX-Redirect", request.getContextPath() + Rutas.CUENTA_ENTRAR);
