@@ -9,8 +9,12 @@
     /* Claves 1-2: un solo color de acción; lo demás en grises y blanco.
        Las variables de este bloque son las canónicas; las de abajo
        remapean los nombres que ya usan las plantillas. */
-    --color-accion: #2e7d32;          /* verde de marca; texto blanco encima da AA */
-    --color-accion-suave: #e3f0e5;    /* relleno de círculos de íconos */
+    --color-accion: #0d4a44;          /* verde de marca; texto blanco encima da AA */
+    --color-accion-suave: #dcebe2;    /* relleno de círculos de íconos */
+    --color-realce: #d97c2e;        /* naranja de apoyo: avisos, énfasis puntual */
+    --color-realce-suave: #f7ead3;
+    --color-atencion: #d8c94f;        /* amarillo: estados de espera/atención */
+    --color-exito: #2e7d52;
     --fondo: #f3f5f6;                 /* gris muy claro de página */
     --tarjeta: #ffffff;
     --texto: #26282b;
@@ -56,7 +60,7 @@
     --chip-texto: var(--texto);
     --nav-fondo: var(--acento);
     --nav-texto: var(--acento-texto);
-    --nav-activo: color-mix(in srgb, var(--acento-texto) 15%, var(--acento));
+    --nav-activo: color-mix(in srgb, var(--acento-texto) 15%, transparent);
     --nav-separador: var(--nav-activo);
     --foco: var(--linea-gruesa) solid var(--acento);
     --gap-2xs: var(--chico);
@@ -536,7 +540,7 @@ main {
 .sidebar,
 .menu-movil {
     --foco: 3px solid var(--acento-texto);
-    background: var(--acento);
+    background: #3f4a30;
     color: var(--acento-texto);
 }
 
@@ -647,7 +651,7 @@ main {
 
 :is(.sidebar, .menu-movil) li a[aria-current="page"] {
     background: var(--acento-texto);
-    color: var(--acento);
+    color: #3f4a30;
     font-weight: 600;
 }
 
@@ -1777,3 +1781,6 @@ fieldset.campo legend {
     background: var(--color-accion-suave);
     color: var(--color-accion);
 }
+
+/* banner de portada: punto de atención con el naranja de realce */
+#ds-ultimo.ultimo { background: var(--color-realce-suave); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-realce) 40%, transparent); }
