@@ -33,6 +33,11 @@ final class TiemposFiltro extends OncePerRequestFilter {
             List.of(Rutas.ESTADISTICAS, Rutas.MIS_SOLICITUDES, Rutas.AVISOS);
     private static final long LENTO_MS = 1000;
     private static final Pattern NUMERO = Pattern.compile("/\\d+(?=/|$)");
+    private final Metricas metricas;
+
+    TiemposFiltro(Metricas metricas) {
+        this.metricas = metricas;
+    }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -52,6 +57,7 @@ final class TiemposFiltro extends OncePerRequestFilter {
             var ruta = ruta(request);
             // una excepción sin manejar todavía no puso el 500 en la respuesta
             int estado = excepcion ? 500 : response.getStatus();
+            metricas.registrar(estado, ms);
             if (ms >= LENTO_MS || estado >= 500) {
                 LOG.warn("{} {} {} {}ms", request.getMethod(), anonima(ruta), estado, ms);
             } else if (medida(ruta)) {

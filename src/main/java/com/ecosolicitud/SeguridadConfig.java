@@ -70,7 +70,7 @@ class SeguridadConfig {
                         .requestMatchers(Rutas.NUEVA + "/**", Rutas.NUEVA,
                                 Rutas.MIS_SOLICITUDES + "/**", Rutas.MIS_SOLICITUDES,
                                 Rutas.AVISOS + "/**", Rutas.AVISOS,
-                                Rutas.OPINION + "/**", Rutas.OPINION).authenticated()
+                                Rutas.OPINION + "/**", Rutas.OPINION, "/metricas").authenticated()
                         .requestMatchers("/demo/**", "/org/**").access((usuario, contexto) ->
                                 new AuthorizationDecision(demoHabilitada && usuario.get().getAuthorities()
                                         .stream().anyMatch(a -> a.getAuthority().equals("ROLE_DEMO")
