@@ -1874,4 +1874,9 @@ button.enviando, .enviando button { opacity: .55; }
     background: none; border: 0; color: var(--texto-secundario); cursor: pointer;
 }
 .ver-clave:hover { color: var(--color-accion); }
-.ver-clave .icono { width: 1.3rem; height: 1.3rem; }
+/* gana a .campo > span .icono (más especificidad) */
+.campo-clave .ver-clave .icono {
+    width: 1.35rem; height: 1.35rem; margin: 0; vertical-align: middle;
+}
+.campo .ver-clave .icono { color: var(--texto-secundario); }
+.ver-clave[aria-pressed="true"] .icono { color: var(--color-accion); }
