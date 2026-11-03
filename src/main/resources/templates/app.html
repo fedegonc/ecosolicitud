@@ -162,6 +162,19 @@
         </div>
     </div>
     <script>
+        // mostrar/ocultar clave: cualquier .ver-clave alterna el input previo
+        document.addEventListener('click', function (e) {
+            var b = e.target.closest && e.target.closest('.ver-clave');
+            if (!b) { return; }
+            var input = b.previousElementSibling;
+            if (!input || input.type === undefined) { return; }
+            var ver = input.type === 'password';
+            input.type = ver ? 'text' : 'password';
+            var use = b.querySelector('use');
+            if (use) { use.setAttribute('href', use.getAttribute('href').replace(/#ojo(-tachado)?/, ver ? '#ojo-tachado' : '#ojo')); }
+            b.setAttribute('aria-pressed', ver ? 'true' : 'false');
+            input.focus();
+        });
         // doble-clic: marca el botón mientras la petición está en vuelo;
         // nunca se deshabilita: si la petición no sale (error, confirm
         // cancelado), el botón sigue vivo y el clic funciona

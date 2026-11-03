@@ -19,7 +19,10 @@
             </label>
             <label class="campo">
                 <span th:text="#{cuenta.clave}">Contraseña</span>
-                <input type="password" name="password" autocomplete="current-password" maxlength="72" required>
+                <span class="campo-clave">
+                    <input type="password" name="password" autocomplete="current-password" maxlength="72" required>
+                    <button type="button" class="ver-clave" th:aria-label="#{cuenta.clave.ver}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#ojo'"></use></svg></button>
+                </span>
             </label>
             <button type="submit" th:text="#{cuenta.entrar.boton}">Ingresar</button>
             <p class="campo-pie"><a th:href="@{${rutas.CUENTA_REGISTRAR}}" th:text="#{cuenta.entrar.registro}">Crear cuenta</a></p>

@@ -1863,3 +1863,15 @@ main > .tarjeta.caja > p:last-child { margin-bottom: 0; }
 
 /* botón con petición en vuelo: atenuado, nunca disabled */
 button.enviando, .enviando button { opacity: .55; }
+
+/* ojito de contraseña: dentro del campo, área táctil completa */
+.campo-clave { position: relative; display: block; }
+.campo-clave input { padding-right: 3rem !important; }
+.ver-clave {
+    position: absolute; right: calc(var(--chico) / 2); top: 50%; transform: translateY(-50%);
+    display: inline-flex; align-items: center; justify-content: center;
+    width: var(--toque-min); height: var(--toque-min);
+    background: none; border: 0; color: var(--texto-secundario); cursor: pointer;
+}
+.ver-clave:hover { color: var(--color-accion); }
+.ver-clave .icono { width: 1.3rem; height: 1.3rem; }

@@ -34,8 +34,11 @@
             </label>
             <label class="campo" th:classappend="${errores.containsKey('clave')} ? 'invalido'">
                 <span th:text="#{cuenta.clave}">Contraseña</span>
-                <input type="password" name="clave" minlength="5" maxlength="72"
-                       autocomplete="new-password" required>
+                <span class="campo-clave">
+                    <input type="password" name="clave" minlength="5" maxlength="72"
+                           autocomplete="new-password" required>
+                    <button type="button" class="ver-clave" th:aria-label="#{cuenta.clave.ver}"><svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#ojo'"></use></svg></button>
+                </span>
                 <span class="ayuda" th:text="#{cuenta.clave.ayuda}">Mínimo 5 caracteres.</span>
                 <span class="error" th:if="${errores.containsKey('clave')}" th:text="#{${errores.get('clave')}}">Error</span>
             </label>
