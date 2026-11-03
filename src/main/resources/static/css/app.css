@@ -1064,7 +1064,8 @@ fieldset.campo legend {
     font-size: var(--t-sm);
 }
 
-.form-nueva fieldset.campo {
+.form-nueva fieldset.campo,
+.form-nueva .flujo > .bloque-ciudad {
     padding: var(--pad);
     border: var(--linea-fina) solid var(--borde);
     border-radius: var(--radio);
@@ -1751,16 +1752,15 @@ fieldset.campo legend {
 
 /* respaldo de opinión: etiquetas de los extremos de la escala 1-5 */
 .escala-extremo { font-size: var(--t-xs); color: var(--texto-secundario); max-width: 6rem; }
-/* clave 3: indicador de pasos del formulario /nueva */
-.pasos {
+/* indicador de pasos del formulario /nueva: fila compacta, no tarjetas */
+.pasos-indicador {
     list-style: none;
     display: flex;
     gap: var(--chico);
     padding: 0;
     margin: 0 0 var(--grande);
-    counter-reset: paso;
 }
-.pasos li {
+.pasos-indicador li {
     flex: 1;
     display: flex;
     align-items: center;
@@ -1770,7 +1770,7 @@ fieldset.campo legend {
     border-bottom: var(--linea-gruesa) solid var(--borde);
     padding-bottom: var(--chico);
 }
-.pasos .paso-num {
+.pasos-indicador .paso-num {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1781,20 +1781,20 @@ fieldset.campo legend {
     color: var(--texto-secundario);
     font-weight: 700;
 }
-.pasos li.paso-activo {
+.pasos-indicador li.paso-activo {
     color: var(--texto);
     font-weight: 700;
     border-bottom-color: var(--color-accion);
 }
-.pasos li.paso-activo .paso-num {
+.pasos-indicador li.paso-activo .paso-num {
     background: var(--color-accion);
     color: var(--acento-texto);
 }
-.pasos li.paso-hecho {
+.pasos-indicador li.paso-hecho {
     color: var(--color-accion);
     border-bottom-color: var(--color-accion);
 }
-.pasos li.paso-hecho .paso-num {
+.pasos-indicador li.paso-hecho .paso-num {
     background: var(--color-accion-suave);
     color: var(--color-accion);
 }

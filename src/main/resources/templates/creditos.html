@@ -16,9 +16,9 @@
     <h2 th:text="${titulo}">Fotos</h2>
     <ul>
         <li th:each="c : ${creditos}">
-            <a th:href="${c.url}" rel="noopener" target="_blank" th:text="${c.obra}">Obra</a>
+            <a th:href="${c.url}" rel="noopener" target="_blank" hx-boost="false" th:text="${c.obra}">Obra</a>
             — <span th:text="${c.autor}">Autor</span> ·
-            <a th:href="${c.licenciaUrl}" rel="noopener license" target="_blank" th:text="${c.licencia}">Licencia</a>
+            <a th:href="${c.licenciaUrl}" rel="noopener license" target="_blank" hx-boost="false" th:text="${c.licencia}">Licencia</a>
             <span class="detalle" th:text="#{${c.uso}}">Uso</span>
         </li>
     </ul>
