@@ -1880,3 +1880,24 @@ button.enviando, .enviando button { opacity: .55; }
 }
 .campo .ver-clave .icono { color: var(--texto-secundario); }
 .ver-clave[aria-pressed="true"] .icono { color: var(--color-accion); }
+
+/* avisos: color por estado (timeline ciudadano + kanban org) */
+.timeline li.est-pendiente::before { background: var(--color-realce); }
+.timeline li:is(.est-en_curso, .est-completada)::before { background: var(--vivo); }
+.timeline li.est-rechazada::before { background: var(--peligro); }
+.timeline li.est-cancelada::before { background: var(--texto-secundario); }
+.timeline li.nueva::before { box-shadow: 0 0 0 3px var(--color-realce-suave); }
+
+.etiqueta.est-pendiente { background: var(--color-realce-suave); color: var(--color-realce); }
+.etiqueta:is(.est-en_curso, .est-completada) { background: var(--color-accion-suave); color: var(--acento); }
+.etiqueta.est-rechazada { background: color-mix(in srgb, var(--peligro) 12%, transparent); color: var(--peligro); }
+.etiqueta.est-cancelada { background: var(--acento-suave); color: var(--texto-secundario); }
+
+.tarjeta.nueva { background: var(--color-realce-suave); }
+.timeline li.nueva .aviso-texto { font-weight: 600; }
+
+.kanban-cant {
+    display: inline-block; min-width: 1.4em; padding: 0 .4em;
+    border-radius: 1em; background: var(--color-accion-suave); color: var(--acento);
+    font-size: var(--t-xs); font-weight: 700; text-align: center; vertical-align: .15em;
+}
