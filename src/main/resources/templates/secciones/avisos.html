@@ -7,6 +7,8 @@
 <main layout:fragment="content">
     <h1 th:text="#{avisos.titulo}">Avisos</h1>
     <p th:if="${avisos.isEmpty()}" th:text="#{${'avisos.vacia.' + #strings.toLowerCase(rolActual.name())}}">Vacía</p>
+    <p class="ayuda" th:unless="${avisos.isEmpty()}" th:text="#{avisos.lectura}">Se marcan los avisos de esta página.</p>
+    <p th:if="${pagina.totalPages > 1}" th:text="#{org.grupo.mostrando(${pagina.numberOfElements}, ${pagina.totalElements})}">Mostrando avisos</p>
 
     <!-- ciudadano: timeline con el estado actual de cada pedido -->
     <ol class="timeline" th:if="${rolActual.name() == 'CIUDADANO' and !avisos.isEmpty()}">
@@ -39,6 +41,19 @@
             </article>
         </section>
     </div>
+    <nav class="fila paginacion" th:if="${pagina.totalPages > 1}" th:attr="aria-label=#{paginacion.titulo}">
+        <a class="caja" th:if="${pagina.hasPrevious()}"
+           th:href="@{${rutas.AVISOS}(pagina=${pagina.number})}">
+            <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha-izq'"></use></svg>
+            <span th:text="#{paginacion.anterior}">Anterior</span>
+        </a>
+        <p th:text="#{paginacion.estado(${pagina.number + 1}, ${pagina.totalPages})}">Página 1 de 3</p>
+        <a class="caja" th:if="${pagina.hasNext()}"
+           th:href="@{${rutas.AVISOS}(pagina=${pagina.number + 2})}">
+            <span th:text="#{paginacion.siguiente}">Siguiente</span>
+            <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
+        </a>
+    </nav>
 </main>
 </body>
 </html>

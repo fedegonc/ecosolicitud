@@ -44,7 +44,7 @@ class ConsultasPorPaginaTest {
             Rutas.NUEVA, 2,
             Rutas.NUEVA + "?ciudad=RIVERA&organizacionId=frontera-limpia", 2,
             Rutas.ACOPIOS, 1,
-            Rutas.AVISOS, 11,
+            Rutas.AVISOS, 6,
             Rutas.GUIA, 1,
             Rutas.COMUNIDAD, 3,
             Rutas.ESTADISTICAS, 4,
@@ -53,7 +53,7 @@ class ConsultasPorPaginaTest {
     private static final Map<String, Long> ORGANIZACION = presupuesto(
             Rutas.ORG_SOLICITUDES, 13,
             Rutas.ORG_PERFIL, 2,
-            Rutas.AVISOS, 11);
+            Rutas.AVISOS, 6);
 
     @Autowired
     private TestRestTemplate rest;
