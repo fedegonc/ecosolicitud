@@ -57,10 +57,13 @@ public class ListadoService {
 
     public BandejaSolicitudes recibidas(Actor actor) {
         var org = organizacionId(actor);
+        // tablero real: una columna por estado, abierto primero
         return new BandejaSolicitudes(List.of(
-                grupo(org, "org.grupo.abiertas", Set.of(Estado.PENDIENTE, Estado.EN_CURSO),
-                        TOPE_GRUPO),
-                grupo(org, "org.grupo.cerradas", Estado.finales(), TOPE_CERRADAS)));
+                grupo(org, Estado.PENDIENTE.getClave(), Set.of(Estado.PENDIENTE), TOPE_GRUPO),
+                grupo(org, Estado.EN_CURSO.getClave(), Set.of(Estado.EN_CURSO), TOPE_GRUPO),
+                grupo(org, Estado.COMPLETADA.getClave(), Set.of(Estado.COMPLETADA), TOPE_CERRADAS),
+                grupo(org, Estado.RECHAZADA.getClave(), Set.of(Estado.RECHAZADA), TOPE_CERRADAS),
+                grupo(org, Estado.CANCELADA.getClave(), Set.of(Estado.CANCELADA), TOPE_CERRADAS)));
     }
 
     public SolicitudMetricas semana(Actor actor) {

@@ -207,19 +207,19 @@ class SolicitudE5Test {
                     "#org-select option[value='frontera-limpia']")).click();
             driver.findElement(By.cssSelector(".org-switch button[type='submit']")).click();
             driver.get(base + Rutas.ORG_SOLICITUDES);
-            assertThat(driver.findElements(By.cssSelector("h2")).stream()
-                    .map(e -> e.getText()).toList())
-                    .containsExactly("Abiertas", "Cerradas");
+            var cabeceras = driver.findElements(By.cssSelector(".kanban-col > h2")).stream()
+                    .map(e -> e.getText().replaceAll("\\s*\\d+\\s*$", "")).toList();
+            assertThat(cabeceras).containsExactly("Pendiente", "Aceptada", "Completada",
+                    "Rechazada", "Cancelada");
             var secciones = driver.findElements(By.cssSelector("main section"));
-            assertThat(secciones.get(0).findElements(By.cssSelector(".tarjeta"))).hasSize(2);
             var pendientes = secciones.get(0).findElements(By.cssSelector(".tarjeta.est-pendiente"));
             assertThat(pendientes).hasSize(1);
             assertThat(pendientes.get(0).getText()).contains("Ana Rodríguez", "Pendiente");
-            assertThat(secciones.get(0).findElements(By.cssSelector(".tarjeta.est-en_curso")))
+            assertThat(secciones.get(1).findElements(By.cssSelector(".tarjeta.est-en_curso")))
                     .hasSize(1);
-            var cerradas = secciones.get(1).findElements(By.cssSelector(".tarjeta"));
-            assertThat(cerradas).hasSize(1);
-            assertThat(cerradas.get(0).getText()).contains("Completada");
+            var completadas = secciones.get(2).findElements(By.cssSelector(".tarjeta"));
+            assertThat(completadas).hasSize(1);
+            assertThat(completadas.get(0).getText()).contains("Completada");
             assertThat(driver.getPageSource()).doesNotContain("Carla Santos");
         });
 
@@ -230,12 +230,12 @@ class SolicitudE5Test {
                     .hasSize(1);
             assertThat(pendiente.findElements(By.cssSelector("form[action$='/rechazar']")))
                     .hasSize(1);
-            var enCurso = secciones.get(0).findElement(By.cssSelector(".tarjeta.est-en_curso"));
+            var enCurso = secciones.get(1).findElement(By.cssSelector(".tarjeta.est-en_curso"));
             assertThat(enCurso.findElements(By.cssSelector("form[action$='/completar']")))
                     .hasSize(1);
             assertThat(enCurso.findElements(By.cssSelector("form[action$='/rechazar']")))
                     .hasSize(1);
-            var cerrada = secciones.get(1).findElement(By.cssSelector(".tarjeta"));
+            var cerrada = secciones.get(2).findElement(By.cssSelector(".tarjeta"));
             assertThat(cerrada.findElements(By.cssSelector("form"))).isEmpty();
         });
     }
