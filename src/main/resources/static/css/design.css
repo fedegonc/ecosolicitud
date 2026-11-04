@@ -1,7 +1,7 @@
 /* Sistema de diseño de la app. Se carga desde app.html después de
    app.css; colores y ritmos salen de las constantes del :root. */
 
-/* caja: la unidad clicable con borde */
+/* caja: superficie compartida; solo los controles tienen respuesta al pulsar */
 .caja {
     display: flex;
     align-items: center;
@@ -15,8 +15,8 @@
     transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .12s ease;
 }
 a.caja { color: inherit; text-decoration: none; }
-.caja:not(.activa):hover { border-color: var(--acento); cursor: pointer; }
-.caja:active { transform: scale(.97); }
+:is(a, button, summary).caja:not(.activa):hover { border-color: var(--acento); cursor: pointer; }
+:is(a, button, summary).caja:active { transform: scale(.97); }
 .caja.activa { border: 2px solid var(--acento); background: var(--acento); color: var(--acento-texto); font-weight: 600; }
 #ds-ciudad > summary.caja.activa { background: none; border-color: transparent; box-shadow: none; color: var(--color-accion); padding: var(--chico); }
 

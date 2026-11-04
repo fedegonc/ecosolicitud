@@ -1449,6 +1449,7 @@ fieldset.campo legend {
 
 .respaldo {
     margin-top: var(--gap-l);
+    margin-bottom: var(--gap-l);
     padding-top: var(--gap-l);
     border-top: var(--linea-fina) solid var(--borde);
 }
