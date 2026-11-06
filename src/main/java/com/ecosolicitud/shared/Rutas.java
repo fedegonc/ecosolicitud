@@ -47,6 +47,7 @@ public final class Rutas {
     public static final String CUENTA_CONDICIONES = "/cuenta/condiciones";
 
     public static final String DEV_LAYOUT_SYSTEM = "/dev/layout-system";
+    public static final String DEV_DESIGN_SYSTEM = "/dev/design-system";
 
     // para Java que arma enlaces (las plantillas usan @{${rutas.X}(id=...)})
     public static String expandir(String plantilla, Object id) {

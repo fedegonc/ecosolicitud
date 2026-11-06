@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="patrones" id="patrones" class="catalogo-seccion" aria-labelledby="titulo-patrones">
+    <h2 id="titulo-patrones" th:text="#{catalogo.patrones}">Patrones reales</h2>
+    <h3 th:text="#{catalogo.estados}">Estados</h3>
+    <div class="fila"><span th:each="estado : ${estados}">
+        <span th:replace="~{componentes/estado :: etiqueta(${estado})}"></span>
+    </span></div>
+    <p class="ayuda" th:text="#{catalogo.estados.ayuda}">Las acciones se derivan del dominio.</p>
+    <div id="catalogo-listado" hx-boost="true" hx-target="#catalogo-listado"
+         hx-select="#catalogo-listado" hx-swap="outerHTML" hx-push-url="true" hx-disabled-elt="unset">
+        <div class="rejilla">
+            <article class="tarjeta caja" th:each="ejemplo : ${pagina.content}"
+                     th:classappend="'est-' + ${#strings.toLowerCase(ejemplo.solicitud.estado.name())}">
+                <div class="texto">
+                    <th:block th:replace="~{secciones/ficha :: cuerpo(${ejemplo.solicitud}, ${ejemplo.solicitud.organizacionNombre}, null)}"></th:block>
+                </div>
+                <div class="fila">
+                    <button type="button" data-accion-muestra th:each="accion : ${ejemplo.acciones}" th:text="#{${accion}}">Acción</button>
+                </div>
+            </article>
+        </div>
+        <nav class="fila paginacion" th:aria-label="#{paginacion.titulo}">
+            <a class="caja" th:if="${pagina.hasPrevious()}"
+               th:href="@{${rutas.DEV_DESIGN_SYSTEM}(pagina=${pagina.number})}" th:text="#{paginacion.anterior}">Anterior</a>
+            <p th:text="#{paginacion.estado(${pagina.number + 1}, ${pagina.totalPages})}">Página</p>
+            <a class="caja" th:if="${pagina.hasNext()}"
+               th:href="@{${rutas.DEV_DESIGN_SYSTEM}(pagina=${pagina.number + 2})}" th:text="#{paginacion.siguiente}">Siguiente</a>
+        </nav>
+    </div>
+    <h3 th:text="#{catalogo.tarjetas}">Tarjeta enlazada y superficie informativa</h3>
+    <div class="grilla">
+        <a th:replace="~{componentes/ds :: tarjeta('ayuda.ciudadano-avisos', '/img/comunidad/acopio-800.webp', '#casos')}"></a>
+        <article class="tarjeta caja" id="catalogo-superficie">
+            <div class="texto">
+                <h3 th:text="#{catalogo.superficie}">No soy un botón</h3>
+                <p th:text="#{catalogo.superficie.ayuda}">Seleccionar texto no debe achicar la tarjeta.</p>
+                <details><summary th:text="#{catalogo.desplegable}">Desplegable</summary>
+                    <p th:text="#{catalogo.desplegable.ayuda}">Sin red.</p>
+                </details>
+            </div>
+        </article>
+    </div>
+    <h3 th:text="#{catalogo.avisos}">Avisos y contador</h3>
+    <div class="fila"><span th:text="#{avisos.contador}">Avisos sin leer</span>
+        <span th:with="avisosSinLeer=2"><span th:replace="~{secciones/badge :: badge}"></span></span>
+    </div>
+    <ol th:replace="~{secciones/avisos :: timeline(${avisosMuestra})}"></ol>
+    <h3 th:text="#{catalogo.kanban}">Kanban y columna vacía</h3>
+    <div class="kanban">
+        <section class="kanban-col" th:each="columna : ${columnasMuestra}">
+            <h4><span th:text="#{${columna.clave}}">Columna</span> <span class="kanban-cant" th:text="${columna.ejemplos.size()}">0</span></h4>
+            <p th:if="${columna.ejemplos.isEmpty()}" th:text="#{catalogo.vacio}">Sin elementos.</p>
+            <article class="tarjeta caja" th:each="ejemplo : ${columna.ejemplos}">
+                <div class="texto"><th:block th:replace="~{secciones/ficha :: cuerpo(${ejemplo.solicitud}, ${ejemplo.solicitud.organizacionNombre}, null)}"></th:block></div>
+            </article>
+        </section>
+    </div>
+    <h3 th:text="#{catalogo.mensajes}">Confirmación y error</h3>
+    <p class="caja banner" role="status" th:text="#{catalogo.confirmacion}">Muestra de confirmación.</p>
+    <p class="caja banner alerta" th:text="#{catalogo.error}">Muestra de error.</p>
+    <details><summary th:text="#{catalogo.codigo}">Implementación</summary>
+        <pre><code>secciones/ficha :: cuerpo(s, titulo, detalleUrl)
+secciones/avisos :: timeline(avisos)
+secciones/badge :: badge
+componentes/estado :: etiqueta(estado)
+componentes/ds :: tarjeta(clave, imagen, enlace)</code></pre>
+    </details>
+</section>
+<section th:fragment="casos" id="casos" class="catalogo-seccion" aria-labelledby="titulo-casos">
+    <h2 id="titulo-casos" th:text="#{catalogo.casos}">Casos difíciles</h2>
+    <h3 th:text="#{catalogo.texto.largo}">Textos largos</h3>
+    <div class="catalogo-muestra catalogo-texto-largo"><p th:text="#{catalogo.largo}">Texto largo.</p>
+        <p>EcoSolicitudReferenciaDePruebaSinEspaciosParaComprobarQueUnaCadenaExtensaNoDesbordaLaPantallaDelCelular</p>
+    </div>
+    <h3 th:text="#{catalogo.externo}">Contenido externo demorado</h3>
+    <p class="ayuda" th:text="#{catalogo.externo.ayuda}">Simulación local: no se conecta con Google.</p>
+    <div class="tarjeta caja cuestionario">
+        <div class="texto">
+            <details class="respaldo" id="catalogo-respaldo">
+                <summary th:text="#{opinion.respaldo.boton}">Responder dentro de EcoSolicitud</summary>
+                <fieldset class="campo">
+                    <legend th:text="#{catalogo.escala}">Escala</legend>
+                    <div th:replace="~{componentes/escala :: escala('ejemploRespaldo')}"></div>
+                </fieldset>
+                <p class="ayuda" th:text="#{catalogo.seguridad}">No se guardan datos.</p>
+            </details>
+            <button type="button" data-externo-muestra th:text="#{catalogo.externo.simular}">Simular demora</button>
+            <p id="catalogo-externo-estado" role="status" th:attr="data-espera=#{catalogo.externo.espera},data-fin=#{catalogo.externo.fin}"></p>
+            <iframe id="catalogo-externo" class="cuestionario-embebido" sandbox="" hidden th:title="#{catalogo.externo}"></iframe>
+        </div>
+    </div>
+    <h3 th:text="#{catalogo.verificacion}">Lista de verificación</h3>
+    <ul>
+        <li th:text="#{catalogo.verificar.teclado}">Teclado.</li>
+        <li th:text="#{catalogo.verificar.movil}">Móvil y zoom.</li>
+        <li th:text="#{catalogo.verificar.movimiento}">Movimiento reducido.</li>
+        <li th:text="#{catalogo.verificar.red}">Sin red.</li>
+        <li th:text="#{catalogo.verificar.idioma}">Español y portugués.</li>
+    </ul>
+    <noscript><p class="ayuda" th:text="#{catalogo.sinjs}">Las muestras nativas funcionan sin JavaScript.</p></noscript>
+</section>
+</body>
+</html>

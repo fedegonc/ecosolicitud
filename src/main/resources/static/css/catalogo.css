@@ -1,0 +1,81 @@
+/* Solo organiza el catálogo. Los componentes conservan app.css y design.css. */
+.catalogo > header,
+.catalogo-seccion {
+    margin-bottom: var(--pad-grande);
+}
+
+.catalogo-indice {
+    padding-block: var(--pad);
+    border-bottom: var(--linea-fina) solid var(--borde);
+}
+
+.catalogo-seccion {
+    scroll-margin-top: var(--pad);
+    padding-top: var(--pad);
+}
+
+.catalogo h2 {
+    font-size: var(--t-lg);
+}
+
+.catalogo h3 {
+    font-size: var(--t-base);
+}
+
+.catalogo-muestra {
+    margin: 0 0 var(--pad);
+    padding: var(--pad);
+    border: var(--linea-fina) solid var(--borde);
+    border-radius: var(--radio);
+    background: var(--superficie);
+}
+
+.catalogo-color {
+    display: block;
+    width: 100%;
+    height: calc(6 * var(--chico));
+    margin-bottom: var(--chico);
+    border: var(--linea-fina) solid var(--borde);
+}
+
+.catalogo output {
+    font-size: var(--t-sm);
+    color: var(--texto-secundario);
+}
+
+.catalogo-tipo-xs { font-size: var(--t-xs); }
+.catalogo-tipo-sm { font-size: var(--t-sm); }
+.catalogo-tipo-base { font-size: var(--t-base); }
+.catalogo-tipo-lg { font-size: var(--t-lg); }
+.catalogo-tipo-xl { font-size: var(--t-xl); }
+
+.catalogo-tokens {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--chico) var(--pad);
+}
+
+.catalogo-tokens dd {
+    margin: 0;
+}
+
+.catalogo-campos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--panel-w), 100%), 1fr));
+    gap: var(--pad);
+}
+
+.catalogo pre {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: var(--pad);
+    background: var(--superficie);
+    border: var(--linea-fina) solid var(--borde);
+    border-radius: var(--radio);
+    font-size: var(--t-sm);
+}
+
+.catalogo .catalogo-texto-largo {
+    max-width: var(--medida);
+    overflow-wrap: anywhere;
+}

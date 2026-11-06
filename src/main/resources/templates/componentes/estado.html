@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<span th:fragment="etiqueta(estado)" class="etiqueta"
+      th:classappend="'est-' + ${#strings.toLowerCase(estado.name())}" th:title="#{${estado.ayuda}}">
+    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${estado.icono}"></use></svg>
+    <span th:text="#{${estado.clave}}">Estado</span>
+</span>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="escala(nombre)" class="escala">
+    <span class="escala-extremo" th:text="#{opinion.escala.min}">Muy en desacuerdo</span>
+    <label th:each="n : ${#numbers.sequence(1, 5)}">
+        <input type="radio" th:name="${nombre}" th:value="${n}"><span th:text="${n}">1</span>
+    </label>
+    <span class="escala-extremo" th:text="#{opinion.escala.max}">Muy de acuerdo</span>
+</div>
+</body>
+</html>
