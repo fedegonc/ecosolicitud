@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<section th:fragment="controles" id="controles" class="catalogo-seccion" aria-labelledby="titulo-controles">
-    <h2 id="titulo-controles" th:text="#{catalogo.controles}">Controles</h2>
+<details th:fragment="controles" id="componentes" name="catalogo-seccion">
+    <summary th:text="#{catalogo.controles}">Componentes</summary>
     <p th:text="#{catalogo.controles.ayuda}">Interactuá con el teclado y el mouse.</p>
     <h3 th:text="#{catalogo.acciones}">Acciones</h3>
     <div class="fila">
@@ -11,43 +11,42 @@
         <button type="button" class="peligro" data-accion-muestra th:text="#{accion.rechazar}">Rechazar</button>
         <button type="button" disabled th:text="#{catalogo.deshabilitado}">Deshabilitado</button>
         <button type="button" disabled aria-busy="true" th:text="#{app.enviando}">Enviando</button>
-        <a href="#patrones" th:text="#{catalogo.enlace}">Ver patrones</a>
     </div>
     <p id="catalogo-estado" role="status" class="ayuda"
        th:attr="data-listo=#{catalogo.accion.lista},data-enviando=#{app.enviando}"
        th:text="#{catalogo.local}">Demostración local.</p>
     <h3 th:text="#{catalogo.formulario}">Formulario</h3>
-    <form id="catalogo-form" class="form-nueva" th:action="@{${rutas.DEV_DESIGN_SYSTEM}}" method="get">
-        <div class="catalogo-campos">
+    <form id="catalogo-form" th:action="@{${rutas.DEV_DESIGN_SYSTEM}}" method="get">
+        <div class="rejilla">
             <label class="campo">
                 <span th:text="#{nueva.nombre}">Nombre</span>
-                <input id="catalogo-nombre" type="text" name="ejemploNombre" required
+                <input id="catalogo-nombre" type="text" required
                        th:maxlength="${limites.NOMBRE}" aria-describedby="catalogo-nombre-ayuda" autocomplete="off">
                 <span class="ayuda" id="catalogo-nombre-ayuda" th:text="#{catalogo.nombre.ayuda}">Solo datos ficticios.</span>
             </label>
             <label class="campo">
                 <span th:text="#{nueva.contacto}">Contacto</span>
-                <input type="tel" name="ejemploContacto" inputmode="tel" th:placeholder="#{nueva.contacto.ejemplo}" autocomplete="off">
+                <input type="tel" inputmode="tel" th:placeholder="#{nueva.contacto.ejemplo}" autocomplete="off">
             </label>
-            <label class="campo">
-                <span th:text="#{cuenta.clave}">Contraseña</span>
-                <input type="password" name="ejemploClave" autocomplete="new-password">
+            <label class="campo invalido">
+                <span th:text="#{catalogo.campo.error}">Campo con error</span>
+                <input type="text" value="?" aria-invalid="true" aria-describedby="catalogo-error">
+                <span id="catalogo-error" class="error" th:text="#{catalogo.error}">Revisá el dato e intentá de nuevo.</span>
             </label>
+        </div>
+        <details>
+            <summary th:text="#{catalogo.seleccion}">Selección y otros estados</summary>
+            <div class="rejilla">
             <label class="campo">
                 <span th:text="#{nueva.ciudad}">Ciudad</span>
-                <select name="ejemploCiudad">
+                <select>
                     <option value="" th:text="#{nueva.ciudad.elegir}">Elegí una ciudad</option>
                     <option>Rivera</option><option>Sant'Ana do Livramento</option>
                 </select>
             </label>
             <label class="campo">
                 <span th:text="#{nueva.nota}">Nota</span>
-                <textarea name="ejemploNota" rows="3" th:maxlength="${limites.NOTA}"></textarea>
-            </label>
-            <label class="campo invalido">
-                <span th:text="#{catalogo.campo.error}">Campo con error</span>
-                <input type="text" value="?" aria-invalid="true" aria-describedby="catalogo-error">
-                <span id="catalogo-error" class="error" th:text="#{catalogo.error}">Revisá el dato e intentá de nuevo.</span>
+                <textarea rows="2" th:maxlength="${limites.NOTA}"></textarea>
             </label>
             <label class="campo">
                 <span th:text="#{catalogo.campo.sololectura}">Solo lectura</span>
@@ -57,7 +56,7 @@
                 <span th:text="#{catalogo.deshabilitado}">Deshabilitado</span>
                 <input type="text" disabled value="Rivera">
             </label>
-        </div>
+            </div>
         <fieldset class="campo">
             <legend th:text="#{nueva.paso2}">Materiales</legend>
             <div class="opciones-materiales">
@@ -73,17 +72,18 @@
             <legend th:text="#{catalogo.escala}">Escala del cuestionario</legend>
             <div th:replace="~{componentes/escala :: escala('ejemploEscala')}"></div>
         </fieldset>
+        </details>
         <button type="submit" th:text="#{catalogo.simular}">Simular envío</button>
     </form>
-    <details class="catalogo-muestra">
+    <details>
         <summary th:text="#{catalogo.desplegable}">Desplegable local</summary>
         <p th:text="#{catalogo.desplegable.ayuda}">Abre sin consultar la red.</p>
     </details>
     <details><summary th:text="#{catalogo.codigo}">Implementación</summary>
-        <pre><code>.form-nueva · .campo · .opcion-material
+        <pre><code>app.css: .campo · .opcion-material
 componentes/escala :: escala(nombre)
 &lt;button type="button" class="secundaria"&gt;…&lt;/button&gt;</code></pre>
     </details>
-</section>
+</details>
 </body>
 </html>

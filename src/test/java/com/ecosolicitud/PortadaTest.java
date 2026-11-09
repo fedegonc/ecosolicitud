@@ -30,12 +30,21 @@ class PortadaTest {
     }
 
     @Test
-    void designCssSeCargaUnaVezDespuesDeAppCss() {
-        var hoja = "/css/" + "design" + ".css";
+    void visitanteNoRecibeUnHistorialSupuesto() {
+        var es = rest.getForObject("/?lang=es", String.class);
+        assertThat(es).contains("¿Querés solicitar una recolección? Empezá acá.")
+                .doesNotContain("Todavía no hiciste ninguna solicitud");
+        var pt = rest.getForObject("/?lang=pt", String.class);
+        assertThat(pt).contains("Quer solicitar uma coleta? Comece aqui.")
+                .doesNotContain("Você ainda não fez nenhuma solicitação");
+    }
+
+    @Test
+    void appCssEsLaUnicaHojaPropiaEnLasPaginasPublicas() {
         for (String ruta : new String[]{Rutas.RAIZ, Rutas.ACOPIOS, Rutas.GUIA}) {
             var cuerpo = rest.getForEntity(ruta, String.class).getBody();
-            assertThat(cuerpo).containsOnlyOnce(hoja);
-            assertThat(cuerpo.indexOf("/css/app.css")).isLessThan(cuerpo.indexOf(hoja));
+            assertThat(cuerpo).containsOnlyOnce("/css/app.css")
+                    .doesNotContain("/css/design.css", "/css/demo.css", "/css/catalogo.css");
         }
     }
 }

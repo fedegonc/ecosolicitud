@@ -26,7 +26,8 @@
     </th:block>
 
     <!-- organización: kanban por dónde está el pedido ahora -->
-    <div class="kanban" th:if="${rolActual.name() == 'ORGANIZACION' and !avisos.isEmpty()}">
+    <th:block th:if="${rolActual.name() == 'ORGANIZACION' and !avisos.isEmpty()}">
+    <div class="kanban" th:fragment="kanban(columnas)">
         <section class="kanban-col" th:each="c : ${columnas}">
             <h2><span th:text="#{${c.clave()}}">Columna</span> <span class="kanban-cant" th:text="${c.avisos().size()}">0</span></h2>
             <article class="tarjeta caja" th:each="a : ${c.avisos()}"
@@ -42,6 +43,7 @@
             </article>
         </section>
     </div>
+    </th:block>
     <nav class="fila paginacion" th:if="${pagina.totalPages > 1}" th:attr="aria-label=#{paginacion.titulo}">
         <a class="caja" th:if="${pagina.hasPrevious()}"
            th:href="@{${rutas.AVISOS}(pagina=${pagina.number})}">

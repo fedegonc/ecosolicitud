@@ -2,7 +2,6 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
     <title th:text="#{catalogo.titulo}">Sistema de diseño</title>
-    <link rel="stylesheet" th:href="@{/css/catalogo.css}">
 </head>
 <body>
 <main layout:fragment="content" id="catalogo" class="catalogo" hx-boost="false">
@@ -12,60 +11,57 @@
         <p th:text="#{catalogo.intro}">Componentes reales, datos ficticios.</p>
         <a th:href="@{${rutas.DEV_LAYOUT_SYSTEM}}" th:text="#{catalogo.layout}">Inspeccionar layout</a>
     </header>
-    <nav class="fila catalogo-indice" th:aria-label="#{catalogo.indice}">
-        <a class="caja" th:each="seccion : ${ {'reglas','fundamentos','controles','patrones','casos'} }"
-           th:href="'#' + ${seccion}" th:text="#{${'catalogo.' + seccion}}">Sección</a>
-    </nav>
-    <section id="reglas" class="catalogo-seccion" aria-labelledby="titulo-reglas">
-        <h2 id="titulo-reglas" th:text="#{catalogo.reglas}">Reglas</h2>
+    <details id="tokens" name="catalogo-seccion" open>
+        <summary th:text="#{catalogo.fundamentos}">Tokens</summary>
+        <p class="ayuda" th:text="#{catalogo.tokens.ayuda}">Valores leídos del CSS cargado.</p>
+        <div class="rejilla">
+            <table>
+                <caption th:text="#{catalogo.colores}">Colores</caption>
+                <tbody><tr th:each="token : ${tokens}">
+                    <th scope="row"><svg class="catalogo-color" aria-hidden="true"><rect width="100%" height="100%" th:attr="fill=${'var(' + token + ')'}"></rect></svg><code th:text="${token}">--acento</code></th>
+                    <td><output th:attr="data-token=${token}">CSS</output></td>
+                </tr></tbody>
+            </table>
+            <div>
+                <table>
+                    <caption th:text="#{catalogo.tipografia}">Tipografía</caption>
+                    <tbody><tr th:each="token : ${tipos}">
+                        <th scope="row"><code th:text="${token}">--t-base</code></th>
+                        <td><output th:attr="data-token=${token}">CSS</output></td>
+                    </tr></tbody>
+                </table>
+                <table>
+                    <caption th:text="#{catalogo.espaciado}">Medidas</caption>
+                    <tbody><tr th:each="token : ${ritmos}">
+                        <th scope="row"><code th:text="${token}">--chico</code></th>
+                        <td><output th:attr="data-token=${token}">CSS</output></td>
+                    </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <details>
+            <summary th:text="#{catalogo.contraste}">Contraste</summary>
+            <p data-contraste="--texto,--superficie"><span th:text="#{catalogo.par.texto}">Texto / superficie</span> <output>—</output></p>
+            <p data-contraste="--accion-principal-texto,--accion-principal"><span th:text="#{catalogo.par.accion}">Texto / acción</span> <output>—</output></p>
+            <p data-contraste="--nav-texto,--nav-fondo"><span th:text="#{nav.secciones}">Navegación</span> <output>—</output></p>
+            <p data-contraste="--error-texto,--superficie"><span th:text="#{catalogo.par.error}">Error / superficie</span> <output>—</output></p>
+            <p class="ayuda" th:text="#{catalogo.contraste.ayuda}">No reemplaza una auditoría.</p>
+        </details>
+    </details>
+    <section th:replace="~{dev/catalogo-controles :: controles}"></section>
+    <section th:replace="~{dev/catalogo-patrones :: patrones}"></section>
+    <details id="reglas" name="catalogo-seccion">
+        <summary th:text="#{catalogo.reglas}">Reglas de uso</summary>
         <ul>
             <li th:text="#{catalogo.regla.tokens}">Usar tokens.</li>
             <li th:text="#{catalogo.regla.superficies}">No confundir superficies y controles.</li>
             <li th:text="#{catalogo.regla.accesibilidad}">Foco, teclado y movimiento reducido.</li>
             <li th:text="#{catalogo.regla.voz}">Vocabulario compartido.</li>
+            <li th:text="#{catalogo.regla.red}">No prometer envíos sin conexión.</li>
         </ul>
-        <p class="caja banner" th:text="#{catalogo.seguridad}">Las acciones de muestra no guardan datos.</p>
-    </section>
-    <section id="fundamentos" class="catalogo-seccion" aria-labelledby="titulo-fundamentos">
-        <h2 id="titulo-fundamentos" th:text="#{catalogo.fundamentos}">Fundamentos</h2>
-        <h3 th:text="#{catalogo.colores}">Colores</h3>
-        <p class="ayuda" th:text="#{catalogo.tokens.ayuda}">Valores leídos del CSS cargado.</p>
-        <div class="rejilla">
-            <figure class="catalogo-muestra" th:each="token : ${tokens}">
-                <svg class="catalogo-color" aria-hidden="true"><rect width="100%" height="100%" th:attr="fill=${'var(' + token + ')'}"></rect></svg>
-                <figcaption><code th:text="${token}">--acento</code> <output th:attr="data-token=${token}">CSS</output></figcaption>
-            </figure>
-        </div>
-        <h3 th:text="#{catalogo.contraste}">Contraste</h3>
-        <div class="fila">
-            <p class="catalogo-muestra" data-contraste="--texto,--superficie"><span th:text="#{catalogo.par.texto}">Texto / superficie</span> <output>—</output></p>
-            <p class="catalogo-muestra" data-contraste="--acento-texto,--acento"><span th:text="#{catalogo.par.accion}">Texto / acción</span> <output>—</output></p>
-            <p class="catalogo-muestra" data-contraste="--error-texto,--superficie"><span th:text="#{catalogo.par.error}">Error / superficie</span> <output>—</output></p>
-        </div>
-        <p class="ayuda" th:text="#{catalogo.contraste.ayuda}">Referencia: 4,5:1 para texto normal. No reemplaza una auditoría.</p>
-        <h3 th:text="#{catalogo.tipografia}">Tipografía</h3>
-        <div class="catalogo-muestra" th:each="token : ${tipos}">
-            <p th:class="'catalogo-tipo-' + ${#strings.substringAfter(token, '--t-')}" th:text="#{catalogo.tipografia.muestra}">Un encuentro más limpio entre vecinos y centros.</p>
-            <code th:text="${token}">--t-base</code> <output th:attr="data-token=${token}">CSS</output>
-        </div>
-        <h3 th:text="#{catalogo.espaciado}">Espaciado y medidas</h3>
-        <dl class="catalogo-tokens"><th:block th:each="token : ${ritmos}">
-            <dt><code th:text="${token}">--chico</code></dt><dd><output th:attr="data-token=${token}">CSS</output></dd>
-        </th:block></dl>
-        <h3 th:text="#{catalogo.iconos}">Iconos</h3>
-        <div class="fila"><span class="catalogo-muestra" th:each="icono : ${iconos}">
-            <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${icono}"></use></svg>
-            <code th:text="${icono}">pin</code>
-        </span></div>
-        <details><summary th:text="#{catalogo.codigo}">Implementación</summary>
-            <pre><code>:root → app.css
-app.css + design.css
-img/iconos.svg</code></pre>
-        </details>
-    </section>
-    <section th:replace="~{dev/catalogo-controles :: controles}"></section>
-    <section th:replace="~{dev/catalogo-patrones :: patrones}"></section>
-    <section th:replace="~{dev/catalogo-patrones :: casos}"></section>
+        <p class="ayuda" th:text="#{catalogo.seguridad}">Las acciones de muestra no guardan datos.</p>
+        <p><a th:href="@{${rutas.DEV_LAYOUT_SYSTEM}}" th:text="#{catalogo.layout}">Inspeccionar layout</a></p>
+    </details>
     <script th:src="@{/js/catalogo.js}"></script>
 </main>
 </body>

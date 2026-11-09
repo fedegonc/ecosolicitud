@@ -5,6 +5,7 @@ Spring Boot + Thymeleaf + htmx, español/portugués, PWA.
 
 - Desarrollo local: `mvn spring-boot:run`
 - Pruebas y revisiones: `mvn verify`
+- Interfaz: [sistema de diseño](DESIGN-SYSTEM.md); CSS propio único en `app.css`.
 - Medición de carga y monitoreo: `testing/CARGA.md`, `testing/MONITOREO.md`
 - Producción: https://ecosolicitud.onrender.com (Render Free, Docker)
 

@@ -12,7 +12,8 @@
         <span th:text="#{${clave + '.texto'}}"></span>
     </div>
 </a>
-<a th:fragment="accion(icono, clave, enlace)" th:href="@{${enlace}}" class="accion">
+<a th:fragment="accion(icono, clave, enlace)" th:href="@{${enlace}}" class="accion"
+   th:classappend="${enlace == rutas.NUEVA} ? 'principal'">
     <span class="circulo"><svg aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${icono}"></use></svg></span>
     <span th:text="#{${clave}}"></span>
 </a>
@@ -54,7 +55,7 @@
         <svg class="icono flecha" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
     </a>
     <a th:if="${s == null}" id="ds-ultimo" class="caja banner ultimo" th:href="@{${rutas.NUEVA}}">
-        <strong th:text="#{portada.sin.pedidos}">Todavía no pediste un retiro</strong>
+        <strong th:text="${usuario != null} ? #{portada.sin.pedidos} : #{portada.invitacion}">¿Querés hacer una solicitud?</strong>
         <svg class="icono flecha" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
     </a>
 </th:block>

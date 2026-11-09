@@ -2,23 +2,9 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
 <head>
     <title>Layout system</title>
-    <!-- solo esta página: cada caja delineada, un color por capa del layout.
-         outline y no border: delinea sin sumar píxeles ni mover nada -->
-    <style>
-        * { outline: 1px solid rgb(0 0 0 / .25); outline-offset: -1px; }
-        .app { outline: 3px solid #d00; }
-        :is(.sidebar, .menu-movil) { outline: 2px solid #06c; }
-        :is(.sidebar, .menu-movil) :is(header, nav, footer) { outline: 2px solid #39f; }
-        .pagina { outline: 3px solid #090; }
-        main { outline: 2px solid #80c; }
-        main > :is(section, div, nav, form, footer) { outline: 2px solid #e70; }
-        :is(.fila, .rejilla, .grilla, .kanban, .acciones) { outline: 2px dashed #c09; }
-        .caja { outline: 2px solid #0aa; }
-        :is(.texto, .imagen, .icono) { outline: 1px solid #a60; }
-    </style>
 </head>
 <body>
-<main layout:fragment="content" class="ds">
+<main layout:fragment="content" class="ds layout-system">
     <p><a th:href="@{${rutas.DEV_DESIGN_SYSTEM}}" th:text="#{catalogo.titulo}">Sistema de diseño</a></p>
 
     <div id="ds-saludo" class="saludo">

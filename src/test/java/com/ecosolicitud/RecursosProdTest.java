@@ -1,11 +1,15 @@
 package com.ecosolicitud;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -17,6 +21,24 @@ class RecursosProdTest {
 
     @Autowired
     private TestRestTemplate rest;
+
+    @Test
+    void noHayHojasPropiasParalelas() throws IOException {
+        var hojas = new PathMatchingResourcePatternResolver()
+                .getResources("classpath*:static/css/*.css");
+        assertThat(Arrays.stream(hojas).map(Resource::getFilename).distinct())
+                .containsExactly("app.css");
+    }
+
+    @Test
+    void unaSolaHojaPropiaYCatalogoFueraDeProduccion() {
+        var pagina = rest.getForObject("/", String.class);
+        assertThat(Pattern.compile("<link[^>]+rel=\"stylesheet\"[^>]*>").matcher(pagina)
+                .results().count()).isEqualTo(1);
+        assertThat(pagina).doesNotContain("/css/design", "/css/demo", "/css/catalogo");
+        assertThat(rest.getForEntity("/dev/design-system", String.class).getStatusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND);
+    }
 
     @Test
     void recursosVersionadosSeSirvenConCacheDeProduccion() {

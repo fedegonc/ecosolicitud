@@ -46,25 +46,9 @@
         }, 800);
     }, true);
     document.addEventListener('click', event => {
-        const boton = event.target.closest('[data-accion-muestra], [data-externo-muestra]');
+        const boton = event.target.closest('[data-accion-muestra]');
         if (!boton || !boton.closest('#catalogo')) return;
-        if (boton.hasAttribute('data-accion-muestra')) {
-            const estado = document.getElementById('catalogo-estado');
-            estado.textContent = `${boton.textContent.trim()}: ${estado.dataset.listo}`;
-            return;
-        }
-        const estado = document.getElementById('catalogo-externo-estado');
-        const frame = document.getElementById('catalogo-externo');
-        frame.hidden = true;
-        estado.textContent = estado.dataset.espera;
-        boton.disabled = true;
-        setTimeout(() => {
-            estado.textContent = estado.dataset.fin;
-            const texto = document.createElement('p');
-            texto.textContent = estado.dataset.fin;
-            frame.srcdoc = texto.outerHTML;
-            frame.hidden = false;
-            boton.disabled = false;
-        }, 3000);
+        const estado = document.getElementById('catalogo-estado');
+        estado.textContent = `${boton.textContent.trim()}: ${estado.dataset.listo}`;
     });
 })();
