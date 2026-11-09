@@ -18,7 +18,7 @@
     --accion-principal-texto: var(--acento-texto);
     --color-atencion: #d8c94f;        /* amarillo: estados de espera/atención */
     --color-exito: #2e7d52;
-    --fondo: #f3f5f6;                 /* gris muy claro de página */
+    --fondo: #f6f3eb;                 /* beige suave de pagina */
     --tarjeta: #ffffff;
     --texto: #26282b;
     --texto-secundario: #5f6469;
@@ -134,7 +134,7 @@ body {
     margin: 0;
     font-size: var(--t-base);
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: var(--fondo-pagina) fixed, var(--fondo);
+    background: var(--fondo-pagina);
     color: var(--texto);
     line-height: 1.45;
     overflow-wrap: anywhere;
