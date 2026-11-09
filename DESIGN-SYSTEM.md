@@ -23,6 +23,13 @@ orden de las reglas requiere comprobar ambas vistas y movil.
   experimento de acciones naranjas y navegacion verde palida.
 - Acciones verdes con texto blanco; naranja solo como realce de avisos,
   siempre con texto oscuro. Ningun estado se comunica solo con color.
+- La paleta global se agrupa en identidad, superficies/texto y estados:
+  verde de marca, neutros, rojo y un unico tono de atencion naranja.
+  Confirmaciones reutilizan el verde; `--color-exito` y `--color-atencion`
+  son alias de compatibilidad, no colores nuevos.
+- Ciudades, tipos de publicaciones y posiciones de graficos no agregan
+  acentos decorativos. Los materiales conservan sus colores de categoria
+  y sus nombres visibles; no son colores de identidad.
 - Espacios desde `--espacio-1` hasta `--espacio-7`; los nombres existentes
   (`--chico`, `--pad`, `--gap-l`) son alias para evitar romper componentes.
 - Tamano de texto desde `--t-*`, radios desde `--radio-*` y objetivos

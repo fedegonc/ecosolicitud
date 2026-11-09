@@ -17,7 +17,11 @@
         <div class="rejilla">
             <table>
                 <caption th:text="#{catalogo.colores}">Colores</caption>
-                <tbody><tr th:each="token : ${tokens}">
+                <tbody th:each="grupo : ${ {'identidad': {'--acento'},
+                    'neutros': {'--superficie', '--fondo', '--texto', '--texto-secundario', '--borde'},
+                    'estados': {'--peligro', '--color-realce'}} }">
+                <tr><th colspan="2" scope="rowgroup" th:text="#{${'catalogo.paleta.' + grupo.key}}">Identidad</th></tr>
+                <tr th:each="token : ${grupo.value}">
                     <th scope="row"><svg class="catalogo-color" aria-hidden="true"><rect width="100%" height="100%" th:attr="fill=${'var(' + token + ')'}"></rect></svg><code th:text="${token}">--acento</code></th>
                     <td><output th:attr="data-token=${token}">CSS</output></td>
                 </tr></tbody>
@@ -39,6 +43,7 @@
                 </table>
             </div>
         </div>
+        <p class="ayuda" th:text="#{catalogo.paleta.ayuda}">Las confirmaciones reutilizan el verde de marca.</p>
         <details>
             <summary th:text="#{catalogo.contraste}">Contraste</summary>
             <p data-contraste="--texto,--superficie"><span th:text="#{catalogo.par.texto}">Texto / superficie</span> <output>—</output></p>
