@@ -72,10 +72,15 @@ El catalogo no incluye un iframe ni consulta servicios externos.
 - Colores por proposito y tamanos desde los tokens existentes.
 - Una tarea principal por pantalla; no confundir tarjetas informativas con botones.
 - Etiquetas visibles, foco de teclado, texto e icono para los estados.
-- Estados del dominio: pendiente, en curso, completada, rechazada y cancelada.
+- Estados visibles: pendiente, aceptada, completada, rechazada y cancelada;
+  pendente, aceita, concluida, recusada y cancelada en portugues.
 - Vocabulario: vecino, centro y solicitud; traducciones equivalentes en portugues.
 - Sin conexion no se confirma un envio: no existe una cola offline de escrituras.
 - Ante un resultado incierto, verificar antes de reenviar.
+- Los vacios describen el listado o grupo actual; no afirman que una persona
+  nunca hizo una solicitud. Las confirmaciones dicen que se guardo o envio.
+- "Nombre de usuario" / "Nome de usuario" se conserva como identificador de
+  acceso, no como nombre del rol: el rol sigue siendo vecino / vizinho.
 - La carga y los errores se muestran donde corresponde; no todos los
   componentes necesitan todos los estados.
 
