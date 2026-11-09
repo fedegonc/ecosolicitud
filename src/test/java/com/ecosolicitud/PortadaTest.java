@@ -17,26 +17,32 @@ class PortadaTest {
 
     private static final String[] SECCIONES = {
             "id=\"ds-saludo\"", "id=\"ds-titulo\"", "id=\"ds-acciones\"",
-            "id=\"ds-ultimo\"", "id=\"ds-consejos\""};
+            "id=\"ds-consejos\""};
 
     @Autowired
     private TestRestTemplate rest;
 
     @Test
-    void portadaRespondeConLasCincoSecciones() {
+    void portadaRespondeConLasSecciones() {
         var r = rest.getForEntity("/?ciudad=livramento", String.class);
         assertThat(r.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(r.getBody()).contains(SECCIONES);
     }
 
     @Test
-    void visitanteNoRecibeUnHistorialSupuesto() {
+    void visitanteNoRecibeUnHistorialNiUnaInvitacionRedundante() {
         var es = rest.getForObject("/?lang=es", String.class);
-        assertThat(es).contains("¿Querés solicitar una recolección? Empezá acá.")
-                .doesNotContain("Todavía no hiciste ninguna solicitud");
+        assertThat(es).contains("Todo para reciclar bien en")
+                .doesNotContain("¿Querés solicitar una recolección?")
+                .doesNotContain("Todavía no hiciste ninguna solicitud")
+                .doesNotContain("¿Primera vez?")
+                .doesNotContain("Ruta de navegación");
         var pt = rest.getForObject("/?lang=pt", String.class);
-        assertThat(pt).contains("Quer solicitar uma coleta? Comece aqui.")
-                .doesNotContain("Você ainda não fez nenhuma solicitação");
+        assertThat(pt).contains("Tudo para reciclar bem em")
+                .doesNotContain("Quer solicitar uma coleta?")
+                .doesNotContain("Você ainda não fez nenhuma solicitação")
+                .doesNotContain("Primeira vez?")
+                .doesNotContain("Trilha de navegação");
     }
 
     @Test

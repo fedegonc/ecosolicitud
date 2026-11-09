@@ -23,12 +23,6 @@
         <p class="hola" th:if="${usuario != null}" th:text="#{portada.hola(${usuario})}">Hola, Ana</p>
         <p class="hola" th:if="${usuario == null and organizacionActiva != null}"
            th:text="#{portada.hola(${organizacionActiva.nombre})}">Hola, Centro</p>
-        <nav class="camino" th:aria-label="#{miga.aria}">
-            <ol>
-                <li><span aria-current="page" th:text="#{miga.inicio}">Inicio</span></li>
-                <li th:text="${pagina.localidad.nombre}">Rivera</li>
-            </ol>
-        </nav>
     </div>
     <nav id="ds-ciudad" th:aria-label="#{ds.ciudad}"
          hx-target=".pagina" hx-select=".pagina"
@@ -44,20 +38,14 @@
         </details>
     </nav>
 </div>
-<!-- barra ancha: el estado del último pedido o la invitación a hacer el primero -->
-<th:block th:fragment="ultimo(s)">
-    <a th:if="${s != null}" id="ds-ultimo" class="caja banner ultimo"
-       th:classappend="'est-' + ${#strings.toLowerCase(s.estado.name())}"
-       th:href="@{${rutas.MIS_SOLICITUD}(id=${s.id})}" th:title="#{${s.estado.ayuda}}">
-        <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.estado.icono}"></use></svg>
-        <strong th:text="#{portada.ultimo(${s.id})}">Tu último pedido #1</strong>
-        <span th:text="#{${s.estado.clave}}">Estado</span>
-        <svg class="icono flecha" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
-    </a>
-    <a th:if="${s == null}" id="ds-ultimo" class="caja banner ultimo" th:href="@{${rutas.NUEVA}}">
-        <strong th:text="${usuario != null} ? #{portada.sin.pedidos} : #{portada.invitacion}">¿Querés hacer una solicitud?</strong>
-        <svg class="icono flecha" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
-    </a>
-</th:block>
+<!-- barra ancha: solo el estado del último pedido; sin invitación redundante -->
+<a th:fragment="ultimo(s)" th:if="${s != null}" id="ds-ultimo" class="caja banner ultimo"
+   th:classappend="'est-' + ${#strings.toLowerCase(s.estado.name())}"
+   th:href="@{${rutas.MIS_SOLICITUD}(id=${s.id})}" th:title="#{${s.estado.ayuda}}">
+    <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#' + ${s.estado.icono}"></use></svg>
+    <strong th:text="#{portada.ultimo(${s.id})}">Tu último pedido #1</strong>
+    <span th:text="#{${s.estado.clave}}">Estado</span>
+    <svg class="icono flecha" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#flecha'"></use></svg>
+</a>
 </body>
 </html>
