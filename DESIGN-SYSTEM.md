@@ -17,18 +17,20 @@ No se oculta la complejidad minificando para cumplir un conteo de lineas:
 se eliminan duplicaciones y se comparten componentes. Un cambio en el
 orden de las reglas requiere comprobar ambas vistas y movil.
 
-## Direccion visual
+## Base estable
 
-- Verde de marca para identidad y navegacion, no como fondo dominante.
-- Navegacion verde muy clara con texto oscuro, foco verde y estado activo
-  marcado tambien con peso y una linea lateral.
-- Accion principal naranja con texto oscuro: contraste aproximado 4.84:1.
-  No usar texto blanco sobre este naranja. El acceso a nueva solicitud
-  comparte estos tokens con los botones principales.
-- Acciones secundarias con contorno verde; peligro con contorno rojo.
-- Bordes continuos y estados deshabilitados visibles, sin cambiar radios,
-  tipografia, fotografias ni mensajes de producto en este bloque.
-- Los colores suaves de avisos usan texto oscuro, no naranja claro.
+- Se conserva el verde de marca de la interfaz original. Se retira el
+  experimento de acciones naranjas y navegacion verde palida.
+- Acciones verdes con texto blanco; naranja solo como realce de avisos,
+  siempre con texto oscuro. Ningun estado se comunica solo con color.
+- Espacios desde `--espacio-1` hasta `--espacio-7`; los nombres existentes
+  (`--chico`, `--pad`, `--gap-l`) son alias para evitar romper componentes.
+- Tamano de texto desde `--t-*`, radios desde `--radio-*` y objetivos
+  tactiles desde `--toque-min` (44 px con texto base de 16 px).
+- Las proporciones de graficos, dimensiones de mapas y puntos de corte
+  responsive no son espaciados ni tamanos tipograficos. Conservan sus
+  unidades de layout; las variables CSS no funcionan en media queries.
+- Sin fuentes remotas, fotografias nuevas ni cambios de identidad.
 
 ## Catalogo compacto
 
