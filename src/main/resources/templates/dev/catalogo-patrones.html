@@ -28,8 +28,9 @@
         <ol th:replace="~{secciones/avisos :: timeline(${avisosMuestra})}"></ol>
     </details>
     <h3 th:text="#{catalogo.mensajes}">Confirmación y error</h3>
-    <p class="caja banner" role="status" th:text="#{catalogo.confirmacion}">Muestra de confirmación.</p>
-    <p class="caja banner alerta" th:text="#{catalogo.error}">Muestra de error.</p>
+    <p class="mensaje mensaje--vacio" th:text="#{mis.vacia}">Sin solicitudes.</p>
+    <p class="mensaje mensaje--confirmacion" role="status" th:text="#{catalogo.confirmacion}">Muestra de confirmación.</p>
+    <p class="mensaje mensaje--error" role="alert" th:text="#{catalogo.error}">Muestra de error.</p>
     <details><summary th:text="#{catalogo.codigo}">Implementación</summary>
         <pre><code>secciones/ficha :: cuerpo(s, titulo, detalleUrl)
 secciones/avisos :: kanban(columnas) / timeline(avisos)

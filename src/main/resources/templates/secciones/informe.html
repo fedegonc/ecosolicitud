@@ -16,7 +16,7 @@
     </nav>
     <p class="solo-pantalla"><button type="button" onclick="window.print()"
            th:text="#{informe.imprimir}">Imprimir</button></p>
-    <p th:if="${informe.metricas.recibidas() == 0}" th:text="#{informe.vacio}">Vacío</p>
+    <p class="mensaje mensaje--vacio" th:if="${informe.metricas.recibidas() == 0}" th:text="#{informe.vacio}">Vacío</p>
     <div class="rejilla">
         <article class="tarjeta caja">
             <strong th:text="${informe.metricas.recibidas()}">4</strong>

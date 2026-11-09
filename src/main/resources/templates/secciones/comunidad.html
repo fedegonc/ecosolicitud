@@ -13,7 +13,7 @@
                hx-target="#listado" hx-select="#listado" hx-swap="outerHTML" hx-push-url="true"
                th:text="#{${'comunidad.filtro.' + #strings.toLowerCase(f.name())}}">Todas</a>
         </nav>
-        <p th:if="${publicaciones.isEmpty()}" th:text="#{comunidad.vacia}">Vacía</p>
+        <p class="mensaje mensaje--vacio" th:if="${publicaciones.isEmpty()}" th:text="#{comunidad.vacia}">Vacía</p>
         <div class="rejilla">
         <article th:each="p : ${publicaciones}" class="tarjeta caja"
                  th:classappend="'pub-' + ${#strings.toLowerCase(#strings.replace(p.tipo.clave, 'comunidad.tipo.', ''))}">
@@ -41,7 +41,7 @@
         <p th:text="#{comunidad.recicladores.ayuda}">Ayuda</p>
         <p class="caja banner" role="note" th:if="${!recicladores.isEmpty()}"
            th:text="#{comunidad.recicladores.demo}">Datos de prueba</p>
-        <p th:if="${recicladores.isEmpty()}"
+        <p class="mensaje mensaje--vacio" th:if="${recicladores.isEmpty()}"
            th:text="#{comunidad.recicladores.vacia}">Vacío</p>
         <ul class="rejilla">
             <li th:each="r : ${recicladores}" class="reciclador"

@@ -73,7 +73,7 @@
         <article class="grafico caja">
             <h2 th:text="#{estadisticas.grafico.material}">Materiales más pedidos</h2>
             <p class="grafico-nota" th:text="#{estadisticas.grafico.material.nota}">Nota</p>
-            <p class="grafico-vacio" th:if="${s.porMaterial.isEmpty()}" th:text="#{estadisticas.grafico.vacio}">Sin datos</p>
+            <p class="grafico-vacio mensaje mensaje--vacio" th:if="${s.porMaterial.isEmpty()}" th:text="#{estadisticas.grafico.vacio}">Sin datos</p>
             <ol class="barras">
                 <li th:each="b : ${s.porMaterial}"
                     th:classappend="'mat-' + ${#strings.toLowerCase(b.clave)}"

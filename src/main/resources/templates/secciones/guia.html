@@ -7,7 +7,7 @@
 <main layout:fragment="content">
     <h1 th:text="#{guia.titulo}">Guía de reciclaje</h1>
     <p th:text="#{guia.intro}">Intro</p>
-    <p th:if="${articulos.isEmpty()}" th:text="#{guia.vacia}">Vacía</p>
+    <p class="mensaje mensaje--vacio" th:if="${articulos.isEmpty()}" th:text="#{guia.vacia}">Vacía</p>
     <div class="rejilla">
         <article th:each="a : ${articulos}" class="tarjeta caja">
             <div class="imagen" th:if="${a.imagen != null}">

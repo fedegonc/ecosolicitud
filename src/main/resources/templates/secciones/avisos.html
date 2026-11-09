@@ -6,7 +6,7 @@
 <body>
 <main layout:fragment="content">
     <h1 th:text="#{avisos.titulo}">Avisos</h1>
-    <p th:if="${avisos.isEmpty()}" th:text="#{${'avisos.vacia.' + #strings.toLowerCase(rolActual.name())}}">Vacía</p>
+    <p class="mensaje mensaje--vacio" th:if="${avisos.isEmpty()}" th:text="#{${'avisos.vacia.' + #strings.toLowerCase(rolActual.name())}}">Vacía</p>
     <p class="ayuda" th:unless="${avisos.isEmpty()}" th:text="#{avisos.lectura}">Se marcan los avisos de esta página.</p>
     <p th:if="${pagina.totalPages > 1}" th:text="#{org.grupo.mostrando(${pagina.numberOfElements}, ${pagina.totalElements})}">Mostrando avisos</p>
 

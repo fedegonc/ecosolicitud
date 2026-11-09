@@ -151,7 +151,7 @@
             <main class="contenido" id="contenido" layout:fragment="content"></main>
             <footer class="pie-pagina">
                 <th:block th:if="${cuentaNombre != null or demoHabilitada}"><p th:text="#{pie.opinion.invitacion}">Tu opinión nos importa y nos ayuda a mejorar.</p>
-                <a th:href="@{${rutas.OPINION}}"
+                <a class="boton secundaria" th:href="@{${rutas.OPINION}}"
                    th:attr="aria-current=${rutaActual == rutas.OPINION} ? 'page' : null">
                     <svg class="icono" aria-hidden="true"><use th:href="@{/img/iconos.svg} + '#mensaje'"></use></svg>
                     <span th:text="#{pie.opinion}">Responder cuestionario de usabilidad</span>

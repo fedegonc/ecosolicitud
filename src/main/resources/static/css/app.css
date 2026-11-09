@@ -293,8 +293,13 @@ dl.estado {
     font-weight: 600;
 }
 
-/* botones: la etiqueta dentro del contenido es la acción principal */
-main button {
+/* Un mismo componente para acciones en botones y enlaces. */
+main button,
+.boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--chico);
     padding: calc(1.5 * var(--chico)) calc(2 * var(--chico));
     min-height: var(--toque-min);
     border: var(--linea-media) solid var(--accion-principal);
@@ -303,23 +308,28 @@ main button {
     color: var(--accion-principal-texto);
     font: inherit;
     font-weight: 600;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
 }
 
-main button.secundaria {
+main button.secundaria,
+.boton.secundaria {
     background: transparent;
     border-color: var(--acento);
     color: var(--acento);
 }
 
-main button:disabled {
+main button:disabled,
+.boton[aria-disabled="true"] {
     opacity: .55;
     cursor: not-allowed;
 }
 
 /* peligro: contorno, no relleno; pesa menos que la acción principal para
    que el pulgar no caiga en Rechazar/Cancelar por ser lo más visible */
-main button.peligro {
+main button.peligro,
+.boton.peligro {
     background: var(--superficie);
     border-color: var(--peligro);
     color: var(--peligro);
@@ -442,18 +452,21 @@ main button,
         color .15s ease, transform .12s ease, box-shadow .15s ease;
 }
 
-main button:hover {
+main button:hover,
+.boton:hover {
     filter: brightness(1.08);
 }
 
-main button.secundaria:hover {
+main button.secundaria:hover,
+.boton.secundaria:hover {
     background: var(--borde-suave);
     border-color: var(--borde-fuerte);
+    color: var(--acento);
     filter: none;
 }
 
 main button:active,
-main a:active {
+.boton:active {
     transform: scale(.97);
 }
 
@@ -533,20 +546,7 @@ main a:active {
 }
 
 .pie-pagina a {
-    border-radius: var(--radio);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--gap-xs);
-    min-height: var(--toque-min);
-    padding: 0 var(--pad);
     font-size: var(--t-sm);
-    background: var(--acento);
-    color: var(--acento-texto);
-    font-weight: 600;
-    text-decoration: none;
-}
-.pie-pagina a:hover {
-    background: var(--color-accion-suave);
 }
 /* página actual: anillo con box-shadow, así el outline queda libre para el foco */
 .pie-pagina a[aria-current="page"] {
@@ -663,6 +663,7 @@ main {
     align-items: center;
     gap: calc(1.5 * var(--chico));
     padding: calc(1.5 * var(--chico));
+    min-height: var(--toque-min);
 }
 
 :is(.sidebar, .menu-movil) li a:hover {
@@ -745,8 +746,8 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--icono);
-    height: var(--icono);
+    width: var(--toque-min);
+    height: var(--toque-min);
     list-style: none;
     cursor: pointer;
 }
@@ -789,8 +790,8 @@ main > .tarjeta {
 .campo textarea {
     width: 100%;
     padding: var(--gap-m) var(--gap-l);
-    min-height: 3rem;
-    border: var(--linea-fina) solid var(--borde);
+    min-height: var(--alto-control);
+    border: var(--linea-fina) solid var(--borde-fuerte);
     border-radius: var(--radio);
     background: var(--superficie);
     color: var(--texto);
@@ -803,9 +804,10 @@ main > .tarjeta {
 .campo input[type="tel"]:focus,
 .campo select:focus,
 .campo textarea:focus {
-    outline: none;
+    outline: var(--foco);
+    outline-offset: var(--linea-media);
     border-color: var(--color-accion);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accion) 22%, transparent);
+    box-shadow: none;
 }
 
 fieldset.campo legend {
@@ -821,6 +823,24 @@ fieldset.campo legend {
     margin: var(--gap-2xs) var(--gap-m) var(--gap-2xs) 0;
     cursor: pointer;
     background: var(--material-fondo, var(--superficie));
+    min-height: var(--toque-min);
+}
+
+.opcion-material:focus-within,
+.campo-check:focus-within,
+.escala label:focus-within {
+    outline: var(--foco);
+    outline-offset: var(--linea-media);
+}
+
+summary,
+.campo-check,
+.escala label {
+    min-height: var(--toque-min);
+}
+
+.escala label {
+    min-width: var(--toque-min);
 }
 
 /* el contorno punteado invita a elegir; al marcar, queda firme */
@@ -990,7 +1010,7 @@ fieldset.campo legend {
     gap: var(--gap-m);
     margin-bottom: var(--gap-s);
     padding: var(--gap-l) var(--gap-l);
-    border: var(--linea-fina) solid var(--borde);
+    border: var(--linea-fina) solid var(--borde-fuerte);
     border-radius: var(--radio);
     background: var(--superficie);
     cursor: pointer;
@@ -1853,7 +1873,7 @@ fieldset.campo legend {
 .tarjeta-chips .mat-electronicos::before { background: var(--material-electronicos-borde); }
 
 /* formularios en tarjeta (ingreso, registro): un solo botón ancho completo */
-.tarjeta .form-nueva button[type="submit"] { width: 100%; min-height: 3rem; }
+.tarjeta .form-nueva button[type="submit"] { width: 100%; min-height: var(--alto-control); }
 
 /* tarjetas que contienen un formulario (ingreso, registro): aire de verdad */
 main > .tarjeta.caja:has(> form) {
@@ -1890,12 +1910,13 @@ button.enviando, .enviando button { opacity: .55; }
 
 /* ojito de contraseña: dentro del campo, área táctil completa */
 .campo-clave { position: relative; display: block; }
-.campo-clave input { padding-right: 3rem !important; }
+.campo-clave input { padding-right: var(--alto-control) !important; }
 .ver-clave {
     position: absolute; right: calc(var(--chico) / 2); top: 50%; transform: translateY(-50%);
     display: inline-flex; align-items: center; justify-content: center;
     width: var(--toque-min); height: var(--toque-min);
     background: none; border: 0; color: var(--texto-secundario); cursor: pointer;
+    padding: 0;
 }
 .ver-clave:hover { color: var(--color-accion); }
 /* gana a .campo > span .icono (más especificidad) */
@@ -1945,6 +1966,7 @@ a.caja { color: inherit; text-decoration: none; }
 :is(a, button, summary).caja:not(.activa):hover { border-color: var(--acento); cursor: pointer; }
 :is(a, button, summary).caja:active { transform: scale(.97); }
 .caja.activa { border: 2px solid var(--acento); background: var(--acento); color: var(--acento-texto); font-weight: 600; }
+:is(a, button, summary).caja { min-width: var(--toque-min); }
 #ds-ciudad > summary.caja.activa { background: none; border-color: transparent; box-shadow: none; color: var(--color-accion); padding: var(--chico); }
 
 .fila { display: flex; align-items: center; flex-wrap: wrap; gap: var(--chico); margin-bottom: var(--chico); }
@@ -2004,6 +2026,31 @@ a.caja { color: inherit; text-decoration: none; }
 .banner.alerta { border-left-color: var(--peligro); color: var(--peligro); }
 .banner .flecha { flex-shrink: 0; font-size: var(--t-grande); color: var(--acento); }
 
+/* Misma superficie para vacio, error y confirmacion; cambia el acento,
+   pero el mensaje y las acciones explican el estado sin depender del color. */
+.mensaje,
+.banner[role="status"],
+.banner[role="alert"],
+.resumen-errores {
+    display: block;
+    min-height: var(--toque-min);
+    padding: var(--pad);
+    margin: 0 0 var(--pad);
+    border: var(--linea-fina) solid var(--borde);
+    border-inline-start: var(--linea-gruesa) solid var(--mensaje-acento, var(--acento));
+    border-radius: var(--radio);
+    background: var(--superficie);
+    color: var(--texto);
+    font-size: var(--t-base);
+    font-weight: 400;
+    box-shadow: none;
+}
+
+.mensaje--vacio { --mensaje-acento: var(--texto-secundario); }
+.mensaje--error, .banner.alerta, .resumen-errores { --mensaje-acento: var(--peligro); }
+.mensaje--confirmacion { --mensaje-acento: var(--color-exito); }
+.mensaje > :last-child, .resumen-errores > :last-child { margin-bottom: 0; }
+
 .banner[role="status"], .banner[role="alert"] {
     transition: opacity .18s ease-out, translate .18s ease-out;
 }
@@ -2029,7 +2076,7 @@ a.caja { color: inherit; text-decoration: none; }
 
 .acciones { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--chico); }
 .accion { display: flex; flex-direction: column; align-items: center; gap: var(--chico); text-align: center; color: var(--texto); text-decoration: none; font-size: var(--t-sm); font-weight: 600; overflow-wrap: normal; hyphens: auto; }
-.accion .circulo { display: flex; align-items: center; justify-content: center; width: calc(1.5 * var(--icono)); height: calc(1.5 * var(--icono)); border-radius: var(--radio-redondo); background: var(--color-accion); color: var(--acento-texto); transition: transform .12s ease; }
+.accion .circulo { display: flex; align-items: center; justify-content: center; width: min(100%, calc(1.5 * var(--icono))); min-height: var(--toque-min); aspect-ratio: 1; border-radius: var(--radio-redondo); background: var(--color-accion); color: var(--acento-texto); transition: transform .12s ease; }
 .accion .circulo svg { width: 55%; height: 55%; fill: currentColor; }
 .accion.principal .circulo { background: var(--accion-principal); color: var(--accion-principal-texto); }
 .accion:hover .circulo { transform: scale(1.06); }
@@ -2046,7 +2093,7 @@ a.caja { color: inherit; text-decoration: none; }
 .ds .grilla .imagen { height: 4rem; }
 .ds .grilla .texto { padding: var(--chico); gap: calc(var(--chico) / 2); }
 .ds .grilla strong { font-size: var(--t-sm); }
-.ds ul.grilla { list-style: none; margin: 0; padding: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ds ul.grilla { list-style: none; margin: 0; padding: 0; grid-template-columns: repeat(auto-fit, minmax(min(var(--tarjeta-min), 100%), 1fr)); }
 .ds ul.grilla a { display: flex; flex-direction: column; gap: calc(var(--chico) / 2); height: 100%; box-sizing: border-box; padding: calc(1.5 * var(--chico)); min-height: var(--toque-min); color: var(--texto); text-decoration: none; }
 .ds ul.grilla .tarjeta-detalle { color: var(--texto-suave); font-size: var(--t-sm); }
 .fila .caja { min-height: var(--toque-min); }
@@ -2315,7 +2362,7 @@ a.caja { color: inherit; text-decoration: none; }
 }
 
 /* El inspector usa colores de depuracion, no tokens de producto. */
-body:has(.layout-system) * { outline: 1px solid rgb(0 0 0 / .25); outline-offset: -1px; }
+:where(body:has(.layout-system)) * { outline: 1px solid rgb(0 0 0 / .25); outline-offset: -1px; }
 body:has(.layout-system) .app { outline: 3px solid #d00; }
 body:has(.layout-system) :is(.sidebar, .menu-movil) { outline: 2px solid #06c; }
 body:has(.layout-system) :is(.sidebar, .menu-movil) :is(header, nav, footer) { outline: 2px solid #39f; }

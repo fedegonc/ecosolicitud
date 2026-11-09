@@ -13,7 +13,7 @@
             <details class="respaldo" id="respaldo" th:open="${param.respaldo != null}"
                      th:with="enviado=${param.respaldo != null and param.respaldo[0] == 'gracias'}">
                 <summary th:text="#{opinion.respaldo.boton}">Responder dentro de EcoSolicitud</summary>
-                <p class="caja banner" role="status" th:if="${enviado}" th:text="#{opinion.respaldo.gracias}">Gracias</p>
+                <p class="mensaje mensaje--confirmacion" role="status" th:if="${enviado}" th:text="#{opinion.respaldo.gracias}">Gracias</p>
                 <th:block th:unless="${enviado}">
                 <p class="ayuda" th:text="#{opinion.respaldo.ayuda}">Respondelo acá</p>
                 <p class="caja banner alerta" role="alert" th:if="${param.respaldo != null}" th:text="#{opinion.respaldo.incompleto}">Incompleto</p>

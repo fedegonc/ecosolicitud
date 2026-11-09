@@ -32,6 +32,21 @@ orden de las reglas requiere comprobar ambas vistas y movil.
   unidades de layout; las variables CSS no funcionan en media queries.
 - Sin fuentes remotas, fotografias nuevas ni cambios de identidad.
 
+## Componentes de presentacion
+
+- Botones: `main button` y `.boton` comparten base; `.secundaria` y
+  `.peligro` solo cambian el tratamiento semantico, no el tamano tactil.
+- Tarjetas: `.tarjeta.caja` comparte superficie, borde, radio y sombra.
+  La grilla de centros usa el ancho minimo de tarjeta para no partir
+  nombres en columnas diminutas en movil.
+- Mensajes: `.mensaje` con `.mensaje--vacio`, `.mensaje--error` o
+  `.mensaje--confirmacion`. Los banners con `role=status/alert` y
+  `.resumen-errores` usan la misma base por compatibilidad.
+- Errores de campo siguen junto al campo con su `aria-describedby`.
+  No se alteran las condiciones que muestran los mensajes ni los destinos.
+- Foco de tres pixeles y campos con borde contrastado; las opciones de
+  escala, seleccion y navegacion tienen objetivos de al menos 44 px.
+
 ## Catalogo compacto
 
 `/dev/design-system`, solo con `dev` y sin `prod`, muestra cuatro
