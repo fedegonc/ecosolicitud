@@ -606,6 +606,7 @@ main {
     gap: var(--chico);
     font-size: var(--t-lg);
     font-weight: 700;
+    min-height: var(--toque-min);
 }
 
 /* el símbolo: líneas en el acento sobre un disco de superficie (blanco);
@@ -637,6 +638,9 @@ main {
     display: inline-flex;
     align-items: center;
     line-height: 1;
+    min-width: var(--toque-min);
+    min-height: var(--toque-min);
+    justify-content: center;
 }
 
 :is(.sidebar, .menu-movil) header p a.activa {
@@ -698,6 +702,9 @@ main {
 
 
 :is(.sidebar, .menu-movil) footer > a {
+    display: flex;
+    align-items: center;
+    min-height: var(--toque-min);
     font-size: var(--t-xs);
     text-decoration: underline;
     opacity: 0.85;
@@ -2050,6 +2057,16 @@ a.caja { color: inherit; text-decoration: none; }
 .mensaje--error, .banner.alerta, .resumen-errores { --mensaje-acento: var(--peligro); }
 .mensaje--confirmacion { --mensaje-acento: var(--color-exito); }
 .mensaje > :last-child, .resumen-errores > :last-child { margin-bottom: 0; }
+
+/* Acciones independientes; los enlaces dentro de prosa conservan su flujo. */
+.cabecera a,
+.centro-resumen > a,
+.mensaje > a,
+.intro > p > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--toque-min);
+}
 
 .banner[role="status"], .banner[role="alert"] {
     transition: opacity .18s ease-out, translate .18s ease-out;
