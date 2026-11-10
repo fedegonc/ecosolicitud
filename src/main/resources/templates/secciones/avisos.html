@@ -28,7 +28,8 @@
     <!-- organización: kanban por dónde está el pedido ahora -->
     <th:block th:if="${rolActual.name() == 'ORGANIZACION' and !avisos.isEmpty()}">
     <div class="kanban" th:fragment="kanban(columnas)">
-        <section class="kanban-col" th:each="c : ${columnas}">
+        <section class="kanban-col" th:each="c : ${columnas}"
+                 th:classappend="'col-' + ${#strings.toLowerCase(#strings.substringAfter(c.clave(), '.'))}">
             <h2><span th:text="#{${c.clave()}}">Columna</span> <span class="kanban-cant" th:text="${c.avisos().size()}">0</span></h2>
             <article class="tarjeta caja" th:each="a : ${c.avisos()}"
                      th:classappend="('est-' + ${#strings.toLowerCase(a.estado().name())}) + (${!a.leida()} ? ' nueva' : '')">

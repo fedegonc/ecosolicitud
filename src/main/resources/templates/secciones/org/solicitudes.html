@@ -15,7 +15,8 @@
         <p class="caja banner alerta" role="alert" th:if="${alertaCodigo}" th:text="#{${alertaCodigo}(${alertaId})}">Alerta</p>
         <div class="kanban">
         <section class="kanban-col" th:each="g : ${bandeja.grupos}"
-                 th:attr="aria-label=#{${g.clave}}">
+                 th:attr="aria-label=#{${g.clave}}"
+                 th:classappend="'col-' + ${#strings.toLowerCase(#strings.substringAfter(g.clave, '.'))}">
             <h2><span th:text="#{${g.clave}}">Grupo</span> <span class="badge" th:text="${g.total}">0</span></h2>
             <p class="mensaje mensaje--vacio" th:if="${g.solicitudes.isEmpty()}" th:text="#{org.vacia}">Vacío</p>
             <div class="rejilla">
