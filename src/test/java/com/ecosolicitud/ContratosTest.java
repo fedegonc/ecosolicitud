@@ -47,6 +47,7 @@ class ContratosTest {
             Map.entry(Seccion.COMUNIDAD, "Comunidad"),
             Map.entry(Seccion.ESTADISTICAS, "Estadísticas del servicio"),
             Map.entry(Seccion.AYUDA, "¿Cómo se usa?"),
+            Map.entry(Seccion.CUENTA_PERFIL, "Mi perfil"),
             Map.entry(Seccion.OPINION, "Dejanos tu opinión"),
             Map.entry(Seccion.AVISOS, "Avisos"));
 

@@ -45,6 +45,7 @@ public final class Rutas {
     public static final String CUENTA_ENTRAR = "/cuenta/entrar";
     public static final String CUENTA_SALIR = "/cuenta/salir";
     public static final String CUENTA_CONDICIONES = "/cuenta/condiciones";
+    public static final String CUENTA_PERFIL = "/cuenta/perfil";
 
     public static final String DEV_LAYOUT_SYSTEM = "/dev/layout-system";
     public static final String DEV_DESIGN_SYSTEM = "/dev/design-system";

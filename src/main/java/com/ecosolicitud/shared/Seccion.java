@@ -21,6 +21,7 @@ public enum Seccion {
     ESTADISTICAS("seccion.estadisticas", Rutas.ESTADISTICAS, "grafico",
             Rol.CIUDADANO, Rol.ORGANIZACION),
     AYUDA("seccion.ayuda", Rutas.AYUDA, "ayuda", Rol.CIUDADANO, Rol.ORGANIZACION),
+    CUENTA_PERFIL("seccion.cuenta.perfil", Rutas.CUENTA_PERFIL, "persona", Rol.CIUDADANO),
     OPINION("opinion.enlace", Rutas.OPINION, "mensaje", Rol.CIUDADANO,
             Rol.ORGANIZACION);
 
@@ -54,7 +55,8 @@ public enum Seccion {
 
     // datos personales o acciones de cuenta: solo con sesión activa
     private static final Set<Seccion> PRIVADAS = EnumSet.of(
-            ORG_SOLICITUDES, ORG_PERFIL, NUEVA, MIS_SOLICITUDES, AVISOS);
+            ORG_SOLICITUDES, ORG_PERFIL, NUEVA, MIS_SOLICITUDES, AVISOS,
+            CUENTA_PERFIL);
 
     public boolean publica() {
         return !PRIVADAS.contains(this);

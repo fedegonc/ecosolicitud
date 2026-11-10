@@ -34,4 +34,8 @@ public class ActorSesion {
     public void elegirOrganizacion(String organizacionId) {
         this.organizacionId = organizacionId;
     }
+
+    public void cambiarNombreCiudadano(String nombre) {
+        this.nombreCiudadano = nombre;
+    }
 }

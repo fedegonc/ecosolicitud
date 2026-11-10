@@ -5,7 +5,9 @@ import java.util.Map;
 
 import com.ecosolicitud.cuenta.Cuentas;
 import com.ecosolicitud.cuenta.Pais;
+import com.ecosolicitud.cuenta.Telefono;
 import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Rol;
 import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.shared.Seccion;
 import com.ecosolicitud.shared.Volver;
@@ -40,6 +42,76 @@ class CuentaController {
     @GetMapping(Rutas.CUENTA_CONDICIONES)
     String condiciones() {
         return "secciones/cuenta/condiciones";
+    }
+
+    @GetMapping(Rutas.CUENTA_PERFIL)
+    String perfil(Model modelo) {
+        var sesion = actor.getObject();
+        var actual = sesion.actual();
+        if (actual.rol() != Rol.CIUDADANO) {
+            return "redirect:" + Seccion.inicioDe(actual.rol());
+        }
+        var cuenta = usuarios.findById(actual.ciudadanoId());
+        if (cuenta.isPresent()) {
+            modelo.addAttribute("valores", Map.of(
+                    "nombre", cuenta.get().getNombre(),
+                    "telefono", Telefono.presentar(cuenta.get().getTelefono())));
+            modelo.addAttribute("paisActual", paisDe(cuenta.get().getTelefono()).name());
+        } else {
+            // sesión demo: no hay fila de cuenta; se muestra la ficha vacía
+            modelo.addAttribute("valores", Map.of(
+                    "nombre", actual.nombreCiudadano(),
+                    "telefono", ""));
+            modelo.addAttribute("paisActual", Pais.UY.name());
+        }
+        modelo.addAttribute("errores", Map.of());
+        return "secciones/cuenta/perfil";
+    }
+
+    @PostMapping(Rutas.CUENTA_PERFIL)
+    String guardarPerfil(@RequestParam String nombre, @RequestParam String pais,
+            @RequestParam String telefono, @RequestParam(required = false) String clave,
+            Model modelo, RedirectAttributes redir) {
+        var sesion = actor.getObject();
+        var actual = sesion.actual();
+        if (actual.rol() != Rol.CIUDADANO) {
+            return "redirect:" + Seccion.inicioDe(actual.rol());
+        }
+        var cuenta = usuarios.findById(actual.ciudadanoId());
+        if (cuenta.isEmpty()) {
+            // sesión demo: sin cuenta real no hay nada que guardar
+            return "redirect:" + Rutas.CUENTA_PERFIL;
+        }
+        Map<String, String> errores = new LinkedHashMap<>();
+        Pais p;
+        try {
+            p = Pais.valueOf(pais == null ? "" : pais);
+        } catch (IllegalArgumentException e) {
+            p = null;
+            errores.put("pais", "cuenta.error.pais");
+        }
+        if (p != null) {
+            errores.putAll(cuentas.erroresDePerfil(
+                    cuenta.get().getId(), nombre, telefono, p, clave));
+        }
+        if (errores.isEmpty()) {
+            cuentas.actualizarPerfil(cuenta.get().getId(),
+                    nombre.strip(), telefono, p, clave);
+            sesion.cambiarNombreCiudadano(nombre.strip().toLowerCase());
+            redir.addFlashAttribute("guardado", true);
+            return "redirect:" + Rutas.CUENTA_PERFIL;
+        }
+        modelo.addAttribute("errores", errores);
+        modelo.addAttribute("valores", Map.of(
+                "nombre", nombre == null ? "" : nombre,
+                "telefono", telefono == null ? "" : telefono));
+        modelo.addAttribute("paisActual", pais == null ? "" : pais);
+        return "secciones/cuenta/perfil";
+    }
+
+    // el país se infiere del celular guardado: 598 es Uruguay, 55 Brasil
+    private static Pais paisDe(String telefono) {
+        return telefono.startsWith("598") ? Pais.UY : Pais.BR;
     }
 
     @GetMapping(Rutas.CUENTA_ENTRAR)

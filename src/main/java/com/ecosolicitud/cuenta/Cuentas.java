@@ -109,6 +109,47 @@ public class Cuentas {
                         .map(u -> Telefono.presentar(u.getTelefono()));
     }
 
+    // perfil: igual que errores(), pero el propio nombre/celular no cuenta
+    // como "ya está en uso" y la contraseña es opcional (vacía = conservar)
+    public Map<String, String> erroresDePerfil(String usuarioId, String nombre,
+            String numero, Pais pais, String clave) {
+        Map<String, String> errores = new LinkedHashMap<>();
+        var usuario = nombre == null ? "" : nombre.strip().toLowerCase();
+        if (usuario.length() < NOMBRE_MINIMO) {
+            errores.put("nombre", "cuenta.error.nombre.corto");
+        } else if (!NOMBRE_FORMATO.matcher(usuario).matches()) {
+            errores.put("nombre", "cuenta.error.nombre.formato");
+        } else if (usuarios.findByNombre(usuario)
+                .filter(u -> !u.getId().equals(usuarioId)).isPresent()) {
+            errores.put("nombre", "cuenta.error.nombre.usado");
+        }
+        try {
+            if (usuarios.findByTelefono(Telefono.normalizar(numero, pais))
+                    .filter(u -> !u.getId().equals(usuarioId)).isPresent()) {
+                errores.put("telefono", "cuenta.error.telefono.usado");
+            }
+        } catch (IllegalArgumentException e) {
+            errores.put("telefono", "cuenta.error.telefono");
+        }
+        if (clave != null && !clave.isBlank() && (clave.length() < CLAVE_MINIMA
+                || clave.getBytes(StandardCharsets.UTF_8).length > CLAVE_MAXIMA_BYTES)) {
+            errores.put("clave", "cuenta.error.clave");
+        }
+        return errores;
+    }
+
+    // guarda los datos del perfil y, si viene una clave nueva, la rota
+    public void actualizarPerfil(String usuarioId, String nombre, String numero,
+            Pais pais, String clave) {
+        var entidad = usuarios.findById(usuarioId).orElseThrow();
+        String telefono = Telefono.normalizar(numero, pais);
+        entidad.cambiarDatos(nombre.strip().toLowerCase(), telefono);
+        if (clave != null && !clave.isBlank()) {
+            entidad.renovarClaveHash(cifrado.encode(clave));
+        }
+        usuarios.save(entidad);
+    }
+
     public Optional<Usuario> buscar(String numero, Pais pais) {
         try {
             return usuarios.findByTelefono(Telefono.normalizar(numero, pais))

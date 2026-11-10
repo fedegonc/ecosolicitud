@@ -46,4 +46,9 @@ public class UsuarioEntidad {
     public void renovarClaveHash(String claveHash) {
         this.claveHash = claveHash;
     }
+
+    public void cambiarDatos(String nombre, String telefono) {
+        this.nombre = nombre;
+        this.telefono = telefono;
+    }
 }
