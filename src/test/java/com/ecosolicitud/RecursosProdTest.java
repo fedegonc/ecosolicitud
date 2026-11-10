@@ -58,4 +58,17 @@ class RecursosProdTest {
             assertThat(versionado.getHeaders().getCacheControl()).contains("max-age=604800");
         }
     }
+
+    // un prefetch al hover guarda la lista ANTES del POST de crear/cancelar/
+    // aceptar; si el redirect cayera en esa copia, la página llegaría vieja
+    // (deliveryType=navigational-prefetch) y la recarga recién la actualizaría
+    @Test
+    void lasBandejasQueUnPostRedirigeNoSePrecargan() {
+        var pagina = rest.getForObject("/", String.class);
+        var reglas = Pattern.compile("speculationrules[\\s\\S]*?</script>").matcher(pagina);
+        assertThat(reglas.find()).as("bloque speculationrules en el layout").isTrue();
+        assertThat(reglas.group())
+                .contains("\"href_matches\": \"/mis-solicitudes*\"")
+                .contains("\"href_matches\": \"/org/solicitudes*\"");
+    }
 }
