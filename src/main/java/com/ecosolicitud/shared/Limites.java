@@ -12,6 +12,7 @@ public final class Limites {
     public static final int NOTA = 300;
     public static final int HORARIO = 80;
     public static final int TELEFONO = 30;
+    public static final int EMAIL = 254;
     public static final int RESPUESTA_TEXTO = 1000;
 
     private Limites() {

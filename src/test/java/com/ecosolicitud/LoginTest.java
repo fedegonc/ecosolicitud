@@ -48,7 +48,7 @@ class LoginTest {
         if (listados.misSolicitudes("test-ciudadana", Filtro.TODAS, 1).isEmpty()
                 && cuentas.buscar("099 777 000", Pais.UY).isEmpty()) {
             usuarioId = cuentas.registrarCiudadano("ana-prueba", "099 777 000",
-                    Pais.UY, "reciclo2026").id();
+                    Pais.UY, "reciclo2026", null).id();
         } else {
             usuarioId = cuentas.buscar("099 777 000", Pais.UY).orElseThrow().id();
         }

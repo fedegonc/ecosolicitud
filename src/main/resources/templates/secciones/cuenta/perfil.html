@@ -9,6 +9,8 @@
     <p th:text="#{cuenta.perfil.intro}">Estos son los datos de tu cuenta de vecino.</p>
     <p class="mensaje mensaje--confirmacion" role="status" th:if="${guardado}"
        th:text="#{cuenta.perfil.guardado}">Los datos de tu cuenta quedaron guardados.</p>
+    <p class="caja banner" role="status" th:if="${recuperada}"
+       th:text="#{cuenta.perfil.recuperada}">Entraste con un código: cambiá tu clave acá.</p>
     <form th:action="@{${rutas.CUENTA_PERFIL}}" method="post">
         <div class="resumen-errores" role="alert" tabindex="-1" th:if="${!errores.isEmpty()}">
             <p th:text="#{perfil.resumen.titulo}">Revisá estos datos antes de guardar</p>
@@ -32,6 +34,13 @@
             <input type="tel" name="telefono" th:value="${valores.telefono}"
                    autocomplete="tel" th:aria-describedby="ayuda-tel">
             <small id="ayuda-tel" class="ayuda" th:text="#{perfil.telefono.ayuda}">Con código de país</small>
+        </label>
+        <label class="campo" th:classappend="${errores.containsKey('email')} ? 'invalido'">
+            <span th:text="#{cuenta.email}">Email (opcional)</span>
+            <input type="email" name="email" th:value="${valores.email}"
+                   autocomplete="email" th:maxlength="${limites.EMAIL}"
+                   th:aria-describedby="ayuda-email">
+            <small id="ayuda-email" class="ayuda" th:text="#{cuenta.email.ayuda}">Para recuperar tu clave</small>
         </label>
         <label class="campo" th:classappend="${errores.containsKey('clave')} ? 'invalido'">
             <span th:text="#{cuenta.perfil.clave}">Contraseña nueva (opcional)</span>

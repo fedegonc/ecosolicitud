@@ -43,7 +43,8 @@ class SeguridadConfig {
         return http.securityMatcher("/cuenta/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(Rutas.CUENTA_REGISTRAR, Rutas.CUENTA_ENTRAR,
-                                Rutas.CUENTA_CONDICIONES).permitAll()
+                                Rutas.CUENTA_CONDICIONES, Rutas.CUENTA_RECUPERAR,
+                                Rutas.CUENTA_RECUPERAR_VERIFICAR).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login.loginPage(Rutas.CUENTA_ENTRAR)
                         .loginProcessingUrl(Rutas.CUENTA_ENTRAR)

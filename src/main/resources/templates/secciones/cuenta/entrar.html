@@ -25,6 +25,7 @@
                 </span>
             </label>
             <button type="submit" th:text="#{cuenta.entrar.boton}">Ingresar</button>
+            <p class="campo-pie"><a th:href="@{${rutas.CUENTA_RECUPERAR}}" th:text="#{cuenta.entrar.recuperar}">¿Olvidaste tu clave?</a></p>
             <p class="campo-pie"><a th:href="@{${rutas.CUENTA_REGISTRAR}}" th:text="#{cuenta.entrar.registro}">Crear cuenta</a></p>
         </form>
     </section>

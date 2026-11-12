@@ -25,6 +25,14 @@
                     <option value="BR" th:selected="${valores['pais'] == 'BR'}">Brasil</option>
                 </select>
             </label>
+            <label class="campo" th:classappend="${errores.containsKey('email')} ? 'invalido'">
+                <span th:text="#{cuenta.email}">Email (opcional)</span>
+                <input type="email" name="email" autocomplete="email"
+                       th:maxlength="${limites.EMAIL}" th:value="${valores['email']}"
+                       aria-describedby="ayuda-email">
+                <span class="ayuda" id="ayuda-email" th:text="#{cuenta.email.ayuda}">Ayuda</span>
+                <span class="error" th:if="${errores.containsKey('email')}" th:text="#{${errores.get('email')}}">Error</span>
+            </label>
             <label class="campo" th:classappend="${errores.containsKey('telefono')} ? 'invalido'">
                 <span th:text="#{cuenta.telefono}">Celular</span>
                 <input type="tel" name="telefono" autocomplete="tel" inputmode="tel" required

@@ -30,6 +30,10 @@ public class UsuarioEntidad {
     @Column(nullable = false, unique = true, length = Limites.NOMBRE)
     private String nombre;
 
+    // opcional: solo quien lo carga puede recuperar la clave por correo
+    @Column(unique = true, length = Limites.EMAIL)
+    private String email;
+
     protected UsuarioEntidad() {
     }
 
@@ -47,8 +51,13 @@ public class UsuarioEntidad {
         this.claveHash = claveHash;
     }
 
-    public void cambiarDatos(String nombre, String telefono) {
+    public void cambiarDatos(String nombre, String telefono, String email) {
         this.nombre = nombre;
         this.telefono = telefono;
+        this.email = email;
+    }
+
+    public void cambiarEmail(String email) {
+        this.email = email;
     }
 }

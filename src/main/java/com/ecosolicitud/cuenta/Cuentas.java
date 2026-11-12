@@ -25,6 +25,8 @@ public class Cuentas {
     private static final int NOMBRE_MINIMO = 5;
     private static final java.util.regex.Pattern NOMBRE_FORMATO =
             java.util.regex.Pattern.compile("[a-zA-Z0-9_.\\-]+");
+    private static final java.util.regex.Pattern EMAIL_FORMATO =
+            java.util.regex.Pattern.compile("[^@\\s]+@[^@\\s]+\\.[^@\\s]+");
 
     private final UsuariosRepository usuarios;
     private final PasswordEncoder cifrado;
@@ -38,12 +40,15 @@ public class Cuentas {
         this.hashSinCuenta = cifrado.encode(UUID.randomUUID().toString());
     }
 
-    public Usuario registrarCiudadano(String nombre, String numero, Pais pais, String clave) {
+    public Usuario registrarCiudadano(String nombre, String numero, Pais pais, String clave,
+            String email) {
         String telefono = validarDatos(nombre, numero, pais, clave);
         var usuario = new Usuario(UUID.randomUUID().toString(), telefono, cifrado.encode(clave),
                 Rol.CIUDADANO, null);
-        usuarios.save(new UsuarioEntidad(usuario.id(), telefono, usuario.claveHash(),
-                usuario.rol(), null, nombre.strip().toLowerCase()));
+        var entidad = new UsuarioEntidad(usuario.id(), telefono, usuario.claveHash(),
+                usuario.rol(), null, nombre.strip().toLowerCase());
+        entidad.cambiarEmail(normalizarEmail(email));
+        usuarios.save(entidad);
         return usuario;
     }
 
@@ -57,9 +62,35 @@ public class Cuentas {
         return Telefono.normalizar(numero, pais);
     }
 
+    public static String normalizarEmail(String email) {
+        if (email == null || email.isBlank()) {
+            return null;
+        }
+        return email.strip().toLowerCase();
+    }
+
+    private void errorDeEmail(String email, String usuarioId, Map<String, String> errores) {
+        var normalizado = normalizarEmail(email);
+        if (normalizado == null) {
+            return;
+        }
+        if (normalizado.length() > com.ecosolicitud.shared.Limites.EMAIL
+                || !EMAIL_FORMATO.matcher(normalizado).matches()) {
+            errores.put("email", "cuenta.error.email");
+        } else if (usuarios.findByEmail(normalizado)
+                .filter(u -> !u.getId().equals(usuarioId)).isPresent()) {
+            errores.put("email", "cuenta.error.email.usado");
+        }
+    }
+
     // campo → clave de messages, todos a la vez: el formulario los muestra
     // juntos en vez de hacer corregir de a uno por envío
     public Map<String, String> errores(String nombre, String numero, Pais pais, String clave) {
+        return errores(nombre, numero, pais, clave, null);
+    }
+
+    public Map<String, String> errores(String nombre, String numero, Pais pais, String clave,
+            String email) {
         Map<String, String> errores = new LinkedHashMap<>();
         var usuario = nombre == null ? "" : nombre.strip().toLowerCase();
         if (usuario.length() < NOMBRE_MINIMO) {
@@ -80,6 +111,7 @@ public class Cuentas {
                 || clave.getBytes(StandardCharsets.UTF_8).length > CLAVE_MAXIMA_BYTES) {
             errores.put("clave", "cuenta.error.clave");
         }
+        errorDeEmail(email, null, errores);
         return errores;
     }
 
@@ -113,6 +145,11 @@ public class Cuentas {
     // como "ya está en uso" y la contraseña es opcional (vacía = conservar)
     public Map<String, String> erroresDePerfil(String usuarioId, String nombre,
             String numero, Pais pais, String clave) {
+        return erroresDePerfil(usuarioId, nombre, numero, pais, clave, null);
+    }
+
+    public Map<String, String> erroresDePerfil(String usuarioId, String nombre,
+            String numero, Pais pais, String clave, String email) {
         Map<String, String> errores = new LinkedHashMap<>();
         var usuario = nombre == null ? "" : nombre.strip().toLowerCase();
         if (usuario.length() < NOMBRE_MINIMO) {
@@ -135,15 +172,16 @@ public class Cuentas {
                 || clave.getBytes(StandardCharsets.UTF_8).length > CLAVE_MAXIMA_BYTES)) {
             errores.put("clave", "cuenta.error.clave");
         }
+        errorDeEmail(email, usuarioId, errores);
         return errores;
     }
 
     // guarda los datos del perfil y, si viene una clave nueva, la rota
     public void actualizarPerfil(String usuarioId, String nombre, String numero,
-            Pais pais, String clave) {
+            Pais pais, String clave, String email) {
         var entidad = usuarios.findById(usuarioId).orElseThrow();
         String telefono = Telefono.normalizar(numero, pais);
-        entidad.cambiarDatos(nombre.strip().toLowerCase(), telefono);
+        entidad.cambiarDatos(nombre.strip().toLowerCase(), telefono, normalizarEmail(email));
         if (clave != null && !clave.isBlank()) {
             entidad.renovarClaveHash(cifrado.encode(clave));
         }

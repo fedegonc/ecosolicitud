@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{cuenta.recuperar.titulo}">Recuperar clave</title>
+</head>
+<body>
+<main layout:fragment="content" class="solicitud-nueva">
+    <header class="nueva-cabecera">
+        <h1 th:text="#{cuenta.recuperar.titulo}">Recuperar clave</h1>
+        <p class="nueva-intro" th:text="#{cuenta.recuperar.detalle}">Te mandamos un código a tu correo.</p>
+    </header>
+    <section class="tarjeta caja">
+        <!-- paso 1: el email; paso 2: el código que llegó (o no) a ese email -->
+        <form th:if="${email == null}" th:action="@{${rutas.CUENTA_RECUPERAR}}" method="post"
+              hx-boost="false" class="form-nueva">
+            <p class="error" th:if="${errores.containsKey('email')}" role="alert"
+               th:text="#{${errores.get('email')}}">Error</p>
+            <label class="campo">
+                <span th:text="#{cuenta.recuperar.email}">Email de tu cuenta</span>
+                <input type="email" name="email" autocomplete="email" required
+                       th:maxlength="${limites.EMAIL}" th:value="${valores.email}">
+            </label>
+            <button type="submit" th:text="#{cuenta.recuperar.enviar}">Enviar código</button>
+            <p class="campo-pie"><a th:href="@{${rutas.CUENTA_ENTRAR}}"
+               th:text="#{cuenta.entrar.titulo}">Volver a ingresar</a></p>
+        </form>
+        <form th:if="${email != null}" th:action="@{${rutas.CUENTA_RECUPERAR_VERIFICAR}}"
+              method="post" hx-boost="false" class="form-nueva">
+            <p class="caja banner" role="status" th:if="${enviado}"
+               th:text="#{cuenta.recuperar.enviado}">Si ese email tiene cuenta, el código ya está en camino.</p>
+            <!-- sin SMTP (dev/demo): el código viaja por la pantalla -->
+            <p class="caja banner alerta" role="status" th:if="${codigoDev != null}"
+               th:text="#{cuenta.recuperar.dev(${codigoDev})}">Tu código es 000000</p>
+            <div class="resumen-errores" role="alert" tabindex="-1" th:if="${!errores.isEmpty()}">
+                <ul>
+                    <li th:each="e : ${errores.values()}" th:text="#{${e}}">Error</li>
+                </ul>
+            </div>
+            <input type="hidden" name="email" th:value="${email}">
+            <label class="campo">
+                <span th:text="#{cuenta.recuperar.codigo}">Código de 6 dígitos</span>
+                <input type="text" name="codigo" inputmode="numeric" pattern="[0-9]{6}"
+                       maxlength="6" autocomplete="one-time-code" required
+                       autocapitalize="none" spellcheck="false">
+            </label>
+            <button type="submit" th:text="#{cuenta.entrar.boton}">Ingresar</button>
+            <p class="campo-pie"><a th:href="@{${rutas.CUENTA_RECUPERAR}}"
+               th:text="#{cuenta.recuperar.otro}">Pedir otro código</a></p>
+        </form>
+    </section>
+</main>
+</body>
+</html>

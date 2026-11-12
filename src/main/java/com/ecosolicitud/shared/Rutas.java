@@ -46,6 +46,8 @@ public final class Rutas {
     public static final String CUENTA_SALIR = "/cuenta/salir";
     public static final String CUENTA_CONDICIONES = "/cuenta/condiciones";
     public static final String CUENTA_PERFIL = "/cuenta/perfil";
+    public static final String CUENTA_RECUPERAR = "/cuenta/recuperar";
+    public static final String CUENTA_RECUPERAR_VERIFICAR = CUENTA_RECUPERAR + "/verificar";
 
     public static final String DEV_LAYOUT_SYSTEM = "/dev/layout-system";
     public static final String DEV_DESIGN_SYSTEM = "/dev/design-system";

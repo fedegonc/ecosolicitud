@@ -15,9 +15,7 @@ import com.ecosolicitud.shared.Volver;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,13 +53,15 @@ class CuentaController {
         if (cuenta.isPresent()) {
             modelo.addAttribute("valores", Map.of(
                     "nombre", cuenta.get().getNombre(),
-                    "telefono", Telefono.presentar(cuenta.get().getTelefono())));
+                    "telefono", Telefono.presentar(cuenta.get().getTelefono()),
+                    "email", cuenta.get().getEmail() == null ? "" : cuenta.get().getEmail()));
             modelo.addAttribute("paisActual", paisDe(cuenta.get().getTelefono()).name());
         } else {
             // sesión demo: no hay fila de cuenta; se muestra la ficha vacía
             modelo.addAttribute("valores", Map.of(
                     "nombre", actual.nombreCiudadano(),
-                    "telefono", ""));
+                    "telefono", "",
+                    "email", ""));
             modelo.addAttribute("paisActual", Pais.UY.name());
         }
         modelo.addAttribute("errores", Map.of());
@@ -71,6 +71,7 @@ class CuentaController {
     @PostMapping(Rutas.CUENTA_PERFIL)
     String guardarPerfil(@RequestParam String nombre, @RequestParam String pais,
             @RequestParam String telefono, @RequestParam(required = false) String clave,
+            @RequestParam(required = false) String email,
             Model modelo, RedirectAttributes redir) {
         var sesion = actor.getObject();
         var actual = sesion.actual();
@@ -92,11 +93,11 @@ class CuentaController {
         }
         if (p != null) {
             errores.putAll(cuentas.erroresDePerfil(
-                    cuenta.get().getId(), nombre, telefono, p, clave));
+                    cuenta.get().getId(), nombre, telefono, p, clave, email));
         }
         if (errores.isEmpty()) {
             cuentas.actualizarPerfil(cuenta.get().getId(),
-                    nombre.strip(), telefono, p, clave);
+                    nombre.strip(), telefono, p, clave, email);
             sesion.cambiarNombreCiudadano(nombre.strip().toLowerCase());
             redir.addFlashAttribute("guardado", true);
             return "redirect:" + Rutas.CUENTA_PERFIL;
@@ -104,7 +105,8 @@ class CuentaController {
         modelo.addAttribute("errores", errores);
         modelo.addAttribute("valores", Map.of(
                 "nombre", nombre == null ? "" : nombre,
-                "telefono", telefono == null ? "" : telefono));
+                "telefono", telefono == null ? "" : telefono,
+                "email", email == null ? "" : email));
         modelo.addAttribute("paisActual", pais == null ? "" : pais);
         return "secciones/cuenta/perfil";
     }
@@ -141,6 +143,7 @@ class CuentaController {
     String crear(@RequestParam String nombre, @RequestParam String pais,
             @RequestParam String telefono, @RequestParam String clave,
             @RequestParam(required = false) String condiciones,
+            @RequestParam(required = false) String email,
             HttpServletRequest request, RedirectAttributes redir, Model modelo) {
         // campo → clave de messages; la plantilla la traduce
         Map<String, String> errores = new LinkedHashMap<>();
@@ -155,7 +158,7 @@ class CuentaController {
             errores.put("pais", "cuenta.error.pais");
         }
         if (p != null) {
-            errores.putAll(cuentas.errores(nombre, telefono, p, clave));
+            errores.putAll(cuentas.errores(nombre, telefono, p, clave, email));
         }
         // reintento del mismo registro (red lenta): la cuenta ya existe y es
         // suya; entra en vez de mostrar "ese nombre ya está en uso"
@@ -167,7 +170,7 @@ class CuentaController {
             return entrarCon(principal, request, redir);
         }
         if (errores.isEmpty()) {
-            var usuario = cuentas.registrarCiudadano(nombre.strip(), telefono, p, clave);
+            var usuario = cuentas.registrarCiudadano(nombre.strip(), telefono, p, clave, email);
             return entrarCon(new UsuarioPrincipal(
                     usuarios.findByTelefono(usuario.telefono()).orElseThrow()), request, redir);
         }
@@ -178,6 +181,7 @@ class CuentaController {
                 "nombre", nombre == null ? "" : nombre,
                 "pais", pais == null ? "" : pais,
                 "telefono", telefono == null ? "" : telefono,
+                "email", email == null ? "" : email,
                 "condiciones", condiciones != null));
         return "secciones/cuenta/registrar";
     }
@@ -194,14 +198,6 @@ class CuentaController {
     // registro = entrada inmediata: sesión autenticada y el mismo actor que
     // el handler de login; la rotación del id evita fijación de sesión
     private void ingresar(HttpServletRequest request, UsuarioPrincipal principal) {
-        var contexto = SecurityContextHolder.createEmptyContext();
-        contexto.setAuthentication(new UsernamePasswordAuthenticationToken(
-                principal, null, principal.getAuthorities()));
-        SecurityContextHolder.setContext(contexto);
-        request.changeSessionId();
-        request.getSession().setAttribute(
-                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, contexto);
-        actor.getObject().autenticar(principal.getCiudadanoId(), principal.getNombre(),
-                principal.getRol(), principal.getOrganizacionId());
+        IngresoSesion.entrar(request, principal, actor.getObject());
     }
 }
