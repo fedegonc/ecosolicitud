@@ -62,7 +62,8 @@ class SeguridadConfig {
     }
 
     @Bean
-    SecurityFilterChain seguridad(HttpSecurity http, MessageSource mensajes, LocaleResolver idiomas,
+    SecurityFilterChain seguridad(HttpSecurity http, AuthenticationSuccessHandler ingreso,
+            MessageSource mensajes, LocaleResolver idiomas,
             @Value("${ecosolicitud.demo.habilitada:true}") boolean demoHabilitada,
             @Value("${ecosolicitud.modo.intentos:5}") int intentos) throws Exception {
         return http
@@ -98,14 +99,7 @@ class SeguridadConfig {
                                 AnyRequestMatcher.INSTANCE))
                 .formLogin(login -> login.loginPage(Rutas.MODO_DEV)
                         .loginProcessingUrl(Rutas.MODO_DEV)
-                        // el admin aterriza en su panel; cualquier otra
-                        // cuenta que entre por acá sigue a la portada
-                        .successHandler((request, response, autenticacion) ->
-                                response.sendRedirect(request.getContextPath()
-                                        + (autenticacion.getAuthorities().stream()
-                                                .anyMatch(a -> a.getAuthority()
-                                                        .equals("ROLE_ADMIN"))
-                                                ? Rutas.ADMIN : Rutas.RAIZ)))
+                        .successHandler(ingreso)
                         .failureUrl(Rutas.MODO_DEV + "?error"))
                 .logout(salir -> salir.logoutUrl(Rutas.MODO_SALIR)
                         .logoutSuccessUrl(Rutas.RAIZ)

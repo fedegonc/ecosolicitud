@@ -3,6 +3,7 @@ package com.ecosolicitud.cuenta.interno;
 import java.io.IOException;
 
 import com.ecosolicitud.shared.ActorSesion;
+import com.ecosolicitud.shared.Rutas;
 import com.ecosolicitud.shared.Seccion;
 import com.ecosolicitud.shared.Volver;
 
@@ -34,6 +35,10 @@ public class IngresoHandler implements AuthenticationSuccessHandler {
             if (u.getRol() == com.ecosolicitud.shared.Rol.CIUDADANO) {
                 destino = Volver.tomar(request).orElse(destino);
             }
+        } else if (auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // la credencial del servidor no es una cuenta: va a su panel
+            destino = Rutas.ADMIN;
         }
         response.sendRedirect(request.getContextPath() + destino);
     }

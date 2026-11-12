@@ -68,6 +68,17 @@ class AdminTest {
     }
 
     @Test
+    void elDestinoSaleDelRolNoDelFormulario() throws Exception {
+        var acceso = acceso();
+        var resultado = mvc.perform(post(Rutas.CUENTA_ENTRAR).session(acceso.sesion())
+                        .param("_csrf", acceso.csrf())
+                        .param("username", "admin-test").param("password", CLAVE))
+                .andExpect(redirectedUrl(Rutas.ADMIN)).andReturn();
+        var sesion = (MockHttpSession) resultado.getRequest().getSession();
+        mvc.perform(get(Rutas.ADMIN).session(sesion)).andExpect(status().isOk());
+    }
+
+    @Test
     void adminVeTotalesCentrosYCuentas() throws Exception {
         var admin = admin();
         mvc.perform(get(Rutas.ADMIN).session(admin))
