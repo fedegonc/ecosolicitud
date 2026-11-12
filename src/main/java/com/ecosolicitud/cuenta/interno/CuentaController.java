@@ -186,18 +186,14 @@ class CuentaController {
         return "secciones/cuenta/registrar";
     }
 
+    // registro = entrada inmediata: sesión autenticada y el mismo actor que
+    // el handler de login; la rotación del id evita fijación de sesión
     private String entrarCon(UsuarioPrincipal principal, HttpServletRequest request,
             RedirectAttributes redir) {
-        ingresar(request, principal);
+        IngresoSesion.entrar(request, principal, actor.getObject());
         redir.addFlashAttribute("avisoCodigo", "cuenta.bienvenida");
         redir.addFlashAttribute("avisoId", principal.getNombre());
         return "redirect:" + Volver.tomar(request)
                 .orElse(Seccion.inicioDe(principal.getRol()));
-    }
-
-    // registro = entrada inmediata: sesión autenticada y el mismo actor que
-    // el handler de login; la rotación del id evita fijación de sesión
-    private void ingresar(HttpServletRequest request, UsuarioPrincipal principal) {
-        IngresoSesion.entrar(request, principal, actor.getObject());
     }
 }
