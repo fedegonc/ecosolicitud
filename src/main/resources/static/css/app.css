@@ -108,6 +108,16 @@
     /* sombra muy leve para tarjetas (clave 2) */
     --sombra-bloque: 0 1px 3px rgb(0 0 0 / 0.08);
     --velo-foto: linear-gradient(transparent, rgb(0 0 0 / 0.65));
+    /* contornos del layout-system: fijos a propósito, distinguen capas */
+    --dep-1: #d00;
+    --dep-2: #06c;
+    --dep-3: #39f;
+    --dep-4: #090;
+    --dep-5: #80c;
+    --dep-6: #e70;
+    --dep-7: #c09;
+    --dep-8: #0aa;
+    --dep-9: #a60;
 }
 
 * {
@@ -2414,12 +2424,12 @@ a.caja { color: inherit; text-decoration: none; }
 
 /* El inspector usa colores de depuracion, no tokens de producto. */
 :where(body:has(.layout-system)) * { outline: 1px solid rgb(0 0 0 / .25); outline-offset: -1px; }
-body:has(.layout-system) .app { outline: 3px solid #d00; }
-body:has(.layout-system) :is(.sidebar, .menu-movil) { outline: 2px solid #06c; }
-body:has(.layout-system) :is(.sidebar, .menu-movil) :is(header, nav, footer) { outline: 2px solid #39f; }
-body:has(.layout-system) .pagina { outline: 3px solid #090; }
-main.layout-system { outline: 2px solid #80c; }
-.layout-system > :is(section, div, nav, form, footer) { outline: 2px solid #e70; }
-body:has(.layout-system) :is(.fila, .rejilla, .grilla, .kanban, .acciones) { outline: 2px dashed #c09; }
-body:has(.layout-system) .caja { outline: 2px solid #0aa; }
-body:has(.layout-system) :is(.texto, .imagen, .icono) { outline: 1px solid #a60; }
+body:has(.layout-system) .app { outline: 3px solid var(--dep-1); }
+body:has(.layout-system) :is(.sidebar, .menu-movil) { outline: 2px solid var(--dep-2); }
+body:has(.layout-system) :is(.sidebar, .menu-movil) :is(header, nav, footer) { outline: 2px solid var(--dep-3); }
+body:has(.layout-system) .pagina { outline: 3px solid var(--dep-4); }
+main.layout-system { outline: 2px solid var(--dep-5); }
+.layout-system > :is(section, div, nav, form, footer) { outline: 2px solid var(--dep-6); }
+body:has(.layout-system) :is(.fila, .rejilla, .grilla, .kanban, .acciones) { outline: 2px dashed var(--dep-7); }
+body:has(.layout-system) .caja { outline: 2px solid var(--dep-8); }
+body:has(.layout-system) :is(.texto, .imagen, .icono) { outline: 1px solid var(--dep-9); }
