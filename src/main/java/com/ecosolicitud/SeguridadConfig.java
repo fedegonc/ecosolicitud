@@ -68,6 +68,7 @@ class SeguridadConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(Rutas.DEMO_REINICIAR).denyAll()
+                        .requestMatchers(Rutas.ADMIN + "/**").hasRole("ADMIN")
                         .requestMatchers(Rutas.NUEVA + "/**", Rutas.NUEVA,
                                 Rutas.MIS_SOLICITUDES + "/**", Rutas.MIS_SOLICITUDES,
                                 Rutas.AVISOS + "/**", Rutas.AVISOS,
@@ -97,7 +98,14 @@ class SeguridadConfig {
                                 AnyRequestMatcher.INSTANCE))
                 .formLogin(login -> login.loginPage(Rutas.MODO_DEV)
                         .loginProcessingUrl(Rutas.MODO_DEV)
-                        .defaultSuccessUrl(Rutas.RAIZ, true)
+                        // el admin aterriza en su panel; cualquier otra
+                        // cuenta que entre por acá sigue a la portada
+                        .successHandler((request, response, autenticacion) ->
+                                response.sendRedirect(request.getContextPath()
+                                        + (autenticacion.getAuthorities().stream()
+                                                .anyMatch(a -> a.getAuthority()
+                                                        .equals("ROLE_ADMIN"))
+                                                ? Rutas.ADMIN : Rutas.RAIZ)))
                         .failureUrl(Rutas.MODO_DEV + "?error"))
                 .logout(salir -> salir.logoutUrl(Rutas.MODO_SALIR)
                         .logoutSuccessUrl(Rutas.RAIZ)

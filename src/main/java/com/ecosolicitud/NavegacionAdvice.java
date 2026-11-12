@@ -128,7 +128,8 @@ class NavegacionAdvice {
                     Rutas.CUENTA_REGISTRAR, "cuenta.registrar.titulo",
                     Rutas.CUENTA_CONDICIONES, "cuenta.condiciones.titulo",
                     Rutas.CUENTA_RECUPERAR, "cuenta.recuperar.titulo",
-                    Rutas.MODO_DEV, "modo.titulo").get(ruta);
+                    Rutas.MODO_DEV, "modo.titulo",
+                    Rutas.ADMIN, "admin.titulo").get(ruta);
             return clave != null
                     ? List.of(Miga.inicio(), Miga.actualClave(clave))
                     : List.of(ruta.equals("/") ? Miga.actualClave("miga.inicio")

@@ -47,7 +47,8 @@ public class RecuperacionService {
     // solo cuando no hay correo configurado (para mostrarlo en dev)
     @Transactional
     public Optional<String> pedirCodigo(String email) {
-        var cuenta = usuarios.findByEmail(email);
+        // una cuenta de baja tampoco entra por acá: se comporta como inexistente
+        var cuenta = usuarios.findByEmail(email).filter(UsuarioEntidad::isActivo);
         if (cuenta.isEmpty()) {
             return Optional.empty();
         }
@@ -63,7 +64,7 @@ public class RecuperacionService {
     // el código correcto y vigente abre sesión: devuelve la cuenta a entrar
     @Transactional
     public Optional<UsuarioEntidad> verificar(String email, String codigo) {
-        var cuenta = usuarios.findByEmail(email);
+        var cuenta = usuarios.findByEmail(email).filter(UsuarioEntidad::isActivo);
         if (cuenta.isEmpty()) {
             return Optional.empty();
         }

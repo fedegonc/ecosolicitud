@@ -48,7 +48,7 @@ class PortadaController {
         var local = localidad(ciudad);
         modelo.addAttribute("pagina", DesignDatos.para(local, sesion.rol(), guia));
         modelo.addAttribute("centros", organizaciones.todas().stream()
-                .filter(o -> o.ciudad() != null
+                .filter(o -> o.habilitada() && o.ciudad() != null
                         && o.ciudad().name().equals(local.name()))
                 .toList());
         return "portada";

@@ -30,15 +30,19 @@ class DemoDeshabilitadoTest {
     @Autowired
     private TestRestTemplate rest;
 
+    // la demo apagada ya no deja afuera al administrador: entra con
+    // ROLE_ADMIN pero sin ROLE_DEMO, así que no hay controles de demo
     @Test
-    void interruptorGlobalImpideElIngresoAunqueHayaCredenciales() {
+    void demoApagadaDejaEntrarAlAdminSinFuncionesDeDemo() {
         var driver = new org.openqa.selenium.htmlunit.HtmlUnitDriver();
         try {
             driver.get(rest.getRootUri() + "/modo/dev");
             driver.findElement(org.openqa.selenium.By.name("username")).sendKeys("admin-test");
             driver.findElement(org.openqa.selenium.By.name("password")).sendKeys("clave-solo-de-pruebas");
             driver.findElement(org.openqa.selenium.By.cssSelector("main form button[type='submit']")).click();
-            assertThat(driver.getCurrentUrl()).endsWith("/modo/dev?error");
+            assertThat(driver.getCurrentUrl()).endsWith("/admin");
+            assertThat(driver.findElements(org.openqa.selenium.By.tagName("table"))).isNotEmpty();
+            assertThat(driver.findElements(org.openqa.selenium.By.cssSelector(".rol-switch"))).isEmpty();
         } finally {
             driver.quit();
         }

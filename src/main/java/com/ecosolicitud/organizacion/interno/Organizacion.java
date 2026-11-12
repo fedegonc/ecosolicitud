@@ -26,6 +26,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "organizaciones")
@@ -70,6 +71,12 @@ public class Organizacion {
     private Double latitud;
     private Double longitud;
 
+    // default sí: los centros que ya existen siguen visibles; el panel de
+    // administración los saca del mapa y del formulario sin borrarlos
+    @Column(nullable = false)
+    @ColumnDefault("true")
+    private boolean habilitada = true;
+
     @Version
     private long version;
 
@@ -101,5 +108,9 @@ public class Organizacion {
         this.telefono = telefono;
         this.latitud = ubicacion == null ? null : ubicacion.latitud();
         this.longitud = ubicacion == null ? null : ubicacion.longitud();
+    }
+
+    public void cambiarHabilitada(boolean habilitada) {
+        this.habilitada = habilitada;
     }
 }

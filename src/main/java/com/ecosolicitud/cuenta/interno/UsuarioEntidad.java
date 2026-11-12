@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "usuarios")
@@ -33,6 +34,12 @@ public class UsuarioEntidad {
     // opcional: solo quien lo carga puede recuperar la clave por correo
     @Column(unique = true, length = Limites.EMAIL)
     private String email;
+
+    // default sí: las cuentas existentes quedan activas; una baja no entra
+    // más pero conserva su historial de solicitudes
+    @Column(nullable = false)
+    @ColumnDefault("true")
+    private boolean activo = true;
 
     protected UsuarioEntidad() {
     }
@@ -59,5 +66,9 @@ public class UsuarioEntidad {
 
     public void cambiarEmail(String email) {
         this.email = email;
+    }
+
+    public void cambiarActivo(boolean activo) {
+        this.activo = activo;
     }
 }

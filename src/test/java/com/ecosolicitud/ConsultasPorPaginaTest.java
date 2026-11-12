@@ -51,7 +51,7 @@ class ConsultasPorPaginaTest {
             Rutas.OPINION, 1);
 
     private static final Map<String, Long> ORGANIZACION = presupuesto(
-            Rutas.ORG_SOLICITUDES, 13,
+            Rutas.ORG_SOLICITUDES, 14,
             Rutas.ORG_PERFIL, 2,
             Rutas.AVISOS, 6);
 
@@ -124,6 +124,10 @@ class ConsultasPorPaginaTest {
             var acceso = AccesoDemoTest.entrar(rest);
             cookie = acceso.cookie();
             csrf = acceso.csrf();
+            // el ingreso admin aterriza en /admin: la guía queda fría y el
+            // primer / la pagaría. Antes de medir se visita una vez, como
+            // cualquier navegación previa haría con la caché compartida
+            get(Rutas.GUIA);
         }
 
         HttpStatus get(String ruta) {

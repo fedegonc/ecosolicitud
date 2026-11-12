@@ -2,6 +2,7 @@ package com.ecosolicitud.cuenta;
 
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,7 +45,7 @@ public class Cuentas {
             String email) {
         String telefono = validarDatos(nombre, numero, pais, clave);
         var usuario = new Usuario(UUID.randomUUID().toString(), telefono, cifrado.encode(clave),
-                Rol.CIUDADANO, null);
+                Rol.CIUDADANO, null, nombre.strip().toLowerCase(), true);
         var entidad = new UsuarioEntidad(usuario.id(), telefono, usuario.claveHash(),
                 usuario.rol(), null, nombre.strip().toLowerCase());
         entidad.cambiarEmail(normalizarEmail(email));
@@ -192,17 +193,35 @@ public class Cuentas {
         try {
             return usuarios.findByTelefono(Telefono.normalizar(numero, pais))
                     .map(u -> new Usuario(u.getId(), u.getTelefono(), u.getClaveHash(),
-                            u.getRol(), u.getOrganizacionId()));
+                            u.getRol(), u.getOrganizacionId(), u.getNombre(), u.isActivo()));
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }
     }
 
-    // vacío tanto si el número no existe como si la clave no coincide
+    // vacío tanto si el número no existe como si la clave no coincide;
+    // una cuenta de baja tampoco entra
     public Optional<Usuario> entrar(String numero, Pais pais, String clave) {
-        var usuario = buscar(numero, pais);
+        var usuario = buscar(numero, pais).filter(Usuario::activo);
         var hash = usuario.map(Usuario::claveHash).orElse(hashSinCuenta);
         boolean coincide = clave != null && cifrado.matches(clave, hash);
         return coincide ? usuario : Optional.empty();
+    }
+
+    // el panel de administración lista todas, incluidas las de baja
+    public List<Usuario> usuarios() {
+        return usuarios.findAll(org.springframework.data.domain.Sort.by("nombre"))
+                .stream()
+                .map(u -> new Usuario(u.getId(), u.getTelefono(), u.getClaveHash(),
+                        u.getRol(), u.getOrganizacionId(), u.getNombre(), u.isActivo()))
+                .toList();
+    }
+
+    // alterna el alta de la cuenta desde el panel: no borra nada
+    @org.springframework.transaction.annotation.Transactional
+    public void cambiarActivo(String id) {
+        var u = usuarios.findById(id).orElseThrow();
+        u.cambiarActivo(!u.isActivo());
+        usuarios.save(u);
     }
 }

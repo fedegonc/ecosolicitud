@@ -10,6 +10,7 @@
     </header>
     <section class="tarjeta caja modo-panel">
         <p th:text="#{modo.alcance}">Solo cambia esta sesion; no cambia la base ni el perfil del servidor.</p>
+        <p th:if="${esAdmin}"><a th:href="@{${rutas.ADMIN}}" th:text="#{modo.admin}">Panel de administración</a></p>
         <th:block th:if="${demoHabilitada}">
             <p class="banner" role="status" th:text="#{modo.activo}">Demostracion activa en esta sesion.</p>
             <p><a th:href="@{${rutas.RAIZ}}" th:text="#{modo.volver}">Ir a la aplicacion</a></p>
@@ -17,7 +18,10 @@
                 <button type="submit" th:text="#{modo.salir}">Salir de demo</button>
             </form>
         </th:block>
-        <form th:unless="${demoHabilitada}" th:action="@{${rutas.MODO_DEV}}" method="post" hx-boost="false" class="form-nueva">
+        <form th:if="${esAdmin and !demoHabilitada}" th:action="@{${rutas.MODO_SALIR}}" method="post" hx-boost="false" class="form-nueva">
+            <button type="submit" th:text="#{cuenta.salir}">Salir</button>
+        </form>
+        <form th:unless="${demoHabilitada or esAdmin}" th:action="@{${rutas.MODO_DEV}}" method="post" hx-boost="false" class="form-nueva">
             <p class="banner alerta" role="alert" th:if="${param.error != null}"
                th:text="#{modo.error}">Usuario o clave incorrectos.</p>
             <label class="campo">

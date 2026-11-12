@@ -164,7 +164,7 @@ class ModoDemoTest {
 
     private MockHttpSession autenticar(Acceso acceso) throws Exception {
         var resultado = mvc.perform(ingreso(acceso, "admin-test", CLAVE))
-                .andExpect(redirectedUrl(Rutas.RAIZ)).andReturn();
+                .andExpect(redirectedUrl(Rutas.ADMIN)).andReturn();
         return (MockHttpSession) resultado.getRequest().getSession();
     }
 

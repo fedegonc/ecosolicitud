@@ -1,9 +1,5 @@
 package com.ecosolicitud.cuenta.interno;
 
-import java.util.List;
-
-
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -37,11 +33,19 @@ public class CuentaUserDetails implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String entrada) throws UsernameNotFoundException {
-        if (habilitado && !usuario.isBlank() && usuario.equals(entrada) && claveGuardada != null) {
-            return new User(usuario, claveGuardada,
-                    List.of(new SimpleGrantedAuthority("ROLE_DEMO")));
+        // el admin entra siempre: ROLE_ADMIN habilita /admin aunque la
+        // demostración esté apagada; ROLE_DEMO solo cuando está encendida
+        if (!usuario.isBlank() && usuario.equals(entrada) && claveGuardada != null) {
+            var permisos = new java.util.ArrayList<SimpleGrantedAuthority>();
+            permisos.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            if (habilitado) {
+                permisos.add(new SimpleGrantedAuthority("ROLE_DEMO"));
+            }
+            return new User(usuario, claveGuardada, permisos);
         }
+        // una cuenta de baja no entra: mismo "sin cuenta" genérico
         return usuarios.findByNombre(entrada == null ? "" : entrada.strip().toLowerCase())
+                .filter(UsuarioEntidad::isActivo)
                 .map(UsuarioPrincipal::new)
                 .orElseThrow(() -> new UsernameNotFoundException("sin cuenta"));
     }

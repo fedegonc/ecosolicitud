@@ -63,7 +63,8 @@ public class OrganizacionService {
     }
 
     public List<AcopiosCiudad> porCiudad() {
-        var agrupadas = todas().stream().collect(groupingBy(OrganizacionInfo::ciudad,
+        var agrupadas = todas().stream().filter(OrganizacionInfo::habilitada)
+                .collect(groupingBy(OrganizacionInfo::ciudad,
                 () -> new EnumMap<>(Ciudad.class), toList()));
         return Arrays.stream(Ciudad.values())
                 .map(c -> new AcopiosCiudad(c, agrupadas.getOrDefault(c, List.of())))
@@ -87,17 +88,19 @@ public class OrganizacionService {
     public List<OrganizacionInfo> compatibles(Ciudad ciudad,
             Collection<Material> materiales) {
         return cargarTodas().stream()
-                .filter(o -> o.ciudad() == ciudad && o.recibeTodos(materiales))
+                .filter(o -> o.habilitada() && o.ciudad() == ciudad
+                        && o.recibeTodos(materiales))
                 .toList();
     }
 
     public List<OrganizacionInfo> queReciben(Material material) {
         return cargarTodas().stream()
-                .filter(o -> o.materiales().contains(material)).toList();
+                .filter(o -> o.habilitada() && o.materiales().contains(material)).toList();
     }
 
     public List<OrganizacionInfo> enCiudad(Ciudad ciudad) {
-        return cargarTodas().stream().filter(o -> o.ciudad() == ciudad).toList();
+        return cargarTodas().stream()
+                .filter(o -> o.habilitada() && o.ciudad() == ciudad).toList();
     }
 
     // cada lista de solicitudes pide los nombres de sus centros: salen de la
@@ -133,6 +136,16 @@ public class OrganizacionService {
         return true;
     }
 
+    // alterna la visibilidad del centro desde el panel de administración
+    @Transactional
+    public void cambiarHabilitada(String id) {
+        var org = repositorio.findById(id).orElseThrow();
+        org.cambiarHabilitada(!org.isHabilitada());
+        repositorio.save(org);
+        cacheTodas = null;
+        AlmacenDelPedido.olvidarTodo(MEMO);
+    }
+
     @Transactional
     public void reemplazarTodas(List<OrganizacionInfo> dataset) {
         repositorio.deleteAll();
@@ -142,8 +155,10 @@ public class OrganizacionService {
     }
 
     private void guardarNueva(OrganizacionInfo info) {
-        repositorio.save(new Organizacion(info.id(), info.nombre(), info.ciudad(),
-                info.materiales(), info.horario(), info.telefono(), info.ubicacion()));
+        var org = new Organizacion(info.id(), info.nombre(), info.ciudad(),
+                info.materiales(), info.horario(), info.telefono(), info.ubicacion());
+        org.cambiarHabilitada(info.habilitada());
+        repositorio.save(org);
     }
 
     private OrganizacionInfo primera() {
@@ -154,6 +169,6 @@ public class OrganizacionService {
     private static OrganizacionInfo aInfo(Organizacion o) {
         return new OrganizacionInfo(o.getId(), o.getNombre(), o.getCiudad(),
                 List.copyOf(o.getMateriales()), o.getHorario(), o.getTelefono(),
-                o.ubicacion(), o.getVersion());
+                o.ubicacion(), o.getVersion(), o.isHabilitada());
     }
 }

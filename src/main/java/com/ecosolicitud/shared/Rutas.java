@@ -41,6 +41,10 @@ public final class Rutas {
     public static final String MODO_DEV = "/modo/dev";
     public static final String MODO_SALIR = MODO_DEV + "/salir";
 
+    public static final String ADMIN = "/admin";
+    public static final String ADMIN_CENTRO = ADMIN + "/centros/{id}";
+    public static final String ADMIN_USUARIO = ADMIN + "/usuarios/{id}";
+
     public static final String CUENTA_REGISTRAR = "/cuenta/registrar";
     public static final String CUENTA_ENTRAR = "/cuenta/entrar";
     public static final String CUENTA_SALIR = "/cuenta/salir";

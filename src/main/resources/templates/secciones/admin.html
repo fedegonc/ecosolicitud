@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{app}">
+<head>
+    <title th:text="#{admin.titulo}">Administración</title>
+</head>
+<body>
+<main layout:fragment="content" class="solicitud-nueva">
+    <header class="nueva-cabecera">
+        <h1 th:text="#{admin.titulo}">Administración</h1>
+    </header>
+    <p class="panel-intro" th:text="#{admin.resumen(${centros.size()}, ${habilitados}, ${usuarios.size()}, ${activos})}">Resumen</p>
+    <section class="grafico caja">
+        <h2 th:text="#{admin.centros}">Centros de acopio</h2>
+        <div class="tabla-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" th:text="#{admin.col.nombre}">Nombre</th>
+                        <th scope="col" th:text="#{admin.col.ciudad}">Ciudad</th>
+                        <th scope="col" th:text="#{admin.col.estado}">Estado</th>
+                        <th scope="col" th:text="#{admin.col.accion}">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${centros}">
+                        <th scope="row"><span th:text="${c.nombre}">Centro</span></th>
+                        <td th:text="${c.ciudad == null} ? '' : #{${c.ciudad.clave}}">Ciudad</td>
+                        <td th:text="${c.habilitada} ? #{admin.habilitada} : #{admin.deshabilitada}">Habilitado</td>
+                        <td>
+                            <form th:action="@{${rutas.ADMIN_CENTRO}(id=${c.id})}" method="post">
+                                <button type="submit" th:classappend="${c.habilitada} ? 'peligro'"
+                                        th:text="${c.habilitada} ? #{admin.deshabilitar} : #{admin.habilitar}">Cambiar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section class="grafico caja">
+        <h2 th:text="#{admin.usuarios}">Cuentas</h2>
+        <div class="tabla-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" th:text="#{admin.col.nombre}">Nombre</th>
+                        <th scope="col" th:text="#{admin.col.rol}">Rol</th>
+                        <th scope="col" th:text="#{admin.col.estado}">Estado</th>
+                        <th scope="col" th:text="#{admin.col.accion}">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u : ${usuarios}">
+                        <th scope="row"><span th:text="${u.nombre}">cuenta</span></th>
+                        <td th:text="#{${'rol.' + #strings.toLowerCase(u.rol.name())}}">Rol</td>
+                        <td th:text="${u.activo} ? #{admin.activo} : #{admin.baja}">Activa</td>
+                        <td>
+                            <form th:action="@{${rutas.ADMIN_USUARIO}(id=${u.id})}" method="post">
+                                <button type="submit" th:classappend="${u.activo} ? 'peligro'"
+                                        th:text="${u.activo} ? #{admin.dardebaja} : #{admin.activar}">Cambiar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

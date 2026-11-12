@@ -32,19 +32,19 @@ final class DemoDatos {
                         List.of(m(cat, "PLASTICO"), m(cat, "CARTON"), m(cat, "PAPEL"),
                                 m(cat, "VIDRIO"), m(cat, "METAL"), m(cat, "LATAS")),
                         "Lunes a sábado, 7–19 h", "+598 00 000 001",
-                        new Ubicacion(-30.9120, -55.5560), 0),
+                        new Ubicacion(-30.9120, -55.5560), 0, true),
                 new OrganizacionInfo("acopio-verde", "Centro de ejemplo – Microcentro",
                         Ciudad.RIVERA,
                         List.of(m(cat, "CARTON"), m(cat, "PAPEL"),
                                 m(cat, "PLASTICO"), m(cat, "LATAS")),
                         "Lunes a viernes, 8–17 h", "+598 00 000 002",
-                        new Ubicacion(-30.9050, -55.5508), 0),
+                        new Ubicacion(-30.9050, -55.5508), 0, true),
                 new OrganizacionInfo("coleta-solidaria", "Centro de exemplo – Jardins",
                         Ciudad.LIVRAMENTO,
                         List.of(m(cat, "PLASTICO"), m(cat, "CARTON"), m(cat, "PAPEL"),
                                 m(cat, "VIDRIO"), m(cat, "METAL"), m(cat, "LATAS")),
                         "Consultar", "+55 00 0000-0003",
-                        new Ubicacion(-30.8900, -55.5320), 0));
+                        new Ubicacion(-30.8900, -55.5320), 0, true));
     }
 
     private static Material m(CatalogoMateriales cat, String codigo) {
