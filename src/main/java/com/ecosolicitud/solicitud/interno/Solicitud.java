@@ -132,7 +132,7 @@ public class Solicitud implements SolicitudMedicion {
         sol.creadaEn = s.creadaEn();
         sol.respondidaEn = s.respondidaEn();
         sol.finalizadaEn = s.finalizadaEn();
-        sol.aceptadaEn = aceptadaSegun(s.estado(), s.respondidaEn(), s.finalizadaEn());
+        sol.aceptadaEn = s.aceptadaEn();
         return sol;
     }
 
@@ -143,21 +143,7 @@ public class Solicitud implements SolicitudMedicion {
         aceptadaEn = ahora;
     }
 
-    // Para datos sin aceptadaEn (semillas y filas previas): rechazar desde
-    // PENDIENTE fija respondida y finalizada en el mismo instante; si la
-    // respuesta es anterior al cierre, hubo una aceptación antes del rechazo.
-    // MigracionAceptadaEn aplica la misma regla en SQL.
-    private static Instant aceptadaSegun(Estado estado, Instant respondidaEn, Instant finalizadaEn) {
-        if (respondidaEn == null) {
-            return null;
-        }
-        return switch (estado) {
-            case EN_CURSO, COMPLETADA -> respondidaEn;
-            case RECHAZADA -> respondidaEn.isBefore(finalizadaEn) ? respondidaEn : null;
-            default -> null;
-        };
-    }
-
+    // MigracionAceptadaEn aplica en SQL la regla derivada de SolicitudSemilla.
     public void rechazar(Instant ahora) {
         exigir(estado.permiteRechazar(), "rechazar");
         if (respondidaEn == null) {

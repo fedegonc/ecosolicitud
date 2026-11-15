@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 // Completa aceptada_en en solicitudes previas a la columna, con la regla de
-// Solicitud.aceptadaSegun: en curso/completada se aceptaron al responder; una
+// SolicitudSemilla.aceptadaEn: en curso/completada se aceptaron al responder; una
 // rechazada se aceptó antes solo si la respuesta precede al cierre.
 // Idempotente: solo toca filas con aceptada_en vacía.
 @Component

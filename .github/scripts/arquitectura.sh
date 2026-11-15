@@ -42,6 +42,10 @@ fi
 # 5. Ninguna interfaz con una sola implementación (salvo repositorios de Spring Data).
 for i in $(grep -rl "^public interface" src/main/java --include='*.java' | grep -v Repository || true); do
     nombre=$(basename "$i" .java)
+    # Spring Data implementa las proyecciones de repositorio dinámicamente.
+    if grep -rqE "<$nombre>" src/main/java --include='*Repository.java'; then
+        continue
+    fi
     n=$(grep -rl "implements $nombre\b" src/main/java --include='*.java' 2>/dev/null | wc -l)
     if [ "$n" -le 1 ]; then
         fallo "interfaz con $n implementación: $nombre (abstracción antes del segundo uso)"
