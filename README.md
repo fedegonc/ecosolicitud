@@ -1,32 +1,31 @@
 # EcoSolicitud
 
-App para pedir retiros de reciclables en Rivera y Sant'Ana do Livramento.
-Spring Boot + Thymeleaf + htmx, español/portugués, PWA.
+Aplicación Spring Boot para pedir retiros de reciclables en Rivera y Sant'Ana do Livramento.
 
-- Desarrollo local: `mvn spring-boot:run`
-- Pruebas y revisiones: `mvn verify`
-- Interfaz: [sistema de diseño](DESIGN-SYSTEM.md); CSS propio único en `app.css`.
-- Medición de carga y monitoreo: `testing/CARGA.md`, `testing/MONITOREO.md`
-- Producción: https://ecosolicitud.onrender.com (Render Free, Docker)
+## Requisitos
 
-Detalle técnico en `testing/` y `docs/`.
+- Java 21
+- Maven 3.9+
 
-## Medir una prueba con participantes
+## Desarrollo
 
-Antes y después de la sesión, guardar hora, commit desplegado, cantidad de
-participantes y una captura de `/metricas` con una cuenta autenticada. Comparar
-los contadores antes/después; se reinician al reiniciar el servidor.
+```bash
+mvn spring-boot:run
+```
 
-Durante la prueba:
+## Verificación
 
-- Revisar errores y pedidos lentos en los logs de Render.
-- Mirar CPU, RAM total y reinicios en Render; conexiones y consultas en Supabase.
-- Registrar por tarea si se completó, cuánto demoró y qué problema encontró la persona.
-- Confirmar los registros esperados en la base y exportar las respuestas al terminar.
-- No ejecutar carga artificial ni desplegar mientras participan personas.
+```bash
+mvn verify
+```
 
-Límites: `p95_ms_ultimos` mezcla las últimas 512 peticiones, no mide cada tarea
-ni la pintura del navegador. `memoria_usada_mb` mide heap Java usado, no RAM
-total del proceso. Actualmente `pedidos_2xx` también incluye redirecciones.
-`/salud` comprueba que la app responde, no la conexión con la base. Las métricas
-no reemplazan una prueba del flujo completo ni un respaldo de datos.
+## Docker
+
+```bash
+docker build -t ecosolicitud .
+docker run -p 8080:8080 \
+  -e DATABASE_URL=... \
+  -e DATABASE_USER=... \
+  -e DATABASE_PASSWORD=... \
+  ecosolicitud
+```
