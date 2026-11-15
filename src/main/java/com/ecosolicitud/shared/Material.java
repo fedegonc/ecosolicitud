@@ -44,6 +44,12 @@ public class Material {
         this.activo = true;
     }
 
+    public Material(Long id, String codigo, String nombre, String icono, boolean activo) {
+        this(codigo, nombre, icono);
+        this.id = id;
+        this.activo = activo;
+    }
+
     @Override
     public boolean equals(Object o) {
         return o instanceof Material m && Objects.equals(codigo, m.codigo);

@@ -8,6 +8,7 @@ import com.ecosolicitud.shared.Limites;
 import com.ecosolicitud.shared.Material;
 import com.ecosolicitud.shared.Ubicacion;
 import com.ecosolicitud.solicitud.Estado;
+import com.ecosolicitud.solicitud.SolicitudMedicion;
 import com.ecosolicitud.solicitud.SolicitudSemilla;
 import com.ecosolicitud.solicitud.TransicionInvalidaException;
 
@@ -41,7 +42,7 @@ import org.hibernate.annotations.BatchSize;
         // estadísticas: solicitudes creadas desde una fecha, de todos los centros
         @Index(name = "ix_sol_creada", columnList = "creada_en")})
 @Getter
-public class Solicitud {
+public class Solicitud implements SolicitudMedicion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

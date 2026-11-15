@@ -41,9 +41,10 @@ class OrgSolicitudesController {
 
     @GetMapping(Rutas.ORG_SOLICITUDES)
     String lista(Model modelo) {
-        modelo.addAttribute("organizacion", organizaciones.actual(actor.actual()));
-        modelo.addAttribute("bandeja", listados.recibidas(actor.actual()));
-        modelo.addAttribute("semana", listados.semana(actor.actual()));
+        var tablero = listados.tablero(actor.actual());
+        modelo.addAttribute("organizacion", tablero.organizacion());
+        modelo.addAttribute("bandeja", tablero.bandeja());
+        modelo.addAttribute("semana", tablero.semana());
         return "secciones/org/solicitudes";
     }
 

@@ -51,7 +51,7 @@ class ConsultasPorPaginaTest {
             Rutas.OPINION, 1);
 
     private static final Map<String, Long> ORGANIZACION = presupuesto(
-            Rutas.ORG_SOLICITUDES, 14,
+            Rutas.ORG_SOLICITUDES, 2,
             Rutas.ORG_PERFIL, 2,
             Rutas.AVISOS, 6);
 
@@ -84,6 +84,17 @@ class ConsultasPorPaginaTest {
         var sesion = new Sesion();
         sesion.get(Rutas.ESTADISTICAS);
         medir("caché", sesion, presupuesto(Rutas.ESTADISTICAS, 1));
+    }
+
+    @Test
+    @DisplayName("Tablero del centro: exactamente dos consultas")
+    void tableroDosConsultas() {
+        var sesion = new Sesion();
+        sesion.post(Rutas.DEMO_ROL, "rol", "ORGANIZACION");
+        sesion.post(Rutas.DEMO_ORGANIZACION, "id", "frontera-limpia");
+        estadisticas.clear();
+        assertThat(sesion.get(Rutas.ORG_SOLICITUDES)).isEqualTo(HttpStatus.OK);
+        assertThat(estadisticas.getPrepareStatementCount()).isEqualTo(2);
     }
 
     @Test

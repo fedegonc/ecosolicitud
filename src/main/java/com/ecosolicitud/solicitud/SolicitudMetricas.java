@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.ecosolicitud.shared.Fechas;
-import com.ecosolicitud.solicitud.interno.Solicitud;
 
 // Indicadores de un conjunto de solicitudes. Cada tasa divide solo por lo ya
 // decidido, así una solicitud nueva no la mueve:
@@ -30,7 +29,7 @@ public record SolicitudMetricas(long recibidas, long pendientes, long respondida
                 .atStartOfDay(Fechas.ZONA).toInstant();
     }
 
-    static SolicitudMetricas desde(List<Solicitud> todas, Instant ahora) {
+    static SolicitudMetricas desde(List<? extends SolicitudMedicion> todas, Instant ahora) {
         long pendientes = 0, respondidas = 0, aceptadas = 0, completadas = 0, aceptadasCerradas = 0;
         Instant pendienteMasVieja = null;
         var respuestas = new ArrayList<Duration>();
