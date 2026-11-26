@@ -1,5 +1,0 @@
-fase,personas_a_la_vez,pedidos_por_segundo,espera_tipica_s,espera_95_s,errores,procesador_max_pct,memoria_max_pct
-Tanda 1: 10 personas,10,6.1,1.0,1.99,0,100,57
-Tanda 2: 15 personas,15,6.8,1.6,2.59,0,100,59
-Tanda 3: 20 personas,20,6.2,2.3,4.98,0,40,60
-Tanda 4: 20 personas,20,6.8,2.3,3.95,0,100,62
