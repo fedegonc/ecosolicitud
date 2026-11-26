@@ -1,17 +1,25 @@
+# Salida de build
 target/
 data/
+
+# Entorno y secretos
 .env
+.seed
 *.log
 *.pid
+
+# IDE
+.idea/
+
+# Reportes de Allure
+.allure/
+
+# Documentación y material de trabajo local (no va al repo público)
 CLAUDE.md
 AGENTS.md
-.seed
-.allure/
 DESIGN-SYSTEM.md
-scratch/
-docs/
-.idea/
-scratch-3/
-simulacion/
 docs/
 testing/
+scratch/
+scratch-3/
+simulacion/
